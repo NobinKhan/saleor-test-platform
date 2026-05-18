@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: saleor-test-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: saleor_test
+      POSTGRES_PASSWORD: saleor_test_pass
+      POSTGRES_DB: saleor_test
+    ports:
+      - "5997:5432"
+    volumes:
+      - saleor_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U saleor_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: saleor-test-backend
+    restart: unless-stopped
+    ports:
+      - "5998:5998"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://saleor_test:saleor_test_pass@db:5432/saleor_test
+      JWT_SECRET_KEY: CHANGE_ME_IN_PRODUCTION_USE_64CHAR_SECRET
+      JWT_ALGORITHM: HS256
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 60
+      JWT_REFRESH_TOKEN_EXPIRE_DAYS: 30
+      APP_HOST: 0.0.0.0
+      APP_PORT: 5998
+      FRONTEND_URL: http://localhost:5999
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5998/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: saleor-test-frontend
+    restart: unless-stopped
+    ports:
+      - "5999:5999"
+    environment:
+      PUBLIC_BACKEND_URL: http://localhost:5998
+
+networks:
+  saleor-platform_saleor-backend-tier:
+    external: true
+
+volumes:
+  saleor_test_data:
