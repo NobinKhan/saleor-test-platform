@@ -2,13 +2,15 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
+ARG PUBLIC_BACKEND_URL=http://localhost:5998
+ENV PUBLIC_BACKEND_URL=$PUBLIC_BACKEND_URL
+
 COPY package.json ./
 RUN npm install
 
 COPY . .
 RUN npm run build
 
-# Production stage
 FROM node:20-slim
 
 WORKDIR /app

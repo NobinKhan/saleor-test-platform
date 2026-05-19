@@ -7,7 +7,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 from sqlalchemy import String, DateTime, Integer, Boolean, Text, ForeignKey, func, Enum as SAEnum
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 import enum
 
@@ -90,6 +90,7 @@ class TestRun(Base):
     skipped: Mapped[int] = mapped_column(Integer, default=0)
     test_scope: Mapped[str] = mapped_column(String(50), default="full")
     public_only: Mapped[bool] = mapped_column(Boolean, default=False)
+    schema_diff: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
     user: Mapped["User"] = relationship(back_populates="test_runs")
     results: Mapped[list["TestResult"]] = relationship(back_populates="test_run", lazy="selectin", cascade="all, delete-orphan")
@@ -119,6 +120,7 @@ class TestResult(Base):
     test_run: Mapped["TestRun"] = relationship(back_populates="results")
 
 
+# Field-level breakdown rows — populated when introspection field checks exist (deferred).
 class TestItem(Base):
     __tablename__ = "test_items"
 

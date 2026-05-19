@@ -1,0 +1,9 @@
+{
+	"/": [],
+	"/dashboard": [],
+	"/login": [],
+	"/register": [],
+	"/run/new": [],
+	"/run/[id]/report": [],
+	"/run/[id]/stream": []
+}

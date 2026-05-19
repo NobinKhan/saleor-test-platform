@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func
 
 from app.core.database import get_db
-from app.core.security import get_current_user
+from app.core.security import get_current_user, get_current_user_sse
 from app.models import User, TestRun, TestResult
 from app.schemas import ReportData, ReportSummary, CategoryBreakdown, ResponseTimeBucket
 
@@ -53,13 +53,13 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
             cat_counts[cat] = {"total": 0, "passed": 0, "failed": 0, "warn": 0, "skip": 0}
         cat_counts[cat]["total"] += cnt
         if status == "pass":
-            cat_counts[cat]["passed"] = cnt
+            cat_counts[cat]["passed"] += cnt
         elif status == "fail":
-            cat_counts[cat]["failed"] = cnt
+            cat_counts[cat]["failed"] += cnt
         elif status == "warn":
-            cat_counts[cat]["warn"] = cnt
+            cat_counts[cat]["warn"] += cnt
         elif status == "skip":
-            cat_counts[cat]["skip"] = cnt
+            cat_counts[cat]["skip"] += cnt
 
     category_breakdown = [
         CategoryBreakdown(category=k, total=v["total"], passed=v["passed"], failed=v["failed"], warn=v["warn"], skip=v["skip"])
@@ -93,11 +93,17 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         started_at=run.started_at,
         completed_at=run.completed_at,
     )
-    return ReportData(summary=summary, category_breakdown=category_breakdown, response_time_distribution=response_time_dist, pass_rate=pass_rate)
+    return ReportData(
+        summary=summary,
+        category_breakdown=category_breakdown,
+        response_time_distribution=response_time_dist,
+        pass_rate=pass_rate,
+        schema_diff=run.schema_diff,
+    )
 
 
 @router.get("/{run_id}/export/csv")
-async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user_sse)):
     run_result = await db.execute(select(TestRun).where(TestRun.id == run_id, TestRun.user_id == user.id))
     run = run_result.scalar_one_or_none()
     if not run:
@@ -133,7 +139,7 @@ async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
 
 
 @router.get("/{run_id}/export/json")
-async def export_json(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+async def export_json(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user_sse)):
     run_result = await db.execute(select(TestRun).where(TestRun.id == run_id, TestRun.user_id == user.id))
     run = run_result.scalar_one_or_none()
     if not run:
@@ -181,7 +187,7 @@ async def export_json(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), use
 
 
 @router.get("/{run_id}/export/pdf")
-async def export_pdf(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+async def export_pdf(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user_sse)):
     if not HAS_REPORTLAB:
         raise HTTPException(500, "PDF export requires reportlab: pip install reportlab")
 

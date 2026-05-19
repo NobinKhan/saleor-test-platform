@@ -2,10 +2,22 @@
 app/services/saleor_auth.py — Fetch JWT from Saleor using admin credentials.
 """
 
-import urllib.request
-import urllib.error
-import json
+from __future__ import annotations
+
 from typing import Optional
+
+import httpx
+
+from app.core.url_utils import resolve_saleor_url_for_runner
+
+TOKEN_CREATE_MUTATION = """
+mutation TokenCreate($email: String!, $password: String!) {
+  tokenCreate(email: $email, password: $password) {
+    token
+    errors { field message code }
+  }
+}
+"""
 
 
 async def fetch_saleor_token(
@@ -18,23 +30,31 @@ async def fetch_saleor_token(
     Call Saleor's tokenCreate mutation with admin credentials.
     Returns (token, error_message).
     """
-    payload = json.dumps({
+    graphql_url = resolve_saleor_url_for_runner(saleor_url)
+    payload = {
         "operationName": "TokenCreate",
-        "query": "mutation TokenCreate($email: String!, $password: String!) { tokenCreate(email: $email, password: $password) { token errors { field message code } } }",
-        "variables": {"email": email, "password": password}
-    }).encode()
+        "query": TOKEN_CREATE_MUTATION,
+        "variables": {"email": email, "password": password},
+    }
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
     }
 
     try:
-        req = urllib.request.Request(saleor_url.rstrip("/") + "/graphql/", data=payload, headers=headers)
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
-            data = json.loads(resp.read())
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.post(graphql_url, json=payload, headers=headers)
 
-        result = data.get("data", {}).get("tokenCreate", {})
-        errors = result.get("errors", [])
+        if resp.status_code != 200:
+            return None, f"HTTP {resp.status_code}: {resp.text[:200]}"
+
+        data = resp.json()
+        top_errors = data.get("errors") or []
+        if top_errors:
+            return None, top_errors[0].get("message", "Saleor GraphQL error")
+
+        result = (data.get("data") or {}).get("tokenCreate") or {}
+        errors = result.get("errors") or []
 
         if errors:
             return None, errors[0].get("message", "Authentication failed")
@@ -45,17 +65,9 @@ async def fetch_saleor_token(
 
         return token, None
 
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8", errors="replace")
-        try:
-            err_json = json.loads(body)
-            msg = err_json.get("errors", [{}])[0].get("message", str(e))
-        except Exception:
-            msg = f"HTTP {e.code}: {str(e)}"
-        return None, msg
-
-    except urllib.error.URLError as e:
-        return None, f"Connection error: {e.reason}"
-
+    except httpx.TimeoutException:
+        return None, "Connection timed out"
+    except httpx.HTTPError as e:
+        return None, f"HTTP error: {e}"
     except Exception as e:
         return None, f"Unexpected error: {str(e)}"

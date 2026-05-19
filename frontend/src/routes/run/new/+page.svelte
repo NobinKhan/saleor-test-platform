@@ -8,7 +8,18 @@
   let saleor_token = ""; // manual token override
   let test_scope = "full";
   let public_only = false;
+  let concurrency = 5;
+  let timeout_seconds = 30;
+  let reference_saleor_url = "";
+  let reference_saleor_token = "";
+  const categories = [
+    "products", "orders", "checkout", "payments", "shipping", "discounts",
+    "channels", "categories", "collections", "attributes", "account",
+    "giftcards", "pages", "warehouse", "meta", "shop", "plugins", "webhooks",
+  ];
+  let selectedCategories: string[] = [...categories];
   let loading = false;
+  let startMessage = "";
   let error = "";
   let testing_auth = false;
 
@@ -47,6 +58,7 @@
     }
 
     loading = true;
+    startMessage = "Creating test run…";
     try {
       const run = await api.post("/api/runs", {
         saleor_url,
@@ -55,19 +67,32 @@
         saleor_token: saleor_token || null,
         test_scope,
         public_only,
+        concurrency,
+        timeout_seconds,
+        categories: test_scope === "custom" ? selectedCategories : null,
+        reference_saleor_url: reference_saleor_url || null,
+        reference_saleor_token: reference_saleor_token || null,
       });
+      startMessage = "Opening live progress…";
       await goto(`/run/${run.id}/stream`);
     } catch (e: any) {
       error = e.message || "Failed to start test run";
-    } finally {
       loading = false;
+      startMessage = "";
     }
   }
 </script>
 
 <svelte:head><title>New Test Run — Saleor Test Platform</title></svelte:head>
 
-<div class="new-run-page">
+{#if loading}
+  <div class="loading-overlay" role="status" aria-live="polite">
+    <span class="spinner" aria-hidden="true"></span>
+    <p>{startMessage || "Starting test run…"}</p>
+  </div>
+{/if}
+
+<div class="new-run-page" class:dimmed={loading}>
   <div class="page-header">
     <h1>New Test Run</h1>
     <p class="subtitle">Configure and start a new Saleor API test</p>
@@ -82,7 +107,7 @@
       <div class="field">
         <label for="url">Saleor Server URL *</label>
         <input id="url" type="url" bind:value={saleor_url} required placeholder="https://your-store.saleor.cloud/graphql/" />
-        <span class="hint">The GraphQL endpoint of your Saleor instance</span>
+        <span class="hint">Use http://localhost:8000/graphql/ for the local stack — the harness rewrites this to the Saleor container when needed.</span>
       </div>
 
       <div class="section-label">Saleor Authentication</div>
@@ -122,7 +147,48 @@
           <option value="full">Full (Queries + Mutations)</option>
           <option value="queries">Queries Only</option>
           <option value="mutations">Mutations Only</option>
+          <option value="custom">Custom (by category)</option>
         </select>
+      </div>
+
+      {#if test_scope === "custom"}
+        <div class="field">
+          <span class="section-label">Categories</span>
+          <div class="category-grid">
+            {#each categories as cat}
+              <label class="cat-check">
+                <input type="checkbox" value={cat} checked={selectedCategories.includes(cat)}
+                  on:change={(e) => {
+                    if (e.currentTarget.checked) selectedCategories = [...selectedCategories, cat];
+                    else selectedCategories = selectedCategories.filter(c => c !== cat);
+                  }} />
+                {cat}
+              </label>
+            {/each}
+          </div>
+        </div>
+      {/if}
+
+      <div class="field-row">
+        <div class="field">
+          <label for="concurrency">Concurrency</label>
+          <input id="concurrency" type="number" min="1" max="20" bind:value={concurrency} />
+        </div>
+        <div class="field">
+          <label for="timeout">Timeout (seconds)</label>
+          <input id="timeout" type="number" min="5" max="120" bind:value={timeout_seconds} />
+        </div>
+      </div>
+
+      <div class="section-label">Reference API (optional)</div>
+      <p class="section-hint">Compare schema drift against another Saleor instance.</p>
+      <div class="field">
+        <label for="ref_url">Reference Saleor URL</label>
+        <input id="ref_url" type="url" bind:value={reference_saleor_url} placeholder="https://reference.saleor.cloud/graphql/" />
+      </div>
+      <div class="field">
+        <label for="ref_token">Reference API Token</label>
+        <input id="ref_token" type="password" bind:value={reference_saleor_token} />
       </div>
 
       <div class="field checkbox-field">
@@ -141,6 +207,43 @@
 </div>
 
 <style>
+  .loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    color: var(--text-primary);
+  }
+
+  .loading-overlay p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+  .loading-overlay .spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .new-run-page.dimmed {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
   .new-run-page { max-width: 700px; }
 
   .page-header { margin-bottom: 1.5rem; }
@@ -206,4 +309,18 @@
   .checkbox-field label { font-weight: 400; color: var(--text-primary); }
 
   .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .cat-check {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
 </style>

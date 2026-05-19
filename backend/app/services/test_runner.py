@@ -13,6 +13,13 @@ from typing import Any, AsyncGenerator
 
 import httpx
 
+from app.core.url_utils import resolve_saleor_url_for_runner
+from app.services.introspection import (
+    compare_schema,
+    compare_two_introspections,
+    introspect_saleor,
+)
+
 # Saleor reference queries/mutations
 SALEOR_QUERIES: list[dict] = [
     # Products
@@ -337,6 +344,31 @@ async def detect_saleor_version(url: str, token: str | None, timeout: int) -> st
     return None
 
 
+def build_endpoints_list(
+    test_scope: str,
+    public_only: bool = False,
+    categories: list[str] | None = None,
+) -> list[dict]:
+    """Build the endpoint list for a test run from scope and filters."""
+    if test_scope == "queries":
+        endpoints = SALEOR_QUERIES.copy()
+    elif test_scope == "mutations":
+        endpoints = SALEOR_MUTATIONS.copy()
+    elif test_scope == "custom" and categories:
+        cats = set(categories)
+        endpoints = [
+            e
+            for e in SALEOR_QUERIES + SALEOR_MUTATIONS
+            if e["category"] in cats
+        ]
+    else:
+        endpoints = SALEOR_QUERIES + SALEOR_MUTATIONS
+
+    if public_only:
+        endpoints = [e for e in endpoints if e["is_public"]]
+    return endpoints
+
+
 class TestRunner:
     """
     Core testing engine. Runs all tests against a Saleor endpoint
@@ -352,14 +384,22 @@ class TestRunner:
         public_only: bool = False,
         concurrency: int = 5,
         timeout: int = 30,
+        categories: list[str] | None = None,
+        reference_saleor_url: str | None = None,
+        reference_saleor_token: str | None = None,
+        use_introspection: bool = True,
     ):
         self.run_id = run_id
-        self.saleor_url = saleor_url
+        self.saleor_url = resolve_saleor_url_for_runner(saleor_url)
         self.saleor_token = saleor_token
         self.test_scope = test_scope
         self.public_only = public_only
         self.concurrency = concurrency
         self.timeout = timeout
+        self.categories = categories
+        self.reference_saleor_url = reference_saleor_url
+        self.reference_saleor_token = reference_saleor_token
+        self.use_introspection = use_introspection
         self._stopped = False
 
     def stop(self):
@@ -368,25 +408,72 @@ class TestRunner:
     async def run(self) -> AsyncGenerator[dict, None]:
         """Run all tests and yield progress events."""
 
-        # Detect version first
+        yield {"type": "progress", "message": "Detecting Saleor version…"}
         version = await detect_saleor_version(self.saleor_url, self.saleor_token, self.timeout)
         yield {"type": "version", "version": version}
 
-        # Build test list
-        if self.test_scope in ("full", "queries"):
-            endpoints = SALEOR_QUERIES.copy()
-        elif self.test_scope == "mutations":
-            endpoints = SALEOR_MUTATIONS.copy()
-        elif self.test_scope == "full":
-            endpoints = SALEOR_QUERIES + SALEOR_MUTATIONS
-        else:
-            endpoints = SALEOR_QUERIES + SALEOR_MUTATIONS
+        endpoints = build_endpoints_list(
+            self.test_scope, self.public_only, self.categories
+        )
 
-        # Filter public only
-        if self.public_only:
-            endpoints = [e for e in endpoints if e["is_public"]]
+        if self.use_introspection:
+            yield {"type": "progress", "message": "Introspecting GraphQL schema…"}
+            try:
+                intro = await introspect_saleor(
+                    self.saleor_url, self.saleor_token, self.timeout
+                )
+                ref_q = [e["name"] for e in SALEOR_QUERIES]
+                ref_m = [e["name"] for e in SALEOR_MUTATIONS]
+                diff = compare_schema(intro, ref_q, ref_m)
+                yield {"type": "schema_diff", "diff": diff}
+
+                known = {e["name"] for e in endpoints}
+                for name in intro.get("queries", []):
+                    if name not in known:
+                        endpoints.append(
+                            {
+                                "name": name,
+                                "kind": "QUERY",
+                                "category": "unknown",
+                                "is_public": True,
+                            }
+                        )
+                        known.add(name)
+                for name in intro.get("mutations", []):
+                    if name not in known:
+                        endpoints.append(
+                            {
+                                "name": name,
+                                "kind": "MUTATION",
+                                "category": "unknown",
+                                "is_public": False,
+                            }
+                        )
+                        known.add(name)
+
+                if self.reference_saleor_url:
+                    ref_intro = await introspect_saleor(
+                        self.reference_saleor_url,
+                        self.reference_saleor_token,
+                        self.timeout,
+                    )
+                    ref_compare = compare_two_introspections(intro, ref_intro)
+                    yield {
+                        "type": "schema_diff",
+                        "diff": {"reference_compare": ref_compare},
+                    }
+            except Exception as exc:
+                yield {
+                    "type": "schema_diff",
+                    "diff": {"introspection_error": str(exc)},
+                }
 
         total = len(endpoints)
+        yield {
+            "type": "progress",
+            "message": f"Running {total} endpoint{'s' if total != 1 else ''}…",
+            "total": total,
+        }
         passed = failed = warnings = skipped = 0
         counts = {"pass": 0, "fail": 0, "warn": 0, "skip": 0}
 
@@ -395,14 +482,19 @@ class TestRunner:
         async def test_one(idx: int, endpoint: dict) -> dict:
             async with semaphore:
                 if self._stopped:
-                    return {"status": "skip", "endpoint": endpoint["name"], "skipped": True}
+                    return {
+                        "status": "skip",
+                        "endpoint": endpoint["name"],
+                        "kind": endpoint["kind"],
+                        "category": endpoint["category"],
+                        "is_public": endpoint["is_public"],
+                        "skipped": True,
+                    }
                 return await self._test_endpoint(endpoint, idx, total)
 
         tasks = [test_one(i, ep) for i, ep in enumerate(endpoints)]
-        results = []
         for coro in asyncio.as_completed(tasks):
             result = await coro
-            results.append(result)
 
             status = result.get("status", "skip")
             if status == "pass":
@@ -424,11 +516,11 @@ class TestRunner:
                 "run_id": str(self.run_id),
                 "current": current,
                 "total": total,
-                "current_endpoint": endpoint["name"],
+                "current_endpoint": result.get("endpoint", ""),
                 "status": status,
-                "endpoint_kind": endpoint["kind"],
-                "category": endpoint["category"],
-                "is_public": endpoint["is_public"],
+                "endpoint_kind": result.get("kind", ""),
+                "category": result.get("category", ""),
+                "is_public": result.get("is_public", False),
                 "response_time_ms": result.get("response_time_ms"),
                 "error_message": result.get("error_message"),
                 "input_sent": result.get("input_sent"),
@@ -453,6 +545,7 @@ class TestRunner:
         """Test a single endpoint."""
         name = endpoint["name"]
         kind = endpoint["kind"]
+        category = endpoint["category"]
         is_public = endpoint["is_public"]
 
         headers = {"Content-Type": "application/json"}
@@ -476,55 +569,55 @@ class TestRunner:
                 # Check for GraphQL errors
                 errors = resp_json.get("errors", [])
                 if errors:
-                    # Classify the error
                     first_err = errors[0] if errors else {}
                     msg = first_err.get("message", "")
                     ext = first_err.get("extensions", {})
+                    code = ext.get("code", "")
 
-                    if ext.get("code") in ("permission", "authentication", "forbidden", "jwt-error", "jwt-invalid"):
-                        return {
-                            "status": "warn",
-                            "endpoint": name,
-                            "kind": kind,
-                            "is_public": is_public,
-                            "response_time_ms": elapsed_ms,
-                            "error_message": f"Auth error: {msg}",
-                            "input_sent": query,
-                            "actual_response": json.dumps(resp_json),
-                        }
+                    auth_codes = {
+                        "permission",
+                        "authentication",
+                        "forbidden",
+                        "jwt-error",
+                        "jwt-invalid",
+                        "PERMISSION_DENIED",
+                    }
+                    schema_markers = (
+                        "cannot query",
+                        "undefined type",
+                        "field has unsupported",
+                        "Unknown type",
+                        "FieldUndefined",
+                    )
+                    validation_codes = {
+                        "INVALID",
+                        "GRAPHQL_VALIDATION_FAILED",
+                        "REQUIRED",
+                        "UNIQUE",
+                    }
+
+                    if code in auth_codes or str(code).lower() in auth_codes:
+                        status = "warn"
+                    elif any(m in msg.lower() for m in schema_markers):
+                        status = "fail"
                     elif "not found" in msg.lower() or "does not exist" in msg.lower():
-                        return {
-                            "status": "pass",
-                            "endpoint": name,
-                            "kind": kind,
-                            "is_public": is_public,
-                            "response_time_ms": elapsed_ms,
-                            "input_sent": query,
-                            "actual_response": json.dumps(resp_json),
-                        }
-                    elif "cannot query" in msg.lower() or "undefined type" in msg.lower() or "field has unsupported" in msg.lower():
-                        return {
-                            "status": "fail",
-                            "endpoint": name,
-                            "kind": kind,
-                            "is_public": is_public,
-                            "response_time_ms": elapsed_ms,
-                            "error_message": f"Schema mismatch: {msg}",
-                            "input_sent": query,
-                            "actual_response": json.dumps(resp_json),
-                        }
+                        status = "pass"
+                    elif code in validation_codes or kind == "MUTATION":
+                        status = "warn"
                     else:
-                        # Other errors - could be validation, etc.
-                        return {
-                            "status": "pass",
-                            "endpoint": name,
-                            "kind": kind,
-                            "is_public": is_public,
-                            "response_time_ms": elapsed_ms,
-                            "input_sent": query,
-                            "actual_response": json.dumps(resp_json),
-                            "error_message": msg,
-                        }
+                        status = "pass"
+
+                    return {
+                        "status": status,
+                        "endpoint": name,
+                        "kind": kind,
+                        "category": category,
+                        "is_public": is_public,
+                        "response_time_ms": elapsed_ms,
+                        "error_message": msg if status != "pass" else None,
+                        "input_sent": query,
+                        "actual_response": json.dumps(resp_json),
+                    }
 
                 # No GraphQL errors — check HTTP status
                 if resp.status_code != 200:
@@ -532,6 +625,7 @@ class TestRunner:
                         "status": "fail",
                         "endpoint": name,
                         "kind": kind,
+                        "category": category,
                         "is_public": is_public,
                         "response_time_ms": elapsed_ms,
                         "error_message": f"HTTP {resp.status_code}: {resp.text[:200]}",
@@ -544,6 +638,7 @@ class TestRunner:
                     "status": "pass",
                     "endpoint": name,
                     "kind": kind,
+                    "category": category,
                     "is_public": is_public,
                     "response_time_ms": elapsed_ms,
                     "input_sent": query,
@@ -556,6 +651,7 @@ class TestRunner:
                 "status": "fail",
                 "endpoint": name,
                 "kind": kind,
+                "category": category,
                 "is_public": is_public,
                 "response_time_ms": elapsed_ms,
                 "error_message": f"Timeout after {self.timeout}s",
@@ -567,6 +663,7 @@ class TestRunner:
                 "status": "fail",
                 "endpoint": name,
                 "kind": kind,
+                "category": category,
                 "is_public": is_public,
                 "response_time_ms": elapsed_ms,
                 "error_message": f"HTTP {e.response.status_code}",
@@ -579,6 +676,7 @@ class TestRunner:
                 "status": "fail",
                 "endpoint": name,
                 "kind": kind,
+                "category": category,
                 "is_public": is_public,
                 "response_time_ms": elapsed_ms,
                 "error_message": str(e),

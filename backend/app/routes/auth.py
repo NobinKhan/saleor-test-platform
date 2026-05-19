@@ -100,7 +100,8 @@ async def validate_saleor_credentials(data: SaleorTokenRequest):
         data.password,
     )
     if error:
-        raise HTTPException(status_code=401, detail=error)
+        # 400 — not 401; the API client treats 401 as expired harness JWT and loops refresh.
+        raise HTTPException(status_code=400, detail=error)
 
     return SaleorTokenResponse(
         token=token,

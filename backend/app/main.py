@@ -7,13 +7,15 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.config import get_settings
 from app.core.database import get_engine
+from app.core.security import validate_jwt_secret_for_startup
 from app.models import Base
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Create tables on startup
+    validate_jwt_secret_for_startup()
     try:
         engine = get_engine()
         url_str = str(engine.url).replace("%", "***")
@@ -31,6 +33,8 @@ async def lifespan(app: FastAPI):
     await get_engine().dispose()
 
 
+settings = get_settings()
+
 app = FastAPI(
     title="Saleor Test Platform",
     description="Automated testing platform for Saleor Commerce API",
@@ -38,15 +42,20 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+_cors_origins = (
+    [settings.frontend_url]
+    if settings.is_production
+    else ["*"]
+)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Import and register routers
 from app.routes.auth import router as auth_router
 from app.routes.tests import router as tests_router
 from app.routes.reports import router as reports_router

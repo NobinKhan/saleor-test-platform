@@ -1,21 +1,20 @@
 <script lang="ts">
   import "../app.css";
+  import { browser } from "$app/environment";
   import { auth } from "$lib/api";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import { onMount } from "svelte";
 
-  let user: { email: string; name: string } | null = null;
-  auth.subscribe(s => { user = s.user; });
+  $: user = $auth.user;
 
-  onMount(() => {
-    const unsubscribe = page.subscribe(p => {
-      if (!user && !p.url.pathname.startsWith("/login") && !p.url.pathname.startsWith("/register")) {
-        goto("/login");
-      }
-    });
-    return unsubscribe;
-  });
+  $: if (
+    browser &&
+    !$auth.accessToken &&
+    !$page.url.pathname.startsWith("/login") &&
+    !$page.url.pathname.startsWith("/register")
+  ) {
+    goto("/login");
+  }
 
   function logout() {
     auth.logout();

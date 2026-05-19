@@ -53,8 +53,11 @@ class TestRunCreate(BaseModel):
     saleor_password: str | None = Field(default=None, description="Saleor admin password (optional, for auto token fetch)")
     test_scope: str = Field(default="full", description="full|queries|mutations|custom")
     public_only: bool = Field(default=False, description="Only test public endpoints")
+    categories: list[str] | None = Field(default=None, description="Categories when test_scope=custom")
     concurrency: int = Field(default=5, ge=1, le=20)
     timeout_seconds: int = Field(default=30, ge=5, le=120)
+    reference_saleor_url: str | None = Field(default=None, description="Reference Saleor URL for schema compare")
+    reference_saleor_token: str | None = Field(default=None, description="Bearer token for reference Saleor")
 
 
 class TestRunSummary(BaseModel):
@@ -153,6 +156,7 @@ class ReportData(BaseModel):
     category_breakdown: list[CategoryBreakdown]
     response_time_distribution: list[ResponseTimeBucket]
     pass_rate: float
+    schema_diff: dict[str, Any] | None = None
 
 
 # ── Live Progress (SSE) ────────────────────────────────────────────────────────

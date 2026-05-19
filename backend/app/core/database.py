@@ -5,9 +5,16 @@ app/core/database.py — Async SQLAlchemy setup.
 from __future__ import annotations
 
 import os
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 from sqlalchemy.orm import DeclarativeBase
-from functools import lru_cache
+
+_engine = None
+_session_maker = None
 
 
 def _get_database_url() -> str:
@@ -15,39 +22,15 @@ def _get_database_url() -> str:
     docker_url = os.environ.get("DATABASE_URL", "")
     if docker_url:
         return docker_url
-    # Fallback to pydantic settings if env var not set (e.g., local dev)
     from app.core.config import get_database_url
+
     return get_database_url()
-
-
-def _get_db_host() -> str:
-    """Return the DB host. Falls back to 172.24.0.3 if 'db' doesn't resolve."""
-    try:
-        import socket
-        socket.gethostbyname("db")
-        return "db"
-    except socket.gaierror:
-        return "172.24.0.3"
-
-
-def _engine_url() -> str:
-    """Always read fresh — do NOT cache. Env vars may not be set at import time."""
-    base_url = _get_database_url()
-    # Always replace 'db' hostname with direct IP to bypass asyncpg DNS resolution
-    # issues inside this container. The IP is stable (DB container has fixed IP).
-    if base_url and "@db:" in base_url:
-        base_url = base_url.replace("@db:", "@172.24.0.3:")
-    return base_url
-
-
-# Note: The engine is created lazily when first accessed, not at import time
-_engine = None
 
 
 def get_engine():
     global _engine
     if _engine is None:
-        url = _engine_url()
+        url = _get_database_url()
         if not url:
             raise ValueError(
                 "DATABASE_URL not set. Set DATABASE_URL env var or in .env file. "
@@ -64,16 +47,14 @@ def get_engine():
 
 def get_async_sessionmaker():
     """Get sessionmaker lazily so env vars are properly loaded."""
-    return async_sessionmaker(
-        get_engine(),
-        class_=AsyncSession,
-        expire_on_commit=False,
-    )
-
-
-# Keep these for backward compatibility with existing code
-engine = None  # Lazy-loaded via get_engine()
-async_sessionmaker = None  # Lazy-loaded via get_async_sessionmaker()
+    global _session_maker
+    if _session_maker is None:
+        _session_maker = async_sessionmaker(
+            get_engine(),
+            class_=AsyncSession,
+            expire_on_commit=False,
+        )
+    return _session_maker
 
 
 class Base(DeclarativeBase):

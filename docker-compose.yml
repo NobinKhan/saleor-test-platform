@@ -1,61 +1,157 @@
+name: saleor-test-platform
+
 services:
-  db:
-    image: postgres:16-alpine
-    container_name: saleor-test-db
+  # ── Saleor (profile: saleor) ────────────────────────────────────────────────
+  saleor-db:
+    profiles: [saleor]
+    image: postgres:17-alpine
+    container_name: saleor-db
     restart: unless-stopped
+    networks: [app]
+    volumes:
+      - saleor_db_data:/var/lib/postgresql/data
+      - ./deploy/saleor/replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql:ro
+    environment:
+      POSTGRES_USER: saleor
+      POSTGRES_PASSWORD: saleor
+      POSTGRES_DB: saleor
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U saleor -d saleor"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  saleor-cache:
+    profiles: [saleor]
+    image: valkey/valkey:8.1-alpine
+    container_name: saleor-cache
+    restart: unless-stopped
+    networks: [app]
+    volumes:
+      - saleor_cache_data:/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  saleor-api:
+    profiles: [saleor]
+    image: ghcr.io/saleor/saleor:3.23
+    container_name: saleor-api
+    restart: unless-stopped
+    networks: [app]
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      saleor-db:
+        condition: service_healthy
+      saleor-cache:
+        condition: service_healthy
+    volumes:
+      - saleor_media:/app/media
+    env_file:
+      - ./deploy/saleor/common.env
+      - ./deploy/saleor/backend.env
+    environment:
+      DASHBOARD_URL: http://localhost:9000/
+      ALLOWED_HOSTS: localhost,127.0.0.1,saleor-api
+
+  saleor-worker:
+    profiles: [saleor]
+    image: ghcr.io/saleor/saleor:3.23
+    container_name: saleor-worker
+    restart: unless-stopped
+    networks: [app]
+    command: celery -A saleor --app=saleor.celeryconf:app worker --loglevel=info -B
+    depends_on:
+      saleor-cache:
+        condition: service_healthy
+    volumes:
+      - saleor_media:/app/media
+    env_file:
+      - ./deploy/saleor/common.env
+      - ./deploy/saleor/backend.env
+
+  # ── Test harness (profile: harness) ───────────────────────────────────────
+  harness-db:
+    profiles: [harness]
+    image: postgres:17-alpine
+    container_name: harness-db
+    restart: unless-stopped
+    networks: [app]
+    ports:
+      - "5997:5432"
+    volumes:
+      - harness_db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: saleor_test
       POSTGRES_PASSWORD: saleor_test_pass
       POSTGRES_DB: saleor_test
-    ports:
-      - "5997:5432"
-    volumes:
-      - saleor_test_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U saleor_test"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U saleor_test -d saleor_test"]
+      interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
 
-  backend:
+  harness-backend:
+    profiles: [harness]
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: saleor-test-backend
+    container_name: harness-backend
     restart: unless-stopped
+    networks: [app]
     ports:
       - "5998:5998"
     environment:
-      DATABASE_URL: postgresql+asyncpg://saleor_test:saleor_test_pass@db:5432/saleor_test
+      DATABASE_URL: postgresql+asyncpg://saleor_test:saleor_test_pass@harness-db:5432/saleor_test
       JWT_SECRET_KEY: CHANGE_ME_IN_PRODUCTION_USE_64CHAR_SECRET
       JWT_ALGORITHM: HS256
       JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 60
       JWT_REFRESH_TOKEN_EXPIRE_DAYS: 30
+      TOKEN_ENCRYPTION_KEY: ""
+      APP_ENV: development
       APP_HOST: 0.0.0.0
       APP_PORT: 5998
       FRONTEND_URL: http://localhost:5999
+      SALEOR_GRAPHQL_URL: http://saleor-api:8000/graphql/
+      REFERENCE_SALEOR_URL: ""
     depends_on:
-      db:
+      harness-db:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5998/api/health"]
-      interval: 30s
+      interval: 15s
       timeout: 10s
-      retries: 3
-  frontend:
+      retries: 5
+      start_period: 30s
+
+  harness-frontend:
+    profiles: [harness]
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: saleor-test-frontend
+      args:
+        PUBLIC_BACKEND_URL: http://localhost:5998
+    container_name: harness-frontend
     restart: unless-stopped
+    networks: [app]
     ports:
       - "5999:5999"
     environment:
       PUBLIC_BACKEND_URL: http://localhost:5998
+    depends_on:
+      - harness-backend
 
 networks:
-  saleor-platform_saleor-backend-tier:
-    external: true
+  app:
+    driver: bridge
 
 volumes:
-  saleor_test_data:
+  saleor_db_data:
+  saleor_cache_data:
+  saleor_media:
+  harness_db_data:

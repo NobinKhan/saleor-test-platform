@@ -6,9 +6,11 @@
     "dev": "vite dev --port 5999",
     "build": "vite build",
     "preview": "vite preview",
+    "prepare": "svelte-kit sync",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "@sveltejs/adapter-auto": "^3.0.0",
     "@sveltejs/adapter-node": "^5.5.4",
     "@sveltejs/kit": "^2.0.0",

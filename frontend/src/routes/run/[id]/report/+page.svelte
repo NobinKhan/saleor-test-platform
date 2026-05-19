@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { page } from "$app/stores";
-  import { api } from "$lib/api";
+  import { api, exportUrl } from "$lib/api";
   import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
   let runId = "";
-  page.subscribe(p => { runId = p.params.id; });
+  page.subscribe(p => { runId = p.params.id ?? ""; });
 
   interface CategoryBreakdown {
     category: string;
@@ -39,6 +39,7 @@
     category_breakdown: CategoryBreakdown[];
     response_time_distribution: ResponseTimeBucket[];
     pass_rate: number;
+    schema_diff?: Record<string, unknown> | null;
   }
 
   let report: ReportData | null = null;
@@ -59,10 +60,7 @@
   });
 
   function downloadUrl(format: string) {
-    const API_BASE = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
-        ? 'http://72.60.199.155:5998'
-        : 'http://localhost:5998';
-    return `${API_BASE}/api/reports/${runId}/export/${format}`;
+    return exportUrl(runId, format);
   }
 
   let statusFilter = "all";
@@ -72,6 +70,10 @@
     if (rate >= 80) return "high";
     if (rate >= 50) return "mid";
     return "low";
+  }
+
+  function pieLabel(props: { name?: string; percent?: number }) {
+    return `${props.name ?? ""} ${((props.percent ?? 0) * 100).toFixed(0)}%`;
   }
 </script>
 
@@ -98,6 +100,13 @@
         <a href={downloadUrl("pdf")} class="btn-secondary btn-sm" download>⬇ PDF</a>
       </div>
     </div>
+
+    {#if report.schema_diff}
+      <div class="card schema-diff">
+        <h2>Schema analysis</h2>
+        <pre>{JSON.stringify(report.schema_diff, null, 2)}</pre>
+      </div>
+    {/if}
 
     <!-- Summary cards -->
     <div class="summary-row">
@@ -167,7 +176,7 @@
                   innerRadius={60}
                   outerRadius={90}
                   dataKey="value"
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={pieLabel}
                   labelLine={false}
                 >
                   {#each [0, 1, 2, 3] as i}
