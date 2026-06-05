@@ -106,3 +106,20 @@ def compare_two_introspections(
         "shared_queries": sorted(tq & rq),
         "shared_mutations": sorted(tm & rm),
     }
+
+
+def schema_gate_diff(
+    target: dict[str, list[str]],
+    reference: dict[str, list[str]],
+    *,
+    source: str = "golden",
+) -> dict[str, Any]:
+    """Build schema_diff for the compatibility gate (reference ops must exist on target)."""
+    drift = compare_two_introspections(target, reference)
+    return {
+        "missing_queries": drift["reference_only_queries"],
+        "missing_mutations": drift["reference_only_mutations"],
+        "extra_queries": drift["target_only_queries"],
+        "extra_mutations": drift["target_only_mutations"],
+        "schema_gate_source": source,
+    }

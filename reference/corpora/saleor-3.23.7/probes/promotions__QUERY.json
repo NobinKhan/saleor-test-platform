@@ -6,7 +6,13 @@
   "golden_response": {
     "data": {
       "promotions": {
-        "edges": []
+        "edges": [
+          {
+            "node": {
+              "id": "UHJvbW90aW9uOjA2ZDAwNjU4LTNhNzktNDYxMi05ODI0LTQyZmI5YjFlYmMzYg=="
+            }
+          }
+        ]
       }
     },
     "extensions": {
@@ -19,5 +25,8 @@
   "golden_outcome": "success_with_data",
   "golden_status": "pass",
   "error_pattern": null,
-  "response_shape_hash": "sha256:6d89ffea2ccdc80b"
+  "response_shape_hash": "sha256:80e7af98cce42034",
+  "golden_contract": "success",
+  "http_status": 200,
+  "probe_stability": "stateful"
 }

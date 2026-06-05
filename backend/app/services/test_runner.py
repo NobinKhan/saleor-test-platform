@@ -16,11 +16,17 @@ import httpx
 from app.core.config import settings
 from app.core.url_utils import resolve_saleor_url_for_runner
 from app.services.version_routing import version_compatibility_warning
-from app.services.reference_corpus import resolve_corpus_version
-from app.services.introspection import compare_schema, introspect_saleor
+from app.services.reference_corpus import (
+    load_all_probes_from_disk,
+    load_manifest,
+    resolve_corpus_version,
+)
+from app.services.introspection import compare_schema, introspect_saleor, schema_gate_diff
+from app.services.saleor_auth import ensure_valid_token, refresh_saleor_token
 from app.services.outcome import classify_graphql_response, classify_transport_error
 from app.services.query_builder import build_query_with_schema, introspect_field_args
 from app.services.reference_compare import compare_to_golden
+from app.services.response_contract import CONTRACT_AUTH_ERROR, CONTRACT_SUCCESS, classify_response_contract
 
 # Saleor reference queries/mutations
 SALEOR_QUERIES: list[dict] = [
@@ -333,10 +339,13 @@ async def detect_saleor_version(url: str, token: str | None, timeout: int) -> st
     if token:
         headers["Authorization"] = f"Bearer {token}"
 
-    query = '{"query":"query { shop { version } }"}'
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.post(url, data=query, headers=headers)
+            resp = await client.post(
+                url,
+                json={"query": "query { shop { version } }"},
+                headers=headers,
+            )
             if resp.status_code == 200:
                 data = resp.json()
                 version = data.get("data", {}).get("shop", {}).get("version")
@@ -373,6 +382,53 @@ def build_endpoints_list(
     return endpoints
 
 
+def build_golden_endpoints(
+    corpus_version: str,
+    test_scope: str,
+    public_only: bool = False,
+    categories: list[str] | None = None,
+) -> list[dict]:
+    """Build endpoint list from golden corpus probes for compatibility replay."""
+    catalog_names = {e["name"] for e in SALEOR_QUERIES + SALEOR_MUTATIONS}
+    probes = load_all_probes_from_disk(corpus_version)
+    endpoints: list[dict] = []
+    for probe in probes:
+        if test_scope == "queries" and probe.endpoint_kind != "QUERY":
+            continue
+        if test_scope == "mutations" and probe.endpoint_kind != "MUTATION":
+            continue
+        if test_scope == "catalog" and probe.endpoint_name not in catalog_names:
+            continue
+        if test_scope == "custom" and categories and probe.category not in set(categories):
+            continue
+        is_public = probe.endpoint_name in {e["name"] for e in SALEOR_QUERIES if e["is_public"]}
+        endpoints.append({
+            "name": probe.endpoint_name,
+            "kind": probe.endpoint_kind,
+            "category": probe.category,
+            "is_public": is_public,
+            "golden_input": probe.input_sent,
+        })
+    if public_only:
+        endpoints = [e for e in endpoints if e["is_public"]]
+    return endpoints
+
+
+def load_reference_schema(corpus_version: str) -> dict[str, list[str]]:
+    """Reference schema from manifest or golden probe names."""
+    manifest = load_manifest(corpus_version)
+    if manifest:
+        rq = manifest.get("reference_queries")
+        rm = manifest.get("reference_mutations")
+        if rq is not None and rm is not None:
+            return {"queries": list(rq), "mutations": list(rm)}
+    probes = load_all_probes_from_disk(corpus_version)
+    return {
+        "queries": sorted({p.endpoint_name for p in probes if p.endpoint_kind == "QUERY"}),
+        "mutations": sorted({p.endpoint_name for p in probes if p.endpoint_kind == "MUTATION"}),
+    }
+
+
 class TestRunner:
     """
     Core testing engine. Runs all tests against a Saleor endpoint
@@ -390,22 +446,66 @@ class TestRunner:
         timeout: int = 30,
         categories: list[str] | None = None,
         use_introspection: bool = True,
+        test_mode: str = "compatibility",
+        saleor_email: str | None = None,
+        saleor_password: str | None = None,
     ):
         self.run_id = run_id
         self.saleor_url = resolve_saleor_url_for_runner(saleor_url)
         self.saleor_token = saleor_token
+        self.saleor_email = saleor_email
+        self.saleor_password = saleor_password
         self.test_scope = test_scope
         self.public_only = public_only
         self.concurrency = concurrency
         self.timeout = timeout
         self.categories = categories
         self.use_introspection = use_introspection
+        self.test_mode = test_mode if test_mode in ("compatibility", "discovery") else "compatibility"
         self._stopped = False
         self.saleor_version: str | None = None
         self.schema_fields: dict[str, list[dict]] | None = None
+        self.corpus_version: str | None = None
 
     def stop(self):
         self._stopped = True
+
+    def _auth_headers(self) -> dict[str, str]:
+        headers = {"Content-Type": "application/json", "Accept": "application/json"}
+        if self.saleor_token:
+            headers["Authorization"] = f"Bearer {self.saleor_token}"
+        return headers
+
+    async def _ensure_valid_token(
+        self,
+        http_client: httpx.AsyncClient | None = None,
+        *,
+        force_refresh: bool = False,
+    ) -> str | None:
+        refreshed = await ensure_valid_token(
+            saleor_url=self.saleor_url,
+            token=self.saleor_token,
+            email=self.saleor_email,
+            password=self.saleor_password,
+            timeout=self.timeout,
+            client=http_client,
+            force_refresh=force_refresh,
+        )
+        if refreshed:
+            self.saleor_token = refreshed
+        return self.saleor_token
+
+    async def _force_refresh_token(self) -> str | None:
+        if self.saleor_email and self.saleor_password:
+            fresh, _err = await refresh_saleor_token(
+                self.saleor_url,
+                self.saleor_email,
+                self.saleor_password,
+                self.timeout,
+            )
+            if fresh:
+                self.saleor_token = fresh
+        return self.saleor_token
 
     async def run(self) -> AsyncGenerator[dict, None]:
         """Run all tests and yield progress events."""
@@ -416,15 +516,22 @@ class TestRunner:
         yield {"type": "version", "version": version}
 
         corpus_ver = resolve_corpus_version(version, settings.golden_corpus_version)
+        self.corpus_version = corpus_ver
         ver_warn = version_compatibility_warning(version, corpus_ver)
         if ver_warn:
             yield {"type": "schema_diff", "diff": {"version_warning": ver_warn}}
 
-        endpoints = build_endpoints_list(
-            self.test_scope, self.public_only, self.categories
-        )
+        if self.test_mode == "compatibility":
+            endpoints = build_golden_endpoints(
+                corpus_ver, self.test_scope, self.public_only, self.categories
+            )
+        else:
+            endpoints = build_endpoints_list(
+                self.test_scope, self.public_only, self.categories
+            )
 
-        if self.use_introspection:
+        defer_schema = self.use_introspection and self.test_mode == "compatibility"
+        if self.use_introspection and not defer_schema:
             yield {"type": "progress", "message": "Introspecting GraphQL schema…"}
             try:
                 intro = await introspect_saleor(
@@ -440,9 +547,10 @@ class TestRunner:
                 ref_q = [e["name"] for e in SALEOR_QUERIES]
                 ref_m = [e["name"] for e in SALEOR_MUTATIONS]
                 diff = compare_schema(intro, ref_q, ref_m)
+                diff["schema_gate_source"] = "dashboard catalog"
                 yield {"type": "schema_diff", "diff": diff}
 
-                if self.test_scope == "full":
+                if self.test_mode == "discovery" and self.test_scope == "full":
                     known = {e["name"] for e in endpoints}
                     for name in intro.get("queries", []):
                         if name not in known:
@@ -481,69 +589,113 @@ class TestRunner:
         passed = failed = warnings = skipped = 0
         counts = {"pass": 0, "fail": 0, "warn": 0, "skip": 0}
 
-        semaphore = asyncio.Semaphore(self.concurrency)
+        effective_concurrency = 1 if self.test_mode == "compatibility" else self.concurrency
+        semaphore = asyncio.Semaphore(effective_concurrency)
 
-        async def test_one(idx: int, endpoint: dict) -> dict:
-            async with semaphore:
-                if self._stopped:
-                    return {
-                        "status": "skip",
-                        "outcome": "skipped",
-                        "expected": "Run stopped by user",
-                        "response_valid": None,
-                        "endpoint": endpoint["name"],
-                        "kind": endpoint["kind"],
-                        "category": endpoint["category"],
-                        "is_public": endpoint["is_public"],
-                        "skipped": True,
-                    }
-                return await self._test_endpoint(endpoint, idx, total)
+        async with httpx.AsyncClient(timeout=self.timeout) as http_client:
+            if self.test_mode == "compatibility" and self.saleor_token:
+                yield {"type": "progress", "message": "Validating staff authentication…"}
+                await self._ensure_valid_token(http_client)
 
-        tasks = [test_one(i, ep) for i, ep in enumerate(endpoints)]
-        for coro in asyncio.as_completed(tasks):
-            result = await coro
+            async def test_one(idx: int, endpoint: dict) -> dict:
+                async with semaphore:
+                    if self._stopped:
+                        return {
+                            "status": "skip",
+                            "outcome": "skipped",
+                            "expected": "Run stopped by user",
+                            "response_valid": None,
+                            "endpoint": endpoint["name"],
+                            "kind": endpoint["kind"],
+                            "category": endpoint["category"],
+                            "is_public": endpoint["is_public"],
+                            "skipped": True,
+                        }
+                    return await self._test_endpoint(endpoint, idx, total, http_client)
 
-            status = result.get("status", "skip")
-            if status == "pass":
-                passed += 1
-                counts["pass"] += 1
-            elif status == "fail":
-                failed += 1
-                counts["fail"] += 1
-            elif status == "warn":
-                warnings += 1
-                counts["warn"] += 1
+            async def emit_result(result: dict) -> dict:
+                nonlocal passed, failed, warnings, skipped
+                status = result.get("status", "skip")
+                if self.test_mode == "compatibility":
+                    if result.get("compatible"):
+                        passed += 1
+                        counts["pass"] += 1
+                    elif result.get("match_status") == "missing_golden":
+                        warnings += 1
+                        counts["warn"] += 1
+                    elif status == "skip":
+                        skipped += 1
+                        counts["skip"] += 1
+                    else:
+                        failed += 1
+                        counts["fail"] += 1
+                elif status == "pass":
+                    passed += 1
+                    counts["pass"] += 1
+                elif status == "fail":
+                    failed += 1
+                    counts["fail"] += 1
+                elif status == "warn":
+                    warnings += 1
+                    counts["warn"] += 1
+                else:
+                    skipped += 1
+                    counts["skip"] += 1
+
+                current = passed + failed + warnings + skipped
+                return {
+                    "type": "result",
+                    "run_id": str(self.run_id),
+                    "current": current,
+                    "total": total,
+                    "current_endpoint": result.get("endpoint", ""),
+                    "status": status,
+                    "endpoint_kind": result.get("kind", ""),
+                    "category": result.get("category", ""),
+                    "is_public": result.get("is_public", False),
+                    "response_time_ms": result.get("response_time_ms"),
+                    "error_message": result.get("error_message"),
+                    "input_sent": result.get("input_sent"),
+                    "actual_response": result.get("actual_response"),
+                    "outcome": result.get("outcome"),
+                    "expected": result.get("expected"),
+                    "expected_response": result.get("expected_response"),
+                    "match_status": result.get("match_status"),
+                    "diff_summary": result.get("diff_summary"),
+                    "field_items": result.get("field_items"),
+                    "compatible": result.get("compatible"),
+                    "response_contract": result.get("response_contract"),
+                    "response_valid": result.get("response_valid"),
+                    "saleor_field_type": result.get("saleor_field_type"),
+                    "actual_field_type": result.get("actual_field_type"),
+                    "status_counts": counts,
+                }
+
+            if self.test_mode == "compatibility":
+                for idx, endpoint in enumerate(endpoints):
+                    yield await emit_result(await test_one(idx, endpoint))
             else:
-                skipped += 1
-                counts["skip"] += 1
+                tasks = [test_one(i, ep) for i, ep in enumerate(endpoints)]
+                for coro in asyncio.as_completed(tasks):
+                    yield await emit_result(await coro)
 
-            current = passed + failed + warnings + skipped
-            yield {
-                "type": "result",
-                "run_id": str(self.run_id),
-                "current": current,
-                "total": total,
-                "current_endpoint": result.get("endpoint", ""),
-                "status": status,
-                "endpoint_kind": result.get("kind", ""),
-                "category": result.get("category", ""),
-                "is_public": result.get("is_public", False),
-                "response_time_ms": result.get("response_time_ms"),
-                "error_message": result.get("error_message"),
-                "input_sent": result.get("input_sent"),
-                "actual_response": result.get("actual_response"),
-                "outcome": result.get("outcome"),
-                "expected": result.get("expected"),
-                "expected_response": result.get("expected_response"),
-                "match_status": result.get("match_status"),
-                "diff_summary": result.get("diff_summary"),
-                "field_items": result.get("field_items"),
-                "response_valid": result.get("response_valid"),
-                "saleor_field_type": result.get("saleor_field_type"),
-                "actual_field_type": result.get("actual_field_type"),
-                "status_counts": counts,
-            }
+        if defer_schema:
+            yield {"type": "progress", "message": "Introspecting GraphQL schema (post-replay)…"}
+            try:
+                await self._ensure_valid_token()
+                intro = await introspect_saleor(
+                    self.saleor_url, self.saleor_token, self.timeout
+                )
+                ref_schema = load_reference_schema(corpus_ver)
+                diff = schema_gate_diff(intro, ref_schema, source="golden")
+                yield {"type": "schema_diff", "diff": diff}
+            except Exception as exc:
+                yield {"type": "schema_diff", "diff": {"introspection_error": str(exc)}}
 
+        yield {
+            "type": "schema_diff",
+            "diff": {"_run_meta": {"test_mode": self.test_mode}},
+        }
         yield {
             "type": "complete",
             "run_id": str(self.run_id),
@@ -553,35 +705,54 @@ class TestRunner:
             "warnings": warnings,
             "skipped": skipped,
             "status_counts": counts,
+            "test_mode": self.test_mode,
         }
 
-    async def _test_endpoint(self, endpoint: dict, idx: int, total: int) -> dict:
+    async def _test_endpoint(
+        self,
+        endpoint: dict,
+        idx: int,
+        total: int,
+        http_client: httpx.AsyncClient | None = None,
+    ) -> dict:
         """Test a single endpoint."""
         name = endpoint["name"]
         kind = endpoint["kind"]
         category = endpoint["category"]
         is_public = endpoint["is_public"]
 
-        headers = {"Content-Type": "application/json"}
-        if self.saleor_token:
-            headers["Authorization"] = f"Bearer {self.saleor_token}"
-
-        query = build_query_with_schema(name, kind, self.schema_fields)
+        if self.test_mode == "compatibility" and endpoint.get("golden_input"):
+            query = endpoint["golden_input"]
+        else:
+            query = build_query_with_schema(name, kind, self.schema_fields)
         start = time.time()
 
         try:
-            async with httpx.AsyncClient(timeout=self.timeout) as client:
-                resp = await client.post(
-                    self.saleor_url,
-                    data=json.dumps({"query": query}),
-                    headers=headers,
-                )
+            client = http_client or httpx.AsyncClient(timeout=self.timeout)
+            own_client = http_client is None
+            try:
+                resp_json = {}
+                resp_status = 500
+                for attempt in range(3):
+                    headers = self._auth_headers()
+                    resp = await client.post(
+                        self.saleor_url,
+                        json={"query": query},
+                        headers=headers,
+                    )
+                    resp_status = resp.status_code
+                    resp_json = resp.json()
+                    contract = classify_response_contract(resp_json, http_status=resp_status)
+                    if contract != CONTRACT_AUTH_ERROR:
+                        break
+                    if attempt < 2:
+                        await self._force_refresh_token()
+                        await asyncio.sleep(0.25 * (attempt + 1))
                 elapsed_ms = int((time.time() - start) * 1000)
 
-                resp_json = resp.json()
                 meta = classify_graphql_response(
                     resp_json,
-                    http_status=resp.status_code,
+                    http_status=resp_status,
                     endpoint_kind=kind,
                 )
                 comparison = compare_to_golden(
@@ -590,24 +761,32 @@ class TestRunner:
                     kind,
                     resp_json,
                     meta,
+                    http_status=resp_status,
                 )
-                status = comparison.recommended_status
-                if comparison.match_status == "missing_golden":
-                    status = meta["status"]
-                expected_label = meta["expected"]
-                if comparison.expected_response:
-                    expected_label = (
-                        f"Golden reference ({comparison.match_status}): "
-                        f"{comparison.golden_outcome or meta['outcome']}"
+                if self.test_mode == "compatibility":
+                    status = "pass" if comparison.compatible else (
+                        "warn" if comparison.match_status == "missing_golden" else "fail"
                     )
+                else:
+                    status = comparison.recommended_status
+                    if comparison.match_status == "missing_golden":
+                        status = meta["status"]
+                contract = meta.get("response_contract") or comparison.actual_contract
+                expected_label = (
+                    f"Contract: {comparison.golden_contract or '?'} → {comparison.actual_contract or contract}"
+                    if comparison.golden_contract
+                    else meta["expected"]
+                )
                 return {
                     "status": status,
-                    "outcome": meta["outcome"],
+                    "outcome": comparison.actual_contract or meta.get("response_contract") or meta["outcome"],
                     "expected": expected_label,
                     "expected_response": comparison.expected_response,
                     "match_status": comparison.match_status,
                     "diff_summary": comparison.diff_summary,
                     "field_items": comparison.field_items,
+                    "compatible": comparison.compatible,
+                    "response_contract": contract,
                     "response_valid": meta["response_valid"],
                     "endpoint": name,
                     "kind": kind,
@@ -618,6 +797,9 @@ class TestRunner:
                     "input_sent": query,
                     "actual_response": json.dumps(resp_json),
                 }
+            finally:
+                if own_client:
+                    await client.aclose()
 
         except httpx.TimeoutException:
             elapsed_ms = int((time.time() - start) * 1000)

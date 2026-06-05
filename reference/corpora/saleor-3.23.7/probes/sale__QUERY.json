@@ -6,7 +6,13 @@
   "golden_response": {
     "data": {
       "sales": {
-        "edges": []
+        "edges": [
+          {
+            "node": {
+              "id": "U2FsZToxMDEx"
+            }
+          }
+        ]
       }
     },
     "extensions": {
@@ -19,5 +25,8 @@
   "golden_outcome": "success_with_data",
   "golden_status": "pass",
   "error_pattern": null,
-  "response_shape_hash": "sha256:747ba946edb706b6"
+  "response_shape_hash": "sha256:2e8f01208a47647f",
+  "golden_contract": "success",
+  "http_status": 200,
+  "probe_stability": "stateful"
 }

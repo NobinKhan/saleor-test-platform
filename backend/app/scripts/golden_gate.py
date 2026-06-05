@@ -59,7 +59,7 @@ async def main() -> int:
     parser.add_argument("--run-id", default=None, help="Test run UUID to check")
     parser.add_argument("--version", default=None, help="Corpus Saleor version")
     args = parser.parse_args()
-    version = args.version or settings.reference_baseline_version
+    version = args.version or settings.golden_corpus_version
 
     ok, msg = await check_corpus(args.min_probes, version)
     print(msg)

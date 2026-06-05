@@ -21,8 +21,11 @@
       }
     }
   },
-  "golden_outcome": "success_with_data",
-  "golden_status": "pass",
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
   "error_pattern": null,
-  "response_shape_hash": "sha256:f82e35e50472d97c"
+  "response_shape_hash": "sha256:f82e35e50472d97c",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "probe_stability": "stateless"
 }

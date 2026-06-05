@@ -67,8 +67,11 @@
       }
     }
   },
-  "golden_outcome": "unexpected_error",
+  "golden_outcome": "not_found_probe",
   "golden_status": "warn",
   "error_pattern": null,
-  "response_shape_hash": "sha256:b9e8cc7eaba3ef33"
+  "response_shape_hash": "sha256:b9e8cc7eaba3ef33",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "probe_stability": "stateless"
 }

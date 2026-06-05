@@ -45,8 +45,11 @@
       }
     }
   },
-  "golden_outcome": "unexpected_error",
+  "golden_outcome": "schema_error",
   "golden_status": "warn",
   "error_pattern": null,
-  "response_shape_hash": "sha256:fd2b446e54f69a8f"
+  "response_shape_hash": "sha256:fd2b446e54f69a8f",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "probe_stability": "stateless"
 }

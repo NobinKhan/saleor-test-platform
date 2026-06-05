@@ -48,9 +48,12 @@ class GoldenProbe:
     golden_status: str
     error_pattern: str | None = None
     response_shape_hash: str | None = None
+    golden_contract: str | None = None
+    http_status: int | None = None
+    probe_stability: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        d = {
             "endpoint_name": self.endpoint_name,
             "endpoint_kind": self.endpoint_kind,
             "category": self.category,
@@ -61,6 +64,13 @@ class GoldenProbe:
             "error_pattern": self.error_pattern,
             "response_shape_hash": self.response_shape_hash,
         }
+        if self.golden_contract:
+            d["golden_contract"] = self.golden_contract
+        if self.http_status is not None:
+            d["http_status"] = self.http_status
+        if self.probe_stability:
+            d["probe_stability"] = self.probe_stability
+        return d
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> GoldenProbe:
@@ -74,6 +84,9 @@ class GoldenProbe:
             golden_status=data["golden_status"],
             error_pattern=data.get("error_pattern"),
             response_shape_hash=data.get("response_shape_hash"),
+            golden_contract=data.get("golden_contract"),
+            http_status=data.get("http_status"),
+            probe_stability=data.get("probe_stability"),
         )
 
 

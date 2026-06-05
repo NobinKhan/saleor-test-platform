@@ -55,6 +55,8 @@ async def capture_reference(
         saleor_version=data.saleor_version,
         test_scope=data.test_scope,
         db=db,
+        saleor_email=data.saleor_email,
+        saleor_password=data.saleor_password,
     )
     return {"ok": True, "user_id": str(user.id), **result}
 

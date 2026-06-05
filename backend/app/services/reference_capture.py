@@ -4,6 +4,7 @@ Capture golden reference probes from a live Saleor instance.
 
 from __future__ import annotations
 
+import asyncio
 import json
 from typing import Any
 
@@ -19,9 +20,12 @@ from app.services.query_builder import build_query_with_schema, introspect_field
 from app.services.reference_compare import probe_from_capture
 from app.services.reference_corpus import (
     corpus_hash,
+    load_all_probes_from_disk,
     load_manifest,
     write_corpus,
 )
+from app.services.response_contract import CONTRACT_AUTH_ERROR, classify_response_contract
+from app.services.saleor_auth import ensure_valid_token, refresh_saleor_token, validate_saleor_token
 from app.services.test_runner import (
     SALEOR_MUTATIONS,
     SALEOR_QUERIES,
@@ -29,15 +33,44 @@ from app.services.test_runner import (
     detect_saleor_version,
 )
 
+ME_CHECK_INTERVAL = 50
+CAPTURE_BATCH_SIZE = 180
+CAPTURE_BATCH_COOLDOWN_SEC = 90
+
+# Mutations that require a customer JWT; auth_error under staff token is expected.
+CUSTOMER_CONTEXT_OPS = frozenset({
+    "accountAddressCreate",
+    "accountAddressDelete",
+    "accountAddressUpdate",
+    "accountDelete",
+    "accountSetDefaultAddress",
+    "addressCreate",
+    "addressDelete",
+    "addressSetDefault",
+    "addressUpdate",
+    "confirmEmailChange",
+    "customerBulkDelete",
+    "customerCreate",
+    "customerDelete",
+    "customerUpdate",
+    "orderCreateFromCheckout",
+    "passwordChange",
+    "requestEmailChange",
+    "sendConfirmationEmail",
+    "userAvatarDelete",
+    "userAvatarUpdate",
+})
+
 
 async def build_capture_endpoints(
     saleor_url: str,
     saleor_token: str | None,
     test_scope: str,
     timeout: int,
-) -> tuple[list[dict], dict[str, list[dict]] | None]:
+) -> tuple[list[dict], dict[str, list[dict]] | None, dict[str, list[str]] | None]:
     endpoints = build_endpoints_list(test_scope, public_only=False)
     schema_fields: dict[str, list[dict]] | None = None
+    intro: dict[str, list[str]] | None = None
 
     if test_scope == "full":
         intro = await introspect_saleor(saleor_url, saleor_token, timeout)
@@ -69,7 +102,30 @@ async def build_capture_endpoints(
                 )
                 known.add(name)
 
-    return endpoints, schema_fields
+    return endpoints, schema_fields, intro
+
+
+def _requires_staff_auth(endpoint: dict) -> bool:
+    """True when auth_error under staff token indicates a capture defect."""
+    if endpoint["name"] in CUSTOMER_CONTEXT_OPS:
+        return False
+    if endpoint["kind"] == "MUTATION":
+        return True
+    catalog_public = {e["name"] for e in SALEOR_QUERIES if e["is_public"]}
+    return endpoint["name"] not in catalog_public
+
+
+def _capture_order(endpoints: list[dict]) -> list[dict]:
+    """Staff/dashboard probes first; customer-context ops last (they can invalidate staff JWT)."""
+
+    def sort_key(ep: dict) -> tuple[int, str]:
+        if ep["name"] in CUSTOMER_CONTEXT_OPS:
+            return (2, ep["name"])
+        if _requires_staff_auth(ep):
+            return (0, ep["name"])
+        return (1, ep["name"])
+
+    return sorted(endpoints, key=sort_key)
 
 
 async def capture_reference_probes(
@@ -80,38 +136,150 @@ async def capture_reference_probes(
     test_scope: str = "full",
     timeout: int = 30,
     db: AsyncSession | None = None,
+    saleor_email: str | None = None,
+    saleor_password: str | None = None,
 ) -> dict[str, Any]:
     version = saleor_version or await detect_saleor_version(saleor_url, saleor_token, timeout)
     if not version:
         version = settings.reference_baseline_version
 
-    endpoints, schema_fields = await build_capture_endpoints(
+    endpoints, schema_fields, intro = await build_capture_endpoints(
         saleor_url, saleor_token, test_scope, timeout
     )
-    headers = {"Content-Type": "application/json"}
-    if saleor_token:
-        headers["Authorization"] = f"Bearer {saleor_token}"
+    endpoints = _capture_order(endpoints)
+    if not saleor_token:
+        raise ValueError("Golden capture requires staff authentication token")
 
+    # Introspection can exhaust JWT validity; always start probe capture with a fresh token.
+    token = saleor_token
+    if saleor_email and saleor_password:
+        fresh, _err = await refresh_saleor_token(
+            saleor_url, saleor_email, saleor_password, timeout
+        )
+        if fresh:
+            token = fresh
     probes = []
+    capture_errors: list[str] = []
+    batches = [
+        endpoints[i : i + CAPTURE_BATCH_SIZE]
+        for i in range(0, len(endpoints), CAPTURE_BATCH_SIZE)
+    ]
+
     async with httpx.AsyncClient(timeout=timeout) as client:
-        for endpoint in endpoints:
-            query = build_query_with_schema(
-                endpoint["name"], endpoint["kind"], schema_fields
+        global_idx = 0
+        for batch_num, batch in enumerate(batches):
+            if batch_num > 0:
+                await asyncio.sleep(CAPTURE_BATCH_COOLDOWN_SEC)
+                if saleor_email and saleor_password:
+                    fresh, _err = await refresh_saleor_token(
+                        saleor_url, saleor_email, saleor_password, timeout
+                    )
+                    if fresh:
+                        token = fresh
+
+            token = await ensure_valid_token(
+                saleor_url=saleor_url,
+                token=token,
+                email=saleor_email,
+                password=saleor_password,
+                timeout=timeout,
+                client=client,
             )
-            resp = await client.post(
-                saleor_url,
-                data=json.dumps({"query": query}),
-                headers=headers,
-            )
-            resp_json = resp.json()
-            classified = classify_graphql_response(
-                resp_json,
-                http_status=resp.status_code,
-                endpoint_kind=endpoint["kind"],
-            )
-            probes.append(probe_from_capture(endpoint, query, resp_json, classified))
+            if not token:
+                raise ValueError("Staff token invalid during capture — could not obtain token")
+
+            for endpoint in batch:
+                idx = global_idx
+                global_idx += 1
+                if (
+                    idx > 0
+                    and idx % ME_CHECK_INTERVAL == 0
+                    and saleor_email
+                    and saleor_password
+                    and not await validate_saleor_token(saleor_url, token, timeout, client)
+                ):
+                    token = await ensure_valid_token(
+                        saleor_url=saleor_url,
+                        token=token,
+                        email=saleor_email,
+                        password=saleor_password,
+                        timeout=timeout,
+                        client=client,
+                    ) or token
+
+                query = build_query_with_schema(
+                    endpoint["name"], endpoint["kind"], schema_fields
+                )
+                headers = {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {token}",
+                }
+                resp = await client.post(
+                    saleor_url,
+                    json={"query": query},
+                    headers=headers,
+                )
+                resp_json = resp.json()
+                contract = classify_response_contract(resp_json, http_status=resp.status_code)
+
+                if contract == CONTRACT_AUTH_ERROR and _requires_staff_auth(endpoint):
+                    token = await ensure_valid_token(
+                        saleor_url=saleor_url,
+                        token=token,
+                        email=saleor_email,
+                        password=saleor_password,
+                        timeout=timeout,
+                        client=client,
+                    ) or token
+                    headers["Authorization"] = f"Bearer {token}"
+                    resp = await client.post(
+                        saleor_url,
+                        json={"query": query},
+                        headers=headers,
+                    )
+                    resp_json = resp.json()
+                    contract = classify_response_contract(resp_json, http_status=resp.status_code)
+                    if contract == CONTRACT_AUTH_ERROR:
+                        msg = (
+                            f"{endpoint['name']} ({endpoint['kind']}): auth_error after refresh"
+                        )
+                        capture_errors.append(msg)
+                        continue
+
+                classified = classify_graphql_response(
+                    resp_json,
+                    http_status=resp.status_code,
+                    endpoint_kind=endpoint["kind"],
+                )
+                probes.append(
+                    probe_from_capture(
+                        endpoint, query, resp_json, classified, http_status=resp.status_code
+                    )
+                )
+
+    captured_keys = {(p.endpoint_name, p.endpoint_kind) for p in probes}
+    for existing in load_all_probes_from_disk(version):
+        key = (existing.endpoint_name, existing.endpoint_kind)
+        if key not in captured_keys:
+            probes.append(existing)
+            captured_keys.add(key)
 
     directory = write_corpus(version, saleor_url, probes)
+    manifest_path = directory / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["auth_mode"] = "staff" if saleor_token else "anonymous"
+    if intro:
+        manifest["reference_queries"] = intro.get("queries", [])
+        manifest["reference_mutations"] = intro.get("mutations", [])
+    else:
+        manifest["reference_queries"] = sorted(
+            {p.endpoint_name for p in probes if p.endpoint_kind == "QUERY"}
+        )
+        manifest["reference_mutations"] = sorted(
+            {p.endpoint_name for p in probes if p.endpoint_kind == "MUTATION"}
+        )
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     chash = corpus_hash(version)
 
     if db is not None:
@@ -133,6 +301,8 @@ async def capture_reference_probes(
         "probe_count": len(probes),
         "corpus_path": str(directory),
         "corpus_hash": chash,
+        "capture_warnings": capture_errors,
+        "capture_skipped": len(capture_errors),
     }
 
 

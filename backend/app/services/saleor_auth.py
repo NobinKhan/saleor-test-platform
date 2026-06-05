@@ -19,6 +19,72 @@ mutation TokenCreate($email: String!, $password: String!) {
 }
 """
 
+ME_QUERY = "query { me { email } }"
+
+
+async def validate_saleor_token(
+    saleor_url: str,
+    token: str | None,
+    timeout: int = 30,
+    client: httpx.AsyncClient | None = None,
+) -> bool:
+    """Return True when the token resolves a staff user via the me query."""
+    if not token:
+        return False
+    graphql_url = resolve_saleor_url_for_runner(saleor_url)
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+    own_client = client is None
+    http = client or httpx.AsyncClient(timeout=timeout)
+    try:
+        resp = await http.post(graphql_url, json={"query": ME_QUERY}, headers=headers)
+        if resp.status_code != 200:
+            return False
+        data = resp.json()
+        return bool((data.get("data") or {}).get("me"))
+    except Exception:
+        return False
+    finally:
+        if own_client:
+            await http.aclose()
+
+
+async def refresh_saleor_token(
+    saleor_url: str,
+    email: str,
+    password: str,
+    timeout: int = 30,
+) -> tuple[Optional[str], Optional[str]]:
+    """Re-authenticate with Saleor and return a fresh JWT."""
+    return await fetch_saleor_token(saleor_url, email, password, timeout)
+
+
+async def ensure_valid_token(
+    *,
+    saleor_url: str,
+    token: str | None,
+    email: str | None,
+    password: str | None,
+    timeout: int = 30,
+    client: httpx.AsyncClient | None = None,
+    force_refresh: bool = False,
+) -> str | None:
+    """Validate token via me; refresh with credentials when invalid or forced."""
+    if not force_refresh and token and await validate_saleor_token(
+        saleor_url, token, timeout, client
+    ):
+        return token
+    if email and password:
+        new_token, _err = await refresh_saleor_token(
+            saleor_url, email, password, timeout
+        )
+        if new_token:
+            return new_token
+    return token
+
 
 async def fetch_saleor_token(
     saleor_url: str,

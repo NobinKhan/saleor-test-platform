@@ -99,6 +99,13 @@
       golden_mismatched: number;
       golden_missing: number;
       upgrade_hint: string | null;
+      probe_outcome_rate: number | null;
+      probe_success_count: number;
+      schema_gate_pass: boolean | null;
+      schema_gate_source: string | null;
+      schema_score: number | null;
+      certified: boolean | null;
+      test_mode: string | null;
     };
     category_breakdown: CategoryBreakdown[];
     response_time_distribution: ResponseTimeBucket[];
@@ -372,6 +379,10 @@
             </td>
           </tr>
           <tr>
+            <th>Test mode</th>
+            <td>{report.summary.test_mode ?? "compatibility"} — replays exact golden inputs</td>
+          </tr>
+          <tr>
             <th>Test scope</th>
             <td>
               {report.summary.test_scope}
@@ -436,36 +447,46 @@
     {/if}
 
     <div class="summary-row">
-      <div class="summary-card big">
-        <span class="summary-label">Pass Rate</span>
-        <span class="summary-value {getPassRateClass(report.summary.pass_rate)}">{report.summary.pass_rate}%</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">Total Tests</span>
-        <span class="summary-value">{report.summary.total}</span>
-      </div>
-      <div class="summary-card pass">
-        <span class="summary-label">Passed</span>
-        <span class="summary-value">{report.summary.passed}</span>
-      </div>
-      <div class="summary-card fail">
-        <span class="summary-label">Failed</span>
-        <span class="summary-value">{report.summary.failed}</span>
-      </div>
-      <div class="summary-card warn">
-        <span class="summary-label">Warnings</span>
-        <span class="summary-value">{report.summary.warnings}</span>
-      </div>
-      <div class="summary-card">
-        <span class="summary-label">Avg Response</span>
-        <span class="summary-value">{report.summary.avg_response_time_ms}ms</span>
-      </div>
       {#if report.summary.compatibility_score != null}
-        <div class="summary-card">
+        <div class="summary-card big">
           <span class="summary-label">Compatibility</span>
           <span class="summary-value {getPassRateClass(report.summary.compatibility_score)}">{report.summary.compatibility_score}%</span>
         </div>
       {/if}
+      {#if report.summary.schema_gate_pass != null}
+        <div class="summary-card {report.summary.schema_gate_pass ? 'pass' : 'fail'}">
+          <span class="summary-label">Schema gate ({report.summary.schema_gate_source ?? "dashboard catalog"})</span>
+          <span class="summary-value">{report.summary.schema_gate_pass ? "PASS" : "FAIL"}</span>
+        </div>
+      {/if}
+      {#if report.summary.certified != null}
+        <div class="summary-card {report.summary.certified ? 'pass' : 'warn'}">
+          <span class="summary-label">Certified</span>
+          <span class="summary-value">{report.summary.certified ? "YES" : "NO"}</span>
+        </div>
+      {/if}
+      <div class="summary-card">
+        <span class="summary-label">Total probes</span>
+        <span class="summary-value">{report.summary.total}</span>
+      </div>
+      <div class="summary-card pass">
+        <span class="summary-label">Compatible</span>
+        <span class="summary-value">{report.summary.passed}</span>
+      </div>
+      <div class="summary-card fail">
+        <span class="summary-label">Incompatible</span>
+        <span class="summary-value">{report.summary.failed}</span>
+      </div>
+      {#if report.summary.probe_outcome_rate != null}
+        <div class="summary-card">
+          <span class="summary-label">Probe success rate</span>
+          <span class="summary-value" title="Informational: probes that returned success-class data (not compatibility)">{report.summary.probe_outcome_rate}%</span>
+        </div>
+      {/if}
+      <div class="summary-card">
+        <span class="summary-label">Avg Response</span>
+        <span class="summary-value">{report.summary.avg_response_time_ms}ms</span>
+      </div>
     </div>
 
     <div class="card latency-panel">

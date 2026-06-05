@@ -13,10 +13,10 @@
     {
       "version": "3.23.7",
       "status": "active",
-      "captured_at": "2026-06-05T12:11:40.158390+00:00",
+      "captured_at": "2026-06-05T17:56:13.319063+00:00",
       "probe_count": 414,
       "saleor_url": "http://saleor-api:8000/graphql/",
-      "corpus_hash": "sha256:ea6beda4261a80a35a6c1910a9f9267e8439673fc44fb7d088cc8cde3d8bc6a6"
+      "corpus_hash": "sha256:b1522749b37bee0518994b4008e5d86f6a15674db0fae3c1e57f333b0a66d34c"
     }
   ]
 }

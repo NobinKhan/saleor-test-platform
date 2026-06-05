@@ -4,65 +4,16 @@
   "category": "unknown",
   "input_sent": "mutation { staffCreate(input: {}) { errors { field message code } } }",
   "golden_response": {
-    "errors": [
-      {
-        "message": "Invalid token. Create new one by using tokenCreate mutation.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 12
-          }
-        ],
-        "path": [
-          "staffCreate"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "InvalidTokenError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
-              "    return executor.execute(resolve_fn, source, info, **args)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
-              "    return fn(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/contextlib.py\", line 81, in inner",
-              "    return func(*args, **kwds)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 520, in mutate",
-              "    setup_context_user(info.context)",
-              "  File \"/app/saleor/graphql/core/context.py\", line 66, in setup_context_user",
-              "    context.user._setup()  # type: ignore[union-attr]",
-              "    ^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/utils/functional.py\", line 404, in _setup",
-              "    self._wrapped = self._setupfunc()",
-              "                    ^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/context.py\", line 94, in user",
-              "    return get_user(request) or None",
-              "           ^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/context.py\", line 84, in get_user",
-              "    request._cached_user = cast(User | None, authenticate(request=request))",
-              "                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/views/decorators/debug.py\", line 75, in sensitive_variables_wrapper",
-              "    return func(*func_args, **func_kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/contrib/auth/__init__.py\", line 114, in authenticate",
-              "    user = backend.authenticate(request, **credentials)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/core/auth_backend.py\", line 51, in authenticate",
-              "    return load_user_from_request(request)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/core/auth_backend.py\", line 151, in load_user_from_request",
-              "    raise jwt.InvalidTokenError(",
-              "jwt.exceptions.InvalidTokenError: Invalid token. Create new one by using tokenCreate mutation."
-            ]
-          }
-        }
-      }
-    ],
     "data": {
-      "staffCreate": null
+      "staffCreate": {
+        "errors": [
+          {
+            "field": "email",
+            "message": "This field cannot be blank.",
+            "code": "REQUIRED"
+          }
+        ]
+      }
     },
     "extensions": {
       "cost": {
@@ -74,5 +25,8 @@
   "golden_outcome": "validation_error",
   "golden_status": "warn",
   "error_pattern": null,
-  "response_shape_hash": "sha256:9d28f4dfdb4026bb"
+  "response_shape_hash": "sha256:8e41ebbbe02e798f",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "probe_stability": "stateless"
 }

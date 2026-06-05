@@ -25,5 +25,8 @@
   "golden_outcome": "success_with_data",
   "golden_status": "pass",
   "error_pattern": null,
-  "response_shape_hash": "sha256:495a2135f8f04d8a"
+  "response_shape_hash": "sha256:495a2135f8f04d8a",
+  "golden_contract": "success",
+  "http_status": 200,
+  "probe_stability": "stateful"
 }

@@ -6,26 +6,12 @@ from __future__ import annotations
 
 from typing import Any
 
-
-def _msg_matches_schema_error(msg: str) -> bool:
-    lower = msg.lower()
-    schema_markers = (
-        "cannot query",
-        "undefined type",
-        "field has unsupported",
-        "unknown type",
-        "fieldundefined",
-        "unknown field",
-        "did you mean",
-        "field undefined",
-    )
-    if any(m in lower for m in schema_markers):
-        return True
-    if "argument" in lower and "required but not provided" in lower:
-        return True
-    if "argument" in lower and "is required" in lower:
-        return True
-    return False
+from app.services.response_contract import (
+    CONTRACT_SUCCESS,
+    CONTRACT_TRANSPORT_ERROR,
+    classify_response_contract,
+    contract_to_legacy_outcome,
+)
 
 
 def classify_graphql_response(
@@ -37,106 +23,54 @@ def classify_graphql_response(
 ) -> dict[str, Any]:
     """
     Return outcome metadata for a single endpoint probe.
-    Maps to pass/fail/warn via test_runner status rules.
+    Uses HTTP-agnostic response contract classification.
     """
+    contract = classify_response_contract(resp_json, http_status=http_status)
+    outcome = contract_to_legacy_outcome(contract)
     errors = resp_json.get("errors") or []
     data = resp_json.get("data")
     has_graphql_data = bool(data) and data is not None
-    response_valid = http_status == 200 and not errors and has_graphql_data
+    first_msg = errors[0].get("message", "") if errors else None
 
-    if http_status != 200:
+    if contract == CONTRACT_SUCCESS:
         return {
-            "outcome": "http_error",
-            "response_valid": False,
-            "has_graphql_data": False,
-            "expected": f"Expect HTTP 200, got {http_status}",
-            "status": "fail",
-            "error_message": error_message or f"HTTP {http_status}",
-        }
-
-    if not errors:
-        return {
-            "outcome": "success_with_data",
+            "outcome": outcome,
+            "response_contract": contract,
             "response_valid": True,
             "has_graphql_data": True,
-            "expected": "Expect GraphQL 200 with data and no errors",
+            "expected": "Expect GraphQL success response",
             "status": "pass",
             "error_message": None,
         }
 
-    first_err = errors[0] if errors else {}
-    msg = first_err.get("message", "")
-    ext = first_err.get("extensions", {})
-    code = ext.get("code", "")
-
-    auth_codes = {
-        "permission",
-        "authentication",
-        "forbidden",
-        "jwt-error",
-        "jwt-invalid",
-        "PERMISSION_DENIED",
-    }
-    validation_codes = {
-        "INVALID",
-        "GRAPHQL_VALIDATION_FAILED",
-        "REQUIRED",
-        "UNIQUE",
-    }
-
-    if code in auth_codes or str(code).lower() in auth_codes:
+    if contract == CONTRACT_TRANSPORT_ERROR:
         return {
-            "outcome": "auth_denied",
+            "outcome": outcome,
+            "response_contract": contract,
             "response_valid": False,
-            "has_graphql_data": has_graphql_data,
-            "expected": "Expect staff access or acceptable permission denial",
-            "status": "warn",
-            "error_message": msg,
-        }
-    if _msg_matches_schema_error(msg):
-        return {
-            "outcome": "schema_error",
-            "response_valid": False,
-            "has_graphql_data": has_graphql_data,
-            "expected": "Expect operation and fields to exist in API schema",
+            "has_graphql_data": False,
+            "expected": f"Expect valid GraphQL response, got HTTP {http_status}",
             "status": "fail",
-            "error_message": msg,
-        }
-    if "not found" in msg.lower() or "does not exist" in msg.lower():
-        return {
-            "outcome": "not_found_probe",
-            "response_valid": False,
-            "has_graphql_data": has_graphql_data,
-            "expected": "Probe uses placeholder IDs — not-found is acceptable",
-            "status": "pass",
-            "error_message": None,
-        }
-    if code in validation_codes:
-        return {
-            "outcome": "validation_error",
-            "response_valid": False,
-            "has_graphql_data": has_graphql_data,
-            "expected": "Mutation probe uses minimal/dummy input — validation errors are expected",
-            "status": "warn",
-            "error_message": msg,
-        }
-    if endpoint_kind == "MUTATION":
-        return {
-            "outcome": "validation_error",
-            "response_valid": False,
-            "has_graphql_data": has_graphql_data,
-            "expected": "Mutation probe uses minimal/dummy input — validation errors are expected",
-            "status": "warn",
-            "error_message": msg,
+            "error_message": error_message or first_msg or f"HTTP {http_status}",
         }
 
+    status = "warn"
+    if contract in ("graphql_error", "schema_error"):
+        status = "warn"
+    expected_map = {
+        "business_error": "Expect business-level validation error in data.errors",
+        "graphql_error": "Expect GraphQL validation error for probe input",
+        "auth_error": "Expect auth/permission denial for probe",
+        "not_found": "Expect not-found for placeholder probe ID",
+    }
     return {
-        "outcome": "unexpected_error",
+        "outcome": outcome,
+        "response_contract": contract,
         "response_valid": False,
         "has_graphql_data": has_graphql_data,
-        "expected": "Expect GraphQL data or a known error pattern",
-        "status": "warn",
-        "error_message": msg,
+        "expected": expected_map.get(contract, "Expect known error pattern"),
+        "status": status,
+        "error_message": first_msg,
     }
 
 
@@ -148,6 +82,7 @@ def classify_transport_error(
     outcome = "timeout" if "timeout" in message.lower() else "transport_error"
     return {
         "outcome": outcome,
+        "response_contract": CONTRACT_TRANSPORT_ERROR,
         "response_valid": False,
         "has_graphql_data": False,
         "expected": "Expect reachable GraphQL endpoint",

@@ -75,3 +75,15 @@ upgrade-reference version:
     #!/usr/bin/env bash
     set -euo pipefail
     bash "{{ root }}/scripts/upgrade-reference.sh" "{{ version }}"
+
+self-check *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
+      python -m app.scripts.self_check {{ extra }}
+
+migrate-corpus *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
+      python -m app.scripts.migrate_corpus_contracts {{ extra }}

@@ -12,6 +12,8 @@ from app.models import TestRun, TestResult
 from app.services.reference_corpus import load_manifest, resolve_corpus_version
 from app.services.reference_registry import get_upgrade_hint
 from app.services.run_helpers import catalog_counts
+from app.services.schema_gate import compute_certified, compute_schema_gate
+from app.services.response_contract import CONTRACT_SUCCESS
 
 BODY_CAP = 4096
 
@@ -61,13 +63,26 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
     ctx = _golden_context(run)
     stats = _summary_stats(results)
     total = run.total_tests
-    pass_rate = round(run.passed / total * 100, 1) if total > 0 else 0.0
+    compat_rate = stats["compatibility_score"]
+    probe_success = sum(
+        1 for r in results
+        if r.outcome == CONTRACT_SUCCESS or r.outcome == "success_with_data"
+    )
+    probe_outcome_rate = round(probe_success / total * 100, 1) if total > 0 else None
+    schema_gate = compute_schema_gate(run.schema_diff)
+    certified = compute_certified(
+        schema_gate_pass=schema_gate["schema_gate_pass"],
+        compatibility_score=compat_rate,
+    )
+    run_meta = (run.schema_diff or {}).get("_run_meta") or {}
+    test_mode = run_meta.get("test_mode", "compatibility")
 
     lines: list[str] = [
         "# Saleor API Compatibility Report",
         "",
         "## Purpose",
         f"This report compares a target GraphQL API against the official Saleor {ctx['golden_corpus_version']} reference.",
+        f" Test mode: **{test_mode}** (golden input replay).",
         "",
         "## Version glossary",
         "| Label | Value | Meaning |",
@@ -77,11 +92,15 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         f"| Golden corpus | {ctx['golden_corpus_version']} ({ctx['golden_probe_count']} probes) | Recorded request/response from official Saleor |",
         "",
         "## Executive summary",
-        f"- Pass rate: **{pass_rate}%** ({run.passed}/{total})",
-        f"- Compatibility score (golden match): **{stats['compatibility_score']}%**"
-        if stats["compatibility_score"] is not None
-        else "- Compatibility score: **N/A** (no golden comparisons)",
-        f"- Failed: {run.failed}, Warnings: {run.warnings}, Skipped: {run.skipped}",
+        f"- **Compatibility score** (primary): **{compat_rate}%**"
+        if compat_rate is not None
+        else "- **Compatibility score**: N/A",
+        f"- Schema gate ({schema_gate.get('schema_gate_source', 'dashboard catalog')}): "
+        f"**{'PASS' if schema_gate['schema_gate_pass'] else 'FAIL'}** "
+        f"(missing {schema_gate['missing_queries']} queries, {schema_gate['missing_mutations']} mutations)",
+        f"- Certified Saleor-compatible: **{'YES' if certified else 'NO'}** (requires schema gate + compatibility ≥ 95%)",
+        f"- Probe outcome rate (informational): **{probe_outcome_rate}%** returned success-class responses ({probe_success}/{total})",
+        f"- Incompatible: {run.failed}, Warnings: {run.warnings}, Compatible: {run.passed}",
         f"- Golden: {stats['golden_matched']} matched, {stats['golden_mismatched']} mismatched, {stats['golden_missing']} missing",
     ]
     if ctx["upgrade_hint"]:
@@ -104,12 +123,28 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
                 more = f" (+{len(items) - 10} more)" if len(items) > 10 else ""
                 lines.append(f"- {label} ({len(items)}): {preview}{more}")
 
-    failures = [
+    true_mismatches = [
         r for r in results
-        if r.status == "fail" or r.match_status in ("mismatch", "shape_drift")
+        if r.match_status in ("mismatch", "shape_drift")
     ]
+    compatible_errors = [
+        r for r in results
+        if r.match_status == "match" and r.status == "fail"
+    ]
+    if true_mismatches:
+        lines.extend(["", "## Behavioral mismatches (action required)"])
+        failures = true_mismatches
+    else:
+        failures = []
+    if compatible_errors:
+        lines.extend([
+            "",
+            f"## Expected error probes (compatible, {len(compatible_errors)} total)",
+            "These probes send invalid/minimal input and receive the same error class as golden — not failures.",
+        ])
     if failures:
-        lines.extend(["", "## Failures requiring action (prioritized)"])
+        if not true_mismatches:
+            lines.extend(["", "## Failures requiring action (prioritized)"])
         for r in failures[:50]:
             lines.extend([
                 "",
@@ -127,7 +162,10 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
             if r.error_message:
                 lines.append(f"- Error: {r.error_message}")
 
-    warns = [r for r in results if r.status == "warn" and r not in failures]
+    warns = [
+        r for r in results
+        if r.status == "warn" and r not in failures and r not in true_mismatches
+    ]
     if warns:
         lines.extend(["", "## Warnings (summary)", "| Endpoint | Kind | Outcome | Match |", "|----------|------|---------|-------|"])
         for r in warns[:30]:
@@ -154,7 +192,11 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
     ctx = _golden_context(run)
     stats = _summary_stats(results)
     total = run.total_tests
-    pass_rate = round(run.passed / total * 100, 1) if total > 0 else 0.0
+    schema_gate = compute_schema_gate(run.schema_diff)
+    certified = compute_certified(
+        schema_gate_pass=schema_gate["schema_gate_pass"],
+        compatibility_score=stats["compatibility_score"],
+    )
 
     def row(r: TestResult, *, full: bool) -> dict[str, Any]:
         base: dict[str, Any] = {
@@ -178,21 +220,19 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
             )
         return base
 
-    priority = [
-        r for r in results
-        if r.status == "fail" or r.match_status in ("mismatch", "shape_drift")
-    ]
+    priority = [r for r in results if r.match_status in ("mismatch", "shape_drift")]
     warnings = [r for r in results if r.status == "warn" and r not in priority]
 
     return {
         "purpose": f"Saleor API compatibility report vs golden {ctx['golden_corpus_version']}",
         "version_glossary": ctx,
         "executive_summary": {
-            "pass_rate": pass_rate,
             "compatibility_score": stats["compatibility_score"],
+            "schema_gate_pass": schema_gate["schema_gate_pass"],
+            "certified": certified,
             "total": total,
-            "passed": run.passed,
-            "failed": run.failed,
+            "compatible": run.passed,
+            "incompatible": run.failed,
             "warnings": run.warnings,
             "skipped": run.skipped,
             **stats,

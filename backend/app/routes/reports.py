@@ -30,6 +30,8 @@ from app.core.config import settings
 from app.services.reference_corpus import load_manifest, resolve_corpus_version
 from app.services.reference_registry import get_upgrade_hint
 from app.services.run_helpers import catalog_counts, decrypt_saleor_email, run_detail_fields
+from app.services.schema_gate import compute_certified, compute_schema_gate
+from app.services.response_contract import CONTRACT_SUCCESS
 
 router = APIRouter(prefix="/api/reports", tags=["reports"])
 
@@ -132,6 +134,20 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
     golden_probe_count = manifest.get("probe_count", 0)
     upgrade_hint = get_upgrade_hint(run.saleor_version, resolved_corpus)
 
+    probe_success = sum(
+        1 for r in results
+        if r.outcome == CONTRACT_SUCCESS or r.outcome == "success_with_data"
+    )
+    probe_outcome_rate = round(probe_success / total * 100, 1) if total > 0 else None
+
+    schema_gate = compute_schema_gate(run.schema_diff)
+    certified = compute_certified(
+        schema_gate_pass=schema_gate["schema_gate_pass"],
+        compatibility_score=compatibility_score,
+    )
+    run_meta = (run.schema_diff or {}).get("_run_meta") or {}
+    test_mode = run_meta.get("test_mode", "compatibility")
+
     slowest = sorted(
         [r for r in results if r.response_time_ms is not None],
         key=lambda r: r.response_time_ms or 0,
@@ -183,6 +199,13 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         golden_mismatched=golden_mismatched,
         golden_missing=golden_missing,
         upgrade_hint=upgrade_hint,
+        probe_outcome_rate=probe_outcome_rate,
+        probe_success_count=probe_success,
+        schema_gate_pass=schema_gate["schema_gate_pass"],
+        schema_gate_source=schema_gate.get("schema_gate_source"),
+        schema_score=schema_gate["schema_score"],
+        certified=certified,
+        test_mode=test_mode,
     )
     return ReportData(
         summary=summary,

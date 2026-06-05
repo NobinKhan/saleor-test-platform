@@ -52,6 +52,10 @@ def _start_runner(
     run: TestRun,
     saleor_token: str,
     categories: list[str] | None = None,
+    test_mode: str = "compatibility",
+    *,
+    saleor_email: str | None = None,
+    saleor_password: str | None = None,
 ) -> None:
     runner_manager.start_run(
         run_id=run.id,
@@ -62,6 +66,9 @@ def _start_runner(
         concurrency=run.concurrency or 5,
         timeout_seconds=run.timeout_seconds or 30,
         categories=categories,
+        test_mode=test_mode,
+        saleor_email=saleor_email or run.saleor_email,
+        saleor_password=saleor_password or run.saleor_password,
     )
 
 
@@ -112,7 +119,14 @@ async def create_run(
     await db.commit()
     await db.refresh(run)
 
-    _start_runner(run, token, data.categories)
+    _start_runner(
+        run,
+        token,
+        data.categories,
+        data.test_mode,
+        saleor_email=row["saleor_email"],
+        saleor_password=row["saleor_password"],
+    )
     return _summary_from_run(run)
 
 
@@ -157,7 +171,14 @@ async def retest_run(
     await db.commit()
     await db.refresh(run)
 
-    _start_runner(run, token, None)
+    _start_runner(
+        run,
+        token,
+        None,
+        "compatibility",
+        saleor_email=row["saleor_email"],
+        saleor_password=row["saleor_password"],
+    )
     return _summary_from_run(run)
 
 

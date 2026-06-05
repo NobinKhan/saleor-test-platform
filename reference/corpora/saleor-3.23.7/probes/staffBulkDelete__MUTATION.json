@@ -6,7 +6,7 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Invalid token. Create new one by using tokenCreate mutation.",
+        "message": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.\"]}",
         "locations": [
           {
             "line": 1,
@@ -18,8 +18,20 @@
         ],
         "extensions": {
           "exception": {
-            "code": "InvalidTokenError",
+            "code": "ValidationError",
             "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/mutations.py\", line 416, in get_nodes_or_error",
+              "    instances = get_nodes(ids, only_type, qs=qs, schema=schema)",
+              "                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/utils/__init__.py\", line 118, in get_nodes",
+              "    nodes_type, pks = resolve_global_ids_to_primary_keys(",
+              "                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/utils/__init__.py\", line 88, in resolve_global_ids_to_primary_keys",
+              "    raise GraphQLError(ERROR_COULD_NO_RESOLVE_GLOBAL_ID % invalid_ids)",
+              "graphql.error.base.GraphQLError: Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.",
+              "",
+              "The above exception was the direct cause of the following exception:",
               "Traceback (most recent call last):",
               "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
               "    return executor.execute(resolve_fn, source, info, **args)",
@@ -30,32 +42,15 @@
               "  File \"/usr/local/lib/python3.12/contextlib.py\", line 81, in inner",
               "    return func(*args, **kwds)",
               "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 1113, in mutate",
-              "    setup_context_user(info.context)",
-              "  File \"/app/saleor/graphql/core/context.py\", line 66, in setup_context_user",
-              "    context.user._setup()  # type: ignore[union-attr]",
-              "    ^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/utils/functional.py\", line 404, in _setup",
-              "    self._wrapped = self._setupfunc()",
-              "                    ^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/context.py\", line 94, in user",
-              "    return get_user(request) or None",
-              "           ^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/context.py\", line 84, in get_user",
-              "    request._cached_user = cast(User | None, authenticate(request=request))",
-              "                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/views/decorators/debug.py\", line 75, in sensitive_variables_wrapper",
-              "    return func(*func_args, **func_kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/contrib/auth/__init__.py\", line 114, in authenticate",
-              "    user = backend.authenticate(request, **credentials)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/core/auth_backend.py\", line 51, in authenticate",
-              "    return load_user_from_request(request)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/core/auth_backend.py\", line 151, in load_user_from_request",
-              "    raise jwt.InvalidTokenError(",
-              "jwt.exceptions.InvalidTokenError: Invalid token. Create new one by using tokenCreate mutation."
+              "  File \"/app/saleor/graphql/core/mutations.py\", line 1118, in mutate",
+              "    count, errors = cls.perform_mutation(root, info, **data)",
+              "                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/account/bulk_mutations/staff_bulk_delete.py\", line 41, in perform_mutation",
+              "    instances = cls.get_nodes_or_error(ids, \"id\", User)",
+              "                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/mutations.py\", line 418, in get_nodes_or_error",
+              "    raise ValidationError(",
+              "django.core.exceptions.ValidationError: {'id': [\"Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.\"]}"
             ]
           }
         }
@@ -71,8 +66,11 @@
       }
     }
   },
-  "golden_outcome": "validation_error",
+  "golden_outcome": "schema_error",
   "golden_status": "warn",
   "error_pattern": null,
-  "response_shape_hash": "sha256:1abaf67ed4d1788f"
+  "response_shape_hash": "sha256:1abaf67ed4d1788f",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "probe_stability": "stateless"
 }

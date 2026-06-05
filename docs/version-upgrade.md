@@ -66,6 +66,10 @@ Never use floating tags (`:3.23`, `:latest`) for golden capture. Always pin an e
 ## Certifying custom backends
 
 - Certify against **one Saleor version at a time** (e.g. "3.23.7 compatible")
-- **Compatibility score** = golden behavioral match % (separate from pass rate)
-- Target: ≥ 95% compatibility + empty schema SDL diff for that version
-- Test your custom backend against official golden, not LAN Docker vs Docker noise
+- **Compatibility score** (primary) = golden input replay with response contract matching
+- **Probe success rate** (informational) = probes returning success-class data only
+- **Schema gate** + **Certified** badge = schema gate pass AND compatibility ≥ 95%
+- Default test mode is `compatibility` — replays exact golden `input_sent` per endpoint
+- Use `discovery` mode for introspection-based probing (legacy behavior)
+- Run `just self-check` against official Saleor after recording golden (≥ 90% gate)
+- Test your custom backend against official golden on a fresh DB with staff credentials

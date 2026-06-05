@@ -66,7 +66,8 @@ class TestRunCreate(BaseModel):
     @classmethod
     def validate_saleor_email(cls, value: str) -> str:
         return _validate_saleor_email(value)
-    test_scope: str = Field(default="catalog", description="catalog|full|queries|mutations|custom")
+    test_scope: str = Field(default="full", description="full|catalog|queries|mutations|custom")
+    test_mode: str = Field(default="compatibility", description="compatibility|discovery")
     public_only: bool = Field(default=False, description="Only test public endpoints")
     categories: list[str] | None = Field(default=None, description="Categories when test_scope=custom")
     concurrency: int = Field(default=5, ge=1, le=20)
@@ -179,6 +180,13 @@ class ReportSummary(BaseModel):
     golden_mismatched: int = 0
     golden_missing: int = 0
     upgrade_hint: str | None = None
+    probe_outcome_rate: float | None = None
+    probe_success_count: int = 0
+    schema_gate_pass: bool | None = None
+    schema_gate_source: str | None = None
+    schema_score: float | None = None
+    certified: bool | None = None
+    test_mode: str | None = None
 
 
 class LatencySummary(BaseModel):

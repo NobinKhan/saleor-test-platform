@@ -42,6 +42,8 @@ async def main() -> int:
             saleor_version=args.version,
             test_scope=args.scope,
             db=db,
+            saleor_email=args.email,
+            saleor_password=args.password,
         )
 
     print(f"Captured {result['probe_count']} probes for Saleor {result['saleor_version']}")

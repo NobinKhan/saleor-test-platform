@@ -63,8 +63,13 @@ class SSERunnerManager:
         concurrency: int = 5,
         timeout_seconds: int = 30,
         categories: list[str] | None = None,
+        test_mode: str = "compatibility",
+        saleor_email: str | None = None,
+        saleor_password: str | None = None,
     ):
         token = decrypt_token(saleor_token) if saleor_token else None
+        email = decrypt_token(saleor_email) if saleor_email else None
+        password = decrypt_token(saleor_password) if saleor_password else None
 
         runner = TestRunner(
             run_id=run_id,
@@ -75,6 +80,9 @@ class SSERunnerManager:
             concurrency=concurrency,
             timeout=timeout_seconds,
             categories=categories,
+            test_mode=test_mode,
+            saleor_email=email,
+            saleor_password=password,
         )
         rid = str(run_id)
         self._runners[rid] = runner
