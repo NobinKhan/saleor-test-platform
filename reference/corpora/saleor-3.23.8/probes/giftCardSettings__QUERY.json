@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "giftCardSettings",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { giftCardSettings { __typename } }",
+  "golden_response": {
+    "data": {
+      "giftCardSettings": {
+        "__typename": "GiftCardSettings"
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:8e07a40e5a8eaacc"
+}

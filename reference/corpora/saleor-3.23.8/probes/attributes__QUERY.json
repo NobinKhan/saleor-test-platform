@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "attributes",
+  "endpoint_kind": "QUERY",
+  "category": "attributes",
+  "input_sent": "query { attributes(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "attributes": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a2b5fbaadb81d220"
+}

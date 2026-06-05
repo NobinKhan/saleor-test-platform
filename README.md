@@ -49,8 +49,25 @@ just fresh    # wipes volumes, migrates Saleor, creates admin@example.com / admi
 ```bash
 just up-harness
 just register
-# UI: set Saleor URL to your API, e.g. http://localhost:8000/graphql/
 ```
+
+**Saleor URL in the UI** (harness backend runs inside Docker):
+
+| Your Saleor runs on | Use in "Saleor Server URL" |
+|---------------------|----------------------------|
+| Same machine, port 8000 | `http://localhost:8000/graphql/` (rewritten to `host.docker.internal` inside the container) |
+| Another machine on LAN | Full URL, e.g. `http://192.168.x.x:8000/graphql/` (used as-is) |
+| Docker Desktop / explicit host access | `http://host.docker.internal:8000/graphql/` |
+
+`localhost` in the UI is **not** the harness container itself — it is rewritten using `SALEOR_GRAPHQL_URL` (default `http://host.docker.internal:8000/graphql/` in compose).
+
+## Authentication
+
+Test runs use **Saleor admin email and password** only (via `tokenCreate`). Credentials are stored encrypted on the run for **retest** from the report page.
+
+## Reference baseline
+
+Reports show the compatibility baseline (default **Saleor Dashboard 3.23.6**) and how many catalog queries/mutations were checked. See [docs/saleor-reference-schema.md](docs/saleor-reference-schema.md).
 
 ## Pass / fail classification
 

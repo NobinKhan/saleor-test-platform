@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "orderUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "orders",
+  "input_sent": "mutation { orderUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "orderUpdate": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'id', 'external_reference'.",
+            "code": "GRAPHQL_ERROR"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:22ed7451a8f6b7a2"
+}

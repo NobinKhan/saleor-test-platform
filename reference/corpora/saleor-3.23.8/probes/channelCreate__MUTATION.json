@@ -1,0 +1,41 @@
+{
+  "endpoint_name": "channelCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "channels",
+  "input_sent": "mutation { channelCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"name\": Expected \"String!\", found null.\nIn field \"slug\": Expected \"String!\", found null.\nIn field \"currencyCode\": Expected \"String!\", found null.\nIn field \"defaultCountry\": Expected \"CountryCode!\", found null.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 33
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
+              "In field \"name\": Expected \"String!\", found null.",
+              "In field \"slug\": Expected \"String!\", found null.",
+              "In field \"currencyCode\": Expected \"String!\", found null.",
+              "In field \"defaultCountry\": Expected \"CountryCode!\", found null."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

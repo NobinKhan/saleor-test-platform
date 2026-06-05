@@ -91,6 +91,12 @@ class TestRun(Base):
     test_scope: Mapped[str] = mapped_column(String(50), default="full")
     public_only: Mapped[bool] = mapped_column(Boolean, default=False)
     schema_diff: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    saleor_email: Mapped[str | None] = mapped_column(Text, nullable=True)
+    saleor_password: Mapped[str | None] = mapped_column(Text, nullable=True)
+    reference_baseline_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    reference_baseline_source: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    concurrency: Mapped[int] = mapped_column(Integer, default=5)
+    timeout_seconds: Mapped[int] = mapped_column(Integer, default=30)
 
     user: Mapped["User"] = relationship(back_populates="test_runs")
     results: Mapped[list["TestResult"]] = relationship(back_populates="test_run", lazy="selectin", cascade="all, delete-orphan")
@@ -114,6 +120,11 @@ class TestResult(Base):
     saleor_field_type: Mapped[str | None] = mapped_column(String(255), nullable=True)
     actual_field_type: Mapped[str | None] = mapped_column(String(255), nullable=True)
     is_public: Mapped[bool] = mapped_column(Boolean, default=True)
+    outcome: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    response_valid: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    expected_response: Mapped[str | None] = mapped_column(Text, nullable=True)
+    match_status: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    diff_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     items: Mapped[list["TestItem"]] = relationship(back_populates="test_result", lazy="selectin", cascade="all, delete-orphan")
@@ -121,6 +132,24 @@ class TestResult(Base):
 
 
 # Field-level breakdown rows — populated when introspection field checks exist (deferred).
+class ReferenceProbe(Base):
+    __tablename__ = "reference_probes"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    saleor_version: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    endpoint_name: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    endpoint_kind: Mapped[str] = mapped_column(String(20), nullable=False)
+    category: Mapped[str] = mapped_column(String(30), nullable=False, default="unknown")
+    input_sent: Mapped[str] = mapped_column(Text, nullable=False)
+    golden_response: Mapped[str] = mapped_column(Text, nullable=False)
+    golden_outcome: Mapped[str] = mapped_column(String(40), nullable=False)
+    golden_status: Mapped[str] = mapped_column(String(10), nullable=False)
+    error_pattern: Mapped[str | None] = mapped_column(Text, nullable=True)
+    response_shape_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    corpus_hash: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
 class TestItem(Base):
     __tablename__ = "test_items"
 
@@ -140,6 +169,7 @@ __all__ = [
     "TestRunStatus",
     "TestResult",
     "TestItem",
+    "ReferenceProbe",
     "TestResultStatus",
     "EndpointKind",
     "EndpointCategory",

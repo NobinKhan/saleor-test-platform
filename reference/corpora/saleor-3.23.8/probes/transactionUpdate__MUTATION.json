@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "transactionUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { transactionUpdate { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "transactionUpdate": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'id', 'token'."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:232b26ce2177d6a5"
+}

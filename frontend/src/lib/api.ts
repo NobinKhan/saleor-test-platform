@@ -60,9 +60,6 @@ export function apiHeaders(): Record<string, string> {
 
 const API_BASE = getApiBase();
 
-/** Paths where 401 means upstream/Saleor failure, not an expired harness JWT. */
-const NO_REFRESH_ON_401 = ['/api/auth/saleor-token'];
-
 function formatApiError(detail: unknown, fallback: string): string {
   if (typeof detail === 'string') return detail;
   if (Array.isArray(detail)) {
@@ -78,7 +75,7 @@ async function apiFetch(path: string, options: RequestInit = {}, retried = false
     ...options,
     headers: { ...apiHeaders(), ...(options.headers || {}) },
   });
-  if (res.status === 401 && !NO_REFRESH_ON_401.some((p) => path.startsWith(p))) {
+  if (res.status === 401) {
     if (!retried) {
       const refreshed = await refreshTokens();
       if (refreshed) {

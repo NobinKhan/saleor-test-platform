@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "appReenableSyncWebhooks",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { appReenableSyncWebhooks(appId: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "appReenableSyncWebhooks": {
+        "errors": [
+          {
+            "field": "appId",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: App."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:947ab7a3a1f96d1e"
+}

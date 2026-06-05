@@ -1,0 +1,39 @@
+{
+  "endpoint_name": "accountRegister",
+  "endpoint_kind": "MUTATION",
+  "category": "account",
+  "input_sent": "mutation { accountRegister(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"email\": Expected \"String!\", found null.\nIn field \"password\": Expected \"String!\", found null.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 35
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
+              "In field \"email\": Expected \"String!\", found null.",
+              "In field \"password\": Expected \"String!\", found null."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

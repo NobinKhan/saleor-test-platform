@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "productTypes",
+  "endpoint_kind": "QUERY",
+  "category": "products",
+  "input_sent": "query { productTypes(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "productTypes": {
+        "edges": [
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MQ=="
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:10c0e7485615b193"
+}

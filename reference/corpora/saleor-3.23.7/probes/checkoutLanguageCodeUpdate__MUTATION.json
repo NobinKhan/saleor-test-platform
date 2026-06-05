@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "checkoutLanguageCodeUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { checkoutLanguageCodeUpdate(languageCode: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"languageCode\" has invalid value \"test\".\nExpected type \"LanguageCodeEnum\", found \"test\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 53
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"languageCode\" has invalid value \"test\".",
+              "Expected type \"LanguageCodeEnum\", found \"test\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

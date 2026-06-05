@@ -1,0 +1,56 @@
+{
+  "endpoint_name": "paymentInitialize",
+  "endpoint_kind": "MUTATION",
+  "category": "payments",
+  "input_sent": "mutation { paymentInitialize(gateway: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "PaymentInitialize.perform_mutation() missing 2 required keyword-only arguments: 'channel' and 'payment_data'",
+        "locations": [
+          {
+            "line": 1,
+            "column": 12
+          }
+        ],
+        "path": [
+          "paymentInitialize"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "TypeError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/contextlib.py\", line 81, in inner",
+              "    return func(*args, **kwds)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/mutations.py\", line 526, in mutate",
+              "    response = cls.perform_mutation(root, info, **data)",
+              "               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "TypeError: PaymentInitialize.perform_mutation() missing 2 required keyword-only arguments: 'channel' and 'payment_data'"
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "paymentInitialize": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "error_pattern": "PaymentInitialize\\.perform_mutation\\(\\)\\ missing\\ 2\\ required\\ keyword\\-only\\ arguments:\\ 'channel'\\ and\\ 'payment_data'",
+  "response_shape_hash": "sha256:ecc0c3bf58482d74"
+}

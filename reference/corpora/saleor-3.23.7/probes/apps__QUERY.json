@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "apps",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { apps(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "apps": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:9f8c63de8c3592cb"
+}

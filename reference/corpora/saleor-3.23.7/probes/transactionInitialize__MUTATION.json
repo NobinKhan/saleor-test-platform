@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "transactionInitialize",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { transactionInitialize(id: \"00000000-0000-0000-0000-000000000000\", paymentGateway: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"paymentGateway\" has invalid value \"test\".\nExpected \"PaymentGatewayToInitialize\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 94
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"paymentGateway\" has invalid value \"test\".",
+              "Expected \"PaymentGatewayToInitialize\", found not an object."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

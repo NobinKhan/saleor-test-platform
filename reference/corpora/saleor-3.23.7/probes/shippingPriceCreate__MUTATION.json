@@ -1,0 +1,39 @@
+{
+  "endpoint_name": "shippingPriceCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { shippingPriceCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "shippingPriceCreate": {
+        "errors": [
+          {
+            "field": "name",
+            "message": "This field cannot be blank.",
+            "code": "REQUIRED"
+          },
+          {
+            "field": "type",
+            "message": "This field cannot be blank.",
+            "code": "REQUIRED"
+          },
+          {
+            "field": "shippingZone",
+            "message": "This field cannot be null.",
+            "code": "REQUIRED"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:0daba132ee99ab03"
+}

@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "webhookDryRun",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { webhookDryRun(objectId: \"00000000-0000-0000-0000-000000000000\", query: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "webhookDryRun": {
+        "errors": [
+          {
+            "field": "query",
+            "message": "Syntax Error GraphQL (1:1) Unexpected Name \"test\"\n\n1: test\n   ^\n"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:4bd96bd2180338bd"
+}

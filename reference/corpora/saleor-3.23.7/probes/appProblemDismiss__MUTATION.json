@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "appProblemDismiss",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { appProblemDismiss(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "appProblemDismiss": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'byApp', 'byStaffWithIds', 'byStaffWithKeys'.",
+            "code": "GRAPHQL_ERROR"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:1a31c543f7d724c9"
+}

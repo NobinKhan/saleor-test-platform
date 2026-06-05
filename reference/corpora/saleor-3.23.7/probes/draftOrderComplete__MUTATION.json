@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "draftOrderComplete",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { draftOrderComplete(id: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "draftOrderComplete": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Order."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:f2e4b118da1e255f"
+}

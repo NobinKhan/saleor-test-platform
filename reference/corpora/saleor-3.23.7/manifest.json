@@ -1,0 +1,7 @@
+{
+  "saleor_version": "3.23.7",
+  "saleor_url": "http://saleor-api:8000/graphql/",
+  "captured_at": "2026-06-05T12:11:40.158390+00:00",
+  "probe_count": 414,
+  "corpus_hash": "sha256:ea6beda4261a80a35a6c1910a9f9267e8439673fc44fb7d088cc8cde3d8bc6a6"
+}

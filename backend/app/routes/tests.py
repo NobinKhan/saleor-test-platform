@@ -12,16 +12,57 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sse_starlette.sse import EventSourceResponse
 
-from app.core.config import get_settings
-from app.core.crypto import encrypt_token
+from app.core.crypto import decrypt_token
 from app.core.database import get_db
 from app.core.security import get_current_user, get_current_user_sse
 from app.models import User, TestRun, TestResult
 from app.schemas import TestRunCreate, TestRunSummary, TestRunDetail, TestResultResponse
-from app.services.saleor_auth import fetch_saleor_token
+from app.services.run_helpers import (
+    authenticate_saleor,
+    build_test_run_row,
+    decrypt_saleor_email,
+    run_detail_fields,
+)
 from app.services.sse_manager import runner_manager
 
 router = APIRouter(prefix="/api/runs", tags=["test-runs"])
+
+
+def _summary_from_run(run: TestRun) -> TestRunSummary:
+    total = run.total_tests or 0
+    passed = run.passed or 0
+    pass_rate = (passed / total * 100) if total > 0 else 0.0
+    return TestRunSummary(
+        id=run.id,
+        saleor_url=run.saleor_url,
+        saleor_version=run.saleor_version,
+        status=run.status,
+        started_at=run.started_at,
+        completed_at=run.completed_at,
+        total_tests=run.total_tests,
+        passed=run.passed,
+        failed=run.failed,
+        warnings=run.warnings,
+        skipped=run.skipped,
+        pass_rate=round(pass_rate, 1),
+    )
+
+
+def _start_runner(
+    run: TestRun,
+    saleor_token: str,
+    categories: list[str] | None = None,
+) -> None:
+    runner_manager.start_run(
+        run_id=run.id,
+        saleor_url=run.saleor_url,
+        saleor_token=saleor_token,
+        test_scope=run.test_scope,
+        public_only=run.public_only,
+        concurrency=run.concurrency or 5,
+        timeout_seconds=run.timeout_seconds or 30,
+        categories=categories,
+    )
 
 
 @router.get("", response_model=list[TestRunSummary])
@@ -38,27 +79,7 @@ async def list_runs(
         .offset(offset)
         .limit(limit)
     )
-    runs = result.scalars().all()
-    out = []
-    for r in runs:
-        pass_rate = (r.passed / r.total_tests * 100) if r.total_tests > 0 else 0.0
-        out.append(
-            TestRunSummary(
-                id=r.id,
-                saleor_url=r.saleor_url,
-                saleor_version=r.saleor_version,
-                status=r.status,
-                started_at=r.started_at,
-                completed_at=r.completed_at,
-                total_tests=r.total_tests,
-                passed=r.passed,
-                failed=r.failed,
-                warnings=r.warnings,
-                skipped=r.skipped,
-                pass_rate=round(pass_rate, 1),
-            )
-        )
-    return out
+    return [_summary_from_run(r) for r in result.scalars().all()]
 
 
 @router.post("", response_model=TestRunSummary)
@@ -67,61 +88,77 @@ async def create_run(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    settings = get_settings()
-    saleor_token = data.saleor_token
+    token, error = await authenticate_saleor(
+        data.saleor_url,
+        str(data.saleor_email),
+        data.saleor_password,
+    )
+    if error or not token:
+        raise HTTPException(400, f"Saleor authentication failed: {error or 'no token'}")
 
-    if not saleor_token and data.saleor_email and data.saleor_password:
-        token, error = await fetch_saleor_token(
-            data.saleor_url,
-            data.saleor_email,
-            data.saleor_password,
-        )
-        if error:
-            raise HTTPException(400, f"Saleor authentication failed: {error}")
-        saleor_token = token
-
-    ref_url = data.reference_saleor_url or settings.reference_saleor_url or None
-    ref_token = data.reference_saleor_token
-
-    run = TestRun(
+    row = build_test_run_row(
         user_id=user.id,
         saleor_url=data.saleor_url,
-        saleor_token=encrypt_token(saleor_token or ""),
-        test_scope=data.test_scope,
-        public_only=data.public_only,
-        status="running",
-    )
-    db.add(run)
-    await db.commit()
-    await db.refresh(run)
-
-    runner_manager.start_run(
-        run_id=run.id,
-        saleor_url=data.saleor_url,
-        saleor_token=saleor_token,
+        saleor_email=str(data.saleor_email),
+        saleor_password=data.saleor_password,
+        saleor_token=token,
         test_scope=data.test_scope,
         public_only=data.public_only,
         concurrency=data.concurrency,
         timeout_seconds=data.timeout_seconds,
-        categories=data.categories,
-        reference_saleor_url=ref_url,
-        reference_saleor_token=ref_token,
     )
+    run = TestRun(**row)
+    db.add(run)
+    await db.commit()
+    await db.refresh(run)
 
-    return TestRunSummary(
-        id=run.id,
-        saleor_url=run.saleor_url,
-        saleor_version=run.saleor_version,
-        status="running",
-        started_at=run.started_at,
-        completed_at=run.completed_at,
-        total_tests=run.total_tests,
-        passed=run.passed,
-        failed=run.failed,
-        warnings=run.warnings,
-        skipped=run.skipped,
-        pass_rate=0.0,
+    _start_runner(run, token, data.categories)
+    return _summary_from_run(run)
+
+
+@router.post("/{run_id}/retest", response_model=TestRunSummary)
+async def retest_run(
+    run_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    result = await db.execute(
+        select(TestRun).where(TestRun.id == run_id, TestRun.user_id == user.id)
     )
+    source = result.scalar_one_or_none()
+    if not source:
+        raise HTTPException(404, "Test run not found")
+
+    email = decrypt_saleor_email(source)
+    if not email or not source.saleor_password:
+        raise HTTPException(
+            400,
+            "This run has no stored credentials. Start a new test from the form.",
+        )
+
+    password = decrypt_token(source.saleor_password)
+    token, error = await authenticate_saleor(source.saleor_url, email, password)
+    if error or not token:
+        raise HTTPException(400, f"Saleor authentication failed: {error or 'no token'}")
+
+    row = build_test_run_row(
+        user_id=user.id,
+        saleor_url=source.saleor_url,
+        saleor_email=email,
+        saleor_password=password,
+        saleor_token=token,
+        test_scope=source.test_scope,
+        public_only=source.public_only,
+        concurrency=source.concurrency or 5,
+        timeout_seconds=source.timeout_seconds or 30,
+    )
+    run = TestRun(**row)
+    db.add(run)
+    await db.commit()
+    await db.refresh(run)
+
+    _start_runner(run, token, None)
+    return _summary_from_run(run)
 
 
 @router.get("/{run_id}", response_model=TestRunDetail)
@@ -136,24 +173,15 @@ async def get_run(
     run = result.scalar_one_or_none()
     if not run:
         raise HTTPException(404, "Test run not found")
-    pass_rate = (run.passed / run.total_tests * 100) if run.total_tests > 0 else 0.0
+
+    base = _summary_from_run(run)
+    extra = run_detail_fields(run)
     return TestRunDetail(
-        id=run.id,
-        saleor_url=run.saleor_url,
-        saleor_version=run.saleor_version,
-        status=run.status,
-        started_at=run.started_at,
-        completed_at=run.completed_at,
-        total_tests=run.total_tests,
-        passed=run.passed,
-        failed=run.failed,
-        warnings=run.warnings,
-        skipped=run.skipped,
-        pass_rate=round(pass_rate, 1),
+        **base.model_dump(),
         user_id=run.user_id,
-        saleor_token="***",
         test_scope=run.test_scope,
         public_only=run.public_only,
+        **extra,
     )
 
 
@@ -215,24 +243,32 @@ async def stream_run(
 
     rid = str(run_id)
 
-    async def event_generator() -> AsyncGenerator[str, None]:
-        yield f"data: {json.dumps({'type': 'connected', 'run_id': rid, 'status': run.status})}\n\n"
+    def sse_payload(event: dict) -> dict[str, str]:
+        return {"data": json.dumps(event)}
+
+    async def event_generator() -> AsyncGenerator[dict[str, str], None]:
+        yield sse_payload({"type": "connected", "run_id": rid, "status": run.status})
 
         if runner_manager.is_active(rid):
             async for event in runner_manager.subscribe(rid):
                 event["run_id"] = rid
-                yield f"data: {json.dumps(event)}\n\n"
+                yield sse_payload(event)
         elif run.status in ("completed", "stopped", "failed"):
             async for event in runner_manager.replay_from_db(run_id):
                 event["run_id"] = rid
-                yield f"data: {json.dumps(event)}\n\n"
+                yield sse_payload(event)
         else:
-            # Run marked active in DB but worker not attached — replay whatever was persisted
             async for event in runner_manager.replay_from_db(run_id):
                 event["run_id"] = rid
-                yield f"data: {json.dumps(event)}\n\n"
+                yield sse_payload(event)
             if run.status in ("running", "pending"):
-                yield f"data: {json.dumps({'type': 'progress', 'message': 'Waiting for test worker...', 'run_id': rid})}\n\n"
+                yield sse_payload(
+                    {
+                        "type": "progress",
+                        "message": "Waiting for test worker...",
+                        "run_id": rid,
+                    }
+                )
 
     return EventSourceResponse(
         event_generator(),

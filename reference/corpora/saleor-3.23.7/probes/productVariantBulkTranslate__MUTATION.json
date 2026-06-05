@@ -1,0 +1,55 @@
+{
+  "endpoint_name": "productVariantBulkTranslate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { productVariantBulkTranslate(translations: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"translations\" has invalid value \"test\".\nExpected \"ProductVariantBulkTranslateInput\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 54
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"translations\" has invalid value \"test\".",
+              "Expected \"ProductVariantBulkTranslateInput\", found not an object."
+            ]
+          }
+        }
+      },
+      {
+        "message": "Cannot query field \"field\" on type \"ProductVariantBulkTranslateError\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 73
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"field\" on type \"ProductVariantBulkTranslateError\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "sales",
+  "endpoint_kind": "QUERY",
+  "category": "discounts",
+  "input_sent": "query { sales(first: 3) { edges { node { id name type startDate endDate } } } }",
+  "golden_response": {
+    "data": {
+      "sales": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 3,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:747ba946edb706b6"
+}

@@ -1,0 +1,21 @@
+{
+  "endpoint_name": "appsInstallations",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { appsInstallations { __typename } }",
+  "golden_response": {
+    "data": {
+      "appsInstallations": []
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:8b80e9e88b922731"
+}

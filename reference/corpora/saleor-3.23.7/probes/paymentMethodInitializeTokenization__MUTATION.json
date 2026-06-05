@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "paymentMethodInitializeTokenization",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { paymentMethodInitializeTokenization(channel: \"test\", id: \"test\", paymentFlowToSupport: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"paymentFlowToSupport\" has invalid value \"test\".\nExpected type \"TokenizedPaymentFlowEnum\", found \"test\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 99
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"paymentFlowToSupport\" has invalid value \"test\".",
+              "Expected type \"TokenizedPaymentFlowEnum\", found \"test\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

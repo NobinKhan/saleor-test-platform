@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "unassignWarehouseShippingZone",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { unassignWarehouseShippingZone(id: \"00000000-0000-0000-0000-000000000000\", shippingZoneIds: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "unassignWarehouseShippingZone": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Warehouse."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:032de7ba1a6937d5"
+}

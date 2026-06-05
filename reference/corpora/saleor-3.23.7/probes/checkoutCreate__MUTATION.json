@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "checkoutCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "checkout",
+  "input_sent": "mutation { checkoutCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"lines\": Expected \"[CheckoutLineInput!]!\", found null.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 34
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
+              "In field \"lines\": Expected \"[CheckoutLineInput!]!\", found null."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "paymentVoid",
+  "endpoint_kind": "MUTATION",
+  "category": "payments",
+  "input_sent": "mutation { paymentVoid(paymentId: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "paymentVoid": {
+        "errors": [
+          {
+            "field": "paymentId",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Payment."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:538cb08d3b69a4d6"
+}

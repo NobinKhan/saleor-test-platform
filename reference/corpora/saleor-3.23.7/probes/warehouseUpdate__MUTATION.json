@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "warehouseUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "warehouse",
+  "input_sent": "mutation { warehouseUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"warehouseUpdate\" on type \"Mutation\". Did you mean \"webhookUpdate\", \"categoryUpdate\", \"pageTypeUpdate\", \"accountUpdate\" or \"taxClassUpdate\"?",
+        "locations": [
+          {
+            "line": 1,
+            "column": 12
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"warehouseUpdate\" on type \"Mutation\". Did you mean \"webhookUpdate\", \"categoryUpdate\", \"pageTypeUpdate\", \"accountUpdate\" or \"taxClassUpdate\"?"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

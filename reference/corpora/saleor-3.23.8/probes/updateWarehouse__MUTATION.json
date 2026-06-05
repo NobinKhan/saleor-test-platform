@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "updateWarehouse",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { updateWarehouse(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "updateWarehouse": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'id', 'external_reference'.",
+            "code": "GRAPHQL_ERROR"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:6b3ce42cdf4faa7c"
+}

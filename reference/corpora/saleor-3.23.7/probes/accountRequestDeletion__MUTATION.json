@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "accountRequestDeletion",
+  "endpoint_kind": "MUTATION",
+  "category": "account",
+  "input_sent": "mutation { accountRequestDeletion(redirectUrl: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "accountRequestDeletion": {
+        "errors": [
+          {
+            "field": "redirectUrl",
+            "message": "Invalid URL. Please check if URL is in RFC 1808 format."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:5661292115638032"
+}

@@ -1,0 +1,39 @@
+{
+  "endpoint_name": "menuItemCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { menuItemCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"name\": Expected \"String!\", found null.\nIn field \"menu\": Expected \"ID!\", found null.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 34
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
+              "In field \"name\": Expected \"String!\", found null.",
+              "In field \"menu\": Expected \"ID!\", found null."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

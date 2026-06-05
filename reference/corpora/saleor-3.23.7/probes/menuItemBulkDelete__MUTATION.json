@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "menuItemBulkDelete",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { menuItemBulkDelete(ids: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "menuItemBulkDelete": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:4762115d6cb105f4"
+}

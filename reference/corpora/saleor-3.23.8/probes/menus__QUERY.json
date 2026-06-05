@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "menus",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { menus(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "menus": {
+        "edges": [
+          {
+            "node": {
+              "id": "TWVudTox"
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:23d43ad604167500"
+}

@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "pageTypes",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { pageTypes(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "pageTypes": {
+        "edges": [
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6MQ=="
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:4c84d1a0228cd736"
+}

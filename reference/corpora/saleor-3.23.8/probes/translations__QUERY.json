@@ -1,0 +1,31 @@
+{
+  "endpoint_name": "translations",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { translations(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"kind\" of required type TranslatableKinds!\" was not provided.",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"kind\" of required type TranslatableKinds!\" was not provided."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:b985873c21c398b6"
+}

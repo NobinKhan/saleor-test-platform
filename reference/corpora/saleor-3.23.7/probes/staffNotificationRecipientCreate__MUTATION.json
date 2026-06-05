@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "staffNotificationRecipientCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { staffNotificationRecipientCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "staffNotificationRecipientCreate": {
+        "errors": [
+          {
+            "field": "staffNotification",
+            "message": "User or email is required",
+            "code": "REQUIRED"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:b806a77e4c637e7e"
+}

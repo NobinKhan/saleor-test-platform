@@ -1,0 +1,31 @@
+{
+  "endpoint_name": "categoryUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "categories",
+  "input_sent": "mutation { categoryUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"id\" of required type ID!\" was not provided.",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"id\" of required type ID!\" was not provided."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0"
+}

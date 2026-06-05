@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "categories",
+  "endpoint_kind": "QUERY",
+  "category": "categories",
+  "input_sent": "query { categories(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "categories": {
+        "edges": [
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MQ=="
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:321a3a9b0d3ef606"
+}

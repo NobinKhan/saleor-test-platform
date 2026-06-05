@@ -1,0 +1,21 @@
+{
+  "endpoint_name": "taxCountryConfigurations",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { taxCountryConfigurations { __typename } }",
+  "golden_response": {
+    "data": {
+      "taxCountryConfigurations": []
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:d80b4f0bb4dcec96"
+}

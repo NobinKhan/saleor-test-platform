@@ -1,0 +1,34 @@
+{
+  "endpoint_name": "categoryCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "categories",
+  "input_sent": "mutation { categoryCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "categoryCreate": {
+        "errors": [
+          {
+            "field": "name",
+            "message": "This field cannot be blank.",
+            "code": "REQUIRED"
+          },
+          {
+            "field": "slug",
+            "message": "This field cannot be blank.",
+            "code": "REQUIRED"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:7e0dfe9eda654df4"
+}

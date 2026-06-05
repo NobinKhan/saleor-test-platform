@@ -1,0 +1,40 @@
+{
+  "endpoint_name": "giftCardBulkCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { giftCardBulkCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"count\": Expected \"Int!\", found null.\nIn field \"balance\": Expected \"PriceInput!\", found null.\nIn field \"isActive\": Expected \"Boolean!\", found null.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 38
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
+              "In field \"count\": Expected \"Int!\", found null.",
+              "In field \"balance\": Expected \"PriceInput!\", found null.",
+              "In field \"isActive\": Expected \"Boolean!\", found null."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

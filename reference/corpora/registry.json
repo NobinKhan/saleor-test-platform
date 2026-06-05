@@ -1,0 +1,22 @@
+{
+  "default_version": "3.23.7",
+  "supported": [
+    {
+      "version": "3.23.8",
+      "status": "archived",
+      "captured_at": "2026-06-05T04:01:29.753437+00:00",
+      "probe_count": 414,
+      "saleor_url": "http://saleor-api:8000/graphql/",
+      "corpus_hash": "sha256:f964e6515b1f4035c6cde45520cfc721c3861cf38826434da9b9003dc20d5dee",
+      "note": "Recorded from floating :3.23 tag (reported 3.23.8); superseded by 3.23.7 pin"
+    },
+    {
+      "version": "3.23.7",
+      "status": "active",
+      "captured_at": "2026-06-05T12:11:40.158390+00:00",
+      "probe_count": 414,
+      "saleor_url": "http://saleor-api:8000/graphql/",
+      "corpus_hash": "sha256:ea6beda4261a80a35a6c1910a9f9267e8439673fc44fb7d088cc8cde3d8bc6a6"
+    }
+  ]
+}

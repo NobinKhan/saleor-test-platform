@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "ordersByUser",
+  "endpoint_kind": "QUERY",
+  "category": "orders",
+  "input_sent": "query { ordersByUser(first: 3) { edges { node { id status } } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"ordersByUser\" on type \"Query\". Did you mean \"orderByToken\", \"orders\" or \"ordersTotal\"?",
+        "locations": [
+          {
+            "line": 1,
+            "column": 9
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"ordersByUser\" on type \"Query\". Did you mean \"orderByToken\", \"orders\" or \"ordersTotal\"?"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

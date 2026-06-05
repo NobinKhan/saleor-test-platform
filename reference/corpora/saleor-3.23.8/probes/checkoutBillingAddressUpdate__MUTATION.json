@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "checkoutBillingAddressUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { checkoutBillingAddressUpdate(billingAddress: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"billingAddress\" has invalid value \"test\".\nExpected \"AddressInput\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 57
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"billingAddress\" has invalid value \"test\".",
+              "Expected \"AddressInput\", found not an object."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

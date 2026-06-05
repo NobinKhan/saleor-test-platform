@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "shippingZoneDelete",
+  "endpoint_kind": "MUTATION",
+  "category": "shipping",
+  "input_sent": "mutation { shippingZoneDelete(id: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "shippingZoneDelete": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ShippingZone."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:649db370b4e88fe8"
+}

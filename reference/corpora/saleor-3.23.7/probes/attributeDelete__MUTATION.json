@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "attributeDelete",
+  "endpoint_kind": "MUTATION",
+  "category": "attributes",
+  "input_sent": "mutation { attributeDelete { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "attributeDelete": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'id', 'external_reference'."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:2899c1eacf76e205"
+}

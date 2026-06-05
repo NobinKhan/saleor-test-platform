@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "checkoutShippingAddressUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "checkout",
+  "input_sent": "mutation { checkoutShippingAddressUpdate(shippingAddress: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"shippingAddress\" has invalid value \"test\".\nExpected \"AddressInput\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 59
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"shippingAddress\" has invalid value \"test\".",
+              "Expected \"AddressInput\", found not an object."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

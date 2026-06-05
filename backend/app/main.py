@@ -8,9 +8,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
-from app.core.database import get_engine
+from app.core.database import get_async_sessionmaker, get_engine
+from app.core.db_migrate import apply_schema_patches
 from app.core.security import validate_jwt_secret_for_startup
 from app.models import Base
+from app.services.reference_capture import sync_corpus_from_disk
 
 
 @asynccontextmanager
@@ -25,7 +27,15 @@ async def lifespan(app: FastAPI):
     try:
         async with get_engine().begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+            await apply_schema_patches(conn)
         print("[startup] database ready, tables created")
+        try:
+            async with get_async_sessionmaker()() as db:
+                synced = await sync_corpus_from_disk(db)
+                if synced:
+                    print(f"[startup] synced {synced} golden reference probes from disk")
+        except Exception as sync_err:
+            print(f"[startup] reference corpus sync skipped: {sync_err}")
     except Exception as e:
         print(f"[startup] db init error: {e}")
         raise
@@ -59,10 +69,12 @@ app.add_middleware(
 from app.routes.auth import router as auth_router
 from app.routes.tests import router as tests_router
 from app.routes.reports import router as reports_router
+from app.routes.reference import router as reference_router
 
 app.include_router(auth_router)
 app.include_router(tests_router)
 app.include_router(reports_router)
+app.include_router(reference_router)
 
 
 @app.get("/api/health")

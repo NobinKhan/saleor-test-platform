@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "collections",
+  "endpoint_kind": "QUERY",
+  "category": "collections",
+  "input_sent": "query { collections(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "collections": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:4e32f82c8ab5becc"
+}

@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "pages",
+  "endpoint_kind": "QUERY",
+  "category": "pages",
+  "input_sent": "query { pages(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "pages": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a6d0487113e86168"
+}

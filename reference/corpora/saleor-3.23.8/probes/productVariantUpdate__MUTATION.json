@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "productVariantUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "products",
+  "input_sent": "mutation { productVariantUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "productVariantUpdate": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'sku', 'id', 'external_reference'.",
+            "code": "GRAPHQL_ERROR"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:04a99890625484ad"
+}

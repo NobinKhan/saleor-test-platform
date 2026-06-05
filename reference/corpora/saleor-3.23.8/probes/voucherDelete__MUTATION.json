@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "voucherDelete",
+  "endpoint_kind": "MUTATION",
+  "category": "discounts",
+  "input_sent": "mutation { voucherDelete(id: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "voucherDelete": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Voucher."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:cc47ec8af1a3d4b6"
+}

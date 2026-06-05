@@ -1,8 +1,11 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
+  import { onDestroy, tick } from "svelte";
   import { browser } from "$app/environment";
+  import { Chart, LineController, LineElement, PointElement, LinearScale, CategoryScale, Filler } from "chart.js";
+
+  Chart.register(LineController, LineElement, PointElement, LinearScale, CategoryScale, Filler);
   import { page } from "$app/stores";
-  import { auth, streamUrl } from "$lib/api";
+  import { api, auth, streamUrl } from "$lib/api";
   import { goto } from "$app/navigation";
 
   $: runId = $page.params.id ?? "";
@@ -26,6 +29,9 @@
     is_public?: boolean;
     response_time_ms?: number;
     error_message?: string;
+    outcome?: string;
+    expected?: string;
+    response_valid?: boolean;
     status_counts?: StatusCounts;
     passed?: number;
     failed?: number;
@@ -48,15 +54,50 @@
   let phaseMessage = "Preparing test run…";
   let connectionState: ConnectionState = "connecting";
   let connectedRunId = "";
+  let parseError = "";
+  let runFinishedOffline = false;
+  let pollTimer: ReturnType<typeof setInterval> | null = null;
+  let latencySamples: number[] = [];
+  let latencyCanvas: HTMLCanvasElement;
+  let latencyChart: Chart | null = null;
+  let lastResultCurrent = 0;
 
-  function testedCount(): number {
-    return statusCounts.pass + statusCounts.fail + statusCounts.warn + statusCounts.skip;
+  function coerceCount(value: unknown): number {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
   }
 
-  function progressPercent(): number {
-    if (!total) return completed ? 100 : 0;
-    return Math.min(100, (testedCount() / total) * 100);
+  type CountSource = Partial<StatusCounts> & {
+    passed?: number;
+    failed?: number;
+    warnings?: number;
+    skipped?: number;
+    status_counts?: StatusCounts;
+  };
+
+  function normalizeStatusCounts(source?: CountSource | null): StatusCounts {
+    if (!source) return { pass: 0, fail: 0, warn: 0, skip: 0 };
+    const sc = source.status_counts ?? source;
+    return {
+      pass: coerceCount(sc.pass ?? source.passed),
+      fail: coerceCount(sc.fail ?? source.failed),
+      warn: coerceCount(sc.warn ?? source.warnings),
+      skip: coerceCount(sc.skip ?? source.skipped),
+    };
   }
+
+  $: testedCount =
+    statusCounts.pass + statusCounts.fail + statusCounts.warn + statusCounts.skip;
+  $: avgLatency = latencySamples.length
+    ? Math.round(latencySamples.reduce((a, b) => a + b, 0) / latencySamples.length)
+    : 0;
+  $: maxLatency = latencySamples.length ? Math.max(...latencySamples) : 0;
+  $: progressPercent = !total
+    ? completed
+      ? 100
+      : 0
+    : Math.min(100, (testedCount / total) * 100);
+  $: pageTitle = completed ? "Test Complete" : "Test in Progress";
 
   function pushActivity(text: string) {
     const time = new Date().toLocaleTimeString();
@@ -88,22 +129,34 @@
       case "result":
         connectionState = "live";
         currentEndpoint = data.current_endpoint || "";
-        total = data.total || total;
-        statusCounts = data.status_counts || statusCounts;
+        if (data.total) total = data.total;
+        if (data.current) lastResultCurrent = data.current;
+        if (data.status_counts) statusCounts = normalizeStatusCounts(data);
+        if (data.response_time_ms != null) {
+          latencySamples = [...latencySamples, data.response_time_ms].slice(-20);
+          updateLatencyChart();
+        }
         phaseMessage = data.current_endpoint
-          ? `Testing ${data.current_endpoint}`
+          ? `Testing ${data.current_endpoint} (${data.response_time_ms ?? 0}ms)`
           : "Running tests…";
         break;
       case "complete":
         completed = true;
         connectionState = "complete";
-        statusCounts = {
-          pass: data.passed ?? statusCounts.pass,
-          fail: data.failed ?? statusCounts.fail,
-          warn: data.warnings ?? statusCounts.warn,
-          skip: data.skipped ?? statusCounts.skip,
-        };
-        total = data.total ?? total;
+        statusCounts = normalizeStatusCounts(data);
+        if (data.total) total = data.total;
+        if (testedCount === 0 && lastResultCurrent > 0) {
+          /* replay may omit per-status tallies until complete */
+        }
+        if (testedCount === 0 && total > 0) {
+          statusCounts = normalizeStatusCounts({
+            passed: data.passed,
+            failed: data.failed,
+            warnings: data.warnings,
+            skipped: data.skipped,
+            status_counts: data.status_counts,
+          });
+        }
         phaseMessage = "Test run complete";
         pushActivity("All tests finished");
         closeStream();
@@ -111,23 +164,139 @@
     }
   }
 
+  function destroyLatencyChart() {
+    latencyChart?.destroy();
+    latencyChart = null;
+  }
+
+  async function updateLatencyChart() {
+    if (!browser || !latencyCanvas || latencySamples.length === 0) return;
+    await tick();
+    const labels = latencySamples.map((_, i) => String(i + 1));
+    if (latencyChart) {
+      latencyChart.data.labels = labels;
+      latencyChart.data.datasets[0].data = [...latencySamples];
+      latencyChart.update("none");
+      return;
+    }
+    latencyChart = new Chart(latencyCanvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Response time (ms)",
+            data: [...latencySamples],
+            borderColor: "#6366f1",
+            backgroundColor: "rgba(99, 102, 241, 0.15)",
+            fill: true,
+            tension: 0.25,
+            pointRadius: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: "#94a3b8", maxTicksLimit: 10 }, grid: { color: "#2a2a3e" } },
+          y: { ticks: { color: "#94a3b8" }, grid: { color: "#2a2a3e" }, beginAtZero: true },
+        },
+      },
+    });
+  }
+
   function closeStream() {
     eventSource?.close();
     eventSource = null;
   }
 
-  function openStream(id: string) {
+  function stopPolling() {
+    if (pollTimer) {
+      clearInterval(pollTimer);
+      pollTimer = null;
+    }
+  }
+
+  async function hydrateFromRun(id: string): Promise<boolean> {
+    try {
+      const run = await api.get(`/api/runs/${id}`);
+      if (run.status === "completed" || run.status === "stopped" || run.status === "failed") {
+        statusCounts = normalizeStatusCounts({
+          passed: run.passed,
+          failed: run.failed,
+          warnings: run.warnings,
+          skipped: run.skipped,
+        });
+        if (run.total_tests) total = run.total_tests;
+        if (run.saleor_version) version = run.saleor_version;
+        return true;
+      }
+    } catch {
+      /* ignore */
+    }
+    return false;
+  }
+
+  async function checkRunStatus(id: string) {
+    try {
+      const run = await api.get(`/api/runs/${id}`);
+      if (run.status === "completed" || run.status === "stopped" || run.status === "failed") {
+        runFinishedOffline = true;
+        if (!completed) {
+          error = "";
+          phaseMessage = "Test run finished — reconnecting to replay results…";
+          await openStream(id, true);
+        }
+      }
+    } catch {
+      /* ignore poll errors */
+    }
+  }
+
+  function startPolling(id: string) {
+    stopPolling();
+    pollTimer = setInterval(() => {
+      if (!completed && connectionState === "error") {
+        checkRunStatus(id);
+      }
+    }, 5000);
+  }
+
+  async function openStream(id: string, softReconnect = false) {
     closeStream();
     error = "";
-    completed = false;
-    connectionState = "connecting";
-    phaseMessage = "Connecting to live stream…";
-    events = [];
-    activity = [];
-    statusCounts = { pass: 0, fail: 0, warn: 0, skip: 0 };
-    total = 0;
-    version = "";
-    currentEndpoint = "";
+    parseError = "";
+    if (!softReconnect) runFinishedOffline = false;
+    stopPolling();
+
+    const finished = softReconnect || (await hydrateFromRun(id));
+    if (!finished) {
+      completed = false;
+      connectionState = "connecting";
+      phaseMessage = "Connecting to live stream…";
+      events = [];
+      activity = [];
+      statusCounts = { pass: 0, fail: 0, warn: 0, skip: 0 };
+      latencySamples = [];
+      destroyLatencyChart();
+      total = 0;
+      version = "";
+      currentEndpoint = "";
+      lastResultCurrent = 0;
+    } else {
+      connectionState = "connecting";
+      phaseMessage = "Loading replay…";
+      if (!softReconnect) {
+        events = [];
+        activity = [];
+        latencySamples = [];
+        destroyLatencyChart();
+        lastResultCurrent = 0;
+      }
+    }
 
     const token = auth.getAccessToken();
     if (!token) {
@@ -142,10 +311,15 @@
     };
 
     eventSource.onmessage = (e) => {
+      parseError = "";
       try {
-        handleStreamEvent(JSON.parse(e.data) as StreamEvent);
+        const raw = e.data.trim();
+        const jsonStr = raw.startsWith("data:") ? raw.replace(/^data:\s*/, "") : raw;
+        handleStreamEvent(JSON.parse(jsonStr) as StreamEvent);
       } catch (err) {
-        console.error("SSE parse error", err);
+        const msg = err instanceof Error ? err.message : "Invalid event data";
+        parseError = `Could not read live update: ${msg}`;
+        console.error("SSE parse error", err, e.data);
       }
     };
 
@@ -160,26 +334,32 @@
         error = "Connection lost. Refresh the page or open the report when the run finishes.";
         connectionState = "error";
         closeStream();
+        startPolling(id);
+        checkRunStatus(id);
       }
     };
+
+    startPolling(id);
   }
 
   $: if (browser && runId && runId !== connectedRunId) {
     connectedRunId = runId;
-    openStream(runId);
+    void openStream(runId);
   }
 
   onDestroy(() => {
+    stopPolling();
+    destroyLatencyChart();
     closeStream();
   });
 </script>
 
-<svelte:head><title>Test Running — Saleor Test Platform</title></svelte:head>
+<svelte:head><title>{pageTitle} — Saleor Test Platform</title></svelte:head>
 
 <div class="stream-page">
   <div class="page-header">
     <div>
-      <h1>Test in Progress</h1>
+      <h1>{pageTitle}</h1>
       <p class="subtitle">
         {#if version}<span class="version-tag">Saleor {version}</span>{/if}
         {phaseMessage}
@@ -198,13 +378,30 @@
   {/if}
 
   {#if error}
-    <div class="error-banner">{error}</div>
+    <div class="error-banner">
+      {error}
+      {#if runFinishedOffline}
+        <a href="/run/{runId}/report" class="btn-primary btn-sm" style="margin-top:0.5rem;display:inline-block;">View Report</a>
+      {/if}
+    </div>
+  {/if}
+
+  {#if parseError}
+    <div class="error-banner parse-warning">{parseError}</div>
   {/if}
 
   <div class="stats-row">
     <div class="stat-card">
-      <span class="stat-value">{testedCount()}</span>
+      <span class="stat-value">{testedCount}</span>
       <span class="stat-label">Tested</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{avgLatency}<span class="unit">ms</span></span>
+      <span class="stat-label">Avg latency</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-value">{maxLatency}<span class="unit">ms</span></span>
+      <span class="stat-label">Max latency</span>
     </div>
     <div class="stat-card pass">
       <span class="stat-value">{statusCounts.pass}</span>
@@ -225,23 +422,29 @@
       <span>Progress</span>
       <span>
         {#if total}
-          {testedCount()} / {total}
+          {testedCount} / {total}
         {:else if !completed}
           Preparing…
         {:else}
-          {testedCount()} / {total || testedCount()}
+          {testedCount} / {total || testedCount}
         {/if}
       </span>
     </div>
     <div class="progress-track" class:indeterminate={!total && !completed}>
       {#if total || completed}
-        <div class="progress-fill" style="width:{progressPercent().toFixed(1)}%"></div>
+        <div class="progress-fill" style="width:{progressPercent.toFixed(1)}%"></div>
       {:else}
         <div class="progress-fill indeterminate-bar"></div>
       {/if}
     </div>
     {#if currentEndpoint && !completed}
       <p class="current-endpoint">Current: <code>{currentEndpoint}</code></p>
+    {/if}
+    {#if latencySamples.length > 0}
+      <div class="latency-chart-wrap">
+        <span class="latency-chart-label">Recent response times (last {latencySamples.length})</span>
+        <canvas bind:this={latencyCanvas}></canvas>
+      </div>
     {/if}
   </div>
 
@@ -253,8 +456,8 @@
           <div class="result-item">
             <span class="badge badge-{ev.status}" style="min-width:60px;text-align:center;">{ev.status}</span>
             <span class="endpoint-name">{ev.current_endpoint}</span>
-            <span class="endpoint-meta">{ev.endpoint_kind} · {ev.category}</span>
-            <span class="response-time">{ev.response_time_ms || 0}ms</span>
+            <span class="endpoint-meta">{ev.endpoint_kind} · {ev.category}{#if ev.outcome} · {ev.outcome}{/if}</span>
+            <span class="response-time">{ev.response_time_ms ?? 0}ms</span>
           </div>
         {:else}
           <div class="empty">
@@ -351,6 +554,12 @@
     font-size: 0.875rem;
   }
 
+  .parse-warning {
+    background: var(--bg-card);
+    border: 1px solid var(--warning);
+    color: var(--warning);
+  }
+
   .spinner {
     width: 1.25rem;
     height: 1.25rem;
@@ -375,10 +584,12 @@
 
   .stats-row {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1rem;
     margin-bottom: 1.5rem;
   }
+
+  .unit { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; }
 
   @media (max-width: 640px) {
     .stats-row { grid-template-columns: repeat(2, 1fr); }
@@ -411,7 +622,11 @@
   .stat-card.fail .stat-value { color: var(--danger); }
   .stat-card.warn .stat-value { color: var(--warning); }
 
-  .progress-section { margin-bottom: 1.5rem; }
+  .progress-section {
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    isolation: isolate;
+  }
 
   .progress-header {
     display: flex;
@@ -456,10 +671,33 @@
     color: var(--text-secondary);
   }
 
+  .latency-chart-wrap {
+    margin-top: 1rem;
+    position: relative;
+    height: 100px;
+    overflow: hidden;
+  }
+
+  .latency-chart-wrap canvas {
+    display: block;
+    max-height: 100px;
+    width: 100% !important;
+    height: 100px !important;
+  }
+
+  .latency-chart-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 0.35rem;
+  }
+
   .panels {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
     gap: 1rem;
+    position: relative;
+    z-index: 1;
   }
 
   .recent-results h3,

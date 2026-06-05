@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "accountSetDefaultAddress",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { accountSetDefaultAddress(id: \"00000000-0000-0000-0000-000000000000\", type: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"type\" has invalid value \"test\".\nExpected type \"AddressTypeEnum\", found \"test\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 87
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"type\" has invalid value \"test\".",
+              "Expected type \"AddressTypeEnum\", found \"test\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

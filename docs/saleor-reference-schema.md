@@ -279,14 +279,31 @@
 
 ---
 
+## Reference baseline
+
+The harness compares each target API against a **static catalog** aligned with **Saleor Dashboard 3.23.6** (see `REFERENCE_BASELINE_VERSION` / `REFERENCE_BASELINE_SOURCE`). This is a dashboard-style compatibility check, not a live clone of every dashboard GraphQL document.
+
 ## Test Result Classification
 
 | Status | Meaning | HTTP/GraphQL Criteria |
 |---|---|---|
-| `pass` | ✅ Available | HTTP 200, no GraphQL errors |
-| `fail` | ❌ Missing/Broken | HTTP 4xx/5xx or GraphQL schema error (undefined type, cannot query) |
-| `warn` | ⚠ Auth Required | HTTP 200 with permission/auth errors — works but needs credentials |
-| `skip` | ⏭ Skipped | User chose public-only scope, or run was stopped |
+| `pass` | Available | HTTP 200, success or acceptable probe (e.g. not-found on placeholder IDs) |
+| `fail` | Missing/Broken | HTTP non-200, timeout, or schema error (undefined field/type) |
+| `warn` | Expected friction | Auth denied, or mutation/validation errors on dummy probe input |
+| `skip` | Skipped | Run stopped or endpoint skipped |
+
+### Outcome labels (Phase A)
+
+| Outcome | Typical status | Meaning |
+|---|---|---|
+| `success_with_data` | pass | HTTP 200, `data` present, no errors |
+| `schema_error` | fail | Field/type missing vs reference schema |
+| `auth_denied` | warn | Permission or JWT error |
+| `validation_error` | warn | Business/validation error on dummy mutation input |
+| `not_found_probe` | pass | Resource not found — acceptable for probe IDs |
+| `http_error` | fail | Non-200 HTTP |
+| `timeout` | fail | Request timed out |
+| `unexpected_error` | pass/warn | Other GraphQL error (classified conservatively) |
 
 ## Key GraphQL Error Codes
 | Code | Meaning |

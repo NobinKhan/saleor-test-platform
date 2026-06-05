@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "languages",
+  "endpoint_kind": "QUERY",
+  "category": "shop",
+  "input_sent": "query { languages(first: 3) { code language } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"languages\" on type \"Query\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 9
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"languages\" on type \"Query\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

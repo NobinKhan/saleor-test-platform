@@ -1,0 +1,27 @@
+{
+  "endpoint_name": "saleCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "discounts",
+  "input_sent": "mutation { saleCreate(input: { name: \"Test Sale\", type: PERCENTAGE, value: 10 }) { sale { id name } errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "saleCreate": {
+        "sale": {
+          "id": "U2FsZToxMDAw",
+          "name": "Test Sale"
+        },
+        "errors": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:7515e66cc94ca581"
+}

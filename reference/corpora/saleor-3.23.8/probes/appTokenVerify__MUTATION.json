@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "appTokenVerify",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { appTokenVerify(token: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "appTokenVerify": {
+        "errors": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:7a6e1cd203a2e83f"
+}

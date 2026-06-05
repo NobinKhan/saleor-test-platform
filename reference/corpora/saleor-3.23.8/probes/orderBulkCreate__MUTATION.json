@@ -1,0 +1,55 @@
+{
+  "endpoint_name": "orderBulkCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { orderBulkCreate(orders: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"orders\" has invalid value \"test\".\nExpected \"OrderBulkCreateInput\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 36
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"orders\" has invalid value \"test\".",
+              "Expected \"OrderBulkCreateInput\", found not an object."
+            ]
+          }
+        }
+      },
+      {
+        "message": "Cannot query field \"field\" on type \"OrderBulkCreateError\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 55
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"field\" on type \"OrderBulkCreateError\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

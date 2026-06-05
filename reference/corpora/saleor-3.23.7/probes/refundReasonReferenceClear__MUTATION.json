@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "refundReasonReferenceClear",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { refundReasonReferenceClear { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "refundReasonReferenceClear": {
+        "errors": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:6e805c2422f858c8"
+}

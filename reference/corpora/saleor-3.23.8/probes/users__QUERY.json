@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "users",
+  "endpoint_kind": "QUERY",
+  "category": "account",
+  "input_sent": "query { users(first: 3) { edges { node { id email firstName lastName } } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"users\" on type \"Query\". Did you mean \"user\", \"orders\", \"vouchers\" or \"customers\"?",
+        "locations": [
+          {
+            "line": 1,
+            "column": 9
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"users\" on type \"Query\". Did you mean \"user\", \"orders\", \"vouchers\" or \"customers\"?"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

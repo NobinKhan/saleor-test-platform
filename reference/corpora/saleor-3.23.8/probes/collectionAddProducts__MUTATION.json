@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "collectionAddProducts",
+  "endpoint_kind": "MUTATION",
+  "category": "collections",
+  "input_sent": "mutation { collectionAddProducts(collectionId: \"00000000-0000-0000-0000-000000000000\", products: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "collectionAddProducts": {
+        "errors": [
+          {
+            "field": "collectionId",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Collection."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a61234d4442c3737"
+}

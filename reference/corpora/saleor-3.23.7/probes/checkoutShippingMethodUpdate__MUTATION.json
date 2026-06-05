@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "checkoutShippingMethodUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "checkout",
+  "input_sent": "mutation { checkoutShippingMethodUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Unknown argument \"input\" on field \"checkoutShippingMethodUpdate\" of type \"Mutation\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 41
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Unknown argument \"input\" on field \"checkoutShippingMethodUpdate\" of type \"Mutation\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

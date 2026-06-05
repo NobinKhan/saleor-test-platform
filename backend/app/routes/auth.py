@@ -8,7 +8,6 @@ from sqlalchemy import select
 
 from app.core.database import get_db
 from app.core.security import hash_password, verify_password, create_access_token, create_refresh_token, decode_token, get_current_user
-from app.services.saleor_auth import fetch_saleor_token
 from app.models import User
 from app.schemas import UserCreate, UserLogin, TokenResponse, RefreshRequest, UserResponse
 
@@ -71,39 +70,3 @@ async def me(user: User = Depends(get_current_user)):
     return UserResponse.model_validate(user)
 
 
-# ── Saleor token validation ────────────────────────────────────────────────────
-
-from pydantic import BaseModel
-
-
-class SaleorTokenRequest(BaseModel):
-    saleor_url: str
-    email: str
-    password: str
-
-
-class SaleorTokenResponse(BaseModel):
-    token: str
-    saleor_url: str
-    saleor_version: str | None = None
-
-
-@router.post("/saleor-token", response_model=SaleorTokenResponse)
-async def validate_saleor_credentials(data: SaleorTokenRequest):
-    """
-    Validate Saleor admin credentials and return a JWT token.
-    Used by the test platform to authenticate against a Saleor instance.
-    """
-    token, error = await fetch_saleor_token(
-        data.saleor_url,
-        data.email,
-        data.password,
-    )
-    if error:
-        # 400 — not 401; the API client treats 401 as expired harness JWT and loops refresh.
-        raise HTTPException(status_code=400, detail=error)
-
-    return SaleorTokenResponse(
-        token=token,
-        saleor_url=data.saleor_url,
-    )

@@ -5,13 +5,10 @@
   let saleor_url = "http://localhost:8000/graphql/";
   let saleor_email = "";
   let saleor_password = "";
-  let saleor_token = ""; // manual token override
-  let test_scope = "full";
+  let test_scope = "catalog";
   let public_only = false;
   let concurrency = 5;
   let timeout_seconds = 30;
-  let reference_saleor_url = "";
-  let reference_saleor_token = "";
   const categories = [
     "products", "orders", "checkout", "payments", "shipping", "discounts",
     "channels", "categories", "collections", "attributes", "account",
@@ -21,33 +18,25 @@
   let loading = false;
   let startMessage = "";
   let error = "";
-  let testing_auth = false;
 
-  async function testAuth() {
-    if (!saleor_email || !saleor_password || !saleor_url) {
-      error = "Fill Saleor URL, email and password first";
-      return;
-    }
-    testing_auth = true;
-    error = "";
-    try {
-      const resp = await api.post("/api/auth/saleor-token", {
-        saleor_url,
-        email: saleor_email,
-        password: saleor_password,
-      });
-      saleor_token = resp.token;
-    } catch (e: any) {
-      error = e.message || "Authentication failed";
-    } finally {
-      testing_auth = false;
-    }
+  function isValidSaleorEmail(email: string): boolean {
+    const trimmed = email.trim();
+    const parts = trimmed.split("@");
+    return parts.length === 2 && parts[0].length > 0 && parts[1].length > 0;
   }
 
   async function startTest() {
     error = "";
     if (!saleor_url) {
       error = "Saleor server URL is required";
+      return;
+    }
+    if (!saleor_email || !saleor_password) {
+      error = "Saleor admin email and password are required";
+      return;
+    }
+    if (!isValidSaleorEmail(saleor_email)) {
+      error = "Enter a valid admin email (e.g. merchant@demo.basmalahub.local)";
       return;
     }
     try {
@@ -58,20 +47,17 @@
     }
 
     loading = true;
-    startMessage = "Creating test run…";
+    startMessage = "Authenticating and creating test run…";
     try {
       const run = await api.post("/api/runs", {
         saleor_url,
-        saleor_email: saleor_email || null,
-        saleor_password: saleor_password || null,
-        saleor_token: saleor_token || null,
+        saleor_email: saleor_email.trim(),
+        saleor_password,
         test_scope,
         public_only,
         concurrency,
         timeout_seconds,
         categories: test_scope === "custom" ? selectedCategories : null,
-        reference_saleor_url: reference_saleor_url || null,
-        reference_saleor_token: reference_saleor_token || null,
       });
       startMessage = "Opening live progress…";
       await goto(`/run/${run.id}/stream`);
@@ -95,7 +81,7 @@
 <div class="new-run-page" class:dimmed={loading}>
   <div class="page-header">
     <h1>New Test Run</h1>
-    <p class="subtitle">Configure and start a new Saleor API test</p>
+    <p class="subtitle">Configure and start a new Saleor API compatibility test</p>
   </div>
 
   <div class="form-card card">
@@ -107,44 +93,28 @@
       <div class="field">
         <label for="url">Saleor Server URL *</label>
         <input id="url" type="url" bind:value={saleor_url} required placeholder="https://your-store.saleor.cloud/graphql/" />
-        <span class="hint">Use http://localhost:8000/graphql/ for the local stack — the harness rewrites this to the Saleor container when needed.</span>
+        <span class="hint">LAN URLs are used as-is. localhost is rewritten inside Docker to reach Saleor on the host.</span>
       </div>
 
-      <div class="section-label">Saleor Authentication</div>
-      <p class="section-hint">Provide admin credentials so the test system can authenticate automatically. Leave token empty to use credentials instead.</p>
+      <div class="section-label">Saleor admin credentials *</div>
+      <p class="section-hint">Dashboard staff login used for tokenCreate during the run. Internal domains (.local, .internal) are supported.</p>
 
       <div class="field-row">
         <div class="field">
           <label for="email">Admin Email</label>
-          <input id="email" type="email" bind:value={saleor_email} placeholder="admin@example.com" />
+          <input id="email" type="text" autocomplete="username" bind:value={saleor_email} required placeholder="merchant@demo.basmalahub.local" />
         </div>
         <div class="field">
           <label for="saleor_password">Admin Password</label>
-          <input id="saleor_password" type="password" bind:value={saleor_password} placeholder="••••••••" />
+          <input id="saleor_password" type="password" bind:value={saleor_password} required placeholder="••••••••" />
         </div>
-        <button type="button" class="btn-secondary test-btn" on:click={testAuth} disabled={testing_auth || !saleor_email || !saleor_password}>
-          {testing_auth ? "Testing..." : "Test Auth"}
-        </button>
       </div>
-
-      {#if saleor_token}
-        <div class="auth-ok">✓ Authenticated — token ready</div>
-      {/if}
-
-      <div class="divider"></div>
-
-      <div class="field">
-        <label for="token">API Token (Optional)</label>
-        <input id="token" type="password" bind:value={saleor_token} placeholder="Bearer token — leave empty to use email/password above" />
-        <span class="hint">Manual override — takes precedence over credentials above</span>
-      </div>
-
-      <div class="divider"></div>
 
       <div class="field">
         <label for="scope">Test Scope</label>
         <select id="scope" bind:value={test_scope}>
-          <option value="full">Full (Queries + Mutations)</option>
+          <option value="catalog">Catalog (recommended — static list only)</option>
+          <option value="full">Full exhaustive (catalog + all introspected endpoints)</option>
           <option value="queries">Queries Only</option>
           <option value="mutations">Mutations Only</option>
           <option value="custom">Custom (by category)</option>
@@ -180,17 +150,6 @@
         </div>
       </div>
 
-      <div class="section-label">Reference API (optional)</div>
-      <p class="section-hint">Compare schema drift against another Saleor instance.</p>
-      <div class="field">
-        <label for="ref_url">Reference Saleor URL</label>
-        <input id="ref_url" type="url" bind:value={reference_saleor_url} placeholder="https://reference.saleor.cloud/graphql/" />
-      </div>
-      <div class="field">
-        <label for="ref_token">Reference API Token</label>
-        <input id="ref_token" type="password" bind:value={reference_saleor_token} />
-      </div>
-
       <div class="field checkbox-field">
         <input id="public" type="checkbox" bind:checked={public_only} />
         <label for="public">Test public endpoints only (skip authenticated)</label>
@@ -221,10 +180,7 @@
     color: var(--text-primary);
   }
 
-  .loading-overlay p {
-    font-size: 1rem;
-    color: var(--text-secondary);
-  }
+  .loading-overlay p { font-size: 1rem; color: var(--text-secondary); }
 
   .loading-overlay .spinner {
     width: 2.5rem;
@@ -235,21 +191,13 @@
     animation: spin 0.8s linear infinite;
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  .new-run-page.dimmed {
-    pointer-events: none;
-    opacity: 0.5;
-  }
-
+  .new-run-page.dimmed { pointer-events: none; opacity: 0.5; }
   .new-run-page { max-width: 700px; }
-
   .page-header { margin-bottom: 1.5rem; }
   .page-header h1 { font-size: 1.5rem; font-weight: 700; }
   .subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem; }
-
   .form-card { padding: 1.5rem; }
 
   .error-banner {
@@ -262,65 +210,23 @@
     margin-bottom: 1rem;
   }
 
-  .section-label {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.25rem;
-  }
-
-  .section-hint {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-bottom: 0.75rem;
-  }
-
+  .section-label { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
+  .section-hint { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
   form { display: flex; flex-direction: column; gap: 1rem; }
-
   .field { display: flex; flex-direction: column; gap: 0.375rem; }
   .field label { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); }
   .hint { font-size: 0.8rem; color: var(--text-muted); }
-
-  .field-row {
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-end;
-  }
+  .field-row { display: flex; gap: 0.75rem; align-items: flex-end; }
   .field-row .field { flex: 1; }
-  .test-btn { flex-shrink: 0; white-space: nowrap; height: 40px; }
-
-  .auth-ok {
-    background: var(--success-bg);
-    color: var(--success);
-    border: 1px solid var(--success);
-    border-radius: 8px;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.875rem;
-  }
-
-  .divider {
-    height: 1px;
-    background: var(--border-color);
-    margin: 0.25rem 0;
-  }
-
   .checkbox-field { flex-direction: row; align-items: center; gap: 0.5rem; }
   .checkbox-field input { width: auto; }
   .checkbox-field label { font-weight: 400; color: var(--text-primary); }
-
   .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
-
   .category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     gap: 0.5rem;
     margin-top: 0.5rem;
   }
-  .cat-check {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.85rem;
-    cursor: pointer;
-  }
+  .cat-check { display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; cursor: pointer; }
 </style>

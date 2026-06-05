@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "vouchers",
+  "endpoint_kind": "QUERY",
+  "category": "discounts",
+  "input_sent": "query { vouchers(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "vouchers": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:fb72b1854bfd5b38"
+}

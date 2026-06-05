@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "paymentGateways",
+  "endpoint_kind": "QUERY",
+  "category": "shop",
+  "input_sent": "query { paymentGateways(first: 3) { id name } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"paymentGateways\" on type \"Query\". Did you mean \"payments\"?",
+        "locations": [
+          {
+            "line": 1,
+            "column": 9
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"paymentGateways\" on type \"Query\". Did you mean \"payments\"?"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

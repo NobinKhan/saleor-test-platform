@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "productVariantBulkCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { productVariantBulkCreate(product: \"00000000-0000-0000-0000-000000000000\", variants: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"variants\" has invalid value \"test\".\nExpected \"ProductVariantBulkCreateInput\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 96
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"variants\" has invalid value \"test\".",
+              "Expected \"ProductVariantBulkCreateInput\", found not an object."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

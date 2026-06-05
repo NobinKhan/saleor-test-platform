@@ -1,0 +1,55 @@
+{
+  "endpoint_name": "productBulkCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { productBulkCreate(products: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"products\" has invalid value \"test\".\nExpected \"ProductBulkCreateInput\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 40
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"products\" has invalid value \"test\".",
+              "Expected \"ProductBulkCreateInput\", found not an object."
+            ]
+          }
+        }
+      },
+      {
+        "message": "Cannot query field \"field\" on type \"ProductBulkCreateError\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 59
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"field\" on type \"ProductBulkCreateError\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "productVariantDelete",
+  "endpoint_kind": "MUTATION",
+  "category": "products",
+  "input_sent": "mutation { productVariantDelete { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "productVariantDelete": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'sku', 'id', 'external_reference'."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:fed102b1a41baad0"
+}

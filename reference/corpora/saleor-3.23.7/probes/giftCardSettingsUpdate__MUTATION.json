@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "giftCardSettingsUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { giftCardSettingsUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "giftCardSettingsUpdate": {
+        "errors": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:c1f42222e4605d9a"
+}

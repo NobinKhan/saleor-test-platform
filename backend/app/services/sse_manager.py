@@ -14,7 +14,7 @@ from sqlalchemy import select
 
 from app.core.crypto import decrypt_token
 from app.core.database import get_async_sessionmaker
-from app.models import TestRun, TestResult
+from app.models import TestRun, TestResult, TestItem
 from app.services.test_runner import TestRunner
 
 
@@ -63,11 +63,8 @@ class SSERunnerManager:
         concurrency: int = 5,
         timeout_seconds: int = 30,
         categories: list[str] | None = None,
-        reference_saleor_url: str | None = None,
-        reference_saleor_token: str | None = None,
     ):
         token = decrypt_token(saleor_token) if saleor_token else None
-        ref_token = decrypt_token(reference_saleor_token) if reference_saleor_token else None
 
         runner = TestRunner(
             run_id=run_id,
@@ -78,8 +75,6 @@ class SSERunnerManager:
             concurrency=concurrency,
             timeout=timeout_seconds,
             categories=categories,
-            reference_saleor_url=reference_saleor_url,
-            reference_saleor_token=ref_token,
         )
         rid = str(run_id)
         self._runners[rid] = runner
@@ -158,12 +153,29 @@ class SSERunnerManager:
                     category=event.get("category", ""),
                     is_public=event.get("is_public", False),
                     status=event.get("status", "skip"),
+                    outcome=event.get("outcome"),
+                    response_valid=event.get("response_valid"),
+                    expected=event.get("expected"),
+                    expected_response=event.get("expected_response"),
+                    match_status=event.get("match_status"),
+                    diff_summary=event.get("diff_summary"),
                     error_message=event.get("error_message"),
                     input_sent=event.get("input_sent"),
                     actual_response=event.get("actual_response"),
                     response_time_ms=event.get("response_time_ms"),
                 )
                 s.add(result)
+                await s.flush()
+                for item in event.get("field_items") or []:
+                    s.add(
+                        TestItem(
+                            test_result_id=result.id,
+                            item_key=item.get("item_key", ""),
+                            item_status=item.get("item_status", "unknown"),
+                            expected_type=item.get("expected_type"),
+                            actual_type=item.get("actual_type"),
+                        )
+                    )
                 await s.commit()
 
         elif event_type == "complete":
@@ -251,6 +263,14 @@ class SSERunnerManager:
                     "is_public": row.is_public,
                     "response_time_ms": row.response_time_ms,
                     "error_message": row.error_message,
+                    "outcome": row.outcome,
+                    "expected": row.expected,
+                    "expected_response": row.expected_response,
+                    "match_status": row.match_status,
+                    "diff_summary": row.diff_summary,
+                    "response_valid": row.response_valid,
+                    "input_sent": row.input_sent,
+                    "actual_response": row.actual_response,
                     "status_counts": dict(counts),
                 }
 

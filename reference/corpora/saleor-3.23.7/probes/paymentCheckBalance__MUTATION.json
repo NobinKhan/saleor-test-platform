@@ -1,0 +1,41 @@
+{
+  "endpoint_name": "paymentCheckBalance",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { paymentCheckBalance(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"gatewayId\": Expected \"String!\", found null.\nIn field \"method\": Expected \"String!\", found null.\nIn field \"channel\": Expected \"String!\", found null.\nIn field \"card\": Expected \"CardInput!\", found null.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 39
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
+              "In field \"gatewayId\": Expected \"String!\", found null.",
+              "In field \"method\": Expected \"String!\", found null.",
+              "In field \"channel\": Expected \"String!\", found null.",
+              "In field \"card\": Expected \"CardInput!\", found null."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "giftCards",
+  "endpoint_kind": "QUERY",
+  "category": "giftcards",
+  "input_sent": "query { giftCards(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "giftCards": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:63fac7d23a4621aa"
+}

@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "appFetchManifest",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { appFetchManifest(manifestUrl: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "appFetchManifest": {
+        "errors": [
+          {
+            "field": "manifestUrl",
+            "message": "Enter a valid URL."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:4efb4204fb88b7a4"
+}

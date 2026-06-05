@@ -1,0 +1,23 @@
+{
+  "endpoint_name": "customers",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { customers(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "customers": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:7d547ff8026b44c9"
+}

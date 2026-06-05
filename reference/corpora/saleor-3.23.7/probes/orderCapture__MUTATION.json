@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "orderCapture",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { orderCapture(amount: \"test\", id: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"amount\" has invalid value \"test\".\nExpected type \"PositiveDecimal\", found \"test\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 33
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"amount\" has invalid value \"test\".",
+              "Expected type \"PositiveDecimal\", found \"test\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

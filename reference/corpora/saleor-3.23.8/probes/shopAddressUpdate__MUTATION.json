@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "shopAddressUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "shop",
+  "input_sent": "mutation { shopAddressUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "shopAddressUpdate": {
+        "errors": [
+          {
+            "field": "country",
+            "message": "This field is required.",
+            "code": "REQUIRED"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:d83f415b725a7586"
+}

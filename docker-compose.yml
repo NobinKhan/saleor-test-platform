@@ -37,7 +37,7 @@ services:
 
   saleor-api:
     profiles: [saleor]
-    image: ghcr.io/saleor/saleor:3.23
+    image: ghcr.io/saleor/saleor:3.23.7
     container_name: saleor-api
     restart: unless-stopped
     networks: [app]
@@ -57,11 +57,11 @@ services:
       - ./deploy/saleor/backend.env
     environment:
       DASHBOARD_URL: http://localhost:9000/
-      ALLOWED_HOSTS: localhost,127.0.0.1,saleor-api
+      ALLOWED_HOSTS: localhost,127.0.0.1,saleor-api,host.docker.internal
 
   saleor-worker:
     profiles: [saleor]
-    image: ghcr.io/saleor/saleor:3.23
+    image: ghcr.io/saleor/saleor:3.23.7
     container_name: saleor-worker
     restart: unless-stopped
     networks: [app]
@@ -104,8 +104,12 @@ services:
     container_name: harness-backend
     restart: unless-stopped
     networks: [app]
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "5998:5998"
+    volumes:
+      - ./reference:/app/reference
     environment:
       DATABASE_URL: postgresql+asyncpg://saleor_test:saleor_test_pass@harness-db:5432/saleor_test
       JWT_SECRET_KEY: CHANGE_ME_IN_PRODUCTION_USE_64CHAR_SECRET
@@ -117,8 +121,13 @@ services:
       APP_HOST: 0.0.0.0
       APP_PORT: 5998
       FRONTEND_URL: http://localhost:5999
-      SALEOR_GRAPHQL_URL: http://saleor-api:8000/graphql/
-      REFERENCE_SALEOR_URL: ""
+      # Rewrite target when UI sends localhost — reaches Saleor on the Docker host
+      SALEOR_GRAPHQL_URL: http://host.docker.internal:8000/graphql/
+      REFERENCE_BASELINE_VERSION: "3.23.6"
+      REFERENCE_BASELINE_SOURCE: saleor-dashboard
+      GOLDEN_CORPUS_VERSION: "3.23.7"
+      REFERENCE_CORPUS_ROOT: /app/reference/corpora
+      REFERENCE_SALEOR_URL: http://saleor-api:8000/graphql/
     depends_on:
       harness-db:
         condition: service_healthy

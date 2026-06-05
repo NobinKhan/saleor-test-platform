@@ -28,6 +28,18 @@ class Settings(BaseSettings):
     app_port: int = Field(default=5998, validation_alias="APP_PORT")
     token_encryption_key: str = Field(default="", validation_alias="TOKEN_ENCRYPTION_KEY")
     reference_saleor_url: str = Field(default="", validation_alias="REFERENCE_SALEOR_URL")
+    reference_baseline_version: str = Field(
+        default="3.23.6",
+        validation_alias="REFERENCE_BASELINE_VERSION",
+    )
+    golden_corpus_version: str = Field(
+        default="3.23.7",
+        validation_alias="GOLDEN_CORPUS_VERSION",
+    )
+    reference_baseline_source: str = Field(
+        default="saleor-dashboard",
+        validation_alias="REFERENCE_BASELINE_SOURCE",
+    )
     saleor_graphql_url_default: str = Field(
         default="http://saleor-api:8000/graphql/",
         validation_alias="SALEOR_GRAPHQL_URL",

@@ -15,6 +15,11 @@ def test_full_scope_includes_queries_and_mutations():
     assert len(endpoints) == len(SALEOR_QUERIES) + len(SALEOR_MUTATIONS)
 
 
+def test_catalog_scope_matches_static_catalog():
+    endpoints = build_endpoints_list("catalog", public_only=False)
+    assert len(endpoints) == len(SALEOR_QUERIES) + len(SALEOR_MUTATIONS)
+
+
 def test_queries_scope_only():
     endpoints = build_endpoints_list("queries", public_only=False)
     assert all(e["kind"] == "QUERY" for e in endpoints)

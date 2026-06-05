@@ -1,0 +1,55 @@
+{
+  "endpoint_name": "webhookSamplePayload",
+  "endpoint_kind": "QUERY",
+  "category": "unknown",
+  "input_sent": "query { webhookSamplePayload(eventType: \"test\") { __typename } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Field \"webhookSamplePayload\" of type \"JSONString\" must not have a sub selection.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 49
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Field \"webhookSamplePayload\" of type \"JSONString\" must not have a sub selection."
+            ]
+          }
+        }
+      },
+      {
+        "message": "Argument \"eventType\" has invalid value \"test\".\nExpected type \"WebhookSampleEventTypeEnum\", found \"test\".",
+        "locations": [
+          {
+            "line": 1,
+            "column": 41
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"eventType\" has invalid value \"test\".",
+              "Expected type \"WebhookSampleEventTypeEnum\", found \"test\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:a78ac8d9655acd0d"
+}

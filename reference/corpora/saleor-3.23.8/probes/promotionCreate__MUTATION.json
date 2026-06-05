@@ -1,0 +1,39 @@
+{
+  "endpoint_name": "promotionCreate",
+  "endpoint_kind": "MUTATION",
+  "category": "discounts",
+  "input_sent": "mutation { promotionCreate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"name\": Expected \"String!\", found null.\nIn field \"type\": Expected \"PromotionTypeEnum!\", found null.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 35
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
+              "In field \"name\": Expected \"String!\", found null.",
+              "In field \"type\": Expected \"PromotionTypeEnum!\", found null."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

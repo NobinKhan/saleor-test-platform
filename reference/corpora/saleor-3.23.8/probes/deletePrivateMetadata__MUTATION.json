@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "deletePrivateMetadata",
+  "endpoint_kind": "MUTATION",
+  "category": "meta",
+  "input_sent": "mutation { deletePrivateMetadata(id: \"00000000-0000-0000-0000-000000000000\", keys: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "deletePrivateMetadata": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Couldn't resolve to a node."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:f8f13fee5b2aafb5"
+}

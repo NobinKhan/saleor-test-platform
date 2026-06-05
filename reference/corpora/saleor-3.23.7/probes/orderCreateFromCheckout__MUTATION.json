@@ -1,0 +1,55 @@
+{
+  "endpoint_name": "orderCreateFromCheckout",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { orderCreateFromCheckout(id: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "To access this path, you need one of the following permissions: HANDLE_CHECKOUTS",
+        "locations": [
+          {
+            "line": 1,
+            "column": 12
+          }
+        ],
+        "path": [
+          "orderCreateFromCheckout"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "PermissionDenied",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/contextlib.py\", line 81, in inner",
+              "    return func(*args, **kwds)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/mutations.py\", line 523, in mutate",
+              "    raise PermissionDenied(permissions=cls._meta.permissions)",
+              "saleor.core.exceptions.PermissionDenied: To access this path, you need one of the following permissions: HANDLE_CHECKOUTS"
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "orderCreateFromCheckout": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:7fbf963f7f8402a7"
+}

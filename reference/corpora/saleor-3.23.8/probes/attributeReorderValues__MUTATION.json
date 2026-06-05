@@ -1,0 +1,38 @@
+{
+  "endpoint_name": "attributeReorderValues",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { attributeReorderValues(attributeId: \"00000000-0000-0000-0000-000000000000\", moves: \"test\") { errors { field message } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"moves\" has invalid value \"test\".\nExpected \"ReorderInput\", found not an object.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 95
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"moves\" has invalid value \"test\".",
+              "Expected \"ReorderInput\", found not an object."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

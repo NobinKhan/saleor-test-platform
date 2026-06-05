@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "attributeUpdate",
+  "endpoint_kind": "MUTATION",
+  "category": "attributes",
+  "input_sent": "mutation { attributeUpdate(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "data": {
+      "attributeUpdate": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'id', 'external_reference'.",
+            "code": "GRAPHQL_ERROR"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:2cb2355343ba93be"
+}

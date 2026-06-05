@@ -47,3 +47,31 @@ logs service:
 
 status:
     @docker compose -f "{{ root }}/docker-compose.yml" ps -a
+
+record-reference url email password *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
+      python -m app.scripts.record_reference \
+      --url "{{ url }}" --email "{{ email }}" --password "{{ password }}" {{ extra }}
+
+record-reference-docker:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
+      python -m app.scripts.record_reference \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
+      --scope full
+
+golden-gate *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
+      python -m app.scripts.golden_gate {{ extra }}
+
+upgrade-reference version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    bash "{{ root }}/scripts/upgrade-reference.sh" "{{ version }}"

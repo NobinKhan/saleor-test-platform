@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "productVariantSetDefault",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { productVariantSetDefault(productId: \"00000000-0000-0000-0000-000000000000\", variantId: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "productVariantSetDefault": {
+        "errors": [
+          {
+            "field": "productId",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Product."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:4489e5b94675b7b2"
+}

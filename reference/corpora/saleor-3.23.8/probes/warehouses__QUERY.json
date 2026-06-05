@@ -1,0 +1,29 @@
+{
+  "endpoint_name": "warehouses",
+  "endpoint_kind": "QUERY",
+  "category": "warehouse",
+  "input_sent": "query { warehouses(first: 1) { edges { node { id } } } }",
+  "golden_response": {
+    "data": {
+      "warehouses": {
+        "edges": [
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOjQ3M2E4OGY3LWVhYTAtNGI1Yy04NmViLWU1Yzk5NmUyOTA0Mw=="
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:6fddead34348bc45"
+}

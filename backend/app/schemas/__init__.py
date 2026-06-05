@@ -8,7 +8,18 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
+
+
+def _validate_saleor_email(value: str) -> str:
+    """Allow internal/dev domains (.local, etc.) that strict EmailStr rejects."""
+    email = value.strip()
+    if email.count("@") != 1:
+        raise ValueError("Invalid email format")
+    local, domain = email.split("@", 1)
+    if not local or not domain:
+        raise ValueError("Invalid email format")
+    return email
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
@@ -48,16 +59,18 @@ class UserResponse(BaseModel):
 
 class TestRunCreate(BaseModel):
     saleor_url: str = Field(description="GraphQL endpoint URL of Saleor server")
-    saleor_token: str | None = Field(default=None, description="Bearer token or API key")
-    saleor_email: str | None = Field(default=None, description="Saleor admin email (optional, for auto token fetch)")
-    saleor_password: str | None = Field(default=None, description="Saleor admin password (optional, for auto token fetch)")
-    test_scope: str = Field(default="full", description="full|queries|mutations|custom")
+    saleor_email: str = Field(min_length=3, max_length=255, description="Saleor admin email")
+    saleor_password: str = Field(min_length=1, description="Saleor admin password")
+
+    @field_validator("saleor_email")
+    @classmethod
+    def validate_saleor_email(cls, value: str) -> str:
+        return _validate_saleor_email(value)
+    test_scope: str = Field(default="catalog", description="catalog|full|queries|mutations|custom")
     public_only: bool = Field(default=False, description="Only test public endpoints")
     categories: list[str] | None = Field(default=None, description="Categories when test_scope=custom")
     concurrency: int = Field(default=5, ge=1, le=20)
     timeout_seconds: int = Field(default=30, ge=5, le=120)
-    reference_saleor_url: str | None = Field(default=None, description="Reference Saleor URL for schema compare")
-    reference_saleor_token: str | None = Field(default=None, description="Bearer token for reference Saleor")
 
 
 class TestRunSummary(BaseModel):
@@ -80,11 +93,16 @@ class TestRunSummary(BaseModel):
 
 class TestRunDetail(TestRunSummary):
     user_id: UUID
-    saleor_token: str
     saleor_email: str | None = None
-    saleor_password: str | None = None
+    saleor_password_masked: str = "••••••••"
     test_scope: str
     public_only: bool
+    concurrency: int = 5
+    timeout_seconds: int = 30
+    reference_baseline_version: str | None = None
+    reference_baseline_source: str | None = None
+    reference_catalog_queries: int = 0
+    reference_catalog_mutations: int = 0
 
 
 # ── Test Result ────────────────────────────────────────────────────────────────
@@ -96,6 +114,12 @@ class TestResultResponse(BaseModel):
     endpoint_kind: str
     field_name: str | None
     status: str
+    outcome: str | None = None
+    response_valid: bool | None = None
+    expected: str | None = None
+    expected_response: str | None = None
+    match_status: str | None = None
+    diff_summary: str | None = None
     input_sent: str | None
     actual_response: str | None
     error_message: str | None
@@ -104,6 +128,7 @@ class TestResultResponse(BaseModel):
     actual_field_type: str | None
     is_public: bool
     created_at: datetime
+    items: list["TestItemResponse"] = []
 
     class Config:
         from_attributes = True
@@ -135,6 +160,43 @@ class ReportSummary(BaseModel):
     saleor_url: str
     started_at: datetime
     completed_at: datetime | None
+    saleor_email: str | None = None
+    saleor_password_masked: str = "••••••••"
+    test_scope: str = "full"
+    public_only: bool = False
+    concurrency: int = 5
+    timeout_seconds: int = 30
+    reference_baseline_version: str | None = None
+    reference_baseline_source: str | None = None
+    reference_catalog_queries: int = 0
+    reference_catalog_mutations: int = 0
+    golden_corpus_version: str | None = None
+    golden_corpus_url: str | None = None
+    golden_probe_count: int = 0
+    golden_match_rate: float | None = None
+    compatibility_score: float | None = None
+    golden_matched: int = 0
+    golden_mismatched: int = 0
+    golden_missing: int = 0
+    upgrade_hint: str | None = None
+
+
+class LatencySummary(BaseModel):
+    avg: float
+    min: int
+    max: int
+    p50: float
+    p95: float
+    sample_count: int
+
+
+class SlowEndpoint(BaseModel):
+    endpoint_name: str
+    endpoint_kind: str
+    category: str
+    status: str
+    response_time_ms: int
+    outcome: str | None = None
 
 
 class CategoryBreakdown(BaseModel):
@@ -155,6 +217,9 @@ class ReportData(BaseModel):
     summary: ReportSummary
     category_breakdown: list[CategoryBreakdown]
     response_time_distribution: list[ResponseTimeBucket]
+    latency_summary: LatencySummary
+    slowest_endpoints: list[SlowEndpoint]
+    results: list[TestResultResponse]
     pass_rate: float
     schema_diff: dict[str, Any] | None = None
 

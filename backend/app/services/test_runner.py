@@ -13,12 +13,14 @@ from typing import Any, AsyncGenerator
 
 import httpx
 
+from app.core.config import settings
 from app.core.url_utils import resolve_saleor_url_for_runner
-from app.services.introspection import (
-    compare_schema,
-    compare_two_introspections,
-    introspect_saleor,
-)
+from app.services.version_routing import version_compatibility_warning
+from app.services.reference_corpus import resolve_corpus_version
+from app.services.introspection import compare_schema, introspect_saleor
+from app.services.outcome import classify_graphql_response, classify_transport_error
+from app.services.query_builder import build_query_with_schema, introspect_field_args
+from app.services.reference_compare import compare_to_golden
 
 # Saleor reference queries/mutations
 SALEOR_QUERIES: list[dict] = [
@@ -354,6 +356,8 @@ def build_endpoints_list(
         endpoints = SALEOR_QUERIES.copy()
     elif test_scope == "mutations":
         endpoints = SALEOR_MUTATIONS.copy()
+    elif test_scope == "catalog":
+        endpoints = SALEOR_QUERIES + SALEOR_MUTATIONS
     elif test_scope == "custom" and categories:
         cats = set(categories)
         endpoints = [
@@ -385,8 +389,6 @@ class TestRunner:
         concurrency: int = 5,
         timeout: int = 30,
         categories: list[str] | None = None,
-        reference_saleor_url: str | None = None,
-        reference_saleor_token: str | None = None,
         use_introspection: bool = True,
     ):
         self.run_id = run_id
@@ -397,10 +399,10 @@ class TestRunner:
         self.concurrency = concurrency
         self.timeout = timeout
         self.categories = categories
-        self.reference_saleor_url = reference_saleor_url
-        self.reference_saleor_token = reference_saleor_token
         self.use_introspection = use_introspection
         self._stopped = False
+        self.saleor_version: str | None = None
+        self.schema_fields: dict[str, list[dict]] | None = None
 
     def stop(self):
         self._stopped = True
@@ -410,7 +412,13 @@ class TestRunner:
 
         yield {"type": "progress", "message": "Detecting Saleor version…"}
         version = await detect_saleor_version(self.saleor_url, self.saleor_token, self.timeout)
+        self.saleor_version = version
         yield {"type": "version", "version": version}
+
+        corpus_ver = resolve_corpus_version(version, settings.golden_corpus_version)
+        ver_warn = version_compatibility_warning(version, corpus_ver)
+        if ver_warn:
+            yield {"type": "schema_diff", "diff": {"version_warning": ver_warn}}
 
         endpoints = build_endpoints_list(
             self.test_scope, self.public_only, self.categories
@@ -422,46 +430,42 @@ class TestRunner:
                 intro = await introspect_saleor(
                     self.saleor_url, self.saleor_token, self.timeout
                 )
+                try:
+                    self.schema_fields = await introspect_field_args(
+                        self.saleor_url, self.saleor_token, self.timeout
+                    )
+                except Exception:
+                    self.schema_fields = None
+
                 ref_q = [e["name"] for e in SALEOR_QUERIES]
                 ref_m = [e["name"] for e in SALEOR_MUTATIONS]
                 diff = compare_schema(intro, ref_q, ref_m)
                 yield {"type": "schema_diff", "diff": diff}
 
-                known = {e["name"] for e in endpoints}
-                for name in intro.get("queries", []):
-                    if name not in known:
-                        endpoints.append(
-                            {
-                                "name": name,
-                                "kind": "QUERY",
-                                "category": "unknown",
-                                "is_public": True,
-                            }
-                        )
-                        known.add(name)
-                for name in intro.get("mutations", []):
-                    if name not in known:
-                        endpoints.append(
-                            {
-                                "name": name,
-                                "kind": "MUTATION",
-                                "category": "unknown",
-                                "is_public": False,
-                            }
-                        )
-                        known.add(name)
-
-                if self.reference_saleor_url:
-                    ref_intro = await introspect_saleor(
-                        self.reference_saleor_url,
-                        self.reference_saleor_token,
-                        self.timeout,
-                    )
-                    ref_compare = compare_two_introspections(intro, ref_intro)
-                    yield {
-                        "type": "schema_diff",
-                        "diff": {"reference_compare": ref_compare},
-                    }
+                if self.test_scope == "full":
+                    known = {e["name"] for e in endpoints}
+                    for name in intro.get("queries", []):
+                        if name not in known:
+                            endpoints.append(
+                                {
+                                    "name": name,
+                                    "kind": "QUERY",
+                                    "category": "unknown",
+                                    "is_public": True,
+                                }
+                            )
+                            known.add(name)
+                    for name in intro.get("mutations", []):
+                        if name not in known:
+                            endpoints.append(
+                                {
+                                    "name": name,
+                                    "kind": "MUTATION",
+                                    "category": "unknown",
+                                    "is_public": False,
+                                }
+                            )
+                            known.add(name)
             except Exception as exc:
                 yield {
                     "type": "schema_diff",
@@ -484,6 +488,9 @@ class TestRunner:
                 if self._stopped:
                     return {
                         "status": "skip",
+                        "outcome": "skipped",
+                        "expected": "Run stopped by user",
+                        "response_valid": None,
                         "endpoint": endpoint["name"],
                         "kind": endpoint["kind"],
                         "category": endpoint["category"],
@@ -525,6 +532,13 @@ class TestRunner:
                 "error_message": result.get("error_message"),
                 "input_sent": result.get("input_sent"),
                 "actual_response": result.get("actual_response"),
+                "outcome": result.get("outcome"),
+                "expected": result.get("expected"),
+                "expected_response": result.get("expected_response"),
+                "match_status": result.get("match_status"),
+                "diff_summary": result.get("diff_summary"),
+                "field_items": result.get("field_items"),
+                "response_valid": result.get("response_valid"),
                 "saleor_field_type": result.get("saleor_field_type"),
                 "actual_field_type": result.get("actual_field_type"),
                 "status_counts": counts,
@@ -552,7 +566,7 @@ class TestRunner:
         if self.saleor_token:
             headers["Authorization"] = f"Bearer {self.saleor_token}"
 
-        query = build_query(name, kind)
+        query = build_query_with_schema(name, kind, self.schema_fields)
         start = time.time()
 
         try:
@@ -565,120 +579,90 @@ class TestRunner:
                 elapsed_ms = int((time.time() - start) * 1000)
 
                 resp_json = resp.json()
-
-                # Check for GraphQL errors
-                errors = resp_json.get("errors", [])
-                if errors:
-                    first_err = errors[0] if errors else {}
-                    msg = first_err.get("message", "")
-                    ext = first_err.get("extensions", {})
-                    code = ext.get("code", "")
-
-                    auth_codes = {
-                        "permission",
-                        "authentication",
-                        "forbidden",
-                        "jwt-error",
-                        "jwt-invalid",
-                        "PERMISSION_DENIED",
-                    }
-                    schema_markers = (
-                        "cannot query",
-                        "undefined type",
-                        "field has unsupported",
-                        "Unknown type",
-                        "FieldUndefined",
+                meta = classify_graphql_response(
+                    resp_json,
+                    http_status=resp.status_code,
+                    endpoint_kind=kind,
+                )
+                comparison = compare_to_golden(
+                    self.saleor_version,
+                    name,
+                    kind,
+                    resp_json,
+                    meta,
+                )
+                status = comparison.recommended_status
+                if comparison.match_status == "missing_golden":
+                    status = meta["status"]
+                expected_label = meta["expected"]
+                if comparison.expected_response:
+                    expected_label = (
+                        f"Golden reference ({comparison.match_status}): "
+                        f"{comparison.golden_outcome or meta['outcome']}"
                     )
-                    validation_codes = {
-                        "INVALID",
-                        "GRAPHQL_VALIDATION_FAILED",
-                        "REQUIRED",
-                        "UNIQUE",
-                    }
-
-                    if code in auth_codes or str(code).lower() in auth_codes:
-                        status = "warn"
-                    elif any(m in msg.lower() for m in schema_markers):
-                        status = "fail"
-                    elif "not found" in msg.lower() or "does not exist" in msg.lower():
-                        status = "pass"
-                    elif code in validation_codes or kind == "MUTATION":
-                        status = "warn"
-                    else:
-                        status = "pass"
-
-                    return {
-                        "status": status,
-                        "endpoint": name,
-                        "kind": kind,
-                        "category": category,
-                        "is_public": is_public,
-                        "response_time_ms": elapsed_ms,
-                        "error_message": msg if status != "pass" else None,
-                        "input_sent": query,
-                        "actual_response": json.dumps(resp_json),
-                    }
-
-                # No GraphQL errors — check HTTP status
-                if resp.status_code != 200:
-                    return {
-                        "status": "fail",
-                        "endpoint": name,
-                        "kind": kind,
-                        "category": category,
-                        "is_public": is_public,
-                        "response_time_ms": elapsed_ms,
-                        "error_message": f"HTTP {resp.status_code}: {resp.text[:200]}",
-                        "input_sent": query,
-                        "actual_response": resp.text[:500],
-                    }
-
-                # Success
                 return {
-                    "status": "pass",
+                    "status": status,
+                    "outcome": meta["outcome"],
+                    "expected": expected_label,
+                    "expected_response": comparison.expected_response,
+                    "match_status": comparison.match_status,
+                    "diff_summary": comparison.diff_summary,
+                    "field_items": comparison.field_items,
+                    "response_valid": meta["response_valid"],
                     "endpoint": name,
                     "kind": kind,
                     "category": category,
                     "is_public": is_public,
                     "response_time_ms": elapsed_ms,
+                    "error_message": meta.get("error_message"),
                     "input_sent": query,
                     "actual_response": json.dumps(resp_json),
                 }
 
         except httpx.TimeoutException:
             elapsed_ms = int((time.time() - start) * 1000)
-            return {
-                "status": "fail",
-                "endpoint": name,
-                "kind": kind,
-                "category": category,
-                "is_public": is_public,
-                "response_time_ms": elapsed_ms,
-                "error_message": f"Timeout after {self.timeout}s",
-                "input_sent": query,
-            }
+            meta = classify_transport_error(
+                kind="timeout",
+                message=f"Timeout after {self.timeout}s",
+            )
+            return _result_from_meta(meta, name, kind, category, is_public, elapsed_ms, query)
         except httpx.HTTPStatusError as e:
             elapsed_ms = int((time.time() - start) * 1000)
-            return {
-                "status": "fail",
-                "endpoint": name,
-                "kind": kind,
-                "category": category,
-                "is_public": is_public,
-                "response_time_ms": elapsed_ms,
-                "error_message": f"HTTP {e.response.status_code}",
-                "input_sent": query,
-                "actual_response": e.response.text[:500],
-            }
+            meta = classify_transport_error(
+                kind="http",
+                message=f"HTTP {e.response.status_code}",
+            )
+            return _result_from_meta(
+                meta, name, kind, category, is_public, elapsed_ms, query,
+                actual_response=e.response.text[:500],
+            )
         except Exception as e:
             elapsed_ms = int((time.time() - start) * 1000)
-            return {
-                "status": "fail",
-                "endpoint": name,
-                "kind": kind,
-                "category": category,
-                "is_public": is_public,
-                "response_time_ms": elapsed_ms,
-                "error_message": str(e),
-                "input_sent": query,
-            }
+            meta = classify_transport_error(kind="error", message=str(e))
+            return _result_from_meta(meta, name, kind, category, is_public, elapsed_ms, query)
+
+
+def _result_from_meta(
+    meta: dict,
+    name: str,
+    kind: str,
+    category: str,
+    is_public: bool,
+    elapsed_ms: int,
+    query: str,
+    actual_response: str | None = None,
+) -> dict:
+    return {
+        "status": meta["status"],
+        "outcome": meta["outcome"],
+        "expected": meta["expected"],
+        "response_valid": meta["response_valid"],
+        "endpoint": name,
+        "kind": kind,
+        "category": category,
+        "is_public": is_public,
+        "response_time_ms": elapsed_ms,
+        "error_message": meta.get("error_message"),
+        "input_sent": query,
+        "actual_response": actual_response,
+    }

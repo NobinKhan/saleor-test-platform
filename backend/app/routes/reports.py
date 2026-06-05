@@ -17,7 +17,19 @@ from sqlalchemy import select, func
 from app.core.database import get_db
 from app.core.security import get_current_user, get_current_user_sse
 from app.models import User, TestRun, TestResult
-from app.schemas import ReportData, ReportSummary, CategoryBreakdown, ResponseTimeBucket
+from app.schemas import (
+    ReportData,
+    ReportSummary,
+    CategoryBreakdown,
+    ResponseTimeBucket,
+    LatencySummary,
+    SlowEndpoint,
+    TestResultResponse,
+)
+from app.core.config import settings
+from app.services.reference_corpus import load_manifest, resolve_corpus_version
+from app.services.reference_registry import get_upgrade_hint
+from app.services.run_helpers import catalog_counts, decrypt_saleor_email, run_detail_fields
 
 router = APIRouter(prefix="/api/reports", tags=["reports"])
 
@@ -30,6 +42,24 @@ try:
     HAS_REPORTLAB = True
 except ImportError:
     HAS_REPORTLAB = False
+
+
+def _latency_stats(times: list[int]) -> LatencySummary:
+    if not times:
+        return LatencySummary(avg=0, min=0, max=0, p50=0, p95=0, sample_count=0)
+    sorted_t = sorted(times)
+    n = len(sorted_t)
+    p50 = sorted_t[n // 2]
+    p95_idx = min(n - 1, int(n * 0.95))
+    p95 = sorted_t[p95_idx]
+    return LatencySummary(
+        avg=round(sum(times) / n, 1),
+        min=sorted_t[0],
+        max=sorted_t[-1],
+        p50=float(p50),
+        p95=float(p95),
+        sample_count=n,
+    )
 
 
 @router.get("/{run_id}", response_model=ReportData)
@@ -77,8 +107,50 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         elif t < 500: buckets["100-500ms"] += 1
         else: buckets["500ms+"] += 1
     response_time_dist = [ResponseTimeBucket(bucket=k, count=v) for k, v in buckets.items()]
-    avg_time = sum(times) / len(times) if times else 0
+    latency_summary = _latency_stats(times)
 
+    results_rows = await db.execute(
+        select(TestResult)
+        .where(TestResult.test_run_id == run_id)
+        .order_by(TestResult.created_at)
+        .limit(500)
+    )
+    results = [TestResultResponse.model_validate(r) for r in results_rows.scalars().all()]
+
+    golden_matched = sum(1 for r in results if r.match_status == "match")
+    golden_mismatched = sum(1 for r in results if r.match_status in ("mismatch", "shape_drift"))
+    golden_missing = sum(1 for r in results if r.match_status == "missing_golden")
+    golden_with_status = golden_matched + golden_mismatched
+    golden_match_rate = (
+        round(golden_matched / golden_with_status * 100, 1) if golden_with_status > 0 else None
+    )
+    compatibility_score = golden_match_rate
+
+    resolved_corpus = resolve_corpus_version(run.saleor_version, settings.golden_corpus_version)
+    manifest = load_manifest(resolved_corpus) or {}
+    golden_corpus_url = manifest.get("saleor_url") or settings.reference_saleor_url
+    golden_probe_count = manifest.get("probe_count", 0)
+    upgrade_hint = get_upgrade_hint(run.saleor_version, resolved_corpus)
+
+    slowest = sorted(
+        [r for r in results if r.response_time_ms is not None],
+        key=lambda r: r.response_time_ms or 0,
+        reverse=True,
+    )[:10]
+    slowest_endpoints = [
+        SlowEndpoint(
+            endpoint_name=r.endpoint_name,
+            endpoint_kind=r.endpoint_kind,
+            category=r.category,
+            status=r.status,
+            response_time_ms=r.response_time_ms or 0,
+            outcome=r.outcome,
+        )
+        for r in slowest
+    ]
+
+    q_count, m_count = catalog_counts()
+    extra = run_detail_fields(run)
     summary = ReportSummary(
         test_run_id=run.id,
         total=total,
@@ -87,16 +159,38 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         warnings=run.warnings,
         skipped=run.skipped,
         pass_rate=round(pass_rate, 1),
-        avg_response_time_ms=round(avg_time, 1),
+        avg_response_time_ms=latency_summary.avg,
         saleor_version=run.saleor_version or "unknown",
         saleor_url=run.saleor_url,
         started_at=run.started_at,
         completed_at=run.completed_at,
+        saleor_email=extra["saleor_email"],
+        saleor_password_masked=extra["saleor_password_masked"],
+        test_scope=run.test_scope,
+        public_only=run.public_only,
+        concurrency=extra["concurrency"],
+        timeout_seconds=extra["timeout_seconds"],
+        reference_baseline_version=run.reference_baseline_version,
+        reference_baseline_source=run.reference_baseline_source,
+        reference_catalog_queries=q_count,
+        reference_catalog_mutations=m_count,
+        golden_corpus_version=resolved_corpus,
+        golden_corpus_url=golden_corpus_url,
+        golden_probe_count=golden_probe_count,
+        golden_match_rate=golden_match_rate,
+        compatibility_score=compatibility_score,
+        golden_matched=golden_matched,
+        golden_mismatched=golden_mismatched,
+        golden_missing=golden_missing,
+        upgrade_hint=upgrade_hint,
     )
     return ReportData(
         summary=summary,
         category_breakdown=category_breakdown,
         response_time_distribution=response_time_dist,
+        latency_summary=latency_summary,
+        slowest_endpoints=slowest_endpoints,
+        results=results,
         pass_rate=pass_rate,
         schema_diff=run.schema_diff,
     )
@@ -114,7 +208,12 @@ async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
 
     output = io.StringIO()
     writer = csv.writer(output)
-    writer.writerow(["Endpoint", "Kind", "Category", "Is Public", "Status", "Response Time (ms)", "Error Message", "Input Sent", "Actual Response", "Created At"])
+    writer.writerow([
+        "Endpoint", "Kind", "Category", "Is Public", "Status", "Outcome",
+        "Match Status", "Response Valid", "Expected", "Diff Summary",
+        "Response Time (ms)", "Error Message",
+        "Input Sent", "Expected Response", "Actual Response", "Created At",
+    ])
 
     for r in results:
         writer.writerow([
@@ -123,9 +222,15 @@ async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
             r.category,
             r.is_public,
             r.status,
+            r.outcome or "",
+            r.match_status or "",
+            r.response_valid if r.response_valid is not None else "",
+            r.expected or "",
+            r.diff_summary or "",
             r.response_time_ms,
             r.error_message or "",
             r.input_sent or "",
+            r.expected_response or "",
             r.actual_response or "",
             r.created_at.isoformat() if r.created_at else "",
         ])
@@ -169,9 +274,13 @@ async def export_json(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), use
                 "category": r.category,
                 "is_public": r.is_public,
                 "status": r.status,
+                "outcome": r.outcome,
+                "match_status": r.match_status,
+                "diff_summary": r.diff_summary,
                 "response_time_ms": r.response_time_ms,
                 "error_message": r.error_message,
                 "input_sent": r.input_sent,
+                "expected_response": r.expected_response,
                 "actual_response": r.actual_response,
                 "created_at": r.created_at.isoformat() if r.created_at else None,
             }
@@ -183,6 +292,42 @@ async def export_json(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), use
         iter([json.dumps(data, indent=2)]),
         media_type="application/json",
         headers={"Content-Disposition": f"attachment; filename=saleor-test-{run_id}.json"},
+    )
+
+
+@router.get("/{run_id}/export/ai")
+async def export_ai(
+    run_id: uuid.UUID,
+    format: str = Query("markdown", pattern="^(markdown|json)$"),
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user_sse),
+):
+    run_result = await db.execute(select(TestRun).where(TestRun.id == run_id, TestRun.user_id == user.id))
+    run = run_result.scalar_one_or_none()
+    if not run:
+        raise HTTPException(404, "Test run not found")
+
+    results_rows = await db.execute(
+        select(TestResult).where(TestResult.test_run_id == run_id).order_by(TestResult.created_at)
+    )
+    results = results_rows.scalars().all()
+
+    from app.services.ai_report import build_ai_report_json, build_ai_report_markdown
+
+    if format == "json":
+        payload = build_ai_report_json(run, results)
+        body = json.dumps(payload, indent=2)
+        media = "application/json"
+        filename = f"saleor-test-{run_id}-ai.json"
+    else:
+        body = build_ai_report_markdown(run, results)
+        media = "text/markdown"
+        filename = f"saleor-test-{run_id}-ai.md"
+
+    return StreamingResponse(
+        iter([body]),
+        media_type=media,
+        headers={"Content-Disposition": f"attachment; filename={filename}"},
     )
 
 

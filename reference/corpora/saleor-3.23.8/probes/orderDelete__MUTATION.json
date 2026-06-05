@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "orderDelete",
+  "endpoint_kind": "MUTATION",
+  "category": "orders",
+  "input_sent": "mutation { orderDelete(input: {}) { errors { field message code } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"orderDelete\" on type \"Mutation\". Did you mean \"pageDelete\", \"orderLineDelete\", \"orderUpdate\", \"saleDelete\" or \"voucherDelete\"?",
+        "locations": [
+          {
+            "line": 1,
+            "column": 12
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"orderDelete\" on type \"Mutation\". Did you mean \"pageDelete\", \"orderLineDelete\", \"orderUpdate\", \"saleDelete\" or \"voucherDelete\"?"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

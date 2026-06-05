@@ -1,0 +1,37 @@
+{
+  "endpoint_name": "webhookEvents",
+  "endpoint_kind": "QUERY",
+  "category": "webhooks",
+  "input_sent": "query { webhookEvents { eventTypes { id name } } }",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"eventTypes\" on type \"WebhookEvent\". Did you mean \"eventType\"?",
+        "locations": [
+          {
+            "line": 1,
+            "column": 25
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"eventTypes\" on type \"WebhookEvent\". Did you mean \"eventType\"?"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "http_error",
+  "golden_status": "fail",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:97b34c8e4eca6349"
+}

@@ -1,0 +1,28 @@
+{
+  "endpoint_name": "checkoutLinesDelete",
+  "endpoint_kind": "MUTATION",
+  "category": "unknown",
+  "input_sent": "mutation { checkoutLinesDelete(linesIds: \"00000000-0000-0000-0000-000000000000\") { errors { field message } } }",
+  "golden_response": {
+    "data": {
+      "checkoutLinesDelete": {
+        "errors": [
+          {
+            "field": null,
+            "message": "At least one of arguments is required: 'checkout_id', 'token', 'id'."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "error_pattern": null,
+  "response_shape_hash": "sha256:f5caacd3a589d480"
+}
