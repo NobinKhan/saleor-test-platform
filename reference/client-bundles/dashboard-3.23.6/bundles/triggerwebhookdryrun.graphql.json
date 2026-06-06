@@ -1,0 +1,45 @@
+{
+  "bundle_id": "triggerwebhookdryrun",
+  "source": "saleor-dashboard",
+  "source_path": "components/DryRun/mutations.ts",
+  "operation_names": [
+    "TriggerWebhookDryRun"
+  ],
+  "document": "mutation TriggerWebhookDryRun($objectId: ID!, $query: String!) {\n  webhookDryRun(objectId: $objectId, query: $query) {\n    payload\n    errors {\n      field\n      message\n    }\n  }\n}",
+  "variables": {
+    "objectId": "{{fixtures.placeholder_id}}",
+    "query": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "webhookDryRun": {
+        "payload": null,
+        "errors": [
+          {
+            "field": "query",
+            "message": "Syntax Error GraphQL (1:1) Unexpected EOF\n\n"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:0af003adcadd2bc9",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "triggerwebhookdryrun",
+    "expected_null": true
+  },
+  "document_hash": "sha256:ad5c8c0a9691a60a"
+}

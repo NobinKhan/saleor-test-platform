@@ -1,0 +1,59 @@
+{
+  "bundle_id": "addressvalidationrules",
+  "source": "saleor-dashboard",
+  "source_path": "components/AddressEdit/queries.ts",
+  "operation_names": [
+    "addressValidationRules"
+  ],
+  "document": "query addressValidationRules($countryCode: CountryCode!) {\n  addressValidationRules(countryCode: $countryCode) {\n    countryAreaChoices {\n      raw\n      verbose\n    }\n    allowedFields\n  }\n}",
+  "variables": {
+    "countryCode": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$countryCode\" of required type \"CountryCode!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 30
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$countryCode\" of required type \"CountryCode!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "addressvalidationrules",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:ed40f69f52836647"
+}

@@ -1,0 +1,31 @@
+{
+  "bundle_id": "giftcardtotalcount",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardsList/queries.ts",
+  "operation_names": [
+    "GiftCardTotalCount"
+  ],
+  "document": "query GiftCardTotalCount {\n  giftCards {\n    totalCount\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "giftCards": {
+        "totalCount": 0
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:5f5ee3df9e7c69c1",
+  "document_hash": "sha256:62085b57c1c940c7"
+}

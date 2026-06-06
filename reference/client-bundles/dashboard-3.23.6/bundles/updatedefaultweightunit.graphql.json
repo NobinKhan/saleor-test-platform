@@ -1,0 +1,45 @@
+{
+  "bundle_id": "updatedefaultweightunit",
+  "source": "saleor-dashboard",
+  "source_path": "shipping/mutations.ts",
+  "operation_names": [
+    "UpdateDefaultWeightUnit"
+  ],
+  "document": "mutation UpdateDefaultWeightUnit($unit: WeightUnitsEnum) {\n  shopSettingsUpdate(input: {defaultWeightUnit: $unit}) {\n    errors {\n      ...ShopSettingsUpdateErrorFragment\n    }\n    shop {\n      defaultWeightUnit\n    }\n  }\n}\n\nfragment ShopSettingsUpdateErrorFragment on ShopError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "unit": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "shopSettingsUpdate": {
+        "errors": [
+          {
+            "code": "REQUIRED",
+            "field": "defaultWeightUnit",
+            "message": "This field cannot be null."
+          }
+        ],
+        "shop": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:a4aa902ca0da0beb",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "updatedefaultweightunit",
+    "expected_null": true
+  },
+  "document_hash": "sha256:64823d4dac22b18c"
+}

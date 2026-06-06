@@ -1,0 +1,4263 @@
+{
+  "bundle_id": "shopinfo",
+  "source": "saleor-dashboard",
+  "source_path": "components/Shop/queries.ts",
+  "operation_names": [
+    "ShopInfo"
+  ],
+  "document": "query ShopInfo {\n  shop {\n    countries {\n      ...CountryWithCode\n    }\n    defaultCountry {\n      ...CountryWithCode\n    }\n    defaultWeightUnit\n    domain {\n      host\n      url\n    }\n    languages {\n      ...Language\n    }\n    name\n    permissions {\n      ...Permission\n    }\n    version\n  }\n}\n\nfragment CountryWithCode on CountryDisplay {\n  country\n  code\n}\n\nfragment Language on LanguageDisplay {\n  code\n  language\n}\n\nfragment Permission on Permission {\n  code\n  name\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "countries": [
+          {
+            "country": "Afghanistan",
+            "code": "AF"
+          },
+          {
+            "country": "\u00c5land Islands",
+            "code": "AX"
+          },
+          {
+            "country": "Albania",
+            "code": "AL"
+          },
+          {
+            "country": "Algeria",
+            "code": "DZ"
+          },
+          {
+            "country": "American Samoa",
+            "code": "AS"
+          },
+          {
+            "country": "Andorra",
+            "code": "AD"
+          },
+          {
+            "country": "Angola",
+            "code": "AO"
+          },
+          {
+            "country": "Anguilla",
+            "code": "AI"
+          },
+          {
+            "country": "Antarctica",
+            "code": "AQ"
+          },
+          {
+            "country": "Antigua and Barbuda",
+            "code": "AG"
+          },
+          {
+            "country": "Argentina",
+            "code": "AR"
+          },
+          {
+            "country": "Armenia",
+            "code": "AM"
+          },
+          {
+            "country": "Aruba",
+            "code": "AW"
+          },
+          {
+            "country": "Australia",
+            "code": "AU"
+          },
+          {
+            "country": "Austria",
+            "code": "AT"
+          },
+          {
+            "country": "Azerbaijan",
+            "code": "AZ"
+          },
+          {
+            "country": "Bahamas",
+            "code": "BS"
+          },
+          {
+            "country": "Bahrain",
+            "code": "BH"
+          },
+          {
+            "country": "Bangladesh",
+            "code": "BD"
+          },
+          {
+            "country": "Barbados",
+            "code": "BB"
+          },
+          {
+            "country": "Belarus",
+            "code": "BY"
+          },
+          {
+            "country": "Belgium",
+            "code": "BE"
+          },
+          {
+            "country": "Belize",
+            "code": "BZ"
+          },
+          {
+            "country": "Benin",
+            "code": "BJ"
+          },
+          {
+            "country": "Bermuda",
+            "code": "BM"
+          },
+          {
+            "country": "Bhutan",
+            "code": "BT"
+          },
+          {
+            "country": "Bolivia",
+            "code": "BO"
+          },
+          {
+            "country": "Bonaire, Sint Eustatius and Saba",
+            "code": "BQ"
+          },
+          {
+            "country": "Bosnia and Herzegovina",
+            "code": "BA"
+          },
+          {
+            "country": "Botswana",
+            "code": "BW"
+          },
+          {
+            "country": "Bouvet Island",
+            "code": "BV"
+          },
+          {
+            "country": "Brazil",
+            "code": "BR"
+          },
+          {
+            "country": "British Indian Ocean Territory",
+            "code": "IO"
+          },
+          {
+            "country": "Brunei",
+            "code": "BN"
+          },
+          {
+            "country": "Bulgaria",
+            "code": "BG"
+          },
+          {
+            "country": "Burkina Faso",
+            "code": "BF"
+          },
+          {
+            "country": "Burundi",
+            "code": "BI"
+          },
+          {
+            "country": "Cabo Verde",
+            "code": "CV"
+          },
+          {
+            "country": "Cambodia",
+            "code": "KH"
+          },
+          {
+            "country": "Cameroon",
+            "code": "CM"
+          },
+          {
+            "country": "Canada",
+            "code": "CA"
+          },
+          {
+            "country": "Cayman Islands",
+            "code": "KY"
+          },
+          {
+            "country": "Central African Republic",
+            "code": "CF"
+          },
+          {
+            "country": "Chad",
+            "code": "TD"
+          },
+          {
+            "country": "Chile",
+            "code": "CL"
+          },
+          {
+            "country": "China",
+            "code": "CN"
+          },
+          {
+            "country": "Christmas Island",
+            "code": "CX"
+          },
+          {
+            "country": "Cocos (Keeling) Islands",
+            "code": "CC"
+          },
+          {
+            "country": "Colombia",
+            "code": "CO"
+          },
+          {
+            "country": "Comoros",
+            "code": "KM"
+          },
+          {
+            "country": "Congo",
+            "code": "CG"
+          },
+          {
+            "country": "Congo (the Democratic Republic of the)",
+            "code": "CD"
+          },
+          {
+            "country": "Cook Islands",
+            "code": "CK"
+          },
+          {
+            "country": "Costa Rica",
+            "code": "CR"
+          },
+          {
+            "country": "C\u00f4te d'Ivoire",
+            "code": "CI"
+          },
+          {
+            "country": "Croatia",
+            "code": "HR"
+          },
+          {
+            "country": "Cuba",
+            "code": "CU"
+          },
+          {
+            "country": "Cura\u00e7ao",
+            "code": "CW"
+          },
+          {
+            "country": "Cyprus",
+            "code": "CY"
+          },
+          {
+            "country": "Czechia",
+            "code": "CZ"
+          },
+          {
+            "country": "Denmark",
+            "code": "DK"
+          },
+          {
+            "country": "Djibouti",
+            "code": "DJ"
+          },
+          {
+            "country": "Dominica",
+            "code": "DM"
+          },
+          {
+            "country": "Dominican Republic",
+            "code": "DO"
+          },
+          {
+            "country": "Ecuador",
+            "code": "EC"
+          },
+          {
+            "country": "Egypt",
+            "code": "EG"
+          },
+          {
+            "country": "El Salvador",
+            "code": "SV"
+          },
+          {
+            "country": "Equatorial Guinea",
+            "code": "GQ"
+          },
+          {
+            "country": "Eritrea",
+            "code": "ER"
+          },
+          {
+            "country": "Estonia",
+            "code": "EE"
+          },
+          {
+            "country": "Eswatini",
+            "code": "SZ"
+          },
+          {
+            "country": "Ethiopia",
+            "code": "ET"
+          },
+          {
+            "country": "European Union",
+            "code": "EU"
+          },
+          {
+            "country": "Falkland Islands (Malvinas)",
+            "code": "FK"
+          },
+          {
+            "country": "Faroe Islands",
+            "code": "FO"
+          },
+          {
+            "country": "Fiji",
+            "code": "FJ"
+          },
+          {
+            "country": "Finland",
+            "code": "FI"
+          },
+          {
+            "country": "France",
+            "code": "FR"
+          },
+          {
+            "country": "French Guiana",
+            "code": "GF"
+          },
+          {
+            "country": "French Polynesia",
+            "code": "PF"
+          },
+          {
+            "country": "French Southern Territories",
+            "code": "TF"
+          },
+          {
+            "country": "Gabon",
+            "code": "GA"
+          },
+          {
+            "country": "Gambia",
+            "code": "GM"
+          },
+          {
+            "country": "Georgia",
+            "code": "GE"
+          },
+          {
+            "country": "Germany",
+            "code": "DE"
+          },
+          {
+            "country": "Ghana",
+            "code": "GH"
+          },
+          {
+            "country": "Gibraltar",
+            "code": "GI"
+          },
+          {
+            "country": "Greece",
+            "code": "GR"
+          },
+          {
+            "country": "Greenland",
+            "code": "GL"
+          },
+          {
+            "country": "Grenada",
+            "code": "GD"
+          },
+          {
+            "country": "Guadeloupe",
+            "code": "GP"
+          },
+          {
+            "country": "Guam",
+            "code": "GU"
+          },
+          {
+            "country": "Guatemala",
+            "code": "GT"
+          },
+          {
+            "country": "Guernsey",
+            "code": "GG"
+          },
+          {
+            "country": "Guinea",
+            "code": "GN"
+          },
+          {
+            "country": "Guinea-Bissau",
+            "code": "GW"
+          },
+          {
+            "country": "Guyana",
+            "code": "GY"
+          },
+          {
+            "country": "Haiti",
+            "code": "HT"
+          },
+          {
+            "country": "Heard Island and McDonald Islands",
+            "code": "HM"
+          },
+          {
+            "country": "Holy See",
+            "code": "VA"
+          },
+          {
+            "country": "Honduras",
+            "code": "HN"
+          },
+          {
+            "country": "Hong Kong",
+            "code": "HK"
+          },
+          {
+            "country": "Hungary",
+            "code": "HU"
+          },
+          {
+            "country": "Iceland",
+            "code": "IS"
+          },
+          {
+            "country": "India",
+            "code": "IN"
+          },
+          {
+            "country": "Indonesia",
+            "code": "ID"
+          },
+          {
+            "country": "Iran",
+            "code": "IR"
+          },
+          {
+            "country": "Iraq",
+            "code": "IQ"
+          },
+          {
+            "country": "Ireland",
+            "code": "IE"
+          },
+          {
+            "country": "Isle of Man",
+            "code": "IM"
+          },
+          {
+            "country": "Israel",
+            "code": "IL"
+          },
+          {
+            "country": "Italy",
+            "code": "IT"
+          },
+          {
+            "country": "Jamaica",
+            "code": "JM"
+          },
+          {
+            "country": "Japan",
+            "code": "JP"
+          },
+          {
+            "country": "Jersey",
+            "code": "JE"
+          },
+          {
+            "country": "Jordan",
+            "code": "JO"
+          },
+          {
+            "country": "Kazakhstan",
+            "code": "KZ"
+          },
+          {
+            "country": "Kenya",
+            "code": "KE"
+          },
+          {
+            "country": "Kiribati",
+            "code": "KI"
+          },
+          {
+            "country": "Kosovo",
+            "code": "XK"
+          },
+          {
+            "country": "Kuwait",
+            "code": "KW"
+          },
+          {
+            "country": "Kyrgyzstan",
+            "code": "KG"
+          },
+          {
+            "country": "Laos",
+            "code": "LA"
+          },
+          {
+            "country": "Latvia",
+            "code": "LV"
+          },
+          {
+            "country": "Lebanon",
+            "code": "LB"
+          },
+          {
+            "country": "Lesotho",
+            "code": "LS"
+          },
+          {
+            "country": "Liberia",
+            "code": "LR"
+          },
+          {
+            "country": "Libya",
+            "code": "LY"
+          },
+          {
+            "country": "Liechtenstein",
+            "code": "LI"
+          },
+          {
+            "country": "Lithuania",
+            "code": "LT"
+          },
+          {
+            "country": "Luxembourg",
+            "code": "LU"
+          },
+          {
+            "country": "Macao",
+            "code": "MO"
+          },
+          {
+            "country": "Madagascar",
+            "code": "MG"
+          },
+          {
+            "country": "Malawi",
+            "code": "MW"
+          },
+          {
+            "country": "Malaysia",
+            "code": "MY"
+          },
+          {
+            "country": "Maldives",
+            "code": "MV"
+          },
+          {
+            "country": "Mali",
+            "code": "ML"
+          },
+          {
+            "country": "Malta",
+            "code": "MT"
+          },
+          {
+            "country": "Marshall Islands",
+            "code": "MH"
+          },
+          {
+            "country": "Martinique",
+            "code": "MQ"
+          },
+          {
+            "country": "Mauritania",
+            "code": "MR"
+          },
+          {
+            "country": "Mauritius",
+            "code": "MU"
+          },
+          {
+            "country": "Mayotte",
+            "code": "YT"
+          },
+          {
+            "country": "Mexico",
+            "code": "MX"
+          },
+          {
+            "country": "Micronesia",
+            "code": "FM"
+          },
+          {
+            "country": "Moldova",
+            "code": "MD"
+          },
+          {
+            "country": "Monaco",
+            "code": "MC"
+          },
+          {
+            "country": "Mongolia",
+            "code": "MN"
+          },
+          {
+            "country": "Montenegro",
+            "code": "ME"
+          },
+          {
+            "country": "Montserrat",
+            "code": "MS"
+          },
+          {
+            "country": "Morocco",
+            "code": "MA"
+          },
+          {
+            "country": "Mozambique",
+            "code": "MZ"
+          },
+          {
+            "country": "Myanmar",
+            "code": "MM"
+          },
+          {
+            "country": "Namibia",
+            "code": "NA"
+          },
+          {
+            "country": "Nauru",
+            "code": "NR"
+          },
+          {
+            "country": "Nepal",
+            "code": "NP"
+          },
+          {
+            "country": "Netherlands",
+            "code": "NL"
+          },
+          {
+            "country": "New Caledonia",
+            "code": "NC"
+          },
+          {
+            "country": "New Zealand",
+            "code": "NZ"
+          },
+          {
+            "country": "Nicaragua",
+            "code": "NI"
+          },
+          {
+            "country": "Niger",
+            "code": "NE"
+          },
+          {
+            "country": "Nigeria",
+            "code": "NG"
+          },
+          {
+            "country": "Niue",
+            "code": "NU"
+          },
+          {
+            "country": "Norfolk Island",
+            "code": "NF"
+          },
+          {
+            "country": "North Korea",
+            "code": "KP"
+          },
+          {
+            "country": "North Macedonia",
+            "code": "MK"
+          },
+          {
+            "country": "Northern Mariana Islands",
+            "code": "MP"
+          },
+          {
+            "country": "Norway",
+            "code": "NO"
+          },
+          {
+            "country": "Oman",
+            "code": "OM"
+          },
+          {
+            "country": "Pakistan",
+            "code": "PK"
+          },
+          {
+            "country": "Palau",
+            "code": "PW"
+          },
+          {
+            "country": "Palestine, State of",
+            "code": "PS"
+          },
+          {
+            "country": "Panama",
+            "code": "PA"
+          },
+          {
+            "country": "Papua New Guinea",
+            "code": "PG"
+          },
+          {
+            "country": "Paraguay",
+            "code": "PY"
+          },
+          {
+            "country": "Peru",
+            "code": "PE"
+          },
+          {
+            "country": "Philippines",
+            "code": "PH"
+          },
+          {
+            "country": "Pitcairn",
+            "code": "PN"
+          },
+          {
+            "country": "Poland",
+            "code": "PL"
+          },
+          {
+            "country": "Portugal",
+            "code": "PT"
+          },
+          {
+            "country": "Puerto Rico",
+            "code": "PR"
+          },
+          {
+            "country": "Qatar",
+            "code": "QA"
+          },
+          {
+            "country": "R\u00e9union",
+            "code": "RE"
+          },
+          {
+            "country": "Romania",
+            "code": "RO"
+          },
+          {
+            "country": "Russia",
+            "code": "RU"
+          },
+          {
+            "country": "Rwanda",
+            "code": "RW"
+          },
+          {
+            "country": "Saint Barth\u00e9lemy",
+            "code": "BL"
+          },
+          {
+            "country": "Saint Helena, Ascension and Tristan da Cunha",
+            "code": "SH"
+          },
+          {
+            "country": "Saint Kitts and Nevis",
+            "code": "KN"
+          },
+          {
+            "country": "Saint Lucia",
+            "code": "LC"
+          },
+          {
+            "country": "Saint Martin (French part)",
+            "code": "MF"
+          },
+          {
+            "country": "Saint Pierre and Miquelon",
+            "code": "PM"
+          },
+          {
+            "country": "Saint Vincent and the Grenadines",
+            "code": "VC"
+          },
+          {
+            "country": "Samoa",
+            "code": "WS"
+          },
+          {
+            "country": "San Marino",
+            "code": "SM"
+          },
+          {
+            "country": "Sao Tome and Principe",
+            "code": "ST"
+          },
+          {
+            "country": "Saudi Arabia",
+            "code": "SA"
+          },
+          {
+            "country": "Senegal",
+            "code": "SN"
+          },
+          {
+            "country": "Serbia",
+            "code": "RS"
+          },
+          {
+            "country": "Seychelles",
+            "code": "SC"
+          },
+          {
+            "country": "Sierra Leone",
+            "code": "SL"
+          },
+          {
+            "country": "Singapore",
+            "code": "SG"
+          },
+          {
+            "country": "Sint Maarten (Dutch part)",
+            "code": "SX"
+          },
+          {
+            "country": "Slovakia",
+            "code": "SK"
+          },
+          {
+            "country": "Slovenia",
+            "code": "SI"
+          },
+          {
+            "country": "Solomon Islands",
+            "code": "SB"
+          },
+          {
+            "country": "Somalia",
+            "code": "SO"
+          },
+          {
+            "country": "South Africa",
+            "code": "ZA"
+          },
+          {
+            "country": "South Georgia and the South Sandwich Islands",
+            "code": "GS"
+          },
+          {
+            "country": "South Korea",
+            "code": "KR"
+          },
+          {
+            "country": "South Sudan",
+            "code": "SS"
+          },
+          {
+            "country": "Spain",
+            "code": "ES"
+          },
+          {
+            "country": "Sri Lanka",
+            "code": "LK"
+          },
+          {
+            "country": "Sudan",
+            "code": "SD"
+          },
+          {
+            "country": "Suriname",
+            "code": "SR"
+          },
+          {
+            "country": "Svalbard and Jan Mayen",
+            "code": "SJ"
+          },
+          {
+            "country": "Sweden",
+            "code": "SE"
+          },
+          {
+            "country": "Switzerland",
+            "code": "CH"
+          },
+          {
+            "country": "Syria",
+            "code": "SY"
+          },
+          {
+            "country": "Taiwan",
+            "code": "TW"
+          },
+          {
+            "country": "Tajikistan",
+            "code": "TJ"
+          },
+          {
+            "country": "Tanzania",
+            "code": "TZ"
+          },
+          {
+            "country": "Thailand",
+            "code": "TH"
+          },
+          {
+            "country": "Timor-Leste",
+            "code": "TL"
+          },
+          {
+            "country": "Togo",
+            "code": "TG"
+          },
+          {
+            "country": "Tokelau",
+            "code": "TK"
+          },
+          {
+            "country": "Tonga",
+            "code": "TO"
+          },
+          {
+            "country": "Trinidad and Tobago",
+            "code": "TT"
+          },
+          {
+            "country": "Tunisia",
+            "code": "TN"
+          },
+          {
+            "country": "T\u00fcrkiye",
+            "code": "TR"
+          },
+          {
+            "country": "Turkmenistan",
+            "code": "TM"
+          },
+          {
+            "country": "Turks and Caicos Islands",
+            "code": "TC"
+          },
+          {
+            "country": "Tuvalu",
+            "code": "TV"
+          },
+          {
+            "country": "Uganda",
+            "code": "UG"
+          },
+          {
+            "country": "Ukraine",
+            "code": "UA"
+          },
+          {
+            "country": "United Arab Emirates",
+            "code": "AE"
+          },
+          {
+            "country": "United Kingdom",
+            "code": "GB"
+          },
+          {
+            "country": "United States Minor Outlying Islands",
+            "code": "UM"
+          },
+          {
+            "country": "United States of America",
+            "code": "US"
+          },
+          {
+            "country": "Uruguay",
+            "code": "UY"
+          },
+          {
+            "country": "Uzbekistan",
+            "code": "UZ"
+          },
+          {
+            "country": "Vanuatu",
+            "code": "VU"
+          },
+          {
+            "country": "Venezuela",
+            "code": "VE"
+          },
+          {
+            "country": "Vietnam",
+            "code": "VN"
+          },
+          {
+            "country": "Virgin Islands (British)",
+            "code": "VG"
+          },
+          {
+            "country": "Virgin Islands (U.S.)",
+            "code": "VI"
+          },
+          {
+            "country": "Wallis and Futuna",
+            "code": "WF"
+          },
+          {
+            "country": "Western Sahara",
+            "code": "EH"
+          },
+          {
+            "country": "Yemen",
+            "code": "YE"
+          },
+          {
+            "country": "Zambia",
+            "code": "ZM"
+          },
+          {
+            "country": "Zimbabwe",
+            "code": "ZW"
+          }
+        ],
+        "defaultCountry": {
+          "country": "United States of America",
+          "code": "US"
+        },
+        "defaultWeightUnit": "KG",
+        "domain": {
+          "host": "localhost:8000",
+          "url": "http://localhost:8000/"
+        },
+        "languages": [
+          {
+            "code": "AF",
+            "language": "Afrikaans"
+          },
+          {
+            "code": "AF_NA",
+            "language": "Afrikaans (Namibia)"
+          },
+          {
+            "code": "AF_ZA",
+            "language": "Afrikaans (South Africa)"
+          },
+          {
+            "code": "AGQ",
+            "language": "Aghem"
+          },
+          {
+            "code": "AGQ_CM",
+            "language": "Aghem (Cameroon)"
+          },
+          {
+            "code": "AK",
+            "language": "Akan"
+          },
+          {
+            "code": "AK_GH",
+            "language": "Akan (Ghana)"
+          },
+          {
+            "code": "AM",
+            "language": "Amharic"
+          },
+          {
+            "code": "AM_ET",
+            "language": "Amharic (Ethiopia)"
+          },
+          {
+            "code": "AR",
+            "language": "Arabic"
+          },
+          {
+            "code": "AR_AE",
+            "language": "Arabic (United Arab Emirates)"
+          },
+          {
+            "code": "AR_BH",
+            "language": "Arabic (Bahrain)"
+          },
+          {
+            "code": "AR_DJ",
+            "language": "Arabic (Djibouti)"
+          },
+          {
+            "code": "AR_DZ",
+            "language": "Arabic (Algeria)"
+          },
+          {
+            "code": "AR_EG",
+            "language": "Arabic (Egypt)"
+          },
+          {
+            "code": "AR_EH",
+            "language": "Arabic (Western Sahara)"
+          },
+          {
+            "code": "AR_ER",
+            "language": "Arabic (Eritrea)"
+          },
+          {
+            "code": "AR_IL",
+            "language": "Arabic (Israel)"
+          },
+          {
+            "code": "AR_IQ",
+            "language": "Arabic (Iraq)"
+          },
+          {
+            "code": "AR_JO",
+            "language": "Arabic (Jordan)"
+          },
+          {
+            "code": "AR_KM",
+            "language": "Arabic (Comoros)"
+          },
+          {
+            "code": "AR_KW",
+            "language": "Arabic (Kuwait)"
+          },
+          {
+            "code": "AR_LB",
+            "language": "Arabic (Lebanon)"
+          },
+          {
+            "code": "AR_LY",
+            "language": "Arabic (Libya)"
+          },
+          {
+            "code": "AR_MA",
+            "language": "Arabic (Morocco)"
+          },
+          {
+            "code": "AR_MR",
+            "language": "Arabic (Mauritania)"
+          },
+          {
+            "code": "AR_OM",
+            "language": "Arabic (Oman)"
+          },
+          {
+            "code": "AR_PS",
+            "language": "Arabic (Palestinian Territories)"
+          },
+          {
+            "code": "AR_QA",
+            "language": "Arabic (Qatar)"
+          },
+          {
+            "code": "AR_SA",
+            "language": "Arabic (Saudi Arabia)"
+          },
+          {
+            "code": "AR_SD",
+            "language": "Arabic (Sudan)"
+          },
+          {
+            "code": "AR_SO",
+            "language": "Arabic (Somalia)"
+          },
+          {
+            "code": "AR_SS",
+            "language": "Arabic (South Sudan)"
+          },
+          {
+            "code": "AR_SY",
+            "language": "Arabic (Syria)"
+          },
+          {
+            "code": "AR_TD",
+            "language": "Arabic (Chad)"
+          },
+          {
+            "code": "AR_TN",
+            "language": "Arabic (Tunisia)"
+          },
+          {
+            "code": "AR_YE",
+            "language": "Arabic (Yemen)"
+          },
+          {
+            "code": "AS",
+            "language": "Assamese"
+          },
+          {
+            "code": "AS_IN",
+            "language": "Assamese (India)"
+          },
+          {
+            "code": "ASA",
+            "language": "Asu"
+          },
+          {
+            "code": "ASA_TZ",
+            "language": "Asu (Tanzania)"
+          },
+          {
+            "code": "AST",
+            "language": "Asturian"
+          },
+          {
+            "code": "AST_ES",
+            "language": "Asturian (Spain)"
+          },
+          {
+            "code": "AZ",
+            "language": "Azerbaijani"
+          },
+          {
+            "code": "AZ_CYRL",
+            "language": "Azerbaijani (Cyrillic)"
+          },
+          {
+            "code": "AZ_CYRL_AZ",
+            "language": "Azerbaijani (Cyrillic, Azerbaijan)"
+          },
+          {
+            "code": "AZ_LATN",
+            "language": "Azerbaijani (Latin)"
+          },
+          {
+            "code": "AZ_LATN_AZ",
+            "language": "Azerbaijani (Latin, Azerbaijan)"
+          },
+          {
+            "code": "BAS",
+            "language": "Basaa"
+          },
+          {
+            "code": "BAS_CM",
+            "language": "Basaa (Cameroon)"
+          },
+          {
+            "code": "BE",
+            "language": "Belarusian"
+          },
+          {
+            "code": "BE_BY",
+            "language": "Belarusian (Belarus)"
+          },
+          {
+            "code": "BEM",
+            "language": "Bemba"
+          },
+          {
+            "code": "BEM_ZM",
+            "language": "Bemba (Zambia)"
+          },
+          {
+            "code": "BEZ",
+            "language": "Bena"
+          },
+          {
+            "code": "BEZ_TZ",
+            "language": "Bena (Tanzania)"
+          },
+          {
+            "code": "BG",
+            "language": "Bulgarian"
+          },
+          {
+            "code": "BG_BG",
+            "language": "Bulgarian (Bulgaria)"
+          },
+          {
+            "code": "BM",
+            "language": "Bambara"
+          },
+          {
+            "code": "BM_ML",
+            "language": "Bambara (Mali)"
+          },
+          {
+            "code": "BN",
+            "language": "Bangla"
+          },
+          {
+            "code": "BN_BD",
+            "language": "Bangla (Bangladesh)"
+          },
+          {
+            "code": "BN_IN",
+            "language": "Bangla (India)"
+          },
+          {
+            "code": "BO",
+            "language": "Tibetan"
+          },
+          {
+            "code": "BO_CN",
+            "language": "Tibetan (China)"
+          },
+          {
+            "code": "BO_IN",
+            "language": "Tibetan (India)"
+          },
+          {
+            "code": "BR",
+            "language": "Breton"
+          },
+          {
+            "code": "BR_FR",
+            "language": "Breton (France)"
+          },
+          {
+            "code": "BRX",
+            "language": "Bodo"
+          },
+          {
+            "code": "BRX_IN",
+            "language": "Bodo (India)"
+          },
+          {
+            "code": "BS",
+            "language": "Bosnian"
+          },
+          {
+            "code": "BS_CYRL",
+            "language": "Bosnian (Cyrillic)"
+          },
+          {
+            "code": "BS_CYRL_BA",
+            "language": "Bosnian (Cyrillic, Bosnia & Herzegovina)"
+          },
+          {
+            "code": "BS_LATN",
+            "language": "Bosnian (Latin)"
+          },
+          {
+            "code": "BS_LATN_BA",
+            "language": "Bosnian (Latin, Bosnia & Herzegovina)"
+          },
+          {
+            "code": "CA",
+            "language": "Catalan"
+          },
+          {
+            "code": "CA_AD",
+            "language": "Catalan (Andorra)"
+          },
+          {
+            "code": "CA_ES",
+            "language": "Catalan (Spain)"
+          },
+          {
+            "code": "CA_ES_VALENCIA",
+            "language": "Catalan (Spain, Valencian)"
+          },
+          {
+            "code": "CA_FR",
+            "language": "Catalan (France)"
+          },
+          {
+            "code": "CA_IT",
+            "language": "Catalan (Italy)"
+          },
+          {
+            "code": "CCP",
+            "language": "Chakma"
+          },
+          {
+            "code": "CCP_BD",
+            "language": "Chakma (Bangladesh)"
+          },
+          {
+            "code": "CCP_IN",
+            "language": "Chakma (India)"
+          },
+          {
+            "code": "CE",
+            "language": "Chechen"
+          },
+          {
+            "code": "CE_RU",
+            "language": "Chechen (Russia)"
+          },
+          {
+            "code": "CEB",
+            "language": "Cebuano"
+          },
+          {
+            "code": "CEB_PH",
+            "language": "Cebuano (Philippines)"
+          },
+          {
+            "code": "CGG",
+            "language": "Chiga"
+          },
+          {
+            "code": "CGG_UG",
+            "language": "Chiga (Uganda)"
+          },
+          {
+            "code": "CHR",
+            "language": "Cherokee"
+          },
+          {
+            "code": "CHR_US",
+            "language": "Cherokee (United States)"
+          },
+          {
+            "code": "CKB",
+            "language": "Central Kurdish"
+          },
+          {
+            "code": "CKB_IQ",
+            "language": "Central Kurdish (Iraq)"
+          },
+          {
+            "code": "CKB_IR",
+            "language": "Central Kurdish (Iran)"
+          },
+          {
+            "code": "CS",
+            "language": "Czech"
+          },
+          {
+            "code": "CS_CZ",
+            "language": "Czech (Czechia)"
+          },
+          {
+            "code": "CU",
+            "language": "Church Slavic"
+          },
+          {
+            "code": "CU_RU",
+            "language": "Church Slavic (Russia)"
+          },
+          {
+            "code": "CY",
+            "language": "Welsh"
+          },
+          {
+            "code": "CY_GB",
+            "language": "Welsh (United Kingdom)"
+          },
+          {
+            "code": "DA",
+            "language": "Danish"
+          },
+          {
+            "code": "DA_DK",
+            "language": "Danish (Denmark)"
+          },
+          {
+            "code": "DA_GL",
+            "language": "Danish (Greenland)"
+          },
+          {
+            "code": "DAV",
+            "language": "Taita"
+          },
+          {
+            "code": "DAV_KE",
+            "language": "Taita (Kenya)"
+          },
+          {
+            "code": "DE",
+            "language": "German"
+          },
+          {
+            "code": "DE_AT",
+            "language": "German (Austria)"
+          },
+          {
+            "code": "DE_BE",
+            "language": "German (Belgium)"
+          },
+          {
+            "code": "DE_CH",
+            "language": "German (Switzerland)"
+          },
+          {
+            "code": "DE_DE",
+            "language": "German (Germany)"
+          },
+          {
+            "code": "DE_IT",
+            "language": "German (Italy)"
+          },
+          {
+            "code": "DE_LI",
+            "language": "German (Liechtenstein)"
+          },
+          {
+            "code": "DE_LU",
+            "language": "German (Luxembourg)"
+          },
+          {
+            "code": "DJE",
+            "language": "Zarma"
+          },
+          {
+            "code": "DJE_NE",
+            "language": "Zarma (Niger)"
+          },
+          {
+            "code": "DSB",
+            "language": "Lower Sorbian"
+          },
+          {
+            "code": "DSB_DE",
+            "language": "Lower Sorbian (Germany)"
+          },
+          {
+            "code": "DUA",
+            "language": "Duala"
+          },
+          {
+            "code": "DUA_CM",
+            "language": "Duala (Cameroon)"
+          },
+          {
+            "code": "DYO",
+            "language": "Jola-Fonyi"
+          },
+          {
+            "code": "DYO_SN",
+            "language": "Jola-Fonyi (Senegal)"
+          },
+          {
+            "code": "DZ",
+            "language": "Dzongkha"
+          },
+          {
+            "code": "DZ_BT",
+            "language": "Dzongkha (Bhutan)"
+          },
+          {
+            "code": "EBU",
+            "language": "Embu"
+          },
+          {
+            "code": "EBU_KE",
+            "language": "Embu (Kenya)"
+          },
+          {
+            "code": "EE",
+            "language": "Ewe"
+          },
+          {
+            "code": "EE_GH",
+            "language": "Ewe (Ghana)"
+          },
+          {
+            "code": "EE_TG",
+            "language": "Ewe (Togo)"
+          },
+          {
+            "code": "EL",
+            "language": "Greek"
+          },
+          {
+            "code": "EL_CY",
+            "language": "Greek (Cyprus)"
+          },
+          {
+            "code": "EL_GR",
+            "language": "Greek (Greece)"
+          },
+          {
+            "code": "EN",
+            "language": "English"
+          },
+          {
+            "code": "EN_AE",
+            "language": "English (United Arab Emirates)"
+          },
+          {
+            "code": "EN_AG",
+            "language": "English (Antigua & Barbuda)"
+          },
+          {
+            "code": "EN_AI",
+            "language": "English (Anguilla)"
+          },
+          {
+            "code": "EN_AS",
+            "language": "English (American Samoa)"
+          },
+          {
+            "code": "EN_AT",
+            "language": "English (Austria)"
+          },
+          {
+            "code": "EN_AU",
+            "language": "English (Australia)"
+          },
+          {
+            "code": "EN_BB",
+            "language": "English (Barbados)"
+          },
+          {
+            "code": "EN_BE",
+            "language": "English (Belgium)"
+          },
+          {
+            "code": "EN_BI",
+            "language": "English (Burundi)"
+          },
+          {
+            "code": "EN_BM",
+            "language": "English (Bermuda)"
+          },
+          {
+            "code": "EN_BS",
+            "language": "English (Bahamas)"
+          },
+          {
+            "code": "EN_BW",
+            "language": "English (Botswana)"
+          },
+          {
+            "code": "EN_BZ",
+            "language": "English (Belize)"
+          },
+          {
+            "code": "EN_CA",
+            "language": "English (Canada)"
+          },
+          {
+            "code": "EN_CC",
+            "language": "English (Cocos (Keeling) Islands)"
+          },
+          {
+            "code": "EN_CH",
+            "language": "English (Switzerland)"
+          },
+          {
+            "code": "EN_CK",
+            "language": "English (Cook Islands)"
+          },
+          {
+            "code": "EN_CM",
+            "language": "English (Cameroon)"
+          },
+          {
+            "code": "EN_CX",
+            "language": "English (Christmas Island)"
+          },
+          {
+            "code": "EN_CY",
+            "language": "English (Cyprus)"
+          },
+          {
+            "code": "EN_DE",
+            "language": "English (Germany)"
+          },
+          {
+            "code": "EN_DG",
+            "language": "English (Diego Garcia)"
+          },
+          {
+            "code": "EN_DK",
+            "language": "English (Denmark)"
+          },
+          {
+            "code": "EN_DM",
+            "language": "English (Dominica)"
+          },
+          {
+            "code": "EN_ER",
+            "language": "English (Eritrea)"
+          },
+          {
+            "code": "EN_FI",
+            "language": "English (Finland)"
+          },
+          {
+            "code": "EN_FJ",
+            "language": "English (Fiji)"
+          },
+          {
+            "code": "EN_FK",
+            "language": "English (Falkland Islands)"
+          },
+          {
+            "code": "EN_FM",
+            "language": "English (Micronesia)"
+          },
+          {
+            "code": "EN_GB",
+            "language": "English (United Kingdom)"
+          },
+          {
+            "code": "EN_GD",
+            "language": "English (Grenada)"
+          },
+          {
+            "code": "EN_GG",
+            "language": "English (Guernsey)"
+          },
+          {
+            "code": "EN_GH",
+            "language": "English (Ghana)"
+          },
+          {
+            "code": "EN_GI",
+            "language": "English (Gibraltar)"
+          },
+          {
+            "code": "EN_GM",
+            "language": "English (Gambia)"
+          },
+          {
+            "code": "EN_GU",
+            "language": "English (Guam)"
+          },
+          {
+            "code": "EN_GY",
+            "language": "English (Guyana)"
+          },
+          {
+            "code": "EN_HK",
+            "language": "English (Hong Kong SAR China)"
+          },
+          {
+            "code": "EN_IE",
+            "language": "English (Ireland)"
+          },
+          {
+            "code": "EN_IL",
+            "language": "English (Israel)"
+          },
+          {
+            "code": "EN_IM",
+            "language": "English (Isle of Man)"
+          },
+          {
+            "code": "EN_IN",
+            "language": "English (India)"
+          },
+          {
+            "code": "EN_IO",
+            "language": "English (British Indian Ocean Territory)"
+          },
+          {
+            "code": "EN_JE",
+            "language": "English (Jersey)"
+          },
+          {
+            "code": "EN_JM",
+            "language": "English (Jamaica)"
+          },
+          {
+            "code": "EN_KE",
+            "language": "English (Kenya)"
+          },
+          {
+            "code": "EN_KI",
+            "language": "English (Kiribati)"
+          },
+          {
+            "code": "EN_KN",
+            "language": "English (St. Kitts & Nevis)"
+          },
+          {
+            "code": "EN_KY",
+            "language": "English (Cayman Islands)"
+          },
+          {
+            "code": "EN_LC",
+            "language": "English (St. Lucia)"
+          },
+          {
+            "code": "EN_LR",
+            "language": "English (Liberia)"
+          },
+          {
+            "code": "EN_LS",
+            "language": "English (Lesotho)"
+          },
+          {
+            "code": "EN_MG",
+            "language": "English (Madagascar)"
+          },
+          {
+            "code": "EN_MH",
+            "language": "English (Marshall Islands)"
+          },
+          {
+            "code": "EN_MO",
+            "language": "English (Macao SAR China)"
+          },
+          {
+            "code": "EN_MP",
+            "language": "English (Northern Mariana Islands)"
+          },
+          {
+            "code": "EN_MS",
+            "language": "English (Montserrat)"
+          },
+          {
+            "code": "EN_MT",
+            "language": "English (Malta)"
+          },
+          {
+            "code": "EN_MU",
+            "language": "English (Mauritius)"
+          },
+          {
+            "code": "EN_MW",
+            "language": "English (Malawi)"
+          },
+          {
+            "code": "EN_MY",
+            "language": "English (Malaysia)"
+          },
+          {
+            "code": "EN_NA",
+            "language": "English (Namibia)"
+          },
+          {
+            "code": "EN_NF",
+            "language": "English (Norfolk Island)"
+          },
+          {
+            "code": "EN_NG",
+            "language": "English (Nigeria)"
+          },
+          {
+            "code": "EN_NL",
+            "language": "English (Netherlands)"
+          },
+          {
+            "code": "EN_NR",
+            "language": "English (Nauru)"
+          },
+          {
+            "code": "EN_NU",
+            "language": "English (Niue)"
+          },
+          {
+            "code": "EN_NZ",
+            "language": "English (New Zealand)"
+          },
+          {
+            "code": "EN_PG",
+            "language": "English (Papua New Guinea)"
+          },
+          {
+            "code": "EN_PH",
+            "language": "English (Philippines)"
+          },
+          {
+            "code": "EN_PK",
+            "language": "English (Pakistan)"
+          },
+          {
+            "code": "EN_PN",
+            "language": "English (Pitcairn Islands)"
+          },
+          {
+            "code": "EN_PR",
+            "language": "English (Puerto Rico)"
+          },
+          {
+            "code": "EN_PW",
+            "language": "English (Palau)"
+          },
+          {
+            "code": "EN_RW",
+            "language": "English (Rwanda)"
+          },
+          {
+            "code": "EN_SB",
+            "language": "English (Solomon Islands)"
+          },
+          {
+            "code": "EN_SC",
+            "language": "English (Seychelles)"
+          },
+          {
+            "code": "EN_SD",
+            "language": "English (Sudan)"
+          },
+          {
+            "code": "EN_SE",
+            "language": "English (Sweden)"
+          },
+          {
+            "code": "EN_SG",
+            "language": "English (Singapore)"
+          },
+          {
+            "code": "EN_SH",
+            "language": "English (St. Helena)"
+          },
+          {
+            "code": "EN_SI",
+            "language": "English (Slovenia)"
+          },
+          {
+            "code": "EN_SL",
+            "language": "English (Sierra Leone)"
+          },
+          {
+            "code": "EN_SS",
+            "language": "English (South Sudan)"
+          },
+          {
+            "code": "EN_SX",
+            "language": "English (Sint Maarten)"
+          },
+          {
+            "code": "EN_SZ",
+            "language": "English (Eswatini)"
+          },
+          {
+            "code": "EN_TC",
+            "language": "English (Turks & Caicos Islands)"
+          },
+          {
+            "code": "EN_TK",
+            "language": "English (Tokelau)"
+          },
+          {
+            "code": "EN_TO",
+            "language": "English (Tonga)"
+          },
+          {
+            "code": "EN_TT",
+            "language": "English (Trinidad & Tobago)"
+          },
+          {
+            "code": "EN_TV",
+            "language": "English (Tuvalu)"
+          },
+          {
+            "code": "EN_TZ",
+            "language": "English (Tanzania)"
+          },
+          {
+            "code": "EN_UG",
+            "language": "English (Uganda)"
+          },
+          {
+            "code": "EN_UM",
+            "language": "English (U.S. Outlying Islands)"
+          },
+          {
+            "code": "EN_US",
+            "language": "English (United States)"
+          },
+          {
+            "code": "EN_VC",
+            "language": "English (St. Vincent & Grenadines)"
+          },
+          {
+            "code": "EN_VG",
+            "language": "English (British Virgin Islands)"
+          },
+          {
+            "code": "EN_VI",
+            "language": "English (U.S. Virgin Islands)"
+          },
+          {
+            "code": "EN_VU",
+            "language": "English (Vanuatu)"
+          },
+          {
+            "code": "EN_WS",
+            "language": "English (Samoa)"
+          },
+          {
+            "code": "EN_ZA",
+            "language": "English (South Africa)"
+          },
+          {
+            "code": "EN_ZM",
+            "language": "English (Zambia)"
+          },
+          {
+            "code": "EN_ZW",
+            "language": "English (Zimbabwe)"
+          },
+          {
+            "code": "EO",
+            "language": "Esperanto"
+          },
+          {
+            "code": "ES",
+            "language": "Spanish"
+          },
+          {
+            "code": "ES_AR",
+            "language": "Spanish (Argentina)"
+          },
+          {
+            "code": "ES_BO",
+            "language": "Spanish (Bolivia)"
+          },
+          {
+            "code": "ES_BR",
+            "language": "Spanish (Brazil)"
+          },
+          {
+            "code": "ES_BZ",
+            "language": "Spanish (Belize)"
+          },
+          {
+            "code": "ES_CL",
+            "language": "Spanish (Chile)"
+          },
+          {
+            "code": "ES_CO",
+            "language": "Spanish (Colombia)"
+          },
+          {
+            "code": "ES_CR",
+            "language": "Spanish (Costa Rica)"
+          },
+          {
+            "code": "ES_CU",
+            "language": "Spanish (Cuba)"
+          },
+          {
+            "code": "ES_DO",
+            "language": "Spanish (Dominican Republic)"
+          },
+          {
+            "code": "ES_EA",
+            "language": "Spanish (Ceuta & Melilla)"
+          },
+          {
+            "code": "ES_EC",
+            "language": "Spanish (Ecuador)"
+          },
+          {
+            "code": "ES_ES",
+            "language": "Spanish (Spain)"
+          },
+          {
+            "code": "ES_GQ",
+            "language": "Spanish (Equatorial Guinea)"
+          },
+          {
+            "code": "ES_GT",
+            "language": "Spanish (Guatemala)"
+          },
+          {
+            "code": "ES_HN",
+            "language": "Spanish (Honduras)"
+          },
+          {
+            "code": "ES_IC",
+            "language": "Spanish (Canary Islands)"
+          },
+          {
+            "code": "ES_MX",
+            "language": "Spanish (Mexico)"
+          },
+          {
+            "code": "ES_NI",
+            "language": "Spanish (Nicaragua)"
+          },
+          {
+            "code": "ES_PA",
+            "language": "Spanish (Panama)"
+          },
+          {
+            "code": "ES_PE",
+            "language": "Spanish (Peru)"
+          },
+          {
+            "code": "ES_PH",
+            "language": "Spanish (Philippines)"
+          },
+          {
+            "code": "ES_PR",
+            "language": "Spanish (Puerto Rico)"
+          },
+          {
+            "code": "ES_PY",
+            "language": "Spanish (Paraguay)"
+          },
+          {
+            "code": "ES_SV",
+            "language": "Spanish (El Salvador)"
+          },
+          {
+            "code": "ES_US",
+            "language": "Spanish (United States)"
+          },
+          {
+            "code": "ES_UY",
+            "language": "Spanish (Uruguay)"
+          },
+          {
+            "code": "ES_VE",
+            "language": "Spanish (Venezuela)"
+          },
+          {
+            "code": "ET",
+            "language": "Estonian"
+          },
+          {
+            "code": "ET_EE",
+            "language": "Estonian (Estonia)"
+          },
+          {
+            "code": "EU",
+            "language": "Basque"
+          },
+          {
+            "code": "EU_ES",
+            "language": "Basque (Spain)"
+          },
+          {
+            "code": "EWO",
+            "language": "Ewondo"
+          },
+          {
+            "code": "EWO_CM",
+            "language": "Ewondo (Cameroon)"
+          },
+          {
+            "code": "FA",
+            "language": "Persian"
+          },
+          {
+            "code": "FA_AF",
+            "language": "Persian (Afghanistan)"
+          },
+          {
+            "code": "FA_IR",
+            "language": "Persian (Iran)"
+          },
+          {
+            "code": "FF",
+            "language": "Fulah"
+          },
+          {
+            "code": "FF_ADLM",
+            "language": "Fulah (Adlam)"
+          },
+          {
+            "code": "FF_ADLM_BF",
+            "language": "Fulah (Adlam, Burkina Faso)"
+          },
+          {
+            "code": "FF_ADLM_CM",
+            "language": "Fulah (Adlam, Cameroon)"
+          },
+          {
+            "code": "FF_ADLM_GH",
+            "language": "Fulah (Adlam, Ghana)"
+          },
+          {
+            "code": "FF_ADLM_GM",
+            "language": "Fulah (Adlam, Gambia)"
+          },
+          {
+            "code": "FF_ADLM_GN",
+            "language": "Fulah (Adlam, Guinea)"
+          },
+          {
+            "code": "FF_ADLM_GW",
+            "language": "Fulah (Adlam, Guinea-Bissau)"
+          },
+          {
+            "code": "FF_ADLM_LR",
+            "language": "Fulah (Adlam, Liberia)"
+          },
+          {
+            "code": "FF_ADLM_MR",
+            "language": "Fulah (Adlam, Mauritania)"
+          },
+          {
+            "code": "FF_ADLM_NE",
+            "language": "Fulah (Adlam, Niger)"
+          },
+          {
+            "code": "FF_ADLM_NG",
+            "language": "Fulah (Adlam, Nigeria)"
+          },
+          {
+            "code": "FF_ADLM_SL",
+            "language": "Fulah (Adlam, Sierra Leone)"
+          },
+          {
+            "code": "FF_ADLM_SN",
+            "language": "Fulah (Adlam, Senegal)"
+          },
+          {
+            "code": "FF_LATN",
+            "language": "Fulah (Latin)"
+          },
+          {
+            "code": "FF_LATN_BF",
+            "language": "Fulah (Latin, Burkina Faso)"
+          },
+          {
+            "code": "FF_LATN_CM",
+            "language": "Fulah (Latin, Cameroon)"
+          },
+          {
+            "code": "FF_LATN_GH",
+            "language": "Fulah (Latin, Ghana)"
+          },
+          {
+            "code": "FF_LATN_GM",
+            "language": "Fulah (Latin, Gambia)"
+          },
+          {
+            "code": "FF_LATN_GN",
+            "language": "Fulah (Latin, Guinea)"
+          },
+          {
+            "code": "FF_LATN_GW",
+            "language": "Fulah (Latin, Guinea-Bissau)"
+          },
+          {
+            "code": "FF_LATN_LR",
+            "language": "Fulah (Latin, Liberia)"
+          },
+          {
+            "code": "FF_LATN_MR",
+            "language": "Fulah (Latin, Mauritania)"
+          },
+          {
+            "code": "FF_LATN_NE",
+            "language": "Fulah (Latin, Niger)"
+          },
+          {
+            "code": "FF_LATN_NG",
+            "language": "Fulah (Latin, Nigeria)"
+          },
+          {
+            "code": "FF_LATN_SL",
+            "language": "Fulah (Latin, Sierra Leone)"
+          },
+          {
+            "code": "FF_LATN_SN",
+            "language": "Fulah (Latin, Senegal)"
+          },
+          {
+            "code": "FI",
+            "language": "Finnish"
+          },
+          {
+            "code": "FI_FI",
+            "language": "Finnish (Finland)"
+          },
+          {
+            "code": "FIL",
+            "language": "Filipino"
+          },
+          {
+            "code": "FIL_PH",
+            "language": "Filipino (Philippines)"
+          },
+          {
+            "code": "FO",
+            "language": "Faroese"
+          },
+          {
+            "code": "FO_DK",
+            "language": "Faroese (Denmark)"
+          },
+          {
+            "code": "FO_FO",
+            "language": "Faroese (Faroe Islands)"
+          },
+          {
+            "code": "FR",
+            "language": "French"
+          },
+          {
+            "code": "FR_BE",
+            "language": "French (Belgium)"
+          },
+          {
+            "code": "FR_BF",
+            "language": "French (Burkina Faso)"
+          },
+          {
+            "code": "FR_BI",
+            "language": "French (Burundi)"
+          },
+          {
+            "code": "FR_BJ",
+            "language": "French (Benin)"
+          },
+          {
+            "code": "FR_BL",
+            "language": "French (St. Barth\u00e9lemy)"
+          },
+          {
+            "code": "FR_CA",
+            "language": "French (Canada)"
+          },
+          {
+            "code": "FR_CD",
+            "language": "French (Congo - Kinshasa)"
+          },
+          {
+            "code": "FR_CF",
+            "language": "French (Central African Republic)"
+          },
+          {
+            "code": "FR_CG",
+            "language": "French (Congo - Brazzaville)"
+          },
+          {
+            "code": "FR_CH",
+            "language": "French (Switzerland)"
+          },
+          {
+            "code": "FR_CI",
+            "language": "French (C\u00f4te d\u2019Ivoire)"
+          },
+          {
+            "code": "FR_CM",
+            "language": "French (Cameroon)"
+          },
+          {
+            "code": "FR_DJ",
+            "language": "French (Djibouti)"
+          },
+          {
+            "code": "FR_DZ",
+            "language": "French (Algeria)"
+          },
+          {
+            "code": "FR_FR",
+            "language": "French (France)"
+          },
+          {
+            "code": "FR_GA",
+            "language": "French (Gabon)"
+          },
+          {
+            "code": "FR_GF",
+            "language": "French (French Guiana)"
+          },
+          {
+            "code": "FR_GN",
+            "language": "French (Guinea)"
+          },
+          {
+            "code": "FR_GP",
+            "language": "French (Guadeloupe)"
+          },
+          {
+            "code": "FR_GQ",
+            "language": "French (Equatorial Guinea)"
+          },
+          {
+            "code": "FR_HT",
+            "language": "French (Haiti)"
+          },
+          {
+            "code": "FR_KM",
+            "language": "French (Comoros)"
+          },
+          {
+            "code": "FR_LU",
+            "language": "French (Luxembourg)"
+          },
+          {
+            "code": "FR_MA",
+            "language": "French (Morocco)"
+          },
+          {
+            "code": "FR_MC",
+            "language": "French (Monaco)"
+          },
+          {
+            "code": "FR_MF",
+            "language": "French (St. Martin)"
+          },
+          {
+            "code": "FR_MG",
+            "language": "French (Madagascar)"
+          },
+          {
+            "code": "FR_ML",
+            "language": "French (Mali)"
+          },
+          {
+            "code": "FR_MQ",
+            "language": "French (Martinique)"
+          },
+          {
+            "code": "FR_MR",
+            "language": "French (Mauritania)"
+          },
+          {
+            "code": "FR_MU",
+            "language": "French (Mauritius)"
+          },
+          {
+            "code": "FR_NC",
+            "language": "French (New Caledonia)"
+          },
+          {
+            "code": "FR_NE",
+            "language": "French (Niger)"
+          },
+          {
+            "code": "FR_PF",
+            "language": "French (French Polynesia)"
+          },
+          {
+            "code": "FR_PM",
+            "language": "French (St. Pierre & Miquelon)"
+          },
+          {
+            "code": "FR_RE",
+            "language": "French (R\u00e9union)"
+          },
+          {
+            "code": "FR_RW",
+            "language": "French (Rwanda)"
+          },
+          {
+            "code": "FR_SC",
+            "language": "French (Seychelles)"
+          },
+          {
+            "code": "FR_SN",
+            "language": "French (Senegal)"
+          },
+          {
+            "code": "FR_SY",
+            "language": "French (Syria)"
+          },
+          {
+            "code": "FR_TD",
+            "language": "French (Chad)"
+          },
+          {
+            "code": "FR_TG",
+            "language": "French (Togo)"
+          },
+          {
+            "code": "FR_TN",
+            "language": "French (Tunisia)"
+          },
+          {
+            "code": "FR_VU",
+            "language": "French (Vanuatu)"
+          },
+          {
+            "code": "FR_WF",
+            "language": "French (Wallis & Futuna)"
+          },
+          {
+            "code": "FR_YT",
+            "language": "French (Mayotte)"
+          },
+          {
+            "code": "FUR",
+            "language": "Friulian"
+          },
+          {
+            "code": "FUR_IT",
+            "language": "Friulian (Italy)"
+          },
+          {
+            "code": "FY",
+            "language": "Western Frisian"
+          },
+          {
+            "code": "FY_NL",
+            "language": "Western Frisian (Netherlands)"
+          },
+          {
+            "code": "GA",
+            "language": "Irish"
+          },
+          {
+            "code": "GA_GB",
+            "language": "Irish (United Kingdom)"
+          },
+          {
+            "code": "GA_IE",
+            "language": "Irish (Ireland)"
+          },
+          {
+            "code": "GD",
+            "language": "Scottish Gaelic"
+          },
+          {
+            "code": "GD_GB",
+            "language": "Scottish Gaelic (United Kingdom)"
+          },
+          {
+            "code": "GL",
+            "language": "Galician"
+          },
+          {
+            "code": "GL_ES",
+            "language": "Galician (Spain)"
+          },
+          {
+            "code": "GSW",
+            "language": "Swiss German"
+          },
+          {
+            "code": "GSW_CH",
+            "language": "Swiss German (Switzerland)"
+          },
+          {
+            "code": "GSW_FR",
+            "language": "Swiss German (France)"
+          },
+          {
+            "code": "GSW_LI",
+            "language": "Swiss German (Liechtenstein)"
+          },
+          {
+            "code": "GU",
+            "language": "Gujarati"
+          },
+          {
+            "code": "GU_IN",
+            "language": "Gujarati (India)"
+          },
+          {
+            "code": "GUZ",
+            "language": "Gusii"
+          },
+          {
+            "code": "GUZ_KE",
+            "language": "Gusii (Kenya)"
+          },
+          {
+            "code": "GV",
+            "language": "Manx"
+          },
+          {
+            "code": "GV_IM",
+            "language": "Manx (Isle of Man)"
+          },
+          {
+            "code": "HA",
+            "language": "Hausa"
+          },
+          {
+            "code": "HA_GH",
+            "language": "Hausa (Ghana)"
+          },
+          {
+            "code": "HA_NE",
+            "language": "Hausa (Niger)"
+          },
+          {
+            "code": "HA_NG",
+            "language": "Hausa (Nigeria)"
+          },
+          {
+            "code": "HAW",
+            "language": "Hawaiian"
+          },
+          {
+            "code": "HAW_US",
+            "language": "Hawaiian (United States)"
+          },
+          {
+            "code": "HE",
+            "language": "Hebrew"
+          },
+          {
+            "code": "HE_IL",
+            "language": "Hebrew (Israel)"
+          },
+          {
+            "code": "HI",
+            "language": "Hindi"
+          },
+          {
+            "code": "HI_IN",
+            "language": "Hindi (India)"
+          },
+          {
+            "code": "HR",
+            "language": "Croatian"
+          },
+          {
+            "code": "HR_BA",
+            "language": "Croatian (Bosnia & Herzegovina)"
+          },
+          {
+            "code": "HR_HR",
+            "language": "Croatian (Croatia)"
+          },
+          {
+            "code": "HSB",
+            "language": "Upper Sorbian"
+          },
+          {
+            "code": "HSB_DE",
+            "language": "Upper Sorbian (Germany)"
+          },
+          {
+            "code": "HU",
+            "language": "Hungarian"
+          },
+          {
+            "code": "HU_HU",
+            "language": "Hungarian (Hungary)"
+          },
+          {
+            "code": "HY",
+            "language": "Armenian"
+          },
+          {
+            "code": "HY_AM",
+            "language": "Armenian (Armenia)"
+          },
+          {
+            "code": "IA",
+            "language": "Interlingua"
+          },
+          {
+            "code": "ID",
+            "language": "Indonesian"
+          },
+          {
+            "code": "ID_ID",
+            "language": "Indonesian (Indonesia)"
+          },
+          {
+            "code": "IG",
+            "language": "Igbo"
+          },
+          {
+            "code": "IG_NG",
+            "language": "Igbo (Nigeria)"
+          },
+          {
+            "code": "II",
+            "language": "Sichuan Yi"
+          },
+          {
+            "code": "II_CN",
+            "language": "Sichuan Yi (China)"
+          },
+          {
+            "code": "IS",
+            "language": "Icelandic"
+          },
+          {
+            "code": "IS_IS",
+            "language": "Icelandic (Iceland)"
+          },
+          {
+            "code": "IT",
+            "language": "Italian"
+          },
+          {
+            "code": "IT_CH",
+            "language": "Italian (Switzerland)"
+          },
+          {
+            "code": "IT_IT",
+            "language": "Italian (Italy)"
+          },
+          {
+            "code": "IT_SM",
+            "language": "Italian (San Marino)"
+          },
+          {
+            "code": "IT_VA",
+            "language": "Italian (Vatican City)"
+          },
+          {
+            "code": "JA",
+            "language": "Japanese"
+          },
+          {
+            "code": "JA_JP",
+            "language": "Japanese (Japan)"
+          },
+          {
+            "code": "JGO",
+            "language": "Ngomba"
+          },
+          {
+            "code": "JGO_CM",
+            "language": "Ngomba (Cameroon)"
+          },
+          {
+            "code": "JMC",
+            "language": "Machame"
+          },
+          {
+            "code": "JMC_TZ",
+            "language": "Machame (Tanzania)"
+          },
+          {
+            "code": "JV",
+            "language": "Javanese"
+          },
+          {
+            "code": "JV_ID",
+            "language": "Javanese (Indonesia)"
+          },
+          {
+            "code": "KA",
+            "language": "Georgian"
+          },
+          {
+            "code": "KA_GE",
+            "language": "Georgian (Georgia)"
+          },
+          {
+            "code": "KAB",
+            "language": "Kabyle"
+          },
+          {
+            "code": "KAB_DZ",
+            "language": "Kabyle (Algeria)"
+          },
+          {
+            "code": "KAM",
+            "language": "Kamba"
+          },
+          {
+            "code": "KAM_KE",
+            "language": "Kamba (Kenya)"
+          },
+          {
+            "code": "KDE",
+            "language": "Makonde"
+          },
+          {
+            "code": "KDE_TZ",
+            "language": "Makonde (Tanzania)"
+          },
+          {
+            "code": "KEA",
+            "language": "Kabuverdianu"
+          },
+          {
+            "code": "KEA_CV",
+            "language": "Kabuverdianu (Cape Verde)"
+          },
+          {
+            "code": "KHQ",
+            "language": "Koyra Chiini"
+          },
+          {
+            "code": "KHQ_ML",
+            "language": "Koyra Chiini (Mali)"
+          },
+          {
+            "code": "KI",
+            "language": "Kikuyu"
+          },
+          {
+            "code": "KI_KE",
+            "language": "Kikuyu (Kenya)"
+          },
+          {
+            "code": "KK",
+            "language": "Kazakh"
+          },
+          {
+            "code": "KK_KZ",
+            "language": "Kazakh (Kazakhstan)"
+          },
+          {
+            "code": "KKJ",
+            "language": "Kako"
+          },
+          {
+            "code": "KKJ_CM",
+            "language": "Kako (Cameroon)"
+          },
+          {
+            "code": "KL",
+            "language": "Kalaallisut"
+          },
+          {
+            "code": "KL_GL",
+            "language": "Kalaallisut (Greenland)"
+          },
+          {
+            "code": "KLN",
+            "language": "Kalenjin"
+          },
+          {
+            "code": "KLN_KE",
+            "language": "Kalenjin (Kenya)"
+          },
+          {
+            "code": "KM",
+            "language": "Khmer"
+          },
+          {
+            "code": "KM_KH",
+            "language": "Khmer (Cambodia)"
+          },
+          {
+            "code": "KN",
+            "language": "Kannada"
+          },
+          {
+            "code": "KN_IN",
+            "language": "Kannada (India)"
+          },
+          {
+            "code": "KO",
+            "language": "Korean"
+          },
+          {
+            "code": "KO_KP",
+            "language": "Korean (North Korea)"
+          },
+          {
+            "code": "KO_KR",
+            "language": "Korean (South Korea)"
+          },
+          {
+            "code": "KOK",
+            "language": "Konkani"
+          },
+          {
+            "code": "KOK_IN",
+            "language": "Konkani (India)"
+          },
+          {
+            "code": "KS",
+            "language": "Kashmiri"
+          },
+          {
+            "code": "KS_ARAB",
+            "language": "Kashmiri (Arabic)"
+          },
+          {
+            "code": "KS_ARAB_IN",
+            "language": "Kashmiri (Arabic, India)"
+          },
+          {
+            "code": "KSB",
+            "language": "Shambala"
+          },
+          {
+            "code": "KSB_TZ",
+            "language": "Shambala (Tanzania)"
+          },
+          {
+            "code": "KSF",
+            "language": "Bafia"
+          },
+          {
+            "code": "KSF_CM",
+            "language": "Bafia (Cameroon)"
+          },
+          {
+            "code": "KSH",
+            "language": "Colognian"
+          },
+          {
+            "code": "KSH_DE",
+            "language": "Colognian (Germany)"
+          },
+          {
+            "code": "KU",
+            "language": "Kurdish"
+          },
+          {
+            "code": "KU_TR",
+            "language": "Kurdish (Turkey)"
+          },
+          {
+            "code": "KW",
+            "language": "Cornish"
+          },
+          {
+            "code": "KW_GB",
+            "language": "Cornish (United Kingdom)"
+          },
+          {
+            "code": "KY",
+            "language": "Kyrgyz"
+          },
+          {
+            "code": "KY_KG",
+            "language": "Kyrgyz (Kyrgyzstan)"
+          },
+          {
+            "code": "LAG",
+            "language": "Langi"
+          },
+          {
+            "code": "LAG_TZ",
+            "language": "Langi (Tanzania)"
+          },
+          {
+            "code": "LB",
+            "language": "Luxembourgish"
+          },
+          {
+            "code": "LB_LU",
+            "language": "Luxembourgish (Luxembourg)"
+          },
+          {
+            "code": "LG",
+            "language": "Ganda"
+          },
+          {
+            "code": "LG_UG",
+            "language": "Ganda (Uganda)"
+          },
+          {
+            "code": "LKT",
+            "language": "Lakota"
+          },
+          {
+            "code": "LKT_US",
+            "language": "Lakota (United States)"
+          },
+          {
+            "code": "LN",
+            "language": "Lingala"
+          },
+          {
+            "code": "LN_AO",
+            "language": "Lingala (Angola)"
+          },
+          {
+            "code": "LN_CD",
+            "language": "Lingala (Congo - Kinshasa)"
+          },
+          {
+            "code": "LN_CF",
+            "language": "Lingala (Central African Republic)"
+          },
+          {
+            "code": "LN_CG",
+            "language": "Lingala (Congo - Brazzaville)"
+          },
+          {
+            "code": "LO",
+            "language": "Lao"
+          },
+          {
+            "code": "LO_LA",
+            "language": "Lao (Laos)"
+          },
+          {
+            "code": "LRC",
+            "language": "Northern Luri"
+          },
+          {
+            "code": "LRC_IQ",
+            "language": "Northern Luri (Iraq)"
+          },
+          {
+            "code": "LRC_IR",
+            "language": "Northern Luri (Iran)"
+          },
+          {
+            "code": "LT",
+            "language": "Lithuanian"
+          },
+          {
+            "code": "LT_LT",
+            "language": "Lithuanian (Lithuania)"
+          },
+          {
+            "code": "LU",
+            "language": "Luba-Katanga"
+          },
+          {
+            "code": "LU_CD",
+            "language": "Luba-Katanga (Congo - Kinshasa)"
+          },
+          {
+            "code": "LUO",
+            "language": "Luo"
+          },
+          {
+            "code": "LUO_KE",
+            "language": "Luo (Kenya)"
+          },
+          {
+            "code": "LUY",
+            "language": "Luyia"
+          },
+          {
+            "code": "LUY_KE",
+            "language": "Luyia (Kenya)"
+          },
+          {
+            "code": "LV",
+            "language": "Latvian"
+          },
+          {
+            "code": "LV_LV",
+            "language": "Latvian (Latvia)"
+          },
+          {
+            "code": "MAI",
+            "language": "Maithili"
+          },
+          {
+            "code": "MAI_IN",
+            "language": "Maithili (India)"
+          },
+          {
+            "code": "MAS",
+            "language": "Masai"
+          },
+          {
+            "code": "MAS_KE",
+            "language": "Masai (Kenya)"
+          },
+          {
+            "code": "MAS_TZ",
+            "language": "Masai (Tanzania)"
+          },
+          {
+            "code": "MER",
+            "language": "Meru"
+          },
+          {
+            "code": "MER_KE",
+            "language": "Meru (Kenya)"
+          },
+          {
+            "code": "MFE",
+            "language": "Morisyen"
+          },
+          {
+            "code": "MFE_MU",
+            "language": "Morisyen (Mauritius)"
+          },
+          {
+            "code": "MG",
+            "language": "Malagasy"
+          },
+          {
+            "code": "MG_MG",
+            "language": "Malagasy (Madagascar)"
+          },
+          {
+            "code": "MGH",
+            "language": "Makhuwa-Meetto"
+          },
+          {
+            "code": "MGH_MZ",
+            "language": "Makhuwa-Meetto (Mozambique)"
+          },
+          {
+            "code": "MGO",
+            "language": "Meta\u02bc"
+          },
+          {
+            "code": "MGO_CM",
+            "language": "Meta\u02bc (Cameroon)"
+          },
+          {
+            "code": "MI",
+            "language": "Maori"
+          },
+          {
+            "code": "MI_NZ",
+            "language": "Maori (New Zealand)"
+          },
+          {
+            "code": "MK",
+            "language": "Macedonian"
+          },
+          {
+            "code": "MK_MK",
+            "language": "Macedonian (North Macedonia)"
+          },
+          {
+            "code": "ML",
+            "language": "Malayalam"
+          },
+          {
+            "code": "ML_IN",
+            "language": "Malayalam (India)"
+          },
+          {
+            "code": "MN",
+            "language": "Mongolian"
+          },
+          {
+            "code": "MN_MN",
+            "language": "Mongolian (Mongolia)"
+          },
+          {
+            "code": "MNI",
+            "language": "Manipuri"
+          },
+          {
+            "code": "MNI_BENG",
+            "language": "Manipuri (Bangla)"
+          },
+          {
+            "code": "MNI_BENG_IN",
+            "language": "Manipuri (Bangla, India)"
+          },
+          {
+            "code": "MR",
+            "language": "Marathi"
+          },
+          {
+            "code": "MR_IN",
+            "language": "Marathi (India)"
+          },
+          {
+            "code": "MS",
+            "language": "Malay"
+          },
+          {
+            "code": "MS_BN",
+            "language": "Malay (Brunei)"
+          },
+          {
+            "code": "MS_ID",
+            "language": "Malay (Indonesia)"
+          },
+          {
+            "code": "MS_MY",
+            "language": "Malay (Malaysia)"
+          },
+          {
+            "code": "MS_SG",
+            "language": "Malay (Singapore)"
+          },
+          {
+            "code": "MT",
+            "language": "Maltese"
+          },
+          {
+            "code": "MT_MT",
+            "language": "Maltese (Malta)"
+          },
+          {
+            "code": "MUA",
+            "language": "Mundang"
+          },
+          {
+            "code": "MUA_CM",
+            "language": "Mundang (Cameroon)"
+          },
+          {
+            "code": "MY",
+            "language": "Burmese"
+          },
+          {
+            "code": "MY_MM",
+            "language": "Burmese (Myanmar (Burma))"
+          },
+          {
+            "code": "MZN",
+            "language": "Mazanderani"
+          },
+          {
+            "code": "MZN_IR",
+            "language": "Mazanderani (Iran)"
+          },
+          {
+            "code": "NAQ",
+            "language": "Nama"
+          },
+          {
+            "code": "NAQ_NA",
+            "language": "Nama (Namibia)"
+          },
+          {
+            "code": "NB",
+            "language": "Norwegian Bokm\u00e5l"
+          },
+          {
+            "code": "NB_NO",
+            "language": "Norwegian Bokm\u00e5l (Norway)"
+          },
+          {
+            "code": "NB_SJ",
+            "language": "Norwegian Bokm\u00e5l (Svalbard & Jan Mayen)"
+          },
+          {
+            "code": "ND",
+            "language": "North Ndebele"
+          },
+          {
+            "code": "ND_ZW",
+            "language": "North Ndebele (Zimbabwe)"
+          },
+          {
+            "code": "NDS",
+            "language": "Low German"
+          },
+          {
+            "code": "NDS_DE",
+            "language": "Low German (Germany)"
+          },
+          {
+            "code": "NDS_NL",
+            "language": "Low German (Netherlands)"
+          },
+          {
+            "code": "NE",
+            "language": "Nepali"
+          },
+          {
+            "code": "NE_IN",
+            "language": "Nepali (India)"
+          },
+          {
+            "code": "NE_NP",
+            "language": "Nepali (Nepal)"
+          },
+          {
+            "code": "NL",
+            "language": "Dutch"
+          },
+          {
+            "code": "NL_AW",
+            "language": "Dutch (Aruba)"
+          },
+          {
+            "code": "NL_BE",
+            "language": "Dutch (Belgium)"
+          },
+          {
+            "code": "NL_BQ",
+            "language": "Dutch (Caribbean Netherlands)"
+          },
+          {
+            "code": "NL_CW",
+            "language": "Dutch (Cura\u00e7ao)"
+          },
+          {
+            "code": "NL_NL",
+            "language": "Dutch (Netherlands)"
+          },
+          {
+            "code": "NL_SR",
+            "language": "Dutch (Suriname)"
+          },
+          {
+            "code": "NL_SX",
+            "language": "Dutch (Sint Maarten)"
+          },
+          {
+            "code": "NMG",
+            "language": "Kwasio"
+          },
+          {
+            "code": "NMG_CM",
+            "language": "Kwasio (Cameroon)"
+          },
+          {
+            "code": "NN",
+            "language": "Norwegian Nynorsk"
+          },
+          {
+            "code": "NN_NO",
+            "language": "Norwegian Nynorsk (Norway)"
+          },
+          {
+            "code": "NNH",
+            "language": "Ngiemboon"
+          },
+          {
+            "code": "NNH_CM",
+            "language": "Ngiemboon (Cameroon)"
+          },
+          {
+            "code": "NUS",
+            "language": "Nuer"
+          },
+          {
+            "code": "NUS_SS",
+            "language": "Nuer (South Sudan)"
+          },
+          {
+            "code": "NYN",
+            "language": "Nyankole"
+          },
+          {
+            "code": "NYN_UG",
+            "language": "Nyankole (Uganda)"
+          },
+          {
+            "code": "OM",
+            "language": "Oromo"
+          },
+          {
+            "code": "OM_ET",
+            "language": "Oromo (Ethiopia)"
+          },
+          {
+            "code": "OM_KE",
+            "language": "Oromo (Kenya)"
+          },
+          {
+            "code": "OR",
+            "language": "Odia"
+          },
+          {
+            "code": "OR_IN",
+            "language": "Odia (India)"
+          },
+          {
+            "code": "OS",
+            "language": "Ossetic"
+          },
+          {
+            "code": "OS_GE",
+            "language": "Ossetic (Georgia)"
+          },
+          {
+            "code": "OS_RU",
+            "language": "Ossetic (Russia)"
+          },
+          {
+            "code": "PA",
+            "language": "Punjabi"
+          },
+          {
+            "code": "PA_ARAB",
+            "language": "Punjabi (Arabic)"
+          },
+          {
+            "code": "PA_ARAB_PK",
+            "language": "Punjabi (Arabic, Pakistan)"
+          },
+          {
+            "code": "PA_GURU",
+            "language": "Punjabi (Gurmukhi)"
+          },
+          {
+            "code": "PA_GURU_IN",
+            "language": "Punjabi (Gurmukhi, India)"
+          },
+          {
+            "code": "PCM",
+            "language": "Nigerian Pidgin"
+          },
+          {
+            "code": "PCM_NG",
+            "language": "Nigerian Pidgin (Nigeria)"
+          },
+          {
+            "code": "PL",
+            "language": "Polish"
+          },
+          {
+            "code": "PL_PL",
+            "language": "Polish (Poland)"
+          },
+          {
+            "code": "PRG",
+            "language": "Prussian"
+          },
+          {
+            "code": "PS",
+            "language": "Pashto"
+          },
+          {
+            "code": "PS_AF",
+            "language": "Pashto (Afghanistan)"
+          },
+          {
+            "code": "PS_PK",
+            "language": "Pashto (Pakistan)"
+          },
+          {
+            "code": "PT",
+            "language": "Portuguese"
+          },
+          {
+            "code": "PT_AO",
+            "language": "Portuguese (Angola)"
+          },
+          {
+            "code": "PT_BR",
+            "language": "Portuguese (Brazil)"
+          },
+          {
+            "code": "PT_CH",
+            "language": "Portuguese (Switzerland)"
+          },
+          {
+            "code": "PT_CV",
+            "language": "Portuguese (Cape Verde)"
+          },
+          {
+            "code": "PT_GQ",
+            "language": "Portuguese (Equatorial Guinea)"
+          },
+          {
+            "code": "PT_GW",
+            "language": "Portuguese (Guinea-Bissau)"
+          },
+          {
+            "code": "PT_LU",
+            "language": "Portuguese (Luxembourg)"
+          },
+          {
+            "code": "PT_MO",
+            "language": "Portuguese (Macao SAR China)"
+          },
+          {
+            "code": "PT_MZ",
+            "language": "Portuguese (Mozambique)"
+          },
+          {
+            "code": "PT_PT",
+            "language": "Portuguese (Portugal)"
+          },
+          {
+            "code": "PT_ST",
+            "language": "Portuguese (S\u00e3o Tom\u00e9 & Pr\u00edncipe)"
+          },
+          {
+            "code": "PT_TL",
+            "language": "Portuguese (Timor-Leste)"
+          },
+          {
+            "code": "QU",
+            "language": "Quechua"
+          },
+          {
+            "code": "QU_BO",
+            "language": "Quechua (Bolivia)"
+          },
+          {
+            "code": "QU_EC",
+            "language": "Quechua (Ecuador)"
+          },
+          {
+            "code": "QU_PE",
+            "language": "Quechua (Peru)"
+          },
+          {
+            "code": "RM",
+            "language": "Romansh"
+          },
+          {
+            "code": "RM_CH",
+            "language": "Romansh (Switzerland)"
+          },
+          {
+            "code": "RN",
+            "language": "Rundi"
+          },
+          {
+            "code": "RN_BI",
+            "language": "Rundi (Burundi)"
+          },
+          {
+            "code": "RO",
+            "language": "Romanian"
+          },
+          {
+            "code": "RO_MD",
+            "language": "Romanian (Moldova)"
+          },
+          {
+            "code": "RO_RO",
+            "language": "Romanian (Romania)"
+          },
+          {
+            "code": "ROF",
+            "language": "Rombo"
+          },
+          {
+            "code": "ROF_TZ",
+            "language": "Rombo (Tanzania)"
+          },
+          {
+            "code": "RU",
+            "language": "Russian"
+          },
+          {
+            "code": "RU_BY",
+            "language": "Russian (Belarus)"
+          },
+          {
+            "code": "RU_KG",
+            "language": "Russian (Kyrgyzstan)"
+          },
+          {
+            "code": "RU_KZ",
+            "language": "Russian (Kazakhstan)"
+          },
+          {
+            "code": "RU_MD",
+            "language": "Russian (Moldova)"
+          },
+          {
+            "code": "RU_RU",
+            "language": "Russian (Russia)"
+          },
+          {
+            "code": "RU_UA",
+            "language": "Russian (Ukraine)"
+          },
+          {
+            "code": "RW",
+            "language": "Kinyarwanda"
+          },
+          {
+            "code": "RW_RW",
+            "language": "Kinyarwanda (Rwanda)"
+          },
+          {
+            "code": "RWK",
+            "language": "Rwa"
+          },
+          {
+            "code": "RWK_TZ",
+            "language": "Rwa (Tanzania)"
+          },
+          {
+            "code": "SAH",
+            "language": "Sakha"
+          },
+          {
+            "code": "SAH_RU",
+            "language": "Sakha (Russia)"
+          },
+          {
+            "code": "SAQ",
+            "language": "Samburu"
+          },
+          {
+            "code": "SAQ_KE",
+            "language": "Samburu (Kenya)"
+          },
+          {
+            "code": "SAT",
+            "language": "Santali"
+          },
+          {
+            "code": "SAT_OLCK",
+            "language": "Santali (Ol Chiki)"
+          },
+          {
+            "code": "SAT_OLCK_IN",
+            "language": "Santali (Ol Chiki, India)"
+          },
+          {
+            "code": "SBP",
+            "language": "Sangu"
+          },
+          {
+            "code": "SBP_TZ",
+            "language": "Sangu (Tanzania)"
+          },
+          {
+            "code": "SD",
+            "language": "Sindhi"
+          },
+          {
+            "code": "SD_ARAB",
+            "language": "Sindhi (Arabic)"
+          },
+          {
+            "code": "SD_ARAB_PK",
+            "language": "Sindhi (Arabic, Pakistan)"
+          },
+          {
+            "code": "SD_DEVA",
+            "language": "Sindhi (Devanagari)"
+          },
+          {
+            "code": "SD_DEVA_IN",
+            "language": "Sindhi (Devanagari, India)"
+          },
+          {
+            "code": "SE",
+            "language": "Northern Sami"
+          },
+          {
+            "code": "SE_FI",
+            "language": "Northern Sami (Finland)"
+          },
+          {
+            "code": "SE_NO",
+            "language": "Northern Sami (Norway)"
+          },
+          {
+            "code": "SE_SE",
+            "language": "Northern Sami (Sweden)"
+          },
+          {
+            "code": "SEH",
+            "language": "Sena"
+          },
+          {
+            "code": "SEH_MZ",
+            "language": "Sena (Mozambique)"
+          },
+          {
+            "code": "SES",
+            "language": "Koyraboro Senni"
+          },
+          {
+            "code": "SES_ML",
+            "language": "Koyraboro Senni (Mali)"
+          },
+          {
+            "code": "SG",
+            "language": "Sango"
+          },
+          {
+            "code": "SG_CF",
+            "language": "Sango (Central African Republic)"
+          },
+          {
+            "code": "SHI",
+            "language": "Tachelhit"
+          },
+          {
+            "code": "SHI_LATN",
+            "language": "Tachelhit (Latin)"
+          },
+          {
+            "code": "SHI_LATN_MA",
+            "language": "Tachelhit (Latin, Morocco)"
+          },
+          {
+            "code": "SHI_TFNG",
+            "language": "Tachelhit (Tifinagh)"
+          },
+          {
+            "code": "SHI_TFNG_MA",
+            "language": "Tachelhit (Tifinagh, Morocco)"
+          },
+          {
+            "code": "SI",
+            "language": "Sinhala"
+          },
+          {
+            "code": "SI_LK",
+            "language": "Sinhala (Sri Lanka)"
+          },
+          {
+            "code": "SK",
+            "language": "Slovak"
+          },
+          {
+            "code": "SK_SK",
+            "language": "Slovak (Slovakia)"
+          },
+          {
+            "code": "SL",
+            "language": "Slovenian"
+          },
+          {
+            "code": "SL_SI",
+            "language": "Slovenian (Slovenia)"
+          },
+          {
+            "code": "SMN",
+            "language": "Inari Sami"
+          },
+          {
+            "code": "SMN_FI",
+            "language": "Inari Sami (Finland)"
+          },
+          {
+            "code": "SN",
+            "language": "Shona"
+          },
+          {
+            "code": "SN_ZW",
+            "language": "Shona (Zimbabwe)"
+          },
+          {
+            "code": "SO",
+            "language": "Somali"
+          },
+          {
+            "code": "SO_DJ",
+            "language": "Somali (Djibouti)"
+          },
+          {
+            "code": "SO_ET",
+            "language": "Somali (Ethiopia)"
+          },
+          {
+            "code": "SO_KE",
+            "language": "Somali (Kenya)"
+          },
+          {
+            "code": "SO_SO",
+            "language": "Somali (Somalia)"
+          },
+          {
+            "code": "SQ",
+            "language": "Albanian"
+          },
+          {
+            "code": "SQ_AL",
+            "language": "Albanian (Albania)"
+          },
+          {
+            "code": "SQ_MK",
+            "language": "Albanian (North Macedonia)"
+          },
+          {
+            "code": "SQ_XK",
+            "language": "Albanian (Kosovo)"
+          },
+          {
+            "code": "SR",
+            "language": "Serbian"
+          },
+          {
+            "code": "SR_CYRL",
+            "language": "Serbian (Cyrillic)"
+          },
+          {
+            "code": "SR_CYRL_BA",
+            "language": "Serbian (Cyrillic, Bosnia & Herzegovina)"
+          },
+          {
+            "code": "SR_CYRL_ME",
+            "language": "Serbian (Cyrillic, Montenegro)"
+          },
+          {
+            "code": "SR_CYRL_RS",
+            "language": "Serbian (Cyrillic, Serbia)"
+          },
+          {
+            "code": "SR_CYRL_XK",
+            "language": "Serbian (Cyrillic, Kosovo)"
+          },
+          {
+            "code": "SR_LATN",
+            "language": "Serbian (Latin)"
+          },
+          {
+            "code": "SR_LATN_BA",
+            "language": "Serbian (Latin, Bosnia & Herzegovina)"
+          },
+          {
+            "code": "SR_LATN_ME",
+            "language": "Serbian (Latin, Montenegro)"
+          },
+          {
+            "code": "SR_LATN_RS",
+            "language": "Serbian (Latin, Serbia)"
+          },
+          {
+            "code": "SR_LATN_XK",
+            "language": "Serbian (Latin, Kosovo)"
+          },
+          {
+            "code": "SU",
+            "language": "Sundanese"
+          },
+          {
+            "code": "SU_LATN",
+            "language": "Sundanese (Latin)"
+          },
+          {
+            "code": "SU_LATN_ID",
+            "language": "Sundanese (Latin, Indonesia)"
+          },
+          {
+            "code": "SV",
+            "language": "Swedish"
+          },
+          {
+            "code": "SV_AX",
+            "language": "Swedish (\u00c5land Islands)"
+          },
+          {
+            "code": "SV_FI",
+            "language": "Swedish (Finland)"
+          },
+          {
+            "code": "SV_SE",
+            "language": "Swedish (Sweden)"
+          },
+          {
+            "code": "SW",
+            "language": "Swahili"
+          },
+          {
+            "code": "SW_CD",
+            "language": "Swahili (Congo - Kinshasa)"
+          },
+          {
+            "code": "SW_KE",
+            "language": "Swahili (Kenya)"
+          },
+          {
+            "code": "SW_TZ",
+            "language": "Swahili (Tanzania)"
+          },
+          {
+            "code": "SW_UG",
+            "language": "Swahili (Uganda)"
+          },
+          {
+            "code": "TA",
+            "language": "Tamil"
+          },
+          {
+            "code": "TA_IN",
+            "language": "Tamil (India)"
+          },
+          {
+            "code": "TA_LK",
+            "language": "Tamil (Sri Lanka)"
+          },
+          {
+            "code": "TA_MY",
+            "language": "Tamil (Malaysia)"
+          },
+          {
+            "code": "TA_SG",
+            "language": "Tamil (Singapore)"
+          },
+          {
+            "code": "TE",
+            "language": "Telugu"
+          },
+          {
+            "code": "TE_IN",
+            "language": "Telugu (India)"
+          },
+          {
+            "code": "TEO",
+            "language": "Teso"
+          },
+          {
+            "code": "TEO_KE",
+            "language": "Teso (Kenya)"
+          },
+          {
+            "code": "TEO_UG",
+            "language": "Teso (Uganda)"
+          },
+          {
+            "code": "TG",
+            "language": "Tajik"
+          },
+          {
+            "code": "TG_TJ",
+            "language": "Tajik (Tajikistan)"
+          },
+          {
+            "code": "TH",
+            "language": "Thai"
+          },
+          {
+            "code": "TH_TH",
+            "language": "Thai (Thailand)"
+          },
+          {
+            "code": "TI",
+            "language": "Tigrinya"
+          },
+          {
+            "code": "TI_ER",
+            "language": "Tigrinya (Eritrea)"
+          },
+          {
+            "code": "TI_ET",
+            "language": "Tigrinya (Ethiopia)"
+          },
+          {
+            "code": "TK",
+            "language": "Turkmen"
+          },
+          {
+            "code": "TK_TM",
+            "language": "Turkmen (Turkmenistan)"
+          },
+          {
+            "code": "TO",
+            "language": "Tongan"
+          },
+          {
+            "code": "TO_TO",
+            "language": "Tongan (Tonga)"
+          },
+          {
+            "code": "TR",
+            "language": "Turkish"
+          },
+          {
+            "code": "TR_CY",
+            "language": "Turkish (Cyprus)"
+          },
+          {
+            "code": "TR_TR",
+            "language": "Turkish (Turkey)"
+          },
+          {
+            "code": "TT",
+            "language": "Tatar"
+          },
+          {
+            "code": "TT_RU",
+            "language": "Tatar (Russia)"
+          },
+          {
+            "code": "TWQ",
+            "language": "Tasawaq"
+          },
+          {
+            "code": "TWQ_NE",
+            "language": "Tasawaq (Niger)"
+          },
+          {
+            "code": "TZM",
+            "language": "Central Atlas Tamazight"
+          },
+          {
+            "code": "TZM_MA",
+            "language": "Central Atlas Tamazight (Morocco)"
+          },
+          {
+            "code": "UG",
+            "language": "Uyghur"
+          },
+          {
+            "code": "UG_CN",
+            "language": "Uyghur (China)"
+          },
+          {
+            "code": "UK",
+            "language": "Ukrainian"
+          },
+          {
+            "code": "UK_UA",
+            "language": "Ukrainian (Ukraine)"
+          },
+          {
+            "code": "UR",
+            "language": "Urdu"
+          },
+          {
+            "code": "UR_IN",
+            "language": "Urdu (India)"
+          },
+          {
+            "code": "UR_PK",
+            "language": "Urdu (Pakistan)"
+          },
+          {
+            "code": "UZ",
+            "language": "Uzbek"
+          },
+          {
+            "code": "UZ_ARAB",
+            "language": "Uzbek (Arabic)"
+          },
+          {
+            "code": "UZ_ARAB_AF",
+            "language": "Uzbek (Arabic, Afghanistan)"
+          },
+          {
+            "code": "UZ_CYRL",
+            "language": "Uzbek (Cyrillic)"
+          },
+          {
+            "code": "UZ_CYRL_UZ",
+            "language": "Uzbek (Cyrillic, Uzbekistan)"
+          },
+          {
+            "code": "UZ_LATN",
+            "language": "Uzbek (Latin)"
+          },
+          {
+            "code": "UZ_LATN_UZ",
+            "language": "Uzbek (Latin, Uzbekistan)"
+          },
+          {
+            "code": "VAI",
+            "language": "Vai"
+          },
+          {
+            "code": "VAI_LATN",
+            "language": "Vai (Latin)"
+          },
+          {
+            "code": "VAI_LATN_LR",
+            "language": "Vai (Latin, Liberia)"
+          },
+          {
+            "code": "VAI_VAII",
+            "language": "Vai (Vai)"
+          },
+          {
+            "code": "VAI_VAII_LR",
+            "language": "Vai (Vai, Liberia)"
+          },
+          {
+            "code": "VI",
+            "language": "Vietnamese"
+          },
+          {
+            "code": "VI_VN",
+            "language": "Vietnamese (Vietnam)"
+          },
+          {
+            "code": "VO",
+            "language": "Volap\u00fck"
+          },
+          {
+            "code": "VUN",
+            "language": "Vunjo"
+          },
+          {
+            "code": "VUN_TZ",
+            "language": "Vunjo (Tanzania)"
+          },
+          {
+            "code": "WAE",
+            "language": "Walser"
+          },
+          {
+            "code": "WAE_CH",
+            "language": "Walser (Switzerland)"
+          },
+          {
+            "code": "WO",
+            "language": "Wolof"
+          },
+          {
+            "code": "WO_SN",
+            "language": "Wolof (Senegal)"
+          },
+          {
+            "code": "XH",
+            "language": "Xhosa"
+          },
+          {
+            "code": "XH_ZA",
+            "language": "Xhosa (South Africa)"
+          },
+          {
+            "code": "XOG",
+            "language": "Soga"
+          },
+          {
+            "code": "XOG_UG",
+            "language": "Soga (Uganda)"
+          },
+          {
+            "code": "YAV",
+            "language": "Yangben"
+          },
+          {
+            "code": "YAV_CM",
+            "language": "Yangben (Cameroon)"
+          },
+          {
+            "code": "YI",
+            "language": "Yiddish"
+          },
+          {
+            "code": "YO",
+            "language": "Yoruba"
+          },
+          {
+            "code": "YO_BJ",
+            "language": "Yoruba (Benin)"
+          },
+          {
+            "code": "YO_NG",
+            "language": "Yoruba (Nigeria)"
+          },
+          {
+            "code": "YUE",
+            "language": "Cantonese"
+          },
+          {
+            "code": "YUE_HANS",
+            "language": "Cantonese (Simplified)"
+          },
+          {
+            "code": "YUE_HANS_CN",
+            "language": "Cantonese (Simplified, China)"
+          },
+          {
+            "code": "YUE_HANT",
+            "language": "Cantonese (Traditional)"
+          },
+          {
+            "code": "YUE_HANT_HK",
+            "language": "Cantonese (Traditional, Hong Kong SAR China)"
+          },
+          {
+            "code": "ZGH",
+            "language": "Standard Moroccan Tamazight"
+          },
+          {
+            "code": "ZGH_MA",
+            "language": "Standard Moroccan Tamazight (Morocco)"
+          },
+          {
+            "code": "ZH",
+            "language": "Chinese"
+          },
+          {
+            "code": "ZH_HANS",
+            "language": "Chinese (Simplified)"
+          },
+          {
+            "code": "ZH_HANS_CN",
+            "language": "Chinese (Simplified, China)"
+          },
+          {
+            "code": "ZH_HANS_HK",
+            "language": "Chinese (Simplified, Hong Kong SAR China)"
+          },
+          {
+            "code": "ZH_HANS_MO",
+            "language": "Chinese (Simplified, Macao SAR China)"
+          },
+          {
+            "code": "ZH_HANS_SG",
+            "language": "Chinese (Simplified, Singapore)"
+          },
+          {
+            "code": "ZH_HANT",
+            "language": "Chinese (Traditional)"
+          },
+          {
+            "code": "ZH_HANT_HK",
+            "language": "Chinese (Traditional, Hong Kong SAR China)"
+          },
+          {
+            "code": "ZH_HANT_MO",
+            "language": "Chinese (Traditional, Macao SAR China)"
+          },
+          {
+            "code": "ZH_HANT_TW",
+            "language": "Chinese (Traditional, Taiwan)"
+          },
+          {
+            "code": "ZU",
+            "language": "Zulu"
+          },
+          {
+            "code": "ZU_ZA",
+            "language": "Zulu (South Africa)"
+          }
+        ],
+        "name": "Saleor e-commerce",
+        "permissions": [
+          {
+            "code": "HANDLE_CHECKOUTS",
+            "name": "Handle checkouts"
+          },
+          {
+            "code": "HANDLE_PAYMENTS",
+            "name": "Handle payments"
+          },
+          {
+            "code": "HANDLE_TAXES",
+            "name": "Handle taxes"
+          },
+          {
+            "code": "IMPERSONATE_USER",
+            "name": "Impersonate user."
+          },
+          {
+            "code": "MANAGE_APPS",
+            "name": "Manage apps"
+          },
+          {
+            "code": "MANAGE_CHANNELS",
+            "name": "Manage channels."
+          },
+          {
+            "code": "MANAGE_CHECKOUTS",
+            "name": "Manage checkouts"
+          },
+          {
+            "code": "MANAGE_DISCOUNTS",
+            "name": "Manage promotions and vouchers."
+          },
+          {
+            "code": "MANAGE_GIFT_CARD",
+            "name": "Manage gift cards."
+          },
+          {
+            "code": "MANAGE_MENUS",
+            "name": "Manage navigation."
+          },
+          {
+            "code": "MANAGE_OBSERVABILITY",
+            "name": "Manage observability"
+          },
+          {
+            "code": "MANAGE_ORDERS",
+            "name": "Manage orders."
+          },
+          {
+            "code": "MANAGE_ORDERS_IMPORT",
+            "name": "Manage orders import."
+          },
+          {
+            "code": "MANAGE_PAGES",
+            "name": "Manage pages."
+          },
+          {
+            "code": "MANAGE_PAGE_TYPES_AND_ATTRIBUTES",
+            "name": "Manage page types and attributes."
+          },
+          {
+            "code": "MANAGE_PLUGINS",
+            "name": "Manage plugins"
+          },
+          {
+            "code": "MANAGE_PRODUCTS",
+            "name": "Manage products."
+          },
+          {
+            "code": "MANAGE_PRODUCT_TYPES_AND_ATTRIBUTES",
+            "name": "Manage product types and attributes."
+          },
+          {
+            "code": "MANAGE_SETTINGS",
+            "name": "Manage settings."
+          },
+          {
+            "code": "MANAGE_SHIPPING",
+            "name": "Manage shipping."
+          },
+          {
+            "code": "MANAGE_STAFF",
+            "name": "Manage staff."
+          },
+          {
+            "code": "MANAGE_TAXES",
+            "name": "Manage taxes"
+          },
+          {
+            "code": "MANAGE_TRANSLATIONS",
+            "name": "Manage translations."
+          },
+          {
+            "code": "MANAGE_USERS",
+            "name": "Manage customers."
+          }
+        ],
+        "version": "3.23.7"
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:7d80a483dc2b9a59",
+  "document_hash": "sha256:e41e092175ae7c82"
+}

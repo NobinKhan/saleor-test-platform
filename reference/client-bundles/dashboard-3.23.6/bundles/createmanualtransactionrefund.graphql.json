@@ -1,0 +1,19 @@
+{
+  "bundle_id": "createmanualtransactionrefund",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "CreateManualTransactionRefund"
+  ],
+  "document": "mutation CreateManualTransactionRefund($orderId: ID!, $amount: PositiveDecimal!, $currency: String!, $description: String, $pspReference: String) {\n  transactionCreate(\n    id: $orderId\n    transaction: {name: \"Manual refund\", pspReference: $pspReference, amountRefunded: {amount: $amount, currency: $currency}}\n    transactionEvent: {pspReference: $pspReference, message: $description}\n  ) {\n    transaction {\n      ...TransactionItem\n    }\n    errors {\n      ...TransactionCreateError\n    }\n  }\n}\n\nfragment TransactionItem on TransactionItem {\n  ...TransactionBaseItem\n  pspReference\n  externalUrl\n  createdAt\n  createdBy {\n    ... on App {\n      name\n      brand {\n        logo {\n          default(size: 64)\n        }\n      }\n    }\n  }\n  paymentMethodDetails {\n    name\n    __typename\n    ... on CardPaymentMethodDetails {\n      ...CardPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n    ... on OtherPaymentMethodDetails {\n      ...OtherPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n  }\n  events {\n    ...TransactionEvent\n  }\n  authorizedAmount {\n    ...Money\n  }\n  chargedAmount {\n    ...Money\n  }\n  refundedAmount {\n    ...Money\n  }\n  canceledAmount {\n    ...Money\n  }\n  authorizePendingAmount {\n    ...Money\n  }\n  chargePendingAmount {\n    ...Money\n  }\n  refundPendingAmount {\n    ...Money\n  }\n  cancelPendingAmount {\n    ...Money\n  }\n}\n\nfragment TransactionBaseItem on TransactionItem {\n  id\n  name\n  actions\n  events {\n    ...TransactionBaseEvent\n  }\n}\n\nfragment TransactionBaseEvent on TransactionEvent {\n  id\n  pspReference\n  amount {\n    ...Money\n  }\n  externalUrl\n  type\n  message\n  createdAt\n  reasonReference {\n    id\n    title\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment CardPaymentMethodDetails on CardPaymentMethodDetails {\n  name\n  brand\n  expMonth\n  expYear\n  firstDigits\n  lastDigits\n}\n\nfragment GiftCardPaymentMethodDetails on GiftCardPaymentMethodDetails {\n  name\n  brand\n  lastChars\n  isSaleorGiftcard\n}\n\nfragment OtherPaymentMethodDetails on OtherPaymentMethodDetails {\n  name\n}\n\nfragment TransactionEvent on TransactionEvent {\n  ...TransactionBaseEvent\n  createdBy {\n    ... on User {\n      ...StaffMemberAvatar\n    }\n    ... on App {\n      ...AppAvatar\n    }\n  }\n  externalUrl\n}\n\nfragment StaffMemberAvatar on User {\n  ...StaffMember\n  avatar(size: 512) {\n    url\n  }\n}\n\nfragment StaffMember on User {\n  id\n  email\n  firstName\n  isActive\n  lastName\n}\n\nfragment AppAvatar on App {\n  id\n  name\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n}\n\nfragment TransactionCreateError on TransactionCreateError {\n  field\n  message\n  code\n}",
+  "variables": {
+    "orderId": "{{fixtures.default_order_id}}",
+    "amount": null,
+    "currency": "",
+    "description": "",
+    "pspReference": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:c3225822af160490"
+}

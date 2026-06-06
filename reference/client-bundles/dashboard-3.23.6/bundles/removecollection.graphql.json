@@ -1,0 +1,44 @@
+{
+  "bundle_id": "removecollection",
+  "source": "saleor-dashboard",
+  "source_path": "collections/mutations.ts",
+  "operation_names": [
+    "RemoveCollection"
+  ],
+  "document": "mutation RemoveCollection($id: ID!) {\n  collectionDelete(id: $id) {\n    errors {\n      ...CollectionError\n    }\n  }\n}\n\nfragment CollectionError on CollectionError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "collectionDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Collection."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:678360b763903b2c",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "removecollection",
+    "expected_null": true
+  },
+  "document_hash": "sha256:f7c6de736b9a582e"
+}

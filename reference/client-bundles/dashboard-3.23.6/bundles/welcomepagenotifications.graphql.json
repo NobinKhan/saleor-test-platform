@@ -1,0 +1,33 @@
+{
+  "bundle_id": "welcomepagenotifications",
+  "source": "saleor-dashboard",
+  "source_path": "welcomePage/queries.ts",
+  "operation_names": [
+    "welcomePageNotifications"
+  ],
+  "document": "query welcomePageNotifications($channel: String!) {\n  productsOutOfStock: products(\n    filter: {stockAvailability: OUT_OF_STOCK}\n    channel: $channel\n  ) {\n    totalCount\n  }\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "productsOutOfStock": {
+        "totalCount": 0
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b666d27c93523f2a",
+  "document_hash": "sha256:6870644cd3cf1626"
+}

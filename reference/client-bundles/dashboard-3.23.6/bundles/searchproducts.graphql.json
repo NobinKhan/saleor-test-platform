@@ -1,0 +1,43 @@
+{
+  "bundle_id": "searchproducts",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useProductSearch.ts",
+  "operation_names": [
+    "SearchProducts"
+  ],
+  "document": "query SearchProducts($after: String, $first: Int!, $query: String!, $channel: String, $where: ProductWhereInput) {\n  search: products(\n    after: $after\n    first: $first\n    search: $query\n    channel: $channel\n    where: $where\n  ) {\n    edges {\n      node {\n        ...SearchProduct\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment SearchProduct on Product {\n  id\n  name\n  productType {\n    id\n    name\n  }\n  thumbnail {\n    url\n  }\n  channelListings {\n    ...ChannelListingProductWithoutPricing\n  }\n  variants {\n    id\n    name\n    sku\n    product {\n      id\n      name\n      thumbnail {\n        url\n        __typename\n      }\n      productType {\n        id\n        name\n        __typename\n      }\n    }\n    channelListings {\n      channel {\n        id\n        isActive\n        name\n        currencyCode\n      }\n      price {\n        amount\n        currency\n      }\n    }\n  }\n  collections {\n    id\n  }\n}\n\nfragment ChannelListingProductWithoutPricing on ProductChannelListing {\n  id\n  isPublished\n  publishedAt\n  isAvailableForPurchase\n  availableForPurchaseAt\n  visibleInListings\n  channel {\n    id\n    name\n    slug\n    currencyCode\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "after": "",
+    "first": 10,
+    "query": "",
+    "channel": "{{fixtures.default_channel}}",
+    "where": null
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "search": {
+        "edges": [],
+        "pageInfo": {
+          "endCursor": null,
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": null
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 120,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
+  "document_hash": "sha256:4d88612307675e92"
+}

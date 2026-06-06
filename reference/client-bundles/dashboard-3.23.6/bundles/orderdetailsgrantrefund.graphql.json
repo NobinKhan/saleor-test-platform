@@ -1,0 +1,98 @@
+{
+  "bundle_id": "orderdetailsgrantrefund",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "OrderDetailsGrantRefund"
+  ],
+  "document": "query OrderDetailsGrantRefund($id: ID!) {\n  order(id: $id) {\n    ...OrderDetailsGrantRefund\n  }\n}\n\nfragment OrderDetailsGrantRefund on Order {\n  id\n  number\n  lines {\n    ...OrderLineGrantRefund\n  }\n  fulfillments {\n    ...OrderFulfillmentGrantRefund\n  }\n  shippingPrice {\n    gross {\n      ...Money\n    }\n  }\n  total {\n    gross {\n      ...Money\n    }\n  }\n  grantedRefunds {\n    ...OrderDetailsGrantedRefund\n  }\n  transactions {\n    ...TransactionItem\n  }\n}\n\nfragment OrderLineGrantRefund on OrderLine {\n  id\n  thumbnail {\n    url\n  }\n  productName\n  quantity\n  quantityToFulfill\n  variantName\n  unitPrice {\n    gross {\n      ...Money\n    }\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment OrderFulfillmentGrantRefund on Fulfillment {\n  id\n  fulfillmentOrder\n  status\n  lines {\n    id\n    quantity\n    orderLine {\n      ...OrderLineGrantRefund\n    }\n  }\n}\n\nfragment OrderDetailsGrantedRefund on OrderGrantedRefund {\n  id\n  reason\n  reasonReference {\n    id\n    title\n  }\n  amount {\n    ...Money\n  }\n  shippingCostsIncluded\n  transaction {\n    id\n  }\n  status\n  lines {\n    id\n    quantity\n    reason\n    orderLine {\n      ...OrderLine\n    }\n  }\n}\n\nfragment OrderLine on OrderLine {\n  id\n  isShippingRequired\n  allocations {\n    id\n    quantity\n    warehouse {\n      id\n      name\n    }\n  }\n  variant {\n    id\n    name\n    quantityAvailable\n    preorder {\n      endDate\n    }\n    stocks {\n      ...Stock\n    }\n    product {\n      id\n      isAvailableForPurchase\n    }\n  }\n  productName\n  productSku\n  isGift\n  quantity\n  quantityFulfilled\n  quantityToFulfill\n  totalPrice {\n    gross {\n      ...MoneyWithFractionDigits\n    }\n    net {\n      ...Money\n    }\n    tax {\n      ...Money\n    }\n  }\n  undiscountedTotalPrice {\n    ...TaxedMoney\n    tax {\n      ...Money\n    }\n  }\n  unitDiscount {\n    amount\n    currency\n  }\n  unitDiscountValue\n  unitDiscountReason\n  unitDiscountType\n  undiscountedUnitPrice {\n    currency\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  unitPrice {\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  taxRate\n  taxClass {\n    id\n    name\n  }\n  voucherCode\n  thumbnail {\n    url\n  }\n  discounts {\n    ...OrderLineDiscount\n  }\n}\n\nfragment Stock on Stock {\n  id\n  quantity\n  quantityAllocated\n  warehouse {\n    ...Warehouse\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}\n\nfragment MoneyWithFractionDigits on Money {\n  amount\n  currency\n  fractionDigits\n}\n\nfragment TaxedMoney on TaxedMoney {\n  net {\n    ...Money\n  }\n  gross {\n    ...Money\n  }\n}\n\nfragment OrderLineDiscount on OrderLineDiscount {\n  id\n  type\n  name\n  translatedName\n  valueType\n  value\n  reason\n  total {\n    ...Money\n  }\n  unit {\n    ...Money\n  }\n}\n\nfragment TransactionItem on TransactionItem {\n  ...TransactionBaseItem\n  pspReference\n  externalUrl\n  createdAt\n  createdBy {\n    ... on App {\n      name\n      brand {\n        logo {\n          default(size: 64)\n        }\n      }\n    }\n  }\n  paymentMethodDetails {\n    name\n    __typename\n    ... on CardPaymentMethodDetails {\n      ...CardPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n    ... on OtherPaymentMethodDetails {\n      ...OtherPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n  }\n  events {\n    ...TransactionEvent\n  }\n  authorizedAmount {\n    ...Money\n  }\n  chargedAmount {\n    ...Money\n  }\n  refundedAmount {\n    ...Money\n  }\n  canceledAmount {\n    ...Money\n  }\n  authorizePendingAmount {\n    ...Money\n  }\n  chargePendingAmount {\n    ...Money\n  }\n  refundPendingAmount {\n    ...Money\n  }\n  cancelPendingAmount {\n    ...Money\n  }\n}\n\nfragment TransactionBaseItem on TransactionItem {\n  id\n  name\n  actions\n  events {\n    ...TransactionBaseEvent\n  }\n}\n\nfragment TransactionBaseEvent on TransactionEvent {\n  id\n  pspReference\n  amount {\n    ...Money\n  }\n  externalUrl\n  type\n  message\n  createdAt\n  reasonReference {\n    id\n    title\n  }\n}\n\nfragment CardPaymentMethodDetails on CardPaymentMethodDetails {\n  name\n  brand\n  expMonth\n  expYear\n  firstDigits\n  lastDigits\n}\n\nfragment GiftCardPaymentMethodDetails on GiftCardPaymentMethodDetails {\n  name\n  brand\n  lastChars\n  isSaleorGiftcard\n}\n\nfragment OtherPaymentMethodDetails on OtherPaymentMethodDetails {\n  name\n}\n\nfragment TransactionEvent on TransactionEvent {\n  ...TransactionBaseEvent\n  createdBy {\n    ... on User {\n      ...StaffMemberAvatar\n    }\n    ... on App {\n      ...AppAvatar\n    }\n  }\n  externalUrl\n}\n\nfragment StaffMemberAvatar on User {\n  ...StaffMember\n  avatar(size: 512) {\n    url\n  }\n}\n\nfragment StaffMember on User {\n  id\n  email\n  firstName\n  isActive\n  lastName\n}\n\nfragment AppAvatar on App {\n  id\n  name\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Order.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "order"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/order/schema.py\", line 222, in resolve_order",
+              "    _, id = from_global_id_or_error(id, Order)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Order."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "order": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 14,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:2548956621b7c72f",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "orderdetailsgrantrefund",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "order"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "order"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:6f225b718a1b1ad2"
+}

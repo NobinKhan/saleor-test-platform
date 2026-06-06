@@ -1,0 +1,12 @@
+---
+description: SGRC — read before editing comparison or normalization logic
+alwaysApply: true
+---
+
+# Saleor GraphQL Response Contract (SGRC)
+
+Before editing `reference_compare.py`, `semantic_compare.py`, or `response_normalize.py`, read [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
+
+- **Tier 1** = certification gate (message + data semantics for errors; shape for success).
+- **Never require** Python `stacktrace`, `locations`, or `extensions.cost` for cross-language backends.
+- Error probes: compare normalized message + data nullability — not full JSON shape to Python golden.

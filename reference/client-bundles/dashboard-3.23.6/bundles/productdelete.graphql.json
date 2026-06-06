@@ -1,0 +1,44 @@
+{
+  "bundle_id": "productdelete",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductDelete"
+  ],
+  "document": "mutation ProductDelete($id: ID!) {\n  productDelete(id: $id) {\n    errors {\n      ...ProductError\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "productDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Product."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:901a3abc7eff58a8",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "productdelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:2adc08a308790cf5"
+}

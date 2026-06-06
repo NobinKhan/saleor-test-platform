@@ -1,0 +1,112 @@
+{
+  "bundle_id": "modelsoftype",
+  "source": "saleor-dashboard",
+  "source_path": "modeling/queries.ts",
+  "operation_names": [
+    "ModelsOfType"
+  ],
+  "document": "query ModelsOfType($pageTypeId: ID!) {\n  pages(first: 100, where: {pageType: {eq: $pageTypeId}}) {\n    edges {\n      node {\n        id\n        title\n      }\n    }\n  }\n}",
+  "variables": {
+    "pageTypeId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "pages"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
+              "    return wrapped_resolver(obj, info, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/page/schema.py\", line 137, in resolve_pages",
+              "    return _resolve_pages(channel_instance=None)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/page/schema.py\", line 130, in _resolve_pages",
+              "    qs = filter_connection_queryset(",
+              "         ^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 506, in filter_connection_queryset",
+              "    return filter_func(",
+              "           ^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 618, in where_filter_qs",
+              "    qs_to_combine = filter_qs(",
+              "                    ^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 549, in filter_qs",
+              "    return ChannelQsContext(filterset.qs, iterable.channel_slug)",
+              "                            ^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/django_filters/filterset.py\", line 250, in qs",
+              "    qs = self.filter_queryset(qs)",
+              "         ^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/filters/where_filters.py\", line 44, in filter_queryset",
+              "    queryset = self.filters[name].filter(queryset, value)",
+              "               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/filters/where_filters.py\", line 81, in __call__",
+              "    return self.method(qs, self.f.field_name, value)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/page/filters.py\", line 708, in filter_page_type",
+              "    return filter_where_by_id_field(qs, \"page_type\", value, \"PageType\")",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/utils/filters.py\", line 139, in filter_where_by_id_field",
+              "    _, pks = resolve_global_ids_to_primary_keys([eq], type, True)",
+              "             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/utils/__init__.py\", line 88, in resolve_global_ids_to_primary_keys",
+              "    raise GraphQLError(ERROR_COULD_NO_RESOLVE_GLOBAL_ID % invalid_ids)",
+              "graphql.error.base.GraphQLError: Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "pages": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 100,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:f3c8eb25e5d84f17",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "modelsoftype",
+    "expected_null": true,
+    "message_pattern": "Could not resolve to a node with the global id list of '['00000000-0000-0000-000",
+    "optional_path": [
+      "pages"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "pages"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:9500fffea18f9347"
+}

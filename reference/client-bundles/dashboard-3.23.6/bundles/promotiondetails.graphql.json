@@ -1,0 +1,104 @@
+{
+  "bundle_id": "promotiondetails",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/queries.ts",
+  "operation_names": [
+    "PromotionDetails"
+  ],
+  "document": "query PromotionDetails($id: ID!) {\n  promotion(id: $id) {\n    ...PromotionDetails\n  }\n}\n\nfragment PromotionDetails on Promotion {\n  id\n  name\n  type\n  description\n  startDate\n  endDate\n  rules {\n    ...PromotionRuleDetails\n  }\n}\n\nfragment PromotionRuleDetails on PromotionRule {\n  id\n  name\n  description\n  channels {\n    ...PromotionRuleChannel\n  }\n  giftIds\n  rewardType\n  rewardValueType\n  rewardValue\n  cataloguePredicate\n  orderPredicate\n}\n\nfragment PromotionRuleChannel on Channel {\n  id\n  isActive\n  name\n  slug\n  currencyCode\n  defaultCountry {\n    code\n    country\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Promotion.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "promotion"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/discount/schema.py\", line 193, in resolve_promotion",
+              "    _, id = from_global_id_or_error(id, Promotion)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Promotion."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "promotion": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:50aecea9ca35fb2e",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "promotiondetails",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "promotion"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "promotion"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:b2b244af58fc1955"
+}

@@ -1,0 +1,31 @@
+{
+  "bundle_id": "giftlabels",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/queries.ts",
+  "operation_names": [
+    "GiftLabels"
+  ],
+  "document": "query GiftLabels($ids: [ID!]) {\n  productVariants(first: 100, where: {ids: $ids}) {\n    edges {\n      node {\n        id\n        name\n        product {\n          name\n        }\n      }\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "productVariants": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 200,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b9a8e86f40cfb175",
+  "document_hash": "sha256:2e384c105b10f1dc"
+}

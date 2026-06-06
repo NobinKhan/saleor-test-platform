@@ -1,0 +1,33 @@
+{
+  "bundle_id": "_searchcustomersoperands",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_SearchCustomersOperands"
+  ],
+  "document": "query _SearchCustomersOperands($first: Int!, $customersIds: [ID!]) {\n  customers(first: $first, filter: {ids: $customersIds}) {\n    edges {\n      node {\n        id\n        email\n        firstName\n        lastName\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "customers": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:ab86c23b3db59604",
+  "document_hash": "sha256:cd7a5484638be0c7"
+}

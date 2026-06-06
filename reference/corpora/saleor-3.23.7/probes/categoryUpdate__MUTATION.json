@@ -30,5 +30,11 @@
   "response_shape_hash": "sha256:e36cc9569fe9d2f0",
   "golden_contract": "graphql_error",
   "http_status": 400,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "categoryUpdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  }
 }

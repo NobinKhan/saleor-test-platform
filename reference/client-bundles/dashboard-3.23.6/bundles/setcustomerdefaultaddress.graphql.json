@@ -1,0 +1,17 @@
+{
+  "bundle_id": "setcustomerdefaultaddress",
+  "source": "saleor-dashboard",
+  "source_path": "customers/mutations.ts",
+  "operation_names": [
+    "SetCustomerDefaultAddress"
+  ],
+  "document": "mutation SetCustomerDefaultAddress($addressId: ID!, $userId: ID!, $type: AddressTypeEnum!) {\n  addressSetDefault(addressId: $addressId, userId: $userId, type: $type) {\n    errors {\n      ...AccountError\n    }\n    user {\n      ...CustomerAddresses\n    }\n  }\n}\n\nfragment AccountError on AccountError {\n  code\n  field\n  addressType\n  message\n}\n\nfragment CustomerAddresses on User {\n  ...Customer\n  addresses {\n    ...Address\n  }\n  defaultBillingAddress {\n    id\n  }\n  defaultShippingAddress {\n    id\n  }\n}\n\nfragment Customer on User {\n  id\n  email\n  firstName\n  lastName\n}\n\nfragment Address on Address {\n  city\n  cityArea\n  companyName\n  country {\n    __typename\n    code\n    country\n  }\n  countryArea\n  firstName\n  id\n  lastName\n  phone\n  postalCode\n  streetAddress1\n  streetAddress2\n}",
+  "variables": {
+    "addressId": "{{fixtures.placeholder_id}}",
+    "userId": "{{fixtures.default_customer_id}}",
+    "type": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:77a73c123aa05b4b"
+}

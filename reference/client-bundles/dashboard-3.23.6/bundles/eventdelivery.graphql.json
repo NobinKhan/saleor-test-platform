@@ -1,0 +1,101 @@
+{
+  "bundle_id": "eventdelivery",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "EventDelivery"
+  ],
+  "document": "query EventDelivery($before: String, $after: String, $first: Int, $last: Int, $filter: AppFilterInput, $canFetchAppEvents: Boolean!) {\n  apps(\n    before: $before\n    after: $after\n    first: $first\n    last: $last\n    filter: $filter\n  ) {\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n      startCursor\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...AppEventDeliveries\n      }\n    }\n  }\n}\n\nfragment AppEventDeliveries on App {\n  webhooks @include(if: $canFetchAppEvents) {\n    failedDelivers: eventDeliveries(\n      first: 1\n      filter: {status: FAILED}\n      sortBy: {field: CREATED_AT, direction: DESC}\n    ) {\n      edges {\n        node {\n          id\n          createdAt\n          attempts(first: 1, sortBy: {field: CREATED_AT, direction: DESC}) {\n            edges {\n              node {\n                id\n                status\n                createdAt\n              }\n            }\n          }\n        }\n      }\n    }\n    pendingDelivers: eventDeliveries(\n      first: 6\n      filter: {status: PENDING}\n      sortBy: {field: CREATED_AT, direction: DESC}\n    ) {\n      edges {\n        node {\n          id\n          attempts(first: 6, sortBy: {field: CREATED_AT, direction: DESC}) {\n            edges {\n              node {\n                id\n                status\n                createdAt\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}",
+  "variables": {
+    "before": "",
+    "after": "",
+    "first": 10,
+    "last": 10,
+    "filter": null,
+    "canFetchAppEvents": false
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument `last` cannot be combined with `first`.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "apps"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
+              "    return wrapped_resolver(obj, info, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/app/schema.py\", line 134, in resolve_apps",
+              "    return create_connection_slice(qs, info, kwargs, AppCountableConnection)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
+              "    slice = connection_from_queryset_slice(",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
+              "    _validate_connection_args(args)",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
+              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
+              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "apps": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 40,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:994cd79df64b38e8",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "eventdelivery",
+    "expected_null": true,
+    "message_pattern": "Argument `last` cannot be combined with `first`.",
+    "optional_path": [
+      "apps"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "apps"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:a8dbf70b8e643fda"
+}

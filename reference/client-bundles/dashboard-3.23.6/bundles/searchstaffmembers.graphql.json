@@ -1,0 +1,52 @@
+{
+  "bundle_id": "searchstaffmembers",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useStaffMemberSearch.ts",
+  "operation_names": [
+    "SearchStaffMembers"
+  ],
+  "document": "query SearchStaffMembers($after: String, $first: Int!, $query: String!) {\n  search: staffUsers(after: $after, first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        email\n        firstName\n        lastName\n        isActive\n        avatar {\n          alt\n          url\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "after": "",
+    "first": 10,
+    "query": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "search": {
+        "edges": [
+          {
+            "node": {
+              "id": "VXNlcjox",
+              "email": "admin@example.com",
+              "firstName": "",
+              "lastName": "",
+              "isActive": true,
+              "avatar": null
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": "WyJhZG1pbkBleGFtcGxlLmNvbSJd",
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": "WyJhZG1pbkBleGFtcGxlLmNvbSJd"
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 20,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:7661849f7d3880a5",
+  "document_hash": "sha256:ba7ebc12c43cf6ef"
+}

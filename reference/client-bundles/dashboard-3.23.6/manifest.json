@@ -1,0 +1,3863 @@
+{
+  "source": "dashboard",
+  "dashboard_version": "3.23.6",
+  "dashboard_git_tag": "3.23.6",
+  "bundle_count": 428,
+  "recorded_count": 395,
+  "bundles_hash": "sha256:f57bb58cd4c35c52230192de64e38c21f73accbcaa1f9a18a7ea5a1ae8a7fdd2",
+  "updated_at": "2026-06-06T07:23:42.111798+00:00",
+  "bundles_index": {
+    "_getattributechoices": {
+      "document_hash": "sha256:1f0b22d55265cfe9",
+      "operation_names": [
+        "_GetAttributeChoices"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getcategorieschoices": {
+      "document_hash": "sha256:0ae3c57cf257f43a",
+      "operation_names": [
+        "_GetCategoriesChoices"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getchanneloperands": {
+      "document_hash": "sha256:4a5e9ab23d24feb7",
+      "operation_names": [
+        "_GetChannelOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getcollectionschoices": {
+      "document_hash": "sha256:44bf42f74f5c0072",
+      "operation_names": [
+        "_GetCollectionsChoices"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getcustomerschoices": {
+      "document_hash": "sha256:9a1def11d11947e8",
+      "operation_names": [
+        "_GetCustomersChoices"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getdynamicleftoperands": {
+      "document_hash": "sha256:fb108a464363cff6",
+      "operation_names": [
+        "_GetDynamicLeftOperands"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getgiftcardtagschoices": {
+      "document_hash": "sha256:d794983bdf1150b6",
+      "operation_names": [
+        "_GetGiftCardTagsChoices"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getlegacychanneloperands": {
+      "document_hash": "sha256:e3323c62af9aede9",
+      "operation_names": [
+        "_GetLegacyChannelOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getpageschoices": {
+      "document_hash": "sha256:e2fd4751a921ee16",
+      "operation_names": [
+        "_GetPagesChoices"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getpagetypeschoices": {
+      "document_hash": "sha256:cf19928514848e04",
+      "operation_names": [
+        "_GetPageTypesChoices"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getproductchoices": {
+      "document_hash": "sha256:58a6bf562fd4de58",
+      "operation_names": [
+        "_GetProductChoices"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getproducttypeschoices": {
+      "document_hash": "sha256:84f472d25630a71a",
+      "operation_names": [
+        "_GetProductTypesChoices"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getproductvariantchoices": {
+      "document_hash": "sha256:ea09b524fe104ab1",
+      "operation_names": [
+        "_GetProductVariantChoices"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_getwarehousechoices": {
+      "document_hash": "sha256:3c727e59ffd36372",
+      "operation_names": [
+        "_GetWarehouseChoices"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchattributeoperands": {
+      "document_hash": "sha256:42fab5e306d2b885",
+      "operation_names": [
+        "_SearchAttributeOperands"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchcategoriesoperands": {
+      "document_hash": "sha256:20b0c5de0280de7b",
+      "operation_names": [
+        "_SearchCategoriesOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchcollectionsoperands": {
+      "document_hash": "sha256:f2d225603329b014",
+      "operation_names": [
+        "_SearchCollectionsOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchcustomersoperands": {
+      "document_hash": "sha256:cd7a5484638be0c7",
+      "operation_names": [
+        "_SearchCustomersOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchpageoperands": {
+      "document_hash": "sha256:4e8b81d3d479c827",
+      "operation_names": [
+        "_SearchPageOperands"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchpagetypesoperands": {
+      "document_hash": "sha256:556ad0f94fb4c29b",
+      "operation_names": [
+        "_SearchPageTypesOperands"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchproductoperands": {
+      "document_hash": "sha256:84d356827fc94494",
+      "operation_names": [
+        "_SearchProductOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchproducttypesoperands": {
+      "document_hash": "sha256:d15fb022c0d5faef",
+      "operation_names": [
+        "_SearchProductTypesOperands"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchproductvariantoperands": {
+      "document_hash": "sha256:0db2fd38bf7999b5",
+      "operation_names": [
+        "_SearchProductVariantOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "_searchwarehouseoperands": {
+      "document_hash": "sha256:c1d444515794ca5a",
+      "operation_names": [
+        "_SearchWarehouseOperands"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "accountconfirm": {
+      "document_hash": "sha256:f93cd9df0bd3210e",
+      "operation_names": [
+        "accountConfirm"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "accountdelete": {
+      "document_hash": "sha256:4e16c26661fee6a1",
+      "operation_names": [
+        "accountDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "accountrequestdeletion": {
+      "document_hash": "sha256:ba5330063998dd02",
+      "operation_names": [
+        "accountRequestDeletion"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "accountupdate": {
+      "document_hash": "sha256:c0984f8cd9e7e7ea",
+      "operation_names": [
+        "accountUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "addressvalidationrules": {
+      "document_hash": "sha256:ed40f69f52836647",
+      "operation_names": [
+        "addressValidationRules"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "app": {
+      "document_hash": "sha256:dbfdbf2e6b2f2647",
+      "operation_names": [
+        "App"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "appactivate": {
+      "document_hash": "sha256:75492e70f2f127d3",
+      "operation_names": [
+        "AppActivate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "appallproblems": {
+      "document_hash": "sha256:b0e273463196d58a",
+      "operation_names": [
+        "AppAllProblems"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "appcreate": {
+      "document_hash": "sha256:fc9687f826a6609f",
+      "operation_names": [
+        "AppCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "appdeactivate": {
+      "document_hash": "sha256:f41f207e5f0cae1a",
+      "operation_names": [
+        "AppDeactivate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "appdelete": {
+      "document_hash": "sha256:2b7413a8c398b3ca",
+      "operation_names": [
+        "AppDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "appdeletefailedinstallation": {
+      "document_hash": "sha256:93f49c4c42fa302b",
+      "operation_names": [
+        "AppDeleteFailedInstallation"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "appfailedpendingwebhooks": {
+      "document_hash": "sha256:b030720af6d055c9",
+      "operation_names": [
+        "AppFailedPendingWebhooks"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "appfetch": {
+      "document_hash": "sha256:0e27a8ed7670f183",
+      "operation_names": [
+        "AppFetch"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "apphasproblems": {
+      "document_hash": "sha256:7b65df9a38ec76f0",
+      "operation_names": [
+        "AppHasProblems"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "appinstall": {
+      "document_hash": "sha256:6b19c60034d4dba5",
+      "operation_names": [
+        "AppInstall"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "appproblemdismiss": {
+      "document_hash": "sha256:9d89a313b0ca733d",
+      "operation_names": [
+        "appProblemDismiss"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "appretryinstall": {
+      "document_hash": "sha256:487052996b3a7800",
+      "operation_names": [
+        "AppRetryInstall"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "appsinstallations": {
+      "document_hash": "sha256:7185b71b7bf811f8",
+      "operation_names": [
+        "AppsInstallations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "appslist": {
+      "document_hash": "sha256:59f50aa8eccd1e10",
+      "operation_names": [
+        "AppsList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "apptokencreate": {
+      "document_hash": "sha256:a29075d154bc4e7b",
+      "operation_names": [
+        "AppTokenCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "apptokendelete": {
+      "document_hash": "sha256:226dc02629f9d192",
+      "operation_names": [
+        "AppTokenDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "appupdate": {
+      "document_hash": "sha256:034f849c0f11bc92",
+      "operation_names": [
+        "AppUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "appupdatepermissions": {
+      "document_hash": "sha256:4e6d133542aef8b2",
+      "operation_names": [
+        "AppUpdatePermissions"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "appwebhookdeliveries": {
+      "document_hash": "sha256:f2ee54dd22f87690",
+      "operation_names": [
+        "AppWebhookDeliveries"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "assignpageattribute": {
+      "document_hash": "sha256:838933ec4cde71ed",
+      "operation_names": [
+        "AssignPageAttribute"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "assignproductattribute": {
+      "document_hash": "sha256:f01958591ea410cd",
+      "operation_names": [
+        "AssignProductAttribute"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributebulkdelete": {
+      "document_hash": "sha256:ec238d077f928f16",
+      "operation_names": [
+        "AttributeBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributecreate": {
+      "document_hash": "sha256:05f21444379407a7",
+      "operation_names": [
+        "AttributeCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributedelete": {
+      "document_hash": "sha256:defb35fd61b3af35",
+      "operation_names": [
+        "AttributeDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "attributedetails": {
+      "document_hash": "sha256:2054ceae21480b41",
+      "operation_names": [
+        "AttributeDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "attributelist": {
+      "document_hash": "sha256:f8218d56546968e9",
+      "operation_names": [
+        "AttributeList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributetranslationdetails": {
+      "document_hash": "sha256:2f3f0361dd006036",
+      "operation_names": [
+        "AttributeTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributetranslations": {
+      "document_hash": "sha256:3a0069c59fe0c781",
+      "operation_names": [
+        "AttributeTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributeupdate": {
+      "document_hash": "sha256:c1fbb9345cc77daf",
+      "operation_names": [
+        "AttributeUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributevaluecreate": {
+      "document_hash": "sha256:08dfbd79d0110fac",
+      "operation_names": [
+        "AttributeValueCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributevaluedelete": {
+      "document_hash": "sha256:412098a31222a627",
+      "operation_names": [
+        "AttributeValueDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "attributevaluereorder": {
+      "document_hash": "sha256:0bbb31759ebc9454",
+      "operation_names": [
+        "AttributeValueReorder"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "attributevalueupdate": {
+      "document_hash": "sha256:a66e2673f2ac0116",
+      "operation_names": [
+        "AttributeValueUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "availablecolumnattributes": {
+      "document_hash": "sha256:c5ceb8011251f348",
+      "operation_names": [
+        "AvailableColumnAttributes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "availableexternalauthentications": {
+      "document_hash": "sha256:705f71224644c182",
+      "operation_names": [
+        "AvailableExternalAuthentications"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "basechannels": {
+      "document_hash": "sha256:174d77aa3298debb",
+      "operation_names": [
+        "BaseChannels"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "bulkdeletegiftcard": {
+      "document_hash": "sha256:294476222ed726f0",
+      "operation_names": [
+        "BulkDeleteGiftCard"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "bulkdeleteshippingrate": {
+      "document_hash": "sha256:dcd7429a4b9c8905",
+      "operation_names": [
+        "BulkDeleteShippingRate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "bulkdeleteshippingzone": {
+      "document_hash": "sha256:3d88f4d2d1c4dba3",
+      "operation_names": [
+        "BulkDeleteShippingZone"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "bulkremovecustomers": {
+      "document_hash": "sha256:296dbba049b89a7a",
+      "operation_names": [
+        "BulkRemoveCustomers"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "categorybulkdelete": {
+      "document_hash": "sha256:cc35675bbb36315e",
+      "operation_names": [
+        "CategoryBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "categorycreate": {
+      "document_hash": "sha256:03ebe701442731e5",
+      "operation_names": [
+        "CategoryCreate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "categorydelete": {
+      "document_hash": "sha256:1d77b9c6195aafaf",
+      "operation_names": [
+        "CategoryDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "categorydetails": {
+      "document_hash": "sha256:7daa9ae0475cdb63",
+      "operation_names": [
+        "CategoryDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "categorytranslationdetails": {
+      "document_hash": "sha256:3af10cca534bf7e3",
+      "operation_names": [
+        "CategoryTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "categorytranslations": {
+      "document_hash": "sha256:3e60ae23288ff452",
+      "operation_names": [
+        "CategoryTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "categoryupdate": {
+      "document_hash": "sha256:ea345937a1144681",
+      "operation_names": [
+        "CategoryUpdate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "changeuserpassword": {
+      "document_hash": "sha256:ae1748ae9ec67c43",
+      "operation_names": [
+        "ChangeUserPassword"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "channel": {
+      "document_hash": "sha256:33870de52525ae52",
+      "operation_names": [
+        "Channel"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "channelactivate": {
+      "document_hash": "sha256:a6212e28c03a16ba",
+      "operation_names": [
+        "ChannelActivate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "channelcreate": {
+      "document_hash": "sha256:ffa91c644dbe00e1",
+      "operation_names": [
+        "ChannelCreate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "channelcurrencies": {
+      "document_hash": "sha256:95c2cce905d53e78",
+      "operation_names": [
+        "ChannelCurrencies"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "channeldeactivate": {
+      "document_hash": "sha256:ce2a601cc3dc3268",
+      "operation_names": [
+        "ChannelDeactivate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "channeldelete": {
+      "document_hash": "sha256:6f8eca77351b01aa",
+      "operation_names": [
+        "ChannelDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "channeldiagnostics": {
+      "document_hash": "sha256:b9c44aa60b9de7a7",
+      "operation_names": [
+        "ChannelDiagnostics"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "channellist": {
+      "document_hash": "sha256:28d2b88cad030a7a",
+      "operation_names": [
+        "ChannelList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "channelreorderwarehouses": {
+      "document_hash": "sha256:96deff4b4e3048cb",
+      "operation_names": [
+        "ChannelReorderWarehouses"
+      ],
+      "priority": "P0",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "channels": {
+      "document_hash": "sha256:f576077b756f5c77",
+      "operation_names": [
+        "Channels"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "channelshippingzones": {
+      "document_hash": "sha256:aacc24cd8525cc20",
+      "operation_names": [
+        "ChannelShippingZones"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "channelupdate": {
+      "document_hash": "sha256:2dad64bee5b1330d",
+      "operation_names": [
+        "ChannelUpdate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "channelusabilitydata": {
+      "document_hash": "sha256:8e9bf012e02ebda9",
+      "operation_names": [
+        "ChannelUsabilityData"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "checkexportfilestatus": {
+      "document_hash": "sha256:a49d54d22662e074",
+      "operation_names": [
+        "CheckExportFileStatus"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "checkorderinvoicesstatus": {
+      "document_hash": "sha256:8f9b5b5587a611c1",
+      "operation_names": [
+        "CheckOrderInvoicesStatus"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "checkoutlist": {
+      "document_hash": "sha256:333986e77e0cd6bf",
+      "operation_names": [
+        "CheckoutList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "clearrefundreasontype": {
+      "document_hash": "sha256:3bfd44e7fdc49989",
+      "operation_names": [
+        "ClearRefundReasonType"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "collectionassignproduct": {
+      "document_hash": "sha256:5d2ebc0483ee2046",
+      "operation_names": [
+        "CollectionAssignProduct"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "collectionbulkdelete": {
+      "document_hash": "sha256:a5cf17d73cff1d2d",
+      "operation_names": [
+        "CollectionBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "collectionchannellistingupdate": {
+      "document_hash": "sha256:7b12ae63ac4f5338",
+      "operation_names": [
+        "CollectionChannelListingUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "collectiondetails": {
+      "document_hash": "sha256:cc13d6338d8ad9c2",
+      "operation_names": [
+        "CollectionDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "collectionlist": {
+      "document_hash": "sha256:a13c47b9a78c6171",
+      "operation_names": [
+        "CollectionList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "collectionproducts": {
+      "document_hash": "sha256:da21e56b331704b7",
+      "operation_names": [
+        "CollectionProducts"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "collectiontranslationdetails": {
+      "document_hash": "sha256:fa229f26ce99ae2b",
+      "operation_names": [
+        "CollectionTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "collectiontranslations": {
+      "document_hash": "sha256:1872352ccc5f0cef",
+      "operation_names": [
+        "CollectionTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "collectionupdate": {
+      "document_hash": "sha256:ce43bb757db6c99a",
+      "operation_names": [
+        "CollectionUpdate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "confirmemailchange": {
+      "document_hash": "sha256:c220e3b1368ac0c6",
+      "operation_names": [
+        "confirmEmailChange"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "createaccountaddress": {
+      "document_hash": "sha256:ae47c69025fe87a2",
+      "operation_names": [
+        "createAccountAddress"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "createcollection": {
+      "document_hash": "sha256:0ec698e0735d7016",
+      "operation_names": [
+        "CreateCollection"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "createcustomer": {
+      "document_hash": "sha256:f6897e0ff336e8c5",
+      "operation_names": [
+        "CreateCustomer"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "createcustomeraddress": {
+      "document_hash": "sha256:a6572553d92a193d",
+      "operation_names": [
+        "CreateCustomerAddress"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "createmanualtransactioncapture": {
+      "document_hash": "sha256:95c9e3588eb9760f",
+      "operation_names": [
+        "CreateManualTransactionCapture"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "createmanualtransactionrefund": {
+      "document_hash": "sha256:c3225822af160490",
+      "operation_names": [
+        "CreateManualTransactionRefund"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "createshippingrate": {
+      "document_hash": "sha256:4e20c642983717b3",
+      "operation_names": [
+        "CreateShippingRate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "createshippingzone": {
+      "document_hash": "sha256:be97a2cbd14799e3",
+      "operation_names": [
+        "CreateShippingZone"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "customeraddresses": {
+      "document_hash": "sha256:f9ab9b32d0c15132",
+      "operation_names": [
+        "CustomerAddresses"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "customercreatedata": {
+      "document_hash": "sha256:2bd0b4fcafaebd05",
+      "operation_names": [
+        "CustomerCreateData"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "customerdetails": {
+      "document_hash": "sha256:6fe428a2cf989890",
+      "operation_names": [
+        "CustomerDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "customergiftcardlist": {
+      "document_hash": "sha256:f2ceddebafe94f94",
+      "operation_names": [
+        "CustomerGiftCardList"
+      ],
+      "priority": "P0",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "deleteaccountaddress": {
+      "document_hash": "sha256:c39a87b1e6886bf3",
+      "operation_names": [
+        "deleteAccountAddress"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "deletegiftcard": {
+      "document_hash": "sha256:d59dd1cf300e30ff",
+      "operation_names": [
+        "DeleteGiftCard"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "deleteshippingrate": {
+      "document_hash": "sha256:076368a726ae0437",
+      "operation_names": [
+        "DeleteShippingRate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "deleteshippingzone": {
+      "document_hash": "sha256:b1623a37be5faabe",
+      "operation_names": [
+        "DeleteShippingZone"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "eventdelivery": {
+      "document_hash": "sha256:a8dbf70b8e643fda",
+      "operation_names": [
+        "EventDelivery"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "exportgiftcards": {
+      "document_hash": "sha256:346dfc142abc4582",
+      "operation_names": [
+        "ExportGiftCards"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "extensionlist": {
+      "document_hash": "sha256:112f481289572425",
+      "operation_names": [
+        "ExtensionList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "externalauthenticationurl": {
+      "document_hash": "sha256:893d5545a9aa2e46",
+      "operation_names": [
+        "externalAuthenticationUrl"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "externallogout": {
+      "document_hash": "sha256:6c3e5b6c48994953",
+      "operation_names": [
+        "externalLogout"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "externalobtainaccesstokens": {
+      "document_hash": "sha256:ad777b991222a5a9",
+      "operation_names": [
+        "externalObtainAccessTokens"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "externalrefresh": {
+      "document_hash": "sha256:f9e6ce78983c9341",
+      "operation_names": [
+        "externalRefresh"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "externalrefreshwithuser": {
+      "document_hash": "sha256:b444a2ee6312b95f",
+      "operation_names": [
+        "externalRefreshWithUser"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "externalverify": {
+      "document_hash": "sha256:4328ca56b79e7432",
+      "operation_names": [
+        "externalVerify"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "fileupload": {
+      "document_hash": "sha256:5c0a0a647918f85b",
+      "operation_names": [
+        "FileUpload"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "fulfillmentreturnproducts": {
+      "document_hash": "sha256:2604189fd61eb71b",
+      "operation_names": [
+        "FulfillmentReturnProducts"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "fulfillorder": {
+      "document_hash": "sha256:b107c0e9eec4ba42",
+      "operation_names": [
+        "FulfillOrder"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "giftcardactivate": {
+      "document_hash": "sha256:1b741d722c0d24ac",
+      "operation_names": [
+        "GiftCardActivate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "giftcardaddnote": {
+      "document_hash": "sha256:134634d4eb12dfca",
+      "operation_names": [
+        "GiftCardAddNote"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcardbulkactivate": {
+      "document_hash": "sha256:5be2aff505f3ca40",
+      "operation_names": [
+        "GiftCardBulkActivate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcardbulkcreate": {
+      "document_hash": "sha256:57f487293edff2d8",
+      "operation_names": [
+        "GiftCardBulkCreate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcardbulkdeactivate": {
+      "document_hash": "sha256:a82ceb9511fb1d08",
+      "operation_names": [
+        "GiftCardBulkDeactivate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcardcreate": {
+      "document_hash": "sha256:0d14f3523f40431e",
+      "operation_names": [
+        "GiftCardCreate"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcarddeactivate": {
+      "document_hash": "sha256:89da9ca46551351b",
+      "operation_names": [
+        "GiftCardDeactivate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "giftcarddetails": {
+      "document_hash": "sha256:4f954d8fa780679f",
+      "operation_names": [
+        "GiftCardDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "giftcardlist": {
+      "document_hash": "sha256:3db0f15e7bba63c2",
+      "operation_names": [
+        "GiftCardList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcardproductscount": {
+      "document_hash": "sha256:7c46020d4e4e04a9",
+      "operation_names": [
+        "GiftCardProductsCount"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "giftcardresend": {
+      "document_hash": "sha256:4f942ab65402e9f2",
+      "operation_names": [
+        "GiftCardResend"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcardsettings": {
+      "document_hash": "sha256:7c258c9d81936c91",
+      "operation_names": [
+        "GiftCardSettings"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "giftcardsettingsupdate": {
+      "document_hash": "sha256:d11162e748d02489",
+      "operation_names": [
+        "GiftCardSettingsUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftcardtotalcount": {
+      "document_hash": "sha256:62085b57c1c940c7",
+      "operation_names": [
+        "GiftCardTotalCount"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "giftcardupdate": {
+      "document_hash": "sha256:1f265a5860ac01c3",
+      "operation_names": [
+        "GiftCardUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "giftlabels": {
+      "document_hash": "sha256:2e384c105b10f1dc",
+      "operation_names": [
+        "GiftLabels"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "globalsearch": {
+      "document_hash": "sha256:d428ee4f940c2ea1",
+      "operation_names": [
+        "GlobalSearch"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "gridattributes": {
+      "document_hash": "sha256:fed423a3e34d6721",
+      "operation_names": [
+        "GridAttributes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "gridwarehouses": {
+      "document_hash": "sha256:d6cd47bce519bc6d",
+      "operation_names": [
+        "GridWarehouses"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "installedapps": {
+      "document_hash": "sha256:4e43390b2bce98ee",
+      "operation_names": [
+        "InstalledApps"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "installedappslist": {
+      "document_hash": "sha256:fe96cfca164736bd",
+      "operation_names": [
+        "InstalledAppsList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "invoiceemailsend": {
+      "document_hash": "sha256:21dcba886ccc56f9",
+      "operation_names": [
+        "InvoiceEmailSend"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "invoicerequest": {
+      "document_hash": "sha256:4c6a44bdbb9325d5",
+      "operation_names": [
+        "InvoiceRequest"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "listcustomers": {
+      "document_hash": "sha256:cb8a54b46667d73d",
+      "operation_names": [
+        "ListCustomers"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "login": {
+      "document_hash": "sha256:7cb8b0c058bcf2ff",
+      "operation_names": [
+        "login"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "loginwithoutdetails": {
+      "document_hash": "sha256:aa6a40d5279a48cf",
+      "operation_names": [
+        "loginWithoutDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "menubulkdelete": {
+      "document_hash": "sha256:e8ce01ec65ec1898",
+      "operation_names": [
+        "MenuBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "menucreate": {
+      "document_hash": "sha256:98bfa3d3e7a2ba0b",
+      "operation_names": [
+        "MenuCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "menudelete": {
+      "document_hash": "sha256:eb13c8dcc0712ba6",
+      "operation_names": [
+        "MenuDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "menudetails": {
+      "document_hash": "sha256:67c4df9a9e082a74",
+      "operation_names": [
+        "MenuDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "menuitemcreate": {
+      "document_hash": "sha256:b69f03c9e97cd30a",
+      "operation_names": [
+        "MenuItemCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "menuitemtranslationdetails": {
+      "document_hash": "sha256:f0be6dbe87b40c26",
+      "operation_names": [
+        "MenuItemTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "menuitemtranslations": {
+      "document_hash": "sha256:103d11d960bd7222",
+      "operation_names": [
+        "MenuItemTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "menuitemupdate": {
+      "document_hash": "sha256:4812c3a26695f9b5",
+      "operation_names": [
+        "MenuItemUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "menulist": {
+      "document_hash": "sha256:f55a84360917c8e8",
+      "operation_names": [
+        "MenuList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "menuupdate": {
+      "document_hash": "sha256:c0f9a106a6a8c9d3",
+      "operation_names": [
+        "MenuUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "modelsoftype": {
+      "document_hash": "sha256:9500fffea18f9347",
+      "operation_names": [
+        "ModelsOfType"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "modeltypes": {
+      "document_hash": "sha256:2c40f17353660a12",
+      "operation_names": [
+        "ModelTypes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "navigatorsearch": {
+      "document_hash": "sha256:258d4b3e216afa5e",
+      "operation_names": [
+        "NavigatorSearch"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "ordercancel": {
+      "document_hash": "sha256:1ae04509f238db14",
+      "operation_names": [
+        "OrderCancel"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "ordercapture": {
+      "document_hash": "sha256:2e6dde3cc36adb4d",
+      "operation_names": [
+        "OrderCapture"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderconfirm": {
+      "document_hash": "sha256:2ed58087121e4108",
+      "operation_names": [
+        "OrderConfirm"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "orderdetails": {
+      "document_hash": "sha256:4e73c2e66d7fdc4e",
+      "operation_names": [
+        "OrderDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "orderdetailsgrantrefund": {
+      "document_hash": "sha256:6f225b718a1b1ad2",
+      "operation_names": [
+        "OrderDetailsGrantRefund"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "orderdetailsgrantrefundedit": {
+      "document_hash": "sha256:129cd9e4e20a8503",
+      "operation_names": [
+        "OrderDetailsGrantRefundEdit"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "orderdetailswithmetadata": {
+      "document_hash": "sha256:88777b7b54386319",
+      "operation_names": [
+        "OrderDetailsWithMetadata"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "orderdiscountadd": {
+      "document_hash": "sha256:85f377cb6a8e9064",
+      "operation_names": [
+        "OrderDiscountAdd"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "orderdiscountdelete": {
+      "document_hash": "sha256:a9d060d10b75234c",
+      "operation_names": [
+        "OrderDiscountDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "orderdiscountupdate": {
+      "document_hash": "sha256:ad568ec7df394ea8",
+      "operation_names": [
+        "OrderDiscountUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderdraftbulkcancel": {
+      "document_hash": "sha256:722843391aa08555",
+      "operation_names": [
+        "OrderDraftBulkCancel"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderdraftcancel": {
+      "document_hash": "sha256:e37622c5539d0cdb",
+      "operation_names": [
+        "OrderDraftCancel"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "orderdraftcreate": {
+      "document_hash": "sha256:dd57aabc5a787fad",
+      "operation_names": [
+        "OrderDraftCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderdraftfinalize": {
+      "document_hash": "sha256:2051519407b65167",
+      "operation_names": [
+        "OrderDraftFinalize"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "orderdraftlist": {
+      "document_hash": "sha256:3c3e9ffac0dd224d",
+      "operation_names": [
+        "OrderDraftList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderdraftupdate": {
+      "document_hash": "sha256:79907debc9e27117",
+      "operation_names": [
+        "OrderDraftUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderfulfilldata": {
+      "document_hash": "sha256:4c7ce392a0b6d4d3",
+      "operation_names": [
+        "OrderFulfillData"
+      ],
+      "priority": "P0",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "orderfulfillmentapprove": {
+      "document_hash": "sha256:1d633bead77805be",
+      "operation_names": [
+        "OrderFulfillmentApprove"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "orderfulfillmentcancel": {
+      "document_hash": "sha256:27abc1799ecc5b41",
+      "operation_names": [
+        "OrderFulfillmentCancel"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderfulfillmentrefundproducts": {
+      "document_hash": "sha256:bd3b4e75e6795016",
+      "operation_names": [
+        "OrderFulfillmentRefundProducts"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "orderfulfillmentupdatetracking": {
+      "document_hash": "sha256:fbef8cfb596d59b2",
+      "operation_names": [
+        "OrderFulfillmentUpdateTracking"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderfulfillsettings": {
+      "document_hash": "sha256:46fa0ef0c5ef8f97",
+      "operation_names": [
+        "OrderFulfillSettings"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "ordergrantrefundadd": {
+      "document_hash": "sha256:0c8dcdc88f2342ee",
+      "operation_names": [
+        "OrderGrantRefundAdd"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "ordergrantrefundaddwithorder": {
+      "document_hash": "sha256:bc7a8340c951ae09",
+      "operation_names": [
+        "OrderGrantRefundAddWithOrder"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "ordergrantrefundedit": {
+      "document_hash": "sha256:c40008d23fabbc2c",
+      "operation_names": [
+        "OrderGrantRefundEdit"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "orderlinedelete": {
+      "document_hash": "sha256:6fc7dc511d5829cc",
+      "operation_names": [
+        "OrderLineDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "orderlinediscountremove": {
+      "document_hash": "sha256:12ddcb7dbd922ea2",
+      "operation_names": [
+        "OrderLineDiscountRemove"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "orderlinediscountupdate": {
+      "document_hash": "sha256:041cd344fd2e7083",
+      "operation_names": [
+        "OrderLineDiscountUpdate"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "orderlinesadd": {
+      "document_hash": "sha256:4596875ef228514b",
+      "operation_names": [
+        "OrderLinesAdd"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderlinesmetadata": {
+      "document_hash": "sha256:566eb5a3fe6961cc",
+      "operation_names": [
+        "OrderLinesMetadata"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "orderlineupdate": {
+      "document_hash": "sha256:7ab90a4113f5830b",
+      "operation_names": [
+        "OrderLineUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderlist": {
+      "document_hash": "sha256:81cb86821cfc286d",
+      "operation_names": [
+        "OrderList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "ordermarkaspaid": {
+      "document_hash": "sha256:b2f65613c83aa367",
+      "operation_names": [
+        "OrderMarkAsPaid"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "ordernoteadd": {
+      "document_hash": "sha256:112b5f64566a749a",
+      "operation_names": [
+        "OrderNoteAdd"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "ordernoteupdate": {
+      "document_hash": "sha256:0aaa943ec58ffc7f",
+      "operation_names": [
+        "OrderNoteUpdate"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "orderrefund": {
+      "document_hash": "sha256:f4b90d92de08da3a",
+      "operation_names": [
+        "OrderRefund"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "orderrefunddata": {
+      "document_hash": "sha256:c95de3f27632d712",
+      "operation_names": [
+        "OrderRefundData"
+      ],
+      "priority": "P0",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "ordersendrefund": {
+      "document_hash": "sha256:6a1dbf0a5d206023",
+      "operation_names": [
+        "OrderSendRefund"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "ordersendrefundforgrantedrefund": {
+      "document_hash": "sha256:b223b1368acc15bb",
+      "operation_names": [
+        "OrderSendRefundForGrantedRefund"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "ordersettings": {
+      "document_hash": "sha256:cddc1667a06affd8",
+      "operation_names": [
+        "OrderSettings"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "ordersettingsupdate": {
+      "document_hash": "sha256:340eafd1d5c132cc",
+      "operation_names": [
+        "OrderSettingsUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "ordershippingmethodupdate": {
+      "document_hash": "sha256:a489587154f4d5f8",
+      "operation_names": [
+        "OrderShippingMethodUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "ordertransactionrequestaction": {
+      "document_hash": "sha256:5fe1af1ddccaa94e",
+      "operation_names": [
+        "OrderTransactionRequestAction"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "ordertransactionsdata": {
+      "document_hash": "sha256:aaf2b7f12d0d2aa0",
+      "operation_names": [
+        "OrderTransactionsData"
+      ],
+      "priority": "P0",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "orderupdate": {
+      "document_hash": "sha256:165e21853aa16f54",
+      "operation_names": [
+        "OrderUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "ordervoid": {
+      "document_hash": "sha256:841655d50acf5c7e",
+      "operation_names": [
+        "OrderVoid"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "pagebulkpublish": {
+      "document_hash": "sha256:31afd19bb9402e8f",
+      "operation_names": [
+        "PageBulkPublish"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagebulkremove": {
+      "document_hash": "sha256:3b4f20af6d79e4d6",
+      "operation_names": [
+        "PageBulkRemove"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagecount": {
+      "document_hash": "sha256:84d0d3097076184f",
+      "operation_names": [
+        "PageCount"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "pagecreate": {
+      "document_hash": "sha256:f959a188cfb3de6c",
+      "operation_names": [
+        "PageCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagedetails": {
+      "document_hash": "sha256:1e18b791549c2d8f",
+      "operation_names": [
+        "PageDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "pagelist": {
+      "document_hash": "sha256:16dbd8a8a3e13819",
+      "operation_names": [
+        "PageList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pageremove": {
+      "document_hash": "sha256:7a275c2dfeb53d1f",
+      "operation_names": [
+        "PageRemove"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "pagetranslationdetails": {
+      "document_hash": "sha256:d28376e12db83534",
+      "operation_names": [
+        "PageTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagetranslations": {
+      "document_hash": "sha256:10eab5f65bcee9f2",
+      "operation_names": [
+        "PageTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagetype": {
+      "document_hash": "sha256:7f020c9dd2354d5b",
+      "operation_names": [
+        "PageType"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "pagetypeattributereorder": {
+      "document_hash": "sha256:ff460ae7724d2f51",
+      "operation_names": [
+        "PageTypeAttributeReorder"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagetypebulkdelete": {
+      "document_hash": "sha256:0ca9634b36e03e52",
+      "operation_names": [
+        "PageTypeBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagetypecreate": {
+      "document_hash": "sha256:4cf4fa3e24c7a29f",
+      "operation_names": [
+        "PageTypeCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagetypedelete": {
+      "document_hash": "sha256:c41a021d28a104ce",
+      "operation_names": [
+        "PageTypeDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "pagetypedetails": {
+      "document_hash": "sha256:a4dd9db8f0a9d780",
+      "operation_names": [
+        "PageTypeDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "pagetypelist": {
+      "document_hash": "sha256:8b54cb9e2616ea17",
+      "operation_names": [
+        "PageTypeList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pagetypeupdate": {
+      "document_hash": "sha256:9f27574a651a4e20",
+      "operation_names": [
+        "PageTypeUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "pageupdate": {
+      "document_hash": "sha256:06e6940c94c73510",
+      "operation_names": [
+        "PageUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "passwordchange": {
+      "document_hash": "sha256:6a3444760b4b418b",
+      "operation_names": [
+        "passwordChange"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "permissiongroupcreate": {
+      "document_hash": "sha256:a94b668107588674",
+      "operation_names": [
+        "PermissionGroupCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "permissiongroupdelete": {
+      "document_hash": "sha256:3f08f4b1b7c6fe4f",
+      "operation_names": [
+        "PermissionGroupDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "permissiongroupdetails": {
+      "document_hash": "sha256:d756ed2f142ac312",
+      "operation_names": [
+        "PermissionGroupDetails"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "permissiongrouplist": {
+      "document_hash": "sha256:835da041781370a8",
+      "operation_names": [
+        "PermissionGroupList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "permissiongroupupdate": {
+      "document_hash": "sha256:cd843261efcf4af8",
+      "operation_names": [
+        "PermissionGroupUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "plugin": {
+      "document_hash": "sha256:d9d6869cb24f0ccb",
+      "operation_names": [
+        "Plugin"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "plugins": {
+      "document_hash": "sha256:8bf787488e02dfba",
+      "operation_names": [
+        "Plugins"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "pluginupdate": {
+      "document_hash": "sha256:ed5cbccb6c8c6fbc",
+      "operation_names": [
+        "PluginUpdate"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productattributeassignmentupdate": {
+      "document_hash": "sha256:af2282f34f66a0ce",
+      "operation_names": [
+        "ProductAttributeAssignmentUpdate"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productbulkdelete": {
+      "document_hash": "sha256:ca7101206532d650",
+      "operation_names": [
+        "productBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productchannellistingupdate": {
+      "document_hash": "sha256:7714161cc8bfdb75",
+      "operation_names": [
+        "ProductChannelListingUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productcount": {
+      "document_hash": "sha256:6c588ddd635d8ea8",
+      "operation_names": [
+        "ProductCount"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "productcreate": {
+      "document_hash": "sha256:60257a810fb8abcc",
+      "operation_names": [
+        "ProductCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productdelete": {
+      "document_hash": "sha256:2adc08a308790cf5",
+      "operation_names": [
+        "ProductDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "productdetails": {
+      "document_hash": "sha256:89dd0072ca017890",
+      "operation_names": [
+        "ProductDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "productexport": {
+      "document_hash": "sha256:9c787b9d2eed084e",
+      "operation_names": [
+        "ProductExport"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productlist": {
+      "document_hash": "sha256:94cf91f91d568590",
+      "operation_names": [
+        "ProductList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productmediabyid": {
+      "document_hash": "sha256:d0cdc61dcbb55df0",
+      "operation_names": [
+        "ProductMediaById"
+      ],
+      "priority": "P0",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productmediacreate": {
+      "document_hash": "sha256:ccd8d15f48f9851d",
+      "operation_names": [
+        "ProductMediaCreate"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productmediadelete": {
+      "document_hash": "sha256:9ea8021e76e81723",
+      "operation_names": [
+        "ProductMediaDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "productmediareorder": {
+      "document_hash": "sha256:7884ac1a8b82cdce",
+      "operation_names": [
+        "ProductMediaReorder"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productmediaupdate": {
+      "document_hash": "sha256:ca6c0372e03ed287",
+      "operation_names": [
+        "ProductMediaUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "producttranslationdetails": {
+      "document_hash": "sha256:26ef7d9caf68f96f",
+      "operation_names": [
+        "ProductTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "producttranslations": {
+      "document_hash": "sha256:b93bee75eaabd3bc",
+      "operation_names": [
+        "ProductTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "producttype": {
+      "document_hash": "sha256:2bbb9eaec51416c0",
+      "operation_names": [
+        "ProductType"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "producttypeattributereorder": {
+      "document_hash": "sha256:40905f053f8d505a",
+      "operation_names": [
+        "ProductTypeAttributeReorder"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "producttypebulkdelete": {
+      "document_hash": "sha256:47e46f5dfbd533d0",
+      "operation_names": [
+        "ProductTypeBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "producttypecreate": {
+      "document_hash": "sha256:01358a08809eef77",
+      "operation_names": [
+        "ProductTypeCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "producttypecreatedata": {
+      "document_hash": "sha256:2c3731b0332aea19",
+      "operation_names": [
+        "ProductTypeCreateData"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "producttypedelete": {
+      "document_hash": "sha256:e977264d8e81bd60",
+      "operation_names": [
+        "ProductTypeDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "producttypedetails": {
+      "document_hash": "sha256:a2d449b69dce1ab5",
+      "operation_names": [
+        "ProductTypeDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "producttypelist": {
+      "document_hash": "sha256:cf17472d28c54cd9",
+      "operation_names": [
+        "ProductTypeList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "producttypeupdate": {
+      "document_hash": "sha256:b2468df57b5f554f",
+      "operation_names": [
+        "ProductTypeUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productupdate": {
+      "document_hash": "sha256:e93bc0a5ccbd71e4",
+      "operation_names": [
+        "ProductUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productvariantbulkcreate": {
+      "document_hash": "sha256:ac2e6990dad587a8",
+      "operation_names": [
+        "ProductVariantBulkCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productvariantbulkdelete": {
+      "document_hash": "sha256:45392a5f533bf9f3",
+      "operation_names": [
+        "ProductVariantBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productvariantbulkupdate": {
+      "document_hash": "sha256:a61293e6f40ba0c3",
+      "operation_names": [
+        "ProductVariantBulkUpdate"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productvariantchannellistingupdate": {
+      "document_hash": "sha256:09559b77a5755244",
+      "operation_names": [
+        "ProductVariantChannelListingUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "productvariantcreatedata": {
+      "document_hash": "sha256:0b5c5bfe00fcfbec",
+      "operation_names": [
+        "ProductVariantCreateData"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "productvariantdetails": {
+      "document_hash": "sha256:c9775ebb2e41d32c",
+      "operation_names": [
+        "ProductVariantDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "productvariantlist": {
+      "document_hash": "sha256:3496468cdde043b8",
+      "operation_names": [
+        "ProductVariantList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "productvariantpreorderdeactivate": {
+      "document_hash": "sha256:a335606cc859451b",
+      "operation_names": [
+        "ProductVariantPreorderDeactivate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "productvariantreorder": {
+      "document_hash": "sha256:4032e5e94e1087c0",
+      "operation_names": [
+        "ProductVariantReorder"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productvariantsetdefault": {
+      "document_hash": "sha256:7c075c5386497ad9",
+      "operation_names": [
+        "ProductVariantSetDefault"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "productvarianttranslationdetails": {
+      "document_hash": "sha256:dd81c9e9ff8c5cf8",
+      "operation_names": [
+        "ProductVariantTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "promotioncreate": {
+      "document_hash": "sha256:8093858ef51e6193",
+      "operation_names": [
+        "PromotionCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "promotiondelete": {
+      "document_hash": "sha256:ea24442a76ea596e",
+      "operation_names": [
+        "PromotionDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "promotiondetails": {
+      "document_hash": "sha256:b2b244af58fc1955",
+      "operation_names": [
+        "PromotionDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "promotionrulecreate": {
+      "document_hash": "sha256:a726e12511762a4e",
+      "operation_names": [
+        "PromotionRuleCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "promotionruledelete": {
+      "document_hash": "sha256:fc40a9371d35112a",
+      "operation_names": [
+        "PromotionRuleDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "promotionruleupdate": {
+      "document_hash": "sha256:b7f2e8d9f4194007",
+      "operation_names": [
+        "PromotionRuleUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "promotionslist": {
+      "document_hash": "sha256:b99687f78267ba73",
+      "operation_names": [
+        "PromotionsList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "promotionupdate": {
+      "document_hash": "sha256:637b8b85418d7365",
+      "operation_names": [
+        "PromotionUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "refreshlimits": {
+      "document_hash": "sha256:ffc7fd0b50cef4ef",
+      "operation_names": [
+        "RefreshLimits"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "refreshtoken": {
+      "document_hash": "sha256:81fe396a7e97ae57",
+      "operation_names": [
+        "refreshToken"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "refreshtokenwithuser": {
+      "document_hash": "sha256:5a72df12b4cc5161",
+      "operation_names": [
+        "refreshTokenWithUser"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "refundreasonreferenceclear": {
+      "document_hash": "sha256:58c6561b7f67d57d",
+      "operation_names": [
+        "RefundReasonReferenceClear"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "refundsettings": {
+      "document_hash": "sha256:3913d970f8e99867",
+      "operation_names": [
+        "RefundSettings"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "refundsettingsupdate": {
+      "document_hash": "sha256:fd3b2b3069541eb3",
+      "operation_names": [
+        "RefundSettingsUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "refundssettings": {
+      "document_hash": "sha256:a67f222955ca7045",
+      "operation_names": [
+        "RefundsSettings"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "removecollection": {
+      "document_hash": "sha256:f7c6de736b9a582e",
+      "operation_names": [
+        "RemoveCollection"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "removecustomer": {
+      "document_hash": "sha256:40eb6f469e807e99",
+      "operation_names": [
+        "RemoveCustomer"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "removecustomeraddress": {
+      "document_hash": "sha256:e18a541b24276157",
+      "operation_names": [
+        "RemoveCustomerAddress"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "reorderproductsincollection": {
+      "document_hash": "sha256:f8b42a6affae9d12",
+      "operation_names": [
+        "ReorderProductsInCollection"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "requestemailchange": {
+      "document_hash": "sha256:4de64c5f1ab082ad",
+      "operation_names": [
+        "requestEmailChange"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "requestpasswordreset": {
+      "document_hash": "sha256:7e99dc683b6e3a55",
+      "operation_names": [
+        "RequestPasswordReset"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "rootcategories": {
+      "document_hash": "sha256:04c7b9122be29b79",
+      "operation_names": [
+        "RootCategories"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "ruleconditionsselectedoptionsdetails": {
+      "document_hash": "sha256:96311ba0183092b2",
+      "operation_names": [
+        "RuleConditionsSelectedOptionsDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "saledetails": {
+      "document_hash": "sha256:1b39d3276737e886",
+      "operation_names": [
+        "SaleDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "salelist": {
+      "document_hash": "sha256:9c03aa22a463a2ba",
+      "operation_names": [
+        "SaleList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "saletranslationdetails": {
+      "document_hash": "sha256:ef5daba994a31f52",
+      "operation_names": [
+        "SaleTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "saletranslations": {
+      "document_hash": "sha256:ca616f21a0123cd7",
+      "operation_names": [
+        "SaleTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "saveonboardingstate": {
+      "document_hash": "sha256:7823ab235cbacdcd",
+      "operation_names": [
+        "SaveOnBoardingState"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "searchattributes": {
+      "document_hash": "sha256:ae75763eb4bbd818",
+      "operation_names": [
+        "SearchAttributes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchattributevalues": {
+      "document_hash": "sha256:977d0d2f308eb483",
+      "operation_names": [
+        "SearchAttributeValues"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "searchavailableingridattributes": {
+      "document_hash": "sha256:1ed1c6ce0d61652c",
+      "operation_names": [
+        "SearchAvailableInGridAttributes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchavailablepageattributes": {
+      "document_hash": "sha256:96a461d45d534bfa",
+      "operation_names": [
+        "SearchAvailablePageAttributes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "searchavailableproductattributes": {
+      "document_hash": "sha256:788eb700c6526b3a",
+      "operation_names": [
+        "SearchAvailableProductAttributes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "searchcategories": {
+      "document_hash": "sha256:df785c331fa1e0cc",
+      "operation_names": [
+        "SearchCategories"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchcategorieswithtotalproducts": {
+      "document_hash": "sha256:bfa5d436d2803513",
+      "operation_names": [
+        "SearchCategoriesWithTotalProducts"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchcollections": {
+      "document_hash": "sha256:d665cf60cbd4e101",
+      "operation_names": [
+        "SearchCollections"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchcollectionswithtotalproducts": {
+      "document_hash": "sha256:ed0763225096fec0",
+      "operation_names": [
+        "SearchCollectionsWithTotalProducts"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchcustomers": {
+      "document_hash": "sha256:9413ef3333905794",
+      "operation_names": [
+        "SearchCustomers"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchgiftcardtags": {
+      "document_hash": "sha256:e8c21a1586cb5099",
+      "operation_names": [
+        "SearchGiftCardTags"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "searchordervariant": {
+      "document_hash": "sha256:bf41e0393e9bcd6c",
+      "operation_names": [
+        "SearchOrderVariant"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchpages": {
+      "document_hash": "sha256:8ca9fbca1927e826",
+      "operation_names": [
+        "SearchPages"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchpagetypes": {
+      "document_hash": "sha256:02dee8284a31d2be",
+      "operation_names": [
+        "SearchPageTypes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchpermissiongroups": {
+      "document_hash": "sha256:367db520670081bb",
+      "operation_names": [
+        "SearchPermissionGroups"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchproducts": {
+      "document_hash": "sha256:4d88612307675e92",
+      "operation_names": [
+        "SearchProducts"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchproducttypes": {
+      "document_hash": "sha256:527f70ed9f4501a7",
+      "operation_names": [
+        "SearchProductTypes"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchshippingzones": {
+      "document_hash": "sha256:57ba406af6ec4dda",
+      "operation_names": [
+        "SearchShippingZones"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "searchstaffmembers": {
+      "document_hash": "sha256:ba7ebc12c43cf6ef",
+      "operation_names": [
+        "SearchStaffMembers"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchvariants": {
+      "document_hash": "sha256:491d613bd94e349f",
+      "operation_names": [
+        "SearchVariants"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchvariantswithproductdata": {
+      "document_hash": "sha256:5c02af670498c310",
+      "operation_names": [
+        "SearchVariantsWithProductData"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "searchwarehouses": {
+      "document_hash": "sha256:09fe2c06955d6bbb",
+      "operation_names": [
+        "SearchWarehouses"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "setaccountdefaultaddress": {
+      "document_hash": "sha256:49b0080e49bc10dc",
+      "operation_names": [
+        "setAccountDefaultAddress"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "setcustomerdefaultaddress": {
+      "document_hash": "sha256:77a73c123aa05b4b",
+      "operation_names": [
+        "SetCustomerDefaultAddress"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "setpassword": {
+      "document_hash": "sha256:9c31465af35f03b3",
+      "operation_names": [
+        "setPassword"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "setrefundreasontype": {
+      "document_hash": "sha256:43b6fbf194cbc5de",
+      "operation_names": [
+        "SetRefundReasonType"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "shippingmethodchannellistingupdate": {
+      "document_hash": "sha256:741dadee011279e8",
+      "operation_names": [
+        "ShippingMethodChannelListingUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "shippingmethodtranslationdetails": {
+      "document_hash": "sha256:94bf93c82f9ef167",
+      "operation_names": [
+        "ShippingMethodTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "shippingmethodtranslations": {
+      "document_hash": "sha256:2a281899d72e9cbe",
+      "operation_names": [
+        "ShippingMethodTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "shippingpriceexcludeproduct": {
+      "document_hash": "sha256:0afd723d22af35f1",
+      "operation_names": [
+        "ShippingPriceExcludeProduct"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "shippingpriceremoveproductfromexclude": {
+      "document_hash": "sha256:cf081947bf982718",
+      "operation_names": [
+        "ShippingPriceRemoveProductFromExclude"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "shippingzone": {
+      "document_hash": "sha256:63ff246bf205166b",
+      "operation_names": [
+        "ShippingZone"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "shippingzonechannels": {
+      "document_hash": "sha256:b20e6c790cb8386c",
+      "operation_names": [
+        "ShippingZoneChannels"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "shippingzones": {
+      "document_hash": "sha256:21770c3ae2dbf2b2",
+      "operation_names": [
+        "ShippingZones"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "shippingzonescount": {
+      "document_hash": "sha256:8d92b71fea4ea03c",
+      "operation_names": [
+        "ShippingZonesCount"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "shopcountries": {
+      "document_hash": "sha256:76cdc46ea43e27f0",
+      "operation_names": [
+        "ShopCountries"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "shopinfo": {
+      "document_hash": "sha256:e41e092175ae7c82",
+      "operation_names": [
+        "ShopInfo"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "shopsettingsupdate": {
+      "document_hash": "sha256:84d826d1828ce4c4",
+      "operation_names": [
+        "ShopSettingsUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "sitesettings": {
+      "document_hash": "sha256:d6b0161659d2095f",
+      "operation_names": [
+        "SiteSettings"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "stafflist": {
+      "document_hash": "sha256:1ded5af5fd311500",
+      "operation_names": [
+        "StaffList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "staffmemberadd": {
+      "document_hash": "sha256:9167262d413245f4",
+      "operation_names": [
+        "StaffMemberAdd"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "staffmemberdelete": {
+      "document_hash": "sha256:be0d19871c36f825",
+      "operation_names": [
+        "StaffMemberDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "staffmemberdetails": {
+      "document_hash": "sha256:8af4fa02e8d5cc80",
+      "operation_names": [
+        "StaffMemberDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "staffmemberupdate": {
+      "document_hash": "sha256:57ab0b1cabd034cf",
+      "operation_names": [
+        "StaffMemberUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "stockvisibilitymode": {
+      "document_hash": "sha256:f6c32323af45f101",
+      "operation_names": [
+        "StockVisibilityMode"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "taxclassassign": {
+      "document_hash": "sha256:f27063f330b93db2",
+      "operation_names": [
+        "TaxClassAssign"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "taxclasscreate": {
+      "document_hash": "sha256:ee97b975cf2a4a48",
+      "operation_names": [
+        "TaxClassCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "taxclassdelete": {
+      "document_hash": "sha256:7b867b47f48b92d5",
+      "operation_names": [
+        "TaxClassDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "taxclasseslist": {
+      "document_hash": "sha256:d1ea8436d50ccb1d",
+      "operation_names": [
+        "TaxClassesList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "taxclassupdate": {
+      "document_hash": "sha256:c5ade74e1333d031",
+      "operation_names": [
+        "TaxClassUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "taxconfigurationslist": {
+      "document_hash": "sha256:764e757c05a76cd3",
+      "operation_names": [
+        "TaxConfigurationsList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "taxconfigurationupdate": {
+      "document_hash": "sha256:e2ebf3b950abcfa0",
+      "operation_names": [
+        "TaxConfigurationUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "taxcountrieslist": {
+      "document_hash": "sha256:25d85fdd2c65c360",
+      "operation_names": [
+        "TaxCountriesList"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "taxcountryconfigurationdelete": {
+      "document_hash": "sha256:311d8430ab6ef14b",
+      "operation_names": [
+        "TaxCountryConfigurationDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "taxcountryconfigurationupdate": {
+      "document_hash": "sha256:18db5a8cb3bb993c",
+      "operation_names": [
+        "TaxCountryConfigurationUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "taxstrategychoices": {
+      "document_hash": "sha256:3856f852893ac867",
+      "operation_names": [
+        "TaxStrategyChoices"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "triggerwebhookdryrun": {
+      "document_hash": "sha256:ad5c8c0a9691a60a",
+      "operation_names": [
+        "TriggerWebhookDryRun"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "unassigncollectionproduct": {
+      "document_hash": "sha256:89001624015262db",
+      "operation_names": [
+        "UnassignCollectionProduct"
+      ],
+      "priority": "P0",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "unassignpageattribute": {
+      "document_hash": "sha256:f855438fe4ae682b",
+      "operation_names": [
+        "UnassignPageAttribute"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "unassignproductattribute": {
+      "document_hash": "sha256:e685ff33e1e7ef74",
+      "operation_names": [
+        "UnassignProductAttribute"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateaccountaddress": {
+      "document_hash": "sha256:8b7093351421db3c",
+      "operation_names": [
+        "updateAccountAddress"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateattributetranslations": {
+      "document_hash": "sha256:b5aee59b704b398f",
+      "operation_names": [
+        "UpdateAttributeTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateattributevaluetranslations": {
+      "document_hash": "sha256:beb0768832d3ef74",
+      "operation_names": [
+        "UpdateAttributeValueTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatecategorytranslations": {
+      "document_hash": "sha256:3d5c86d788dfa269",
+      "operation_names": [
+        "UpdateCategoryTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatecollectiontranslations": {
+      "document_hash": "sha256:c4fd47e177ef8848",
+      "operation_names": [
+        "UpdateCollectionTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatecustomer": {
+      "document_hash": "sha256:a161eaaa3ba024a8",
+      "operation_names": [
+        "UpdateCustomer"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatecustomeraddress": {
+      "document_hash": "sha256:7ef86f01f93b1b1c",
+      "operation_names": [
+        "UpdateCustomerAddress"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatedefaultweightunit": {
+      "document_hash": "sha256:64823d4dac22b18c",
+      "operation_names": [
+        "UpdateDefaultWeightUnit"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "updatemenuitemtranslations": {
+      "document_hash": "sha256:b1a4222f85fc3927",
+      "operation_names": [
+        "UpdateMenuItemTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatemetadata": {
+      "document_hash": "sha256:5ad397f7a2f51984",
+      "operation_names": [
+        "UpdateMetadata"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatepagetranslations": {
+      "document_hash": "sha256:492363871b5a56ed",
+      "operation_names": [
+        "UpdatePageTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateprivatemetadata": {
+      "document_hash": "sha256:35d27ff5a12495e2",
+      "operation_names": [
+        "UpdatePrivateMetadata"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateproducttranslations": {
+      "document_hash": "sha256:e36d853eb7bda831",
+      "operation_names": [
+        "UpdateProductTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateproductvarianttranslations": {
+      "document_hash": "sha256:af32d01d5dee8a56",
+      "operation_names": [
+        "UpdateProductVariantTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatesaletranslations": {
+      "document_hash": "sha256:3972c7d864656361",
+      "operation_names": [
+        "UpdateSaleTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateshippingmethodtranslations": {
+      "document_hash": "sha256:9bee4c44e1842e73",
+      "operation_names": [
+        "UpdateShippingMethodTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateshippingrate": {
+      "document_hash": "sha256:eb1a58eafa0a952d",
+      "operation_names": [
+        "UpdateShippingRate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updateshippingzone": {
+      "document_hash": "sha256:a08a4bbf9684baf0",
+      "operation_names": [
+        "UpdateShippingZone"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "updatevouchertranslations": {
+      "document_hash": "sha256:fce26cb19360ca3f",
+      "operation_names": [
+        "UpdateVoucherTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "user": {
+      "document_hash": "sha256:0d00fa6c59574a8a",
+      "operation_names": [
+        "User"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "auth_error"
+    },
+    "useraccountupdate": {
+      "document_hash": "sha256:f1227b11b7666748",
+      "operation_names": [
+        "UserAccountUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "useravatardelete": {
+      "document_hash": "sha256:c11cf1418bf6991f",
+      "operation_names": [
+        "UserAvatarDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "useravatarupdate": {
+      "document_hash": "sha256:62bb35b57276b684",
+      "operation_names": [
+        "UserAvatarUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "userdetails": {
+      "document_hash": "sha256:861fe852f2501464",
+      "operation_names": [
+        "UserDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "userpassowrdchange": {
+      "document_hash": "sha256:d8d4813235f9159a",
+      "operation_names": [
+        "UserPassowrdChange"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "userwithoutdetails": {
+      "document_hash": "sha256:ac53f1e578f152a6",
+      "operation_names": [
+        "UserWithoutDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "auth_error"
+    },
+    "variantcreate": {
+      "document_hash": "sha256:dea7d9386ba36d99",
+      "operation_names": [
+        "VariantCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "variantdelete": {
+      "document_hash": "sha256:0a98858afcaf62a0",
+      "operation_names": [
+        "VariantDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "variantmediaassign": {
+      "document_hash": "sha256:f8387d018e897a77",
+      "operation_names": [
+        "VariantMediaAssign"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "variantmediaunassign": {
+      "document_hash": "sha256:e44eff73000f5ee5",
+      "operation_names": [
+        "VariantMediaUnassign"
+      ],
+      "priority": "P1",
+      "recorded": false,
+      "golden_contract": null
+    },
+    "variantupdate": {
+      "document_hash": "sha256:0e7857feb3f0dce0",
+      "operation_names": [
+        "VariantUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "verifytoken": {
+      "document_hash": "sha256:9b743acb68dd71a2",
+      "operation_names": [
+        "verifyToken"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "voucherbulkdelete": {
+      "document_hash": "sha256:6125662b768171c2",
+      "operation_names": [
+        "VoucherBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "vouchercataloguesadd": {
+      "document_hash": "sha256:9cb73a9f077df0b5",
+      "operation_names": [
+        "VoucherCataloguesAdd"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "vouchercataloguesremove": {
+      "document_hash": "sha256:be7a7304ff0633cf",
+      "operation_names": [
+        "VoucherCataloguesRemove"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "voucherchannellistingupdate": {
+      "document_hash": "sha256:189fbe82d7dab079",
+      "operation_names": [
+        "VoucherChannelListingUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "vouchercodebulkdelete": {
+      "document_hash": "sha256:992ac1f2ef1a0eef",
+      "operation_names": [
+        "VoucherCodeBulkDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "vouchercodes": {
+      "document_hash": "sha256:5ca2acce4e70bf89",
+      "operation_names": [
+        "VoucherCodes"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "vouchercreate": {
+      "document_hash": "sha256:ee0258ba98918094",
+      "operation_names": [
+        "VoucherCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "voucherdelete": {
+      "document_hash": "sha256:a3f9e55cbd8e4d35",
+      "operation_names": [
+        "VoucherDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "voucherdetails": {
+      "document_hash": "sha256:79a641acf64f6a56",
+      "operation_names": [
+        "VoucherDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "voucherlist": {
+      "document_hash": "sha256:107878d82601d47c",
+      "operation_names": [
+        "VoucherList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "vouchertranslationdetails": {
+      "document_hash": "sha256:05ea0bb4ec868912",
+      "operation_names": [
+        "VoucherTranslationDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "vouchertranslations": {
+      "document_hash": "sha256:2c7089bb0ac7de07",
+      "operation_names": [
+        "VoucherTranslations"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "voucherupdate": {
+      "document_hash": "sha256:3f75333884a47808",
+      "operation_names": [
+        "VoucherUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "warehousecreate": {
+      "document_hash": "sha256:31f64d73d9e50fea",
+      "operation_names": [
+        "WarehouseCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "warehousedelete": {
+      "document_hash": "sha256:2e958b5717f50baa",
+      "operation_names": [
+        "WarehouseDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "warehousedetails": {
+      "document_hash": "sha256:b4055ac8bdbf7e3e",
+      "operation_names": [
+        "WarehouseDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "warehouselist": {
+      "document_hash": "sha256:abc964ca47b6ca80",
+      "operation_names": [
+        "WarehouseList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "warehousescount": {
+      "document_hash": "sha256:f255520ba6786bcd",
+      "operation_names": [
+        "WarehousesCount"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "warehouseupdate": {
+      "document_hash": "sha256:c6f1c1f9057c943b",
+      "operation_names": [
+        "WarehouseUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "webhookcreate": {
+      "document_hash": "sha256:44c10d13a13fdafc",
+      "operation_names": [
+        "WebhookCreate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "webhookdelete": {
+      "document_hash": "sha256:5398f6c1785f2d61",
+      "operation_names": [
+        "WebhookDelete"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "webhookdetails": {
+      "document_hash": "sha256:eda6662839f93c8b",
+      "operation_names": [
+        "WebhookDetails"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "webhookupdate": {
+      "document_hash": "sha256:8e16a74087e8d7fc",
+      "operation_names": [
+        "WebhookUpdate"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "welcomepageactivities": {
+      "document_hash": "sha256:996f809945eeac76",
+      "operation_names": [
+        "WelcomePageActivities"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "welcomepageanalytics": {
+      "document_hash": "sha256:ef28a439092998f2",
+      "operation_names": [
+        "WelcomePageAnalytics"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "welcomepagenotifications": {
+      "document_hash": "sha256:6870644cd3cf1626",
+      "operation_names": [
+        "welcomePageNotifications"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    }
+  }
+}

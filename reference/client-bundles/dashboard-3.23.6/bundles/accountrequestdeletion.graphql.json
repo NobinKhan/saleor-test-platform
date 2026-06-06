@@ -1,0 +1,45 @@
+{
+  "bundle_id": "accountrequestdeletion",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/mutations.ts",
+  "operation_names": [
+    "accountRequestDeletion"
+  ],
+  "document": "mutation accountRequestDeletion($channel: String!, $redirectUrl: String!) {\n  accountRequestDeletion(channel: $channel, redirectUrl: $redirectUrl) {\n    errors {\n      ...AccountErrorFragment\n    }\n  }\n}\n\nfragment AccountErrorFragment on AccountError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "redirectUrl": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "accountRequestDeletion": {
+        "errors": [
+          {
+            "code": "INVALID",
+            "field": "redirectUrl",
+            "message": "Invalid URL. Please check if URL is in RFC 1808 format."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:00b8c1c2d57baa5d",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "accountrequestdeletion",
+    "expected_null": true
+  },
+  "document_hash": "sha256:ba5330063998dd02"
+}

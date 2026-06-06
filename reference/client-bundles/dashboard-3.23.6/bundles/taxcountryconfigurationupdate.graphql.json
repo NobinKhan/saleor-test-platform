@@ -1,0 +1,47 @@
+{
+  "bundle_id": "taxcountryconfigurationupdate",
+  "source": "saleor-dashboard",
+  "source_path": "taxes/mutations.ts",
+  "operation_names": [
+    "TaxCountryConfigurationUpdate"
+  ],
+  "document": "mutation TaxCountryConfigurationUpdate($countryCode: CountryCode!, $updateTaxClassRates: [TaxClassRateInput!]!) {\n  taxCountryConfigurationUpdate(\n    countryCode: $countryCode\n    updateTaxClassRates: $updateTaxClassRates\n  ) {\n    errors {\n      ...TaxCountryConfigurationUpdateError\n    }\n  }\n}\n\nfragment TaxCountryConfigurationUpdateError on TaxCountryConfigurationUpdateError {\n  field\n  code\n  message\n}",
+  "variables": {
+    "countryCode": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"updateTaxClassRates\" of required type [TaxClassRateInput!]!\" provided the variable \"$updateTaxClassRates\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"updateTaxClassRates\" of required type [TaxClassRateInput!]!\" provided the variable \"$updateTaxClassRates\" which was not provided"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "taxcountryconfigurationupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:18db5a8cb3bb993c"
+}

@@ -1,0 +1,32 @@
+{
+  "bundle_id": "stockvisibilitymode",
+  "source": "saleor-dashboard",
+  "source_path": "products/queries.ts",
+  "operation_names": [
+    "StockVisibilityMode"
+  ],
+  "document": "query StockVisibilityMode {\n  shop {\n    id\n    useLegacyShippingZoneStockAvailability\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "id": "U2hvcDox",
+        "useLegacyShippingZoneStockAvailability": true
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:c0f9d48f275cb016",
+  "document_hash": "sha256:f6c32323af45f101"
+}

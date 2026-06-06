@@ -1,10 +1,4272 @@
 {
   "saleor_version": "3.23.7",
   "saleor_url": "http://saleor-api:8000/graphql/",
-  "captured_at": "2026-06-05T17:56:13.319063+00:00",
+  "captured_at": "2026-06-06T07:28:06.796735+00:00",
   "probe_count": 414,
-  "corpus_hash": "sha256:b1522749b37bee0518994b4008e5d86f6a15674db0fae3c1e57f333b0a66d34c",
-  "auth_mode": "staff",
+  "corpus_hash": "sha256:c6a77dea7bd64226d19bd7327410152db07806e10d2a2e55d0b7af3037207cf4",
+  "operations_index": {
+    "_entities__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "25fe968b0c57b254",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "_entities",
+        "expected_null": true,
+        "message_pattern": "Invalid type for 'representation' field: must be an object",
+        "optional_path": [
+          "_entities"
+        ]
+      }
+    },
+    "_service__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7a14e85a72ac9180",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "accountAddressCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "403a99bf9766bf01",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "accountAddressCreate",
+        "expected_null": false
+      }
+    },
+    "accountAddressDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "be1454794048b89d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "accountAddressDelete",
+        "expected_null": false
+      }
+    },
+    "accountAddressUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "41bd2a3c52c0b64d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "accountAddressUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "accountDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c65b87f0a790f454",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "accountDelete",
+        "expected_null": false
+      }
+    },
+    "accountRegister__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "116373414940f75c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "accountRegister",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "accountRequestDeletion__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ee07faf4cd2df317",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "accountRequestDeletion",
+        "expected_null": false
+      }
+    },
+    "accountSetDefaultAddress__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "68816a0853503753",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "accountSetDefaultAddress",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "accountUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4e1b6b6771b04150",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "addressCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "364dd28d01408537",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "addressCreate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "addressDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "dc07575a2d7b491a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "addressDelete",
+        "expected_null": false
+      }
+    },
+    "addressSetDefault__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "879870dad744bd20",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "addressSetDefault",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "addressUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7b76d2c36419f2ac",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "addressUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "addressValidationRules__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4b74a7a41160da70",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "addressValidationRules",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "address__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "90f1f3d5e7cf5a0b",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "address",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "address"
+        ]
+      }
+    },
+    "appActivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "863ceff9e79d8ec1",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appActivate",
+        "expected_null": false
+      }
+    },
+    "appCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c8eb8e12a29777c2",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appCreate",
+        "expected_null": false
+      }
+    },
+    "appDeactivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "99a41d4f7fe83ce8",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appDeactivate",
+        "expected_null": false
+      }
+    },
+    "appDeleteFailedInstallation__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "545abe5c8b0dc966",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appDeleteFailedInstallation",
+        "expected_null": false
+      }
+    },
+    "appDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bbd316598a786939",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appDelete",
+        "expected_null": false
+      }
+    },
+    "appExtension__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "560b8962b494016f",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "appExtension",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "appExtension"
+        ]
+      }
+    },
+    "appExtensions__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a3705f864316359e",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "appFetchManifest__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2ee2cdc363c7a24b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appFetchManifest",
+        "expected_null": false
+      }
+    },
+    "appInstall__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "672ee8e890a2a973",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "appInstall",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "appProblemCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4e93ef2c4750a2d0",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "appProblemCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "appProblemDismiss__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "14beed8b5864fad3",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appProblemDismiss",
+        "expected_null": false
+      }
+    },
+    "appReenableSyncWebhooks__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "056fc1b496becccf",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appReenableSyncWebhooks",
+        "expected_null": false
+      }
+    },
+    "appRetryInstall__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "89510b577545deb6",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appRetryInstall",
+        "expected_null": false
+      }
+    },
+    "appTokenCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a5b142eb21cacf5c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "appTokenCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "appTokenDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "53b9d08e68884e8c",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "appTokenDelete",
+        "expected_null": false
+      }
+    },
+    "appTokenVerify__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e988a8954f314169",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "appUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "abf4bffff3d3f517",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "appUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "app__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "030451174deac54d",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "app",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "app"
+        ]
+      }
+    },
+    "appsInstallations__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ebc5a134f2488d48",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "apps__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ad546aaf66ef7f64",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "assignNavigation__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8b145286c46a671d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "assignNavigation",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "assignWarehouseShippingZone__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "584bc26f4ae42e69",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "assignWarehouseShippingZone",
+        "expected_null": false
+      }
+    },
+    "attributeBulkCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b04f8f1759bd04b1",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeBulkCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "attributeBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f8f66b32a4c22984",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeBulkDelete",
+        "expected_null": true,
+        "message_pattern": "Could not resolve to a node with the global id list of '['00000000-0000-0000-000",
+        "optional_path": [
+          "attributeBulkDelete"
+        ]
+      }
+    },
+    "attributeBulkTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7b17a72591d14d46",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeBulkTranslate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "attributeBulkUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "dd2b41597d8456f4",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeBulkUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "attributeCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4e192445b0362e17",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "attributeDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4903e883eb63271f",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "attributeDelete",
+        "expected_null": false
+      }
+    },
+    "attributeReorderValues__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d1469abc4ac4ef1d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeReorderValues",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "attributeTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5eca5572839c707a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "attributeUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4c0f686b41a5cbd2",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "attributeUpdate",
+        "expected_null": false
+      }
+    },
+    "attributeValueBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "965c98b29e63dbd8",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeValueBulkDelete",
+        "expected_null": true,
+        "message_pattern": "Could not resolve to a node with the global id list of '['00000000-0000-0000-000",
+        "optional_path": [
+          "attributeValueBulkDelete"
+        ]
+      }
+    },
+    "attributeValueBulkTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "81f1efacb6337fef",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeValueBulkTranslate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "attributeValueCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c5dfed000eb2a2ba",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeValueCreate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "attributeValueDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ec234033ee47e8dd",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "attributeValueDelete",
+        "expected_null": false
+      }
+    },
+    "attributeValueTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f95bf4315cf451df",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "attributeValueTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "attributeValueUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "1fa5402982e2275a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "attributeValueUpdate",
+        "expected_null": false
+      }
+    },
+    "attribute__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c05956298a859121",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "attribute",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "attribute"
+        ]
+      }
+    },
+    "attributes__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bcc16b661808560d",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "categories__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6a170fcce6aa3db3",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "categoryBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "70852c3e790152e0",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "categoryBulkDelete",
+        "expected_null": false
+      }
+    },
+    "categoryCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6bcd431e5b563f3e",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "categoryCreate",
+        "expected_null": false
+      }
+    },
+    "categoryDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5f599f737df0531d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "categoryDelete",
+        "expected_null": false
+      }
+    },
+    "categoryTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "42f53f2d80a3092a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "categoryTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "categoryUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "feb855c15872d40f",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "categoryUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "category__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a671a944477a537f",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "category",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "category"
+        ]
+      }
+    },
+    "channelActivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ccda8f451c6e5330",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "channelActivate",
+        "expected_null": false
+      }
+    },
+    "channelCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "addea13a5c35e471",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "channelCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "channelDeactivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2cd62aa591f2c274",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "channelDeactivate",
+        "expected_null": false
+      }
+    },
+    "channelDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8b33c51290254c5b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "channelDelete",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "channelReorderWarehouses__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2cdb69be5bc492ff",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "channelReorderWarehouses",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "channelUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "221ad74cb174d3dd",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "channelUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "channel__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0db0faa396f2b030",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "channel",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "channel"
+        ]
+      }
+    },
+    "channels__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "14e3278a94eb786e",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "checkoutAddPromoCode__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ee43b1aadd37ad8d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutAddPromoCode",
+        "expected_null": false
+      }
+    },
+    "checkoutBillingAddressUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f5d6b4e2c72de41c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutBillingAddressUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "checkoutComplete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "907ecc6f8bc3b457",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutComplete",
+        "expected_null": false
+      }
+    },
+    "checkoutCreateFromOrder__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "683378e89d9a96e3",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutCreateFromOrder",
+        "expected_null": false
+      }
+    },
+    "checkoutCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "82c994ecc11f334f",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "checkoutCustomerAttach__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f967e4bdfe909fd7",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutCustomerAttach",
+        "expected_null": false
+      }
+    },
+    "checkoutCustomerDetach__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3eda2da5f541732f",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutCustomerDetach",
+        "expected_null": false
+      }
+    },
+    "checkoutCustomerNoteUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "35e9877155b9529e",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutCustomerNoteUpdate",
+        "expected_null": false
+      }
+    },
+    "checkoutDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3bc677815184d407",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutDelete",
+        "expected_null": false
+      }
+    },
+    "checkoutDeliveryMethodUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "665acbfa0eaf4f61",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutDeliveryMethodUpdate",
+        "expected_null": false
+      }
+    },
+    "checkoutEmailUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d038a6f45939be69",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutEmailUpdate",
+        "expected_null": false
+      }
+    },
+    "checkoutLanguageCodeUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b7ca0f1057d70b19",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutLanguageCodeUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "checkoutLinesAdd__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e0f10950f0c2024a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutLinesAdd",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "checkoutLinesDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e9634e1b9870b49c",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutLinesDelete",
+        "expected_null": false
+      }
+    },
+    "checkoutLinesUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3073a24910d8603d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutLinesUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "checkoutLines__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d9907c7c33609582",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "checkoutPaymentCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "409bd8fec18bb862",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutPaymentCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "checkoutRemovePromoCode__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f535fed88f4efad6",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "checkoutRemovePromoCode",
+        "expected_null": false
+      }
+    },
+    "checkoutShippingAddressUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "69b5eb82abdbe3fd",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutShippingAddressUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "checkoutShippingMethodUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "677a3123a4c91054",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutShippingMethodUpdate",
+        "expected_null": true,
+        "message_pattern": "Unknown argument \"input\" on field \"checkoutShippingMethodUpdate\" of type \"Mutati"
+      }
+    },
+    "checkoutUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "578a9faf53e0c63e",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "checkoutUpdate",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"checkoutUpdate\" on type \"Mutation\". Did you mean \"checkoutCr"
+      }
+    },
+    "checkout__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e4c549bef204ebc0",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "checkout",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "checkout"
+        ]
+      }
+    },
+    "checkouts__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8c2e621a1d97ee37",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "collectionAddProducts__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "88efd97d333cb95e",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "collectionAddProducts",
+        "expected_null": false
+      }
+    },
+    "collectionBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9b02799bd2caee25",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "collectionBulkDelete",
+        "expected_null": false
+      }
+    },
+    "collectionChannelListingUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "215fb359b85bdc94",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "collectionChannelListingUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "collectionCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e1d1e4639ba0ae7b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "collectionCreate",
+        "expected_null": false
+      }
+    },
+    "collectionDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "73fc5d8a0d3bdf5a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "collectionDelete",
+        "expected_null": false
+      }
+    },
+    "collectionRemoveProducts__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4d3e8aae0163bfe9",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "collectionRemoveProducts",
+        "expected_null": false
+      }
+    },
+    "collectionReorderProducts__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3887edb08d219aa5",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "collectionReorderProducts",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "collectionTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a8d8d810d96258a9",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "collectionTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "collectionUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2c4f1c41341753d0",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "collectionUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "collection__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "208c4cb6f8cad60c",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "collection",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "collection"
+        ]
+      }
+    },
+    "collections__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "294cd3cc52cb0954",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "confirmAccount__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7b54078516e77992",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "confirmAccount",
+        "expected_null": false
+      }
+    },
+    "confirmEmailChange__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d965e28ee1fe6504",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "confirmEmailChange",
+        "expected_null": false
+      }
+    },
+    "createWarehouse__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2fc5b8a406f1e36c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "createWarehouse",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "customerBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "08fe9cad4d56d5e9",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "customerBulkDelete",
+        "expected_null": false
+      }
+    },
+    "customerBulkUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "1e2649df458e8f13",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "customerBulkUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "customerCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b270819f4938c60a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "customerCreate",
+        "expected_null": false
+      }
+    },
+    "customerDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bba434366d46c510",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "customerDelete",
+        "expected_null": false
+      }
+    },
+    "customerUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c25e037e51a51a4b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "customerUpdate",
+        "expected_null": false
+      }
+    },
+    "customers__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4b7d6a3d4f5aa1e3",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "deleteMetadata__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a2f9ce9c7d0ae9a8",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "deleteMetadata",
+        "expected_null": false
+      }
+    },
+    "deletePrivateMetadata__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "160c78065af1eeb0",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "deletePrivateMetadata",
+        "expected_null": false
+      }
+    },
+    "deleteWarehouse__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b54d673c8f6958b6",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "deleteWarehouse",
+        "expected_null": false
+      }
+    },
+    "deliveryOptionsCalculate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "aa2a1210bdd739ce",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "deliveryOptionsCalculate",
+        "expected_null": false
+      }
+    },
+    "draftOrderBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "22b18666e5b22d2c",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "draftOrderBulkDelete",
+        "expected_null": false
+      }
+    },
+    "draftOrderComplete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "60a46e97f9631e5a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "draftOrderComplete",
+        "expected_null": false
+      }
+    },
+    "draftOrderCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ff960993b521aa8d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "draftOrderCreate",
+        "expected_null": false
+      }
+    },
+    "draftOrderDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d4be4905c1756bff",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "draftOrderDelete",
+        "expected_null": false
+      }
+    },
+    "draftOrderUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f0e7aa82fcc5da59",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "draftOrderUpdate",
+        "expected_null": false
+      }
+    },
+    "draftOrders__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "207042337d967a9c",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "eventDeliveryRetry__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "aaa8c45a5339b922",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "eventDeliveryRetry",
+        "expected_null": false
+      }
+    },
+    "exportFile__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4280de918a53227b",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "exportFile",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "exportFile"
+        ]
+      }
+    },
+    "exportFiles__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c67a91c82fadc884",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "externalAuthenticationUrl__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a0bdb1befbbe8ada",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "externalAuthenticationUrl",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "externalLogout__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "232fd0ee3899523f",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "externalLogout",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "externalObtainAccessTokens__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d98e44fc0a54ee7a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "externalObtainAccessTokens",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "externalRefresh__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "380eb492dec9fd3e",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "externalRefresh",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "externalVerify__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "67c0885ef048c1b3",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "externalVerify",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "fileUpload__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7691c8fcfe0d1b0f",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "fileUpload",
+        "expected_null": true,
+        "message_pattern": "StringValue(value='test')",
+        "optional_path": [
+          "fileUpload"
+        ]
+      }
+    },
+    "giftCardActivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f4a8935e49458366",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "giftCardActivate",
+        "expected_null": false
+      }
+    },
+    "giftCardAddNote__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2393f6de9c9010f9",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "giftCardAddNote",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "giftCardBulkActivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4f96dc530c8e87a7",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "giftCardBulkActivate",
+        "expected_null": false
+      }
+    },
+    "giftCardBulkCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2c1b6bea761209ca",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "giftCardBulkCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "giftCardBulkDeactivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b1392fd2084078e1",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "giftCardBulkDeactivate",
+        "expected_null": false
+      }
+    },
+    "giftCardBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f903c6fe6f995aaa",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "giftCardBulkDelete",
+        "expected_null": false
+      }
+    },
+    "giftCardCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "89a3a804020bdf5f",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "giftCardCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "giftCardCurrencies__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c418eff208165caf",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "giftCardCurrencies",
+        "expected_null": true,
+        "message_pattern": "Field \"giftCardCurrencies\" of type \"[String!]!\" must not have a sub selection."
+      }
+    },
+    "giftCardDeactivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2952ab21d11d27c7",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "giftCardDeactivate",
+        "expected_null": false
+      }
+    },
+    "giftCardDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9e95a453af66f046",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "giftCardDelete",
+        "expected_null": false
+      }
+    },
+    "giftCardResend__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c6d37eeceb3e620b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "giftCardResend",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "giftCardSettingsUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "91c7aecb82d807e4",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "giftCardSettings__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f6b6a54188debe4c",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "giftCardTags__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bfc64915caa1f990",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "giftCardUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "974741d6f6449af2",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "giftCardUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "giftCard__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8faa13299a62d6d1",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "giftCard",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "giftCard"
+        ]
+      }
+    },
+    "giftCards__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "db1bff0486e62fba",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "invoiceCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e81e88f5df420975",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "invoiceCreate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "invoiceDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "68bc44fe55518ec9",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "invoiceDelete",
+        "expected_null": false
+      }
+    },
+    "invoiceRequestDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a46adf5614cbc6c9",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "invoiceRequestDelete",
+        "expected_null": false
+      }
+    },
+    "invoiceRequest__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "19cab3add970d1b2",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "invoiceRequest",
+        "expected_null": false
+      }
+    },
+    "invoiceSendNotification__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d230646f8af84b62",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "invoiceSendNotification",
+        "expected_null": false
+      }
+    },
+    "invoiceUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4681767416034439",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "invoiceUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "languages__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2a579f95397a56f6",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "languages",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"languages\" on type \"Query\"."
+      }
+    },
+    "me__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6f36502c7b9658f7",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "menuBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5e325b235b19c660",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "menuBulkDelete",
+        "expected_null": false
+      }
+    },
+    "menuCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "cb59e8ee4ca34a07",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "menuCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "menuDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ac922dbb0f8138e8",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "menuDelete",
+        "expected_null": false
+      }
+    },
+    "menuItemBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6b0a28b2c7c191ba",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "menuItemBulkDelete",
+        "expected_null": false
+      }
+    },
+    "menuItemCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a85622c607c7e1cd",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "menuItemCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "menuItemDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "384a8bce8ab9c401",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "menuItemDelete",
+        "expected_null": false
+      }
+    },
+    "menuItemMove__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6384ab47c62f0e43",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "menuItemMove",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "menuItemTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "df5c296348947a0d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "menuItemTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "menuItemUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "09033112b101d6a9",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "menuItemUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "menuItem__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b3133f2657d5ceb1",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "menuItem",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "menuItem"
+        ]
+      }
+    },
+    "menuItems__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "53ac5baefa16c45a",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "menuUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4b9604d5ff78be92",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "menuUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "menu__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2c627e03de7c8483",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "menu",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "menu"
+        ]
+      }
+    },
+    "menus__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "37d5a6b1571e7d99",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "meta__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3f34590cd69c8d9c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "meta",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"meta\" on type \"Query\". Did you mean \"menu\" or \"me\"?"
+      }
+    },
+    "orderBulkCancel__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "29261aa4ac9f33cf",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderBulkCancel",
+        "expected_null": false
+      }
+    },
+    "orderBulkCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8a9919d7cba696b3",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderBulkCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "orderCancel__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "950bdd5320672108",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderCancel",
+        "expected_null": false
+      }
+    },
+    "orderCapture__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0e87478dc3118c41",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderCapture",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "orderConfirm__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "523cabcbfe2498b6",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderConfirm",
+        "expected_null": false
+      }
+    },
+    "orderCreateFromCheckout__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a1e09dcb87bbc7c3",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderCreateFromCheckout",
+        "expected_null": true,
+        "message_pattern": "<auth>",
+        "optional_path": [
+          "orderCreateFromCheckout"
+        ]
+      }
+    },
+    "orderCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e0855bbee3112376",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderCreate",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"orderCreate\" on type \"Mutation\". Did you mean \"orderUpdate\","
+      }
+    },
+    "orderDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e853d2d23fe72bdf",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderDelete",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"orderDelete\" on type \"Mutation\". Did you mean \"pageDelete\", "
+      }
+    },
+    "orderDiscountAdd__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "450fdcac4e61afe1",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderDiscountAdd",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderDiscountDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e20079c4e9b569ca",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderDiscountDelete",
+        "expected_null": false
+      }
+    },
+    "orderDiscountUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "30538ee649d19edb",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderDiscountUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderFulfill__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9852657fe15fb956",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderFulfill",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "orderFulfillmentApprove__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9525cc50ae91f0d7",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderFulfillmentApprove",
+        "expected_null": false
+      }
+    },
+    "orderFulfillmentCancel__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "18fddfb3af983dc6",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderFulfillmentCancel",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderFulfillmentRefundProducts__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d8156b974067424b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderFulfillmentRefundProducts",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderFulfillmentReturnProducts__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8cfb8c0dc4502de7",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderFulfillmentReturnProducts",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderFulfillmentUpdateTracking__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "58ed1d8d0b9d1c27",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderFulfillmentUpdateTracking",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderGrantRefundCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "32196f6951e79024",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderGrantRefundCreate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderGrantRefundUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "043b9b9a2b2059d3",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderGrantRefundUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderLineAdd__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a5b36cc4874565a3",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderLineAdd",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"orderLineAdd\" on type \"Mutation\". Did you mean \"orderNoteAdd"
+      }
+    },
+    "orderLineDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "63b053d597fae151",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderLineDelete",
+        "expected_null": false
+      }
+    },
+    "orderLineDiscountRemove__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "68589170a3739a51",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderLineDiscountRemove",
+        "expected_null": false
+      }
+    },
+    "orderLineDiscountUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5e46c6afaa6f34ce",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderLineDiscountUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderLineUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "244c77843d6a6381",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderLineUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderLinesCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "13742acb91603635",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderLinesCreate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderMarkAsPaid__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8366895b4edb1e51",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderMarkAsPaid",
+        "expected_null": false
+      }
+    },
+    "orderNoteAdd__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9252b68e2e288e57",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderNoteAdd",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderNoteUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d693561d9d545f2a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderNoteUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderRefund__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2979f8a92bf40a08",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderRefund",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "orderUpdateShipping__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b22a05a09320bdef",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "orderUpdateShipping",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "orderUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7aa4646d0c6b8ac7",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderUpdate",
+        "expected_null": false
+      }
+    },
+    "orderVoid__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6ae9f982defd4d56",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "orderVoid",
+        "expected_null": false
+      }
+    },
+    "order__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7f76f16a2cbdc9f8",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "order",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "order"
+        ]
+      }
+    },
+    "ordersByUser__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bf77a32e068a6601",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "ordersByUser",
+        "expected_null": true,
+        "message_pattern": "<auth>"
+      }
+    },
+    "ordersDraft__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "79f2706b559070ed",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "ordersDraft",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"ordersDraft\" on type \"Query\". Did you mean \"orders\" or \"orde"
+      }
+    },
+    "orders__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "64a2dbf9ee3e315e",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "pageAttributeAssign__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8011ecdeb5a73509",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageAttributeAssign",
+        "expected_null": false
+      }
+    },
+    "pageAttributeUnassign__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a080a373ec8b807a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageAttributeUnassign",
+        "expected_null": false
+      }
+    },
+    "pageBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "862eccd7d4582910",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageBulkDelete",
+        "expected_null": false
+      }
+    },
+    "pageBulkPublish__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9dad7b96bf150e41",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageBulkPublish",
+        "expected_null": false
+      }
+    },
+    "pageCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b0ffda19d8496193",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "pageCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "pageDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "10bb6e5cfb65ec6d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageDelete",
+        "expected_null": false
+      }
+    },
+    "pageReorderAttributeValues__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "91b615928734c115",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "pageReorderAttributeValues",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "pageTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "1a497d2c732447e7",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "pageTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "pageTypeBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "13a546a9fd90a4bc",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageTypeBulkDelete",
+        "expected_null": false
+      }
+    },
+    "pageTypeCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "02d7908c632793bb",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageTypeCreate",
+        "expected_null": false
+      }
+    },
+    "pageTypeDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ebd31debf1f601dc",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageTypeDelete",
+        "expected_null": false
+      }
+    },
+    "pageTypeReorderAttributes__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f689e07c69539729",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "pageTypeReorderAttributes",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "pageTypeUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2a7982824717eccd",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "pageTypeUpdate",
+        "expected_null": false
+      }
+    },
+    "pageType__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "90b9ab8e6425384a",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "pageType",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "pageType"
+        ]
+      }
+    },
+    "pageTypes__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "520f0628110ba8f3",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "pageUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "753371865b5bd422",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "pageUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "page__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "17bd5d71b04e6cc4",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "page",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "page"
+        ]
+      }
+    },
+    "pages__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c072a086a2cc5210",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "passwordChange__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ea73fe942f1e9b53",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "passwordChange",
+        "expected_null": false
+      }
+    },
+    "paymentCapture__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ec89a4fd34654a0a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "paymentCapture",
+        "expected_null": false
+      }
+    },
+    "paymentCheckBalance__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "28a8b21321bb9b79",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "paymentCheckBalance",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "paymentGatewayInitializeTokenization__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a36760b3cc8453d1",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "paymentGatewayInitializeTokenization",
+        "expected_null": false
+      }
+    },
+    "paymentGatewayInitialize__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "166e067a3fd7bdde",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "paymentGatewayInitialize",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "paymentGatewayInitialize"
+        ]
+      }
+    },
+    "paymentGateways__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9b35183909b2e107",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "paymentGateways",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"paymentGateways\" on type \"Query\". Did you mean \"payments\"?"
+      }
+    },
+    "paymentInitialize__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2c2fb65db2206218",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "paymentInitialize",
+        "expected_null": true,
+        "message_pattern": "<required>",
+        "optional_path": [
+          "paymentInitialize"
+        ]
+      }
+    },
+    "paymentMethodInitializeTokenization__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f3f435dba7b775a4",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "paymentMethodInitializeTokenization",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "paymentMethodProcessTokenization__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "88436da97a61da57",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "paymentMethodProcessTokenization",
+        "expected_null": false
+      }
+    },
+    "paymentRefund__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6708889aa969755c",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "paymentRefund",
+        "expected_null": false
+      }
+    },
+    "paymentVoid__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b314edc82d858507",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "paymentVoid",
+        "expected_null": false
+      }
+    },
+    "payment__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "fc6be831d6df19c7",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "payment",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "payment"
+        ]
+      }
+    },
+    "payments__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8bb5663a6c9f3b4e",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "permissionGroupCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0eec58ed1b0f77e1",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "permissionGroupCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "permissionGroupDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0abb1499a6a7540b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "permissionGroupDelete",
+        "expected_null": false
+      }
+    },
+    "permissionGroupUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c16e52f67e8261d2",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "permissionGroupUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "permissionGroup__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a452c6ce5c56a847",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "permissionGroup",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "permissionGroup"
+        ]
+      }
+    },
+    "permissionGroups__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f1d5d64c4957503c",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "pluginUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "973bf9090170ec61",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "pluginUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "plugin__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a855911abff47525",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "plugins__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "160ecaec89cab37a",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "productAttributeAssign__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "acd62f950d6eca1c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productAttributeAssign",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productAttributeAssignmentUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a726fb1421ccb0d6",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productAttributeAssignmentUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productAttributeUnassign__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "104661e6860c745b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productAttributeUnassign",
+        "expected_null": false
+      }
+    },
+    "productBulkCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "dd6c3b1877529a3a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productBulkCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3ac6a2618abdc323",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productBulkDelete",
+        "expected_null": false
+      }
+    },
+    "productBulkTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5277325bcb129992",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productBulkTranslate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productChannelListingUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "766b75cb3753a4e6",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productChannelListingUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "productCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c4ddac114d508bac",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "251d576cf59f72de",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productDelete",
+        "expected_null": false
+      }
+    },
+    "productMediaBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d276abe223992335",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productMediaBulkDelete",
+        "expected_null": false
+      }
+    },
+    "productMediaCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2489e7054352f4b7",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productMediaCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productMediaDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e92df72c4e39cc90",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productMediaDelete",
+        "expected_null": false
+      }
+    },
+    "productMediaReorder__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c51956f63b09e28f",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productMediaReorder",
+        "expected_null": false
+      }
+    },
+    "productMediaUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "23146f8025510833",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productMediaUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "productReorderAttributeValues__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "da69e4e17efee070",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productReorderAttributeValues",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "57ad111254f89cfa",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "productTypeBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8fb0a82815393247",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productTypeBulkDelete",
+        "expected_null": false
+      }
+    },
+    "productTypeCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "eb81fd101d4af7f8",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productTypeCreate",
+        "expected_null": false
+      }
+    },
+    "productTypeDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "90066721bf83762e",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productTypeDelete",
+        "expected_null": false
+      }
+    },
+    "productTypeReorderAttributes__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "93bf0ba7328d6ffc",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productTypeReorderAttributes",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productTypeUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ea177c767d6ddcba",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productTypeUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "productType__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e527c58afd4fed1d",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "productType",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "productType"
+        ]
+      }
+    },
+    "productTypes__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "dfedf53eb3d551fb",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "productUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "13ae49bfe8a0e3a0",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productUpdate",
+        "expected_null": false
+      }
+    },
+    "productVariantBulkCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "1eb06b59fbe35866",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantBulkCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c4dbf18b8fb9b476",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantBulkDelete",
+        "expected_null": true,
+        "message_pattern": "<required>",
+        "optional_path": [
+          "productVariantBulkDelete"
+        ]
+      }
+    },
+    "productVariantBulkTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0cc8490f81ded157",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantBulkTranslate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantBulkUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "78e50e1939f1f021",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantBulkUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantChannelListingUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6e75d168cfe4be57",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantChannelListingUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "026b197a3a6c33de",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "975fe9b8b8be1119",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productVariantDelete",
+        "expected_null": false
+      }
+    },
+    "productVariantPreorderDeactivate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "73f4807531611036",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productVariantPreorderDeactivate",
+        "expected_null": false
+      }
+    },
+    "productVariantReorderAttributeValues__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2c16bb0ed646e04d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantReorderAttributeValues",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantReorder__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "1578e73ef1c2624b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantReorder",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantSetDefault__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bcd95623e6518eb8",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productVariantSetDefault",
+        "expected_null": false
+      }
+    },
+    "productVariantStocksCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "51a323d1edccd7e6",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantStocksCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantStocksDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6a0bc652f02eb16f",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productVariantStocksDelete",
+        "expected_null": false
+      }
+    },
+    "productVariantStocksUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4c6b22c40f8de2b9",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantStocksUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "productVariantTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ff2a4de488a07ed1",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productVariantTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "productVariantUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0c543db5679d9e0d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "productVariantUpdate",
+        "expected_null": false
+      }
+    },
+    "productVariant__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e7bf3302f1699361",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "productVariant",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "productVariant"
+        ]
+      }
+    },
+    "productVariants__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d394bdc46fa88efc",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "product__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "76d216ae77308858",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "product",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "product"
+        ]
+      }
+    },
+    "products__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "315d4e7d8525b4a4",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "promotionBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2d5bca56dce62682",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "promotionBulkDelete",
+        "expected_null": false
+      }
+    },
+    "promotionCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "713fd046d82aa94d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "promotionCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "promotionDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "75d309c377646e84",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "promotionDelete",
+        "expected_null": false
+      }
+    },
+    "promotionRuleCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9914a92624fedf67",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "promotionRuleCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "promotionRuleDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e8390b9b2eecaf60",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "promotionRuleDelete",
+        "expected_null": false
+      }
+    },
+    "promotionRuleTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c5ea3be20a0a7110",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "promotionRuleTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "promotionRuleUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9c1cdfa3b67fdaa3",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "promotionRuleUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "promotionTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "080b9d6c96208a95",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "promotionTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "promotionUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b440bb261736bd6a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "promotionUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "promotion__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6ab09a50d7e32b5e",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "promotion",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "promotion"
+        ]
+      }
+    },
+    "promotions__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2367a3d7fb3e0d14",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "refundReasonReferenceClear__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8754696fbb11ee82",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "refundSettingsUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "730643fd040a99f7",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "refundSettingsUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "refundSettings__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bd40bf4aa8a3eb18",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "requestEmailChange__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "eb7cfa63ce8dfaa2",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "requestEmailChange",
+        "expected_null": false
+      }
+    },
+    "requestPasswordReset__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7d452d43d45e56f3",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "requestPasswordReset",
+        "expected_null": false
+      }
+    },
+    "resetPassword__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "57234fc18e9a285a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "resetPassword",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"resetPassword\" on type \"Mutation\". Did you mean \"setPassword"
+      }
+    },
+    "saleBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0bf069e2ba183f32",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "saleBulkDelete",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "saleBulkDelete"
+        ]
+      }
+    },
+    "saleCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "fa544cf94c17b7e6",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "saleDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "44cd597a8c6cfbb6",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "saleDelete",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "saleUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3c917f265fd4e8d2",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "saleUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "sale__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d0016397c6bccf95",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "sales__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ca3e4cc03e682bcc",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "sendConfirmationEmail__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0bf16579df13358d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "sendConfirmationEmail",
+        "expected_null": false
+      }
+    },
+    "setPassword__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3198cd3f0be1c366",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "setPassword",
+        "expected_null": false
+      }
+    },
+    "shippingMethodChannelListingUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "669084c878f23065",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingMethodChannelListingUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "shippingMethodCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d2a2297eb483211a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingMethodCreate",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"shippingMethodCreate\" on type \"Mutation\". Did you mean \"ship"
+      }
+    },
+    "shippingMethodDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7995a0b742217b5c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingMethodDelete",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"shippingMethodDelete\" on type \"Mutation\". Did you mean \"ship"
+      }
+    },
+    "shippingMethodUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2ae6f0fa589961f8",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingMethodUpdate",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"shippingMethodUpdate\" on type \"Mutation\". Did you mean \"ship"
+      }
+    },
+    "shippingMethods__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2a0e042c04b3d50f",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingZones",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"price\" on type \"ShippingMethodType\"."
+      }
+    },
+    "shippingPriceBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "788018405941ae91",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shippingPriceBulkDelete",
+        "expected_null": false
+      }
+    },
+    "shippingPriceCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "059c991991774b15",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shippingPriceCreate",
+        "expected_null": false
+      }
+    },
+    "shippingPriceDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9ad1d1c2d05a44ea",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shippingPriceDelete",
+        "expected_null": false
+      }
+    },
+    "shippingPriceExcludeProducts__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e85eecc19c5d2db8",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingPriceExcludeProducts",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "shippingPriceRemoveProductFromExclude__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "22d546b982c1197c",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shippingPriceRemoveProductFromExclude",
+        "expected_null": false
+      }
+    },
+    "shippingPriceTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c2fd7ec5def35ae7",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingPriceTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "shippingPriceUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f7e7a18e162cc322",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingPriceUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "shippingZoneBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ef3518407a9217fa",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shippingZoneBulkDelete",
+        "expected_null": false
+      }
+    },
+    "shippingZoneCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ba13b1fc1de1cd7b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shippingZoneCreate",
+        "expected_null": false
+      }
+    },
+    "shippingZoneDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8b5ddcce534fb471",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shippingZoneDelete",
+        "expected_null": false
+      }
+    },
+    "shippingZoneUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3b719191d9f607cc",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shippingZoneUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "shippingZone__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d66ecaea16d560ed",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "shippingZone",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "shippingZone"
+        ]
+      }
+    },
+    "shippingZones__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5c26273464d33a43",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "shopAddressUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b112d58cdfb6ccbf",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "shopAddressUpdate",
+        "expected_null": false
+      }
+    },
+    "shopDomainUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2c1cabf66af5d9ea",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "shopSettingsTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f63180850b26785c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "shopSettingsTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "shopSettingsUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2b15eea133de130e",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "shop__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c77df92aed757c4e",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "staffBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4c984359a0f4c6e2",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "staffBulkDelete",
+        "expected_null": true,
+        "message_pattern": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000",
+        "optional_path": [
+          "staffBulkDelete"
+        ]
+      }
+    },
+    "staffCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f048491978814f6d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "staffCreate",
+        "expected_null": false
+      }
+    },
+    "staffDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0865ddfc803e2099",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "staffDelete",
+        "expected_null": false
+      }
+    },
+    "staffNotificationRecipientCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8eacdf5c97e0612a",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "staffNotificationRecipientCreate",
+        "expected_null": false
+      }
+    },
+    "staffNotificationRecipientDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "6962ab86e50d9851",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "staffNotificationRecipientDelete",
+        "expected_null": false
+      }
+    },
+    "staffNotificationRecipientUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b59f2053485e592b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "staffNotificationRecipientUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "staffUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4c27ed3ef6161546",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "staffUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "staffUsers__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "01084fa02d5b47d9",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "stockBulkUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9538110ba5679fba",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "stockBulkUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "stock__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "32fb5e92ccd1ffa9",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "stock",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "stock"
+        ]
+      }
+    },
+    "stocks__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "329b231938fe753f",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "storedPaymentMethodRequestDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5e87c53ac3489491",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "storedPaymentMethodRequestDelete",
+        "expected_null": false
+      }
+    },
+    "taxClassCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b477aa52b252f325",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "taxClassCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "taxClassDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "adb760fd54357ae2",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "taxClassDelete",
+        "expected_null": false
+      }
+    },
+    "taxClassUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "66e389cb7cb4f77b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "taxClassUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "taxClass__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2cb588cdb51d46d9",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "taxClass",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "taxClass"
+        ]
+      }
+    },
+    "taxClasses__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ab825e280d084261",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "taxConfigurationUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "fe3f9976c0f8a8ef",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "taxConfigurationUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "taxConfiguration__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "be16280efde3884a",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "taxConfiguration",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "taxConfiguration"
+        ]
+      }
+    },
+    "taxConfigurations__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "20df03f9bb370155",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "taxCountryConfigurationDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4e4d2909c187b802",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "taxCountryConfigurationDelete",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "taxCountryConfigurationUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bac9e9aeb8a7a72a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "taxCountryConfigurationUpdate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "taxCountryConfiguration__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "767007e22cb93026",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "taxCountryConfiguration",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "taxCountryConfigurations__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "65deab5138558c60",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "taxExemptionManage__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "191afe92087b4912",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "taxExemptionManage",
+        "expected_null": false
+      }
+    },
+    "tokenCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "47d9bf580f3a0d5b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "tokenCreate",
+        "expected_null": false
+      }
+    },
+    "tokenRefresh__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "8a07e968e6581454",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "tokenRefresh",
+        "expected_null": false
+      }
+    },
+    "tokenVerify__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "659a0c25e9291364",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "tokenVerify",
+        "expected_null": false
+      }
+    },
+    "tokensDeactivateAll__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "7243d51972df9d0d",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "transactionCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b8946b167e499d0a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "transactionCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "transactionEventReport__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "86e12ac97979eae9",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "transactionEventReport",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "transactionInitialize__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "be3ab820f077436c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "transactionInitialize",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "transactionProcess__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "c45c916988b577e7",
+      "golden_contract": null,
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "transactionProcess",
+        "expected_null": false
+      }
+    },
+    "transactionRequestAction__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "38d68cd99917669e",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "transactionRequestAction",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      }
+    },
+    "transactionRequestRefundForGrantedRefund__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "acf3bf2b6371f4be",
+      "golden_contract": null,
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "transactionRequestRefundForGrantedRefund",
+        "expected_null": false
+      }
+    },
+    "transactionUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "4c25a3841a54d6f6",
+      "golden_contract": null,
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "transactionUpdate",
+        "expected_null": false
+      }
+    },
+    "transaction__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "704ba69b69710574",
+      "golden_contract": null,
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "transaction",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "transaction"
+        ]
+      }
+    },
+    "transactions__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "afe6722d45bc2786",
+      "golden_contract": null,
+      "semantic_profile": null
+    },
+    "translation__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "0bdd07f621182480",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "translation",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "translations__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "04bfe60bcdee484d",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "translations",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "unassignWarehouseShippingZone__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "edc87a2340304949",
+      "golden_contract": null,
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "unassignWarehouseShippingZone",
+        "expected_null": false
+      }
+    },
+    "updateMetadata__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "292148055cb4ecc2",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "updateMetadata",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "updatePrivateMetadata__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "740277f00a39223c",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "updatePrivateMetadata",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "updateWarehouse__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "d1ba0b533b3c5dbe",
+      "golden_contract": null,
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "updateWarehouse",
+        "expected_null": false
+      }
+    },
+    "userAvatarDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9256c61afca427f5",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "userAvatarUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "42ae6ae8bb82c167",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "userAvatarUpdate",
+        "expected_null": false
+      }
+    },
+    "userBulkSetActive__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "fbf3b3f4ca91cde4",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "userBulkSetActive",
+        "expected_null": false
+      }
+    },
+    "user__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "227aaf88647dde3d",
+      "golden_contract": null,
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "user",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "user"
+        ]
+      }
+    },
+    "users__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "72d6764d7141d275",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "users",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"users\" on type \"Query\". Did you mean \"user\", \"orders\", \"vouc"
+      }
+    },
+    "variantMediaAssign__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f7416b8ecef6675b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "variantMediaAssign",
+        "expected_null": false
+      }
+    },
+    "variantMediaUnassign__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "3909238629e872b1",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "variantMediaUnassign",
+        "expected_null": false
+      }
+    },
+    "voucherBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "f98a34f75c5c1058",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "voucherBulkDelete",
+        "expected_null": false
+      }
+    },
+    "voucherCataloguesAdd__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5d8d75638b716607",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "voucherCataloguesAdd",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "voucherCataloguesRemove__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ac159474acc3bb89",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "voucherCataloguesRemove",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "voucherChannelListingUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "b32cf268b1fabf32",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "voucherChannelListingUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "voucherCodeBulkDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "19f05f8e8c0c6b22",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "voucherCodeBulkDelete",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"field\" on type \"VoucherCodeBulkDeleteError\"."
+      }
+    },
+    "voucherCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "38b97eca3c349b50",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "voucherCreate",
+        "expected_null": false
+      }
+    },
+    "voucherDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "212ba8e7fe4933fd",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "voucherDelete",
+        "expected_null": false
+      }
+    },
+    "voucherTranslate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "ae634c5cdd2f5827",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "voucherTranslate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "voucherUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "775e04b2a226234f",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "voucherUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "voucher__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9ad1752d135d17eb",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "voucher",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "voucher"
+        ]
+      }
+    },
+    "vouchers__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2e5790e6f0d89c89",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "warehouseCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "41dc9b15da0a52fa",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "warehouseCreate",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"warehouseCreate\" on type \"Mutation\". Did you mean \"webhookCr"
+      }
+    },
+    "warehouseDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "9781b0f25d96be4a",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "warehouseDelete",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"warehouseDelete\" on type \"Mutation\". Did you mean \"webhookDe"
+      }
+    },
+    "warehouseUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "bfe819d8a3dda0d8",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "warehouseUpdate",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"warehouseUpdate\" on type \"Mutation\". Did you mean \"webhookUp"
+      }
+    },
+    "warehouse__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2d14f23ad35f8ed4",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "warehouse",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "warehouse"
+        ]
+      }
+    },
+    "warehouses__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "a68c4c7ee9e0cb9c",
+      "golden_contract": "success",
+      "semantic_profile": null
+    },
+    "webhookCreate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "dbace1e67753146b",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "webhookCreate",
+        "expected_null": false
+      }
+    },
+    "webhookDelete__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "e7111699617cb7c8",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "webhookDelete",
+        "expected_null": false
+      }
+    },
+    "webhookDryRun__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "99b180e1001b15ba",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "webhookDryRun",
+        "expected_null": false
+      }
+    },
+    "webhookEvents__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "11ed1cab768ec56b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "webhookEvents",
+        "expected_null": true,
+        "message_pattern": "Cannot query field \"eventTypes\" on type \"WebhookEvent\". Did you mean \"eventType\""
+      }
+    },
+    "webhookSamplePayload__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "dbd4c7b0ad77fc2b",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "webhookSamplePayload",
+        "expected_null": true,
+        "message_pattern": "Field \"webhookSamplePayload\" of type \"JSONString\" must not have a sub selection."
+      }
+    },
+    "webhookTrigger__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "2b978a8c91f2d07d",
+      "golden_contract": "business_error",
+      "semantic_profile": {
+        "contract": "business_error",
+        "data_path": "webhookTrigger",
+        "expected_null": false
+      }
+    },
+    "webhookUpdate__MUTATION": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "5535642c790780ee",
+      "golden_contract": "graphql_error",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "webhookUpdate",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      }
+    },
+    "webhook__QUERY": {
+      "recorded_at": "2026-06-06T07:28:06.796735+00:00",
+      "input_hash": "dcd90cb23cbe6eb6",
+      "golden_contract": "not_found",
+      "semantic_profile": {
+        "contract": "not_found",
+        "data_path": "webhook",
+        "expected_null": true,
+        "message_pattern": "<invalid_id>",
+        "optional_path": [
+          "webhook"
+        ]
+      }
+    }
+  },
   "reference_queries": [
     "webhook",
     "webhookSamplePayload",

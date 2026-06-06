@@ -1,0 +1,31 @@
+{
+  "bundle_id": "plugin",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "Plugin"
+  ],
+  "document": "query Plugin($id: ID!) {\n  plugin(id: $id) {\n    ...PluginsDetails\n  }\n}\n\nfragment PluginsDetails on Plugin {\n  id\n  name\n  description\n  globalConfiguration {\n    ...PluginConfigurationExtended\n  }\n  channelConfigurations {\n    ...PluginConfigurationExtended\n  }\n}\n\nfragment PluginConfigurationExtended on PluginConfiguration {\n  ...PluginConfigurationBase\n  configuration {\n    ...ConfigurationItem\n  }\n}\n\nfragment PluginConfigurationBase on PluginConfiguration {\n  active\n  channel {\n    id\n    name\n    slug\n  }\n}\n\nfragment ConfigurationItem on ConfigurationItem {\n  name\n  value\n  type\n  helpText\n  label\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "plugin": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6ffc88b434cdca24",
+  "document_hash": "sha256:d9d6869cb24f0ccb"
+}

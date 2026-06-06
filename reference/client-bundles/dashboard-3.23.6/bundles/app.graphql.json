@@ -1,0 +1,99 @@
+{
+  "bundle_id": "app",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "App"
+  ],
+  "document": "query App($id: ID!, $hasManagedAppsPermission: Boolean!) {\n  app(id: $id) {\n    ...App\n    aboutApp\n    author\n    permissions {\n      code\n      name\n    }\n    dataPrivacyUrl\n    brand {\n      logo {\n        default(size: 64, format: WEBP)\n      }\n    }\n  }\n}\n\nfragment App on App {\n  id\n  name\n  created\n  isActive\n  type\n  homepageUrl\n  appUrl\n  manifestUrl\n  configurationUrl\n  supportUrl\n  version\n  accessToken\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n  privateMetadata @include(if: $hasManagedAppsPermission) {\n    key\n    value\n  }\n  metadata @include(if: $hasManagedAppsPermission) {\n    key\n    value\n  }\n  tokens @include(if: $hasManagedAppsPermission) {\n    authToken\n    id\n    name\n  }\n  webhooks @include(if: $hasManagedAppsPermission) {\n    ...Webhook\n  }\n}\n\nfragment Webhook on Webhook {\n  id\n  name\n  isActive\n  app {\n    id\n    name\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "hasManagedAppsPermission": true
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: App.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "app"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/promise/promise.py\", line 87, in try_catch",
+              "    return (handler(*args, **kwargs), None)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/app/schema.py\", line 147, in resolve_app",
+              "    return resolve_app(info, id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/app/resolvers.py\", line 64, in resolve_app",
+              "    _, id = from_global_id_or_error(id, \"App\")",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: App."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "app": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 3,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:141f7f5c3b2be95f",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "app",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "app"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "app"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:dbfdbf2e6b2f2647"
+}

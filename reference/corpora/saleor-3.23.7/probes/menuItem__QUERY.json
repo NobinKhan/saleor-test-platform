@@ -70,5 +70,14 @@
   "response_shape_hash": "sha256:c6332f2ddfeca835",
   "golden_contract": "not_found",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "menuItem",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "menuItem"
+    ]
+  }
 }

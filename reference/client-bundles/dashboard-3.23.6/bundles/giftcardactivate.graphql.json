@@ -1,0 +1,45 @@
+{
+  "bundle_id": "giftcardactivate",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardUpdate/GiftCardUpdatePageHeader/mutations.ts",
+  "operation_names": [
+    "GiftCardActivate"
+  ],
+  "document": "mutation GiftCardActivate($id: ID!) {\n  giftCardActivate(id: $id) {\n    errors {\n      ...GiftCardError\n    }\n    giftCard {\n      ...GiftCardData\n    }\n  }\n}\n\nfragment GiftCardError on GiftCardError {\n  code\n  field\n  message\n}\n\nfragment GiftCardData on GiftCard {\n  ...Metadata\n  last4CodeChars\n  boughtInChannel\n  createdBy {\n    ...UserBase\n  }\n  product {\n    id\n    name\n  }\n  usedBy {\n    ...UserBase\n  }\n  usedByEmail\n  createdByEmail\n  created\n  expiryDate\n  lastUsedOn\n  isActive\n  initialBalance {\n    ...Money\n  }\n  currentBalance {\n    ...Money\n  }\n  id\n  tags {\n    name\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment UserBase on User {\n  id\n  firstName\n  lastName\n}\n\nfragment Money on Money {\n  amount\n  currency\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "giftCardActivate": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "giftCardId",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: GiftCard."
+          }
+        ],
+        "giftCard": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 3,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:4c116b34d8913ded",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "giftcardactivate",
+    "expected_null": true
+  },
+  "document_hash": "sha256:1b741d722c0d24ac"
+}

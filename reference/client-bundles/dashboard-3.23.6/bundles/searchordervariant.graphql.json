@@ -1,0 +1,45 @@
+{
+  "bundle_id": "searchordervariant",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useOrderVariantSearch.ts",
+  "operation_names": [
+    "SearchOrderVariant"
+  ],
+  "document": "query SearchOrderVariant($channel: String!, $first: Int!, $query: String!, $after: String, $address: AddressInput, $isPublished: Boolean, $stockAvailability: StockAvailability) {\n  search: products(\n    first: $first\n    after: $after\n    filter: {search: $query, isPublished: $isPublished, stockAvailability: $stockAvailability}\n    channel: $channel\n  ) {\n    edges {\n      node {\n        id\n        name\n        thumbnail {\n          url\n        }\n        variants {\n          id\n          name\n          sku\n          pricing(address: $address) {\n            priceUndiscounted {\n              gross {\n                ...Money\n              }\n            }\n            price {\n              gross {\n                ...Money\n              }\n            }\n            onSale\n          }\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n      hasPreviousPage\n      startCursor\n    }\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "first": 10,
+    "query": "",
+    "after": "",
+    "address": null,
+    "isPublished": false,
+    "stockAvailability": null
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "search": {
+        "edges": [],
+        "pageInfo": {
+          "endCursor": null,
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": null
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 40,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
+  "document_hash": "sha256:bf41e0393e9bcd6c"
+}

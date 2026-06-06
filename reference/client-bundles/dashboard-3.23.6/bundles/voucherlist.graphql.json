@@ -1,0 +1,102 @@
+{
+  "bundle_id": "voucherlist",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/queries.ts",
+  "operation_names": [
+    "VoucherList"
+  ],
+  "document": "query VoucherList($after: String, $before: String, $first: Int, $last: Int, $filter: VoucherFilterInput, $sort: VoucherSortingInput, $channel: String) {\n  vouchers(\n    after: $after\n    before: $before\n    first: $first\n    last: $last\n    filter: $filter\n    sortBy: $sort\n    channel: $channel\n  ) {\n    edges {\n      node {\n        ...Voucher\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment Voucher on Voucher {\n  ...Metadata\n  id\n  name\n  startDate\n  endDate\n  usageLimit\n  type\n  discountValueType\n  countries {\n    code\n    country\n  }\n  minCheckoutItemsQuantity\n  channelListings {\n    id\n    channel {\n      id\n      name\n      currencyCode\n    }\n    discountValue\n    currency\n    minSpent {\n      amount\n      currency\n    }\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "after": "",
+    "before": "",
+    "first": 10,
+    "last": 10,
+    "filter": null,
+    "sort": null,
+    "channel": "{{fixtures.default_channel}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument `last` cannot be combined with `first`.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "vouchers"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
+              "    return wrapped_resolver(obj, info, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/discount/schema.py\", line 189, in resolve_vouchers",
+              "    return create_connection_slice(qs, info, kwargs, VoucherCountableConnection)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
+              "    slice = connection_from_queryset_slice(",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
+              "    _validate_connection_args(args)",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
+              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
+              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "vouchers": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 80,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:f02fd126ed9011db",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "voucherlist",
+    "expected_null": true,
+    "message_pattern": "Argument `last` cannot be combined with `first`.",
+    "optional_path": [
+      "vouchers"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "vouchers"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:107878d82601d47c"
+}

@@ -1,0 +1,51 @@
+{
+  "bundle_id": "searchcategorieswithtotalproducts",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useCategorySearch.ts",
+  "operation_names": [
+    "SearchCategoriesWithTotalProducts"
+  ],
+  "document": "query SearchCategoriesWithTotalProducts($after: String, $first: Int!, $filter: CategoryFilterInput) {\n  search: categories(after: $after, first: $first, filter: $filter) {\n    edges {\n      node {\n        ...CategoryWithTotalProducts\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment CategoryWithTotalProducts on Category {\n  id\n  name\n  products {\n    totalCount\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "after": "",
+    "first": 10,
+    "filter": null
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "search": {
+        "edges": [
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MQ==",
+              "name": "Default Category",
+              "products": {
+                "totalCount": 0
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": "WyIxIl0=",
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": "WyIxIl0="
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 20,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:2da92286800ac348",
+  "document_hash": "sha256:bfa5d436d2803513"
+}

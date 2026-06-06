@@ -1,0 +1,15 @@
+{
+  "bundle_id": "reorderproductsincollection",
+  "source": "saleor-dashboard",
+  "source_path": "collections/mutations.ts",
+  "operation_names": [
+    "ReorderProductsInCollection"
+  ],
+  "document": "mutation ReorderProductsInCollection($collectionId: ID!, $moves: [MoveProductInput!]!) {\n  collectionReorderProducts(collectionId: $collectionId, moves: $moves) {\n    errors {\n      message\n    }\n  }\n}",
+  "variables": {
+    "collectionId": "{{fixtures.default_collection_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:f8b42a6affae9d12"
+}

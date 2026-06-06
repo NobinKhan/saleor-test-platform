@@ -1,0 +1,44 @@
+{
+  "bundle_id": "categorydelete",
+  "source": "saleor-dashboard",
+  "source_path": "categories/mutations.ts",
+  "operation_names": [
+    "CategoryDelete"
+  ],
+  "document": "mutation CategoryDelete($id: ID!) {\n  categoryDelete(id: $id) {\n    errors {\n      ...ProductError\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "categoryDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Category."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:382c34c9da1f26ff",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "categorydelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:1d77b9c6195aafaf"
+}

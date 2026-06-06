@@ -1,0 +1,20 @@
+{
+  "bundle_id": "ordergrantrefundadd",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "OrderGrantRefundAdd"
+  ],
+  "document": "mutation OrderGrantRefundAdd($orderId: ID!, $amount: Decimal, $reason: String, $reasonReferenceId: ID, $lines: [OrderGrantRefundCreateLineInput!], $grantRefundForShipping: Boolean, $transactionId: ID!) {\n  orderGrantRefundCreate(\n    id: $orderId\n    input: {amount: $amount, reason: $reason, lines: $lines, grantRefundForShipping: $grantRefundForShipping, transactionId: $transactionId, reasonReference: $reasonReferenceId}\n  ) {\n    errors {\n      ...OrderGrantRefundCreateError\n    }\n    grantedRefund {\n      id\n    }\n  }\n}\n\nfragment OrderGrantRefundCreateError on OrderGrantRefundCreateError {\n  field\n  message\n  code\n  lines {\n    field\n    message\n    code\n    lineId\n  }\n}",
+  "variables": {
+    "orderId": "{{fixtures.default_order_id}}",
+    "amount": null,
+    "reason": "",
+    "reasonReferenceId": "{{fixtures.placeholder_id}}",
+    "grantRefundForShipping": false,
+    "transactionId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:0c8dcdc88f2342ee"
+}

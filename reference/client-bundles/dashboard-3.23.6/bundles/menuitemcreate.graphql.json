@@ -1,0 +1,59 @@
+{
+  "bundle_id": "menuitemcreate",
+  "source": "saleor-dashboard",
+  "source_path": "structures/mutations.ts",
+  "operation_names": [
+    "MenuItemCreate"
+  ],
+  "document": "mutation MenuItemCreate($input: MenuItemCreateInput!) {\n  menuItemCreate(input: $input) {\n    errors {\n      ...MenuError\n    }\n    menuItem {\n      menu {\n        id\n        items {\n          ...MenuItemNested\n        }\n      }\n    }\n  }\n}\n\nfragment MenuError on MenuError {\n  code\n  field\n  message\n}\n\nfragment MenuItemNested on MenuItem {\n  ...MenuItem\n  children {\n    ...MenuItem\n    children {\n      ...MenuItem\n      children {\n        ...MenuItem\n        children {\n          ...MenuItem\n          children {\n            ...MenuItem\n            children {\n              ...MenuItem\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment MenuItem on MenuItem {\n  category {\n    id\n    name\n  }\n  collection {\n    id\n    name\n  }\n  id\n  level\n  name\n  page {\n    id\n    title\n  }\n  url\n}",
+  "variables": {
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"MenuItemCreateInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 25
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"MenuItemCreateInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "menuitemcreate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:b69f03c9e97cd30a"
+}

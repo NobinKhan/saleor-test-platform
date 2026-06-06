@@ -1,0 +1,43 @@
+{
+  "bundle_id": "setrefundreasontype",
+  "source": "saleor-dashboard",
+  "source_path": "refundsSettings/mutations.ts",
+  "operation_names": [
+    "SetRefundReasonType"
+  ],
+  "document": "mutation SetRefundReasonType($modelTypeId: ID!) {\n  refundSettingsUpdate(input: {refundReasonReferenceType: $modelTypeId}) {\n    errors {\n      message\n      code\n    }\n  }\n}",
+  "variables": {
+    "modelTypeId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "refundSettingsUpdate": {
+        "errors": [
+          {
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: PageType.",
+            "code": "GRAPHQL_ERROR"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:51e162eaf2591d5a",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "setrefundreasontype",
+    "expected_null": true
+  },
+  "document_hash": "sha256:43b6fbf194cbc5de"
+}

@@ -1,0 +1,38 @@
+{
+  "bundle_id": "taxclassassign",
+  "source": "saleor-dashboard",
+  "source_path": "taxes/queries.ts",
+  "operation_names": [
+    "TaxClassAssign"
+  ],
+  "document": "query TaxClassAssign($first: Int, $after: String) {\n  taxClasses(first: $first, after: $after) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}",
+  "variables": {
+    "first": 10,
+    "after": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "taxClasses": {
+        "edges": [],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": null
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:d94f1752a954376c",
+  "document_hash": "sha256:f27063f330b93db2"
+}

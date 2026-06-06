@@ -1,0 +1,45 @@
+{
+  "bundle_id": "producttypedelete",
+  "source": "saleor-dashboard",
+  "source_path": "productTypes/mutations.ts",
+  "operation_names": [
+    "ProductTypeDelete"
+  ],
+  "document": "mutation ProductTypeDelete($id: ID!) {\n  productTypeDelete(id: $id) {\n    errors {\n      ...ProductTypeDeleteErrorFragment\n    }\n    productType {\n      id\n    }\n  }\n}\n\nfragment ProductTypeDeleteErrorFragment on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "productTypeDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "pk",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ProductType."
+          }
+        ],
+        "productType": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6093094b2d173c84",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "producttypedelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:e977264d8e81bd60"
+}

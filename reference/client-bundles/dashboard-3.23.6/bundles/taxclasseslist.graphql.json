@@ -1,0 +1,101 @@
+{
+  "bundle_id": "taxclasseslist",
+  "source": "saleor-dashboard",
+  "source_path": "taxes/queries.ts",
+  "operation_names": [
+    "TaxClassesList"
+  ],
+  "document": "query TaxClassesList($before: String, $after: String, $first: Int, $last: Int, $filter: TaxClassFilterInput, $sortBy: TaxClassSortingInput) {\n  taxClasses(\n    before: $before\n    after: $after\n    first: $first\n    last: $last\n    filter: $filter\n    sortBy: $sortBy\n  ) {\n    edges {\n      node {\n        ...TaxClass\n      }\n    }\n  }\n}\n\nfragment TaxClass on TaxClass {\n  ...TaxClassBase\n  countries {\n    ...TaxRate\n  }\n  ...Metadata\n}\n\nfragment TaxClassBase on TaxClass {\n  id\n  name\n}\n\nfragment TaxRate on TaxClassCountryRate {\n  country {\n    ...CountryWithCode\n  }\n  rate\n}\n\nfragment CountryWithCode on CountryDisplay {\n  country\n  code\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}",
+  "variables": {
+    "before": "",
+    "after": "",
+    "first": 10,
+    "last": 10,
+    "filter": null,
+    "sortBy": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument `last` cannot be combined with `first`.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "taxClasses"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
+              "    return wrapped_resolver(obj, info, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/tax/schema.py\", line 149, in resolve_tax_classes",
+              "    return create_connection_slice(qs, info, kwargs, TaxClassCountableConnection)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
+              "    slice = connection_from_queryset_slice(",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
+              "    _validate_connection_args(args)",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
+              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
+              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "taxClasses": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 40,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b9c5ebb667ec5163",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "taxclasseslist",
+    "expected_null": true,
+    "message_pattern": "Argument `last` cannot be combined with `first`.",
+    "optional_path": [
+      "taxClasses"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "taxClasses"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:d1ea8436d50ccb1d"
+}

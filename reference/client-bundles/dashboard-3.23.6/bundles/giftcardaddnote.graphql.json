@@ -1,0 +1,60 @@
+{
+  "bundle_id": "giftcardaddnote",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardUpdate/mutations.ts",
+  "operation_names": [
+    "GiftCardAddNote"
+  ],
+  "document": "mutation GiftCardAddNote($id: ID!, $input: GiftCardAddNoteInput!) {\n  giftCardAddNote(id: $id, input: $input) {\n    errors {\n      ...GiftCardError\n    }\n    giftCard {\n      ...GiftCardData\n    }\n    event {\n      ...GiftCardEvent\n    }\n  }\n}\n\nfragment GiftCardError on GiftCardError {\n  code\n  field\n  message\n}\n\nfragment GiftCardData on GiftCard {\n  ...Metadata\n  last4CodeChars\n  boughtInChannel\n  createdBy {\n    ...UserBase\n  }\n  product {\n    id\n    name\n  }\n  usedBy {\n    ...UserBase\n  }\n  usedByEmail\n  createdByEmail\n  created\n  expiryDate\n  lastUsedOn\n  isActive\n  initialBalance {\n    ...Money\n  }\n  currentBalance {\n    ...Money\n  }\n  id\n  tags {\n    name\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment UserBase on User {\n  id\n  firstName\n  lastName\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment GiftCardEvent on GiftCardEvent {\n  expiryDate\n  oldExpiryDate\n  id\n  date\n  type\n  message\n  email\n  orderId\n  orderNumber\n  tags\n  oldTags\n  balance {\n    initialBalance {\n      ...Money\n    }\n    currentBalance {\n      ...Money\n    }\n    oldInitialBalance {\n      ...Money\n    }\n    oldCurrentBalance {\n      ...Money\n    }\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"GiftCardAddNoteInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 36
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"GiftCardAddNoteInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "giftcardaddnote",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:134634d4eb12dfca"
+}

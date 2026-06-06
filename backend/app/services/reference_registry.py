@@ -37,14 +37,12 @@ def register_corpus_version(
     *,
     probe_count: int,
     saleor_url: str = "",
-    status: str = "active",
     set_default: bool | None = None,
 ) -> dict[str, Any]:
     registry = load_registry()
     manifest = load_manifest(version) or {}
     entry = {
         "version": version,
-        "status": status,
         "captured_at": manifest.get("captured_at") or datetime.now(timezone.utc).isoformat(),
         "probe_count": probe_count or manifest.get("probe_count", 0),
         "saleor_url": saleor_url or manifest.get("saleor_url", ""),
@@ -69,9 +67,9 @@ def get_upgrade_hint(target_version: str | None, resolved_corpus: str | None) ->
     parts_c = resolved_corpus.split(".")
     if len(parts_t) >= 2 and len(parts_c) >= 2:
         if parts_t[0] != parts_c[0]:
-            return f"Major mismatch: record golden for Saleor {target_version} (`just upgrade-reference {target_version}`)"
+            return f"Major mismatch: record golden for Saleor {target_version} (`bash scripts/upgrade-reference.sh {target_version}`)"
         if f"{parts_t[0]}.{parts_t[1]}" != f"{parts_c[0]}.{parts_c[1]}":
-            return f"Minor drift: upgrade golden to {target_version} (`just upgrade-reference {target_version}`)"
+            return f"Minor drift: upgrade golden to {target_version} (`bash scripts/upgrade-reference.sh {target_version}`)"
         if target_version != resolved_corpus:
             return f"Patch drift: consider re-recording {target_version} if GraphQL changed"
     return None

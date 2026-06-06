@@ -1,0 +1,101 @@
+{
+  "bundle_id": "warehouselist",
+  "source": "saleor-dashboard",
+  "source_path": "warehouses/queries.ts",
+  "operation_names": [
+    "WarehouseList"
+  ],
+  "document": "query WarehouseList($first: Int, $after: String, $last: Int, $before: String, $filter: WarehouseFilterInput, $sort: WarehouseSortingInput) {\n  warehouses(\n    before: $before\n    after: $after\n    first: $first\n    last: $last\n    filter: $filter\n    sortBy: $sort\n  ) {\n    edges {\n      node {\n        ...WarehouseWithShipping\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment WarehouseWithShipping on Warehouse {\n  ...Warehouse\n  shippingZones(first: 100) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "first": 10,
+    "after": "",
+    "last": 10,
+    "before": "",
+    "filter": null,
+    "sort": null
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument `last` cannot be combined with `first`.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "warehouses"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
+              "    return wrapped_resolver(obj, info, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/warehouse/schema.py\", line 76, in resolve_warehouses",
+              "    return create_connection_slice(qs, info, kwargs, WarehouseCountableConnection)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
+              "    slice = connection_from_queryset_slice(",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
+              "    _validate_connection_args(args)",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
+              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
+              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "warehouses": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 20,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:7bbae9514bf22347",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "warehouselist",
+    "expected_null": true,
+    "message_pattern": "Argument `last` cannot be combined with `first`.",
+    "optional_path": [
+      "warehouses"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "warehouses"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:abc964ca47b6ca80"
+}

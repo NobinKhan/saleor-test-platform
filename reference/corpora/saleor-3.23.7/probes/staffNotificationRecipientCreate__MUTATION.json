@@ -28,5 +28,10 @@
   "response_shape_hash": "sha256:b806a77e4c637e7e",
   "golden_contract": "business_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "staffNotificationRecipientCreate",
+    "expected_null": false
+  }
 }

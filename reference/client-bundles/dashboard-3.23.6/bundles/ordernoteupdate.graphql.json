@@ -1,0 +1,16 @@
+{
+  "bundle_id": "ordernoteupdate",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "OrderNoteUpdate"
+  ],
+  "document": "mutation OrderNoteUpdate($order: ID!, $input: OrderNoteInput!) {\n  orderNoteUpdate(note: $order, input: $input) {\n    errors {\n      code\n      field\n      message\n    }\n    order {\n      id\n      events {\n        ...OrderEvent\n      }\n    }\n  }\n}\n\nfragment OrderEvent on OrderEvent {\n  id\n  amount\n  shippingCostsIncluded\n  date\n  email\n  emailType\n  invoiceNumber\n  discount {\n    valueType\n    value\n    reason\n    amount {\n      amount\n      currency\n    }\n    oldValueType\n    oldValue\n    oldAmount {\n      amount\n      currency\n    }\n  }\n  relatedOrder {\n    id\n    number\n  }\n  related {\n    id\n  }\n  message\n  quantity\n  transactionReference\n  type\n  user {\n    id\n    email\n    firstName\n    lastName\n    avatar(size: 128) {\n      url\n    }\n  }\n  app {\n    id\n    name\n    appUrl\n    brand {\n      logo {\n        default(size: 128)\n      }\n    }\n  }\n  lines {\n    quantity\n    itemName\n    discount {\n      valueType\n      value\n      reason\n      amount {\n        amount\n        currency\n      }\n      oldValueType\n      oldValue\n      oldAmount {\n        amount\n        currency\n      }\n    }\n    orderLine {\n      id\n      productName\n      variantName\n    }\n  }\n}",
+  "variables": {
+    "order": "{{fixtures.default_order_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:0aaa943ec58ffc7f"
+}

@@ -95,19 +95,40 @@ async def create_run(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    token, error = await authenticate_saleor(
-        data.saleor_url,
-        str(data.saleor_email),
-        data.saleor_password,
-    )
+    saleor_url = data.saleor_url
+    saleor_email = str(data.saleor_email)
+    saleor_password = data.saleor_password
+
+    if data.clone_from_run_id:
+        result = await db.execute(
+            select(TestRun).where(
+                TestRun.id == data.clone_from_run_id,
+                TestRun.user_id == user.id,
+            )
+        )
+        source = result.scalar_one_or_none()
+        if not source:
+            raise HTTPException(404, "Source test run not found")
+        if not saleor_password:
+            if not source.saleor_password:
+                raise HTTPException(
+                    400,
+                    "Source run has no stored password; enter a password to continue.",
+                )
+            saleor_password = decrypt_token(source.saleor_password)
+
+    if not saleor_password:
+        raise HTTPException(400, "Saleor admin password is required")
+
+    token, error = await authenticate_saleor(saleor_url, saleor_email, saleor_password)
     if error or not token:
         raise HTTPException(400, f"Saleor authentication failed: {error or 'no token'}")
 
     row = build_test_run_row(
         user_id=user.id,
-        saleor_url=data.saleor_url,
-        saleor_email=str(data.saleor_email),
-        saleor_password=data.saleor_password,
+        saleor_url=saleor_url,
+        saleor_email=saleor_email,
+        saleor_password=saleor_password,
         saleor_token=token,
         test_scope=data.test_scope,
         public_only=data.public_only,
@@ -124,58 +145,6 @@ async def create_run(
         token,
         data.categories,
         data.test_mode,
-        saleor_email=row["saleor_email"],
-        saleor_password=row["saleor_password"],
-    )
-    return _summary_from_run(run)
-
-
-@router.post("/{run_id}/retest", response_model=TestRunSummary)
-async def retest_run(
-    run_id: uuid.UUID,
-    db: AsyncSession = Depends(get_db),
-    user: User = Depends(get_current_user),
-):
-    result = await db.execute(
-        select(TestRun).where(TestRun.id == run_id, TestRun.user_id == user.id)
-    )
-    source = result.scalar_one_or_none()
-    if not source:
-        raise HTTPException(404, "Test run not found")
-
-    email = decrypt_saleor_email(source)
-    if not email or not source.saleor_password:
-        raise HTTPException(
-            400,
-            "This run has no stored credentials. Start a new test from the form.",
-        )
-
-    password = decrypt_token(source.saleor_password)
-    token, error = await authenticate_saleor(source.saleor_url, email, password)
-    if error or not token:
-        raise HTTPException(400, f"Saleor authentication failed: {error or 'no token'}")
-
-    row = build_test_run_row(
-        user_id=user.id,
-        saleor_url=source.saleor_url,
-        saleor_email=email,
-        saleor_password=password,
-        saleor_token=token,
-        test_scope=source.test_scope,
-        public_only=source.public_only,
-        concurrency=source.concurrency or 5,
-        timeout_seconds=source.timeout_seconds or 30,
-    )
-    run = TestRun(**row)
-    db.add(run)
-    await db.commit()
-    await db.refresh(run)
-
-    _start_runner(
-        run,
-        token,
-        None,
-        "compatibility",
         saleor_email=row["saleor_email"],
         saleor_password=row["saleor_password"],
     )

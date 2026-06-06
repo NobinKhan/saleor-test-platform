@@ -1,0 +1,63 @@
+{
+  "bundle_id": "shippingmethodtranslations",
+  "source": "saleor-dashboard",
+  "source_path": "translations/queries.ts",
+  "operation_names": [
+    "ShippingMethodTranslations"
+  ],
+  "document": "query ShippingMethodTranslations($language: LanguageCodeEnum!, $first: Int, $after: String, $last: Int, $before: String) {\n  translations(\n    kind: SHIPPING_METHOD\n    before: $before\n    after: $after\n    first: $first\n    last: $last\n  ) {\n    edges {\n      node {\n        ...ShippingMethodTranslation\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment ShippingMethodTranslation on ShippingMethodTranslatableContent {\n  id\n  name\n  description\n  shippingMethod {\n    id\n  }\n  translation(languageCode: $language) {\n    id\n    language {\n      code\n      language\n    }\n    name\n    description\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "language": null,
+    "first": 10,
+    "after": "",
+    "last": 10,
+    "before": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$language\" of required type \"LanguageCodeEnum!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 34
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$language\" of required type \"LanguageCodeEnum!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "shippingmethodtranslations",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:2a281899d72e9cbe"
+}

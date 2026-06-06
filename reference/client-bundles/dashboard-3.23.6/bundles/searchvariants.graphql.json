@@ -1,0 +1,42 @@
+{
+  "bundle_id": "searchvariants",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useVariantSearch.ts",
+  "operation_names": [
+    "SearchVariants"
+  ],
+  "document": "query SearchVariants($after: String, $first: Int!, $query: String!, $channel: String) {\n  search: productVariants(\n    after: $after\n    first: $first\n    filter: {search: $query}\n    channel: $channel\n  ) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "after": "",
+    "first": 10,
+    "query": "",
+    "channel": "{{fixtures.default_channel}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "search": {
+        "edges": [],
+        "pageInfo": {
+          "endCursor": null,
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": null
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
+  "document_hash": "sha256:491d613bd94e349f"
+}

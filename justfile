@@ -1,13 +1,16 @@
 # Saleor Test Platform — one compose file, minimal commands
 #
-#   just up          — Saleor API + test harness
-#   just up-harness  — harness only (external GraphQL target)
-#   just down        — stop all services
-#   just fresh       — reset volumes, migrate Saleor, create admin
-#   just register    — create harness UI user
-#   just logs api    — follow container logs
+# Stack:
+#   just up | up-harness | down | fresh | register | logs | status
+#
+# Reference corpus (local Saleor defaults; pass script flags via *extra):
+#   just corpus-diff | patch-corpus | record-reference | verify-corpus | self-check
+#
+# Golden baseline (official Saleor must pass before testing other backends):
+#   just baseline
 
 root := justfile_directory()
+compose := "docker compose -f " + root + "/docker-compose.yml"
 
 _run cmd *args:
     #!/usr/bin/env bash
@@ -48,42 +51,62 @@ logs service:
 status:
     @docker compose -f "{{ root }}/docker-compose.yml" ps -a
 
-record-reference url email password *extra:
+record-reference *extra:
     #!/usr/bin/env bash
     set -euo pipefail
-    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
-      python -m app.scripts.record_reference \
-      --url "{{ url }}" --email "{{ email }}" --password "{{ password }}" {{ extra }}
-
-record-reference-docker:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
+    {{compose}} exec harness-backend \
       python -m app.scripts.record_reference \
       --url "http://saleor-api:8000/graphql/" \
       --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
       --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
-      --scope full
+      --scope full {{ extra }}
 
-golden-gate *extra:
+corpus-diff *extra:
     #!/usr/bin/env bash
     set -euo pipefail
-    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
-      python -m app.scripts.golden_gate {{ extra }}
+    {{compose}} exec harness-backend \
+      python -m app.scripts.corpus_diff \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" {{ extra }}
 
-upgrade-reference version:
+patch-corpus *extra:
     #!/usr/bin/env bash
     set -euo pipefail
-    bash "{{ root }}/scripts/upgrade-reference.sh" "{{ version }}"
+    {{compose}} exec harness-backend \
+      python -m app.scripts.patch_corpus \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" {{ extra }}
+
+verify-corpus *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    {{compose}} exec harness-backend \
+      python -m app.scripts.verify_corpus {{ extra }}
 
 self-check *extra:
     #!/usr/bin/env bash
     set -euo pipefail
-    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
+    {{compose}} exec harness-backend \
       python -m app.scripts.self_check {{ extra }}
 
-migrate-corpus *extra:
+baseline *extra:
     #!/usr/bin/env bash
     set -euo pipefail
-    docker compose -f "{{ root }}/docker-compose.yml" exec harness-backend \
-      python -m app.scripts.migrate_corpus_contracts {{ extra }}
+    echo "=== Golden baseline: corpus integrity (L1 + L3) ==="
+    {{compose}} exec harness-backend \
+      python -m app.scripts.verify_corpus \
+      --min-probes 400 \
+      --min-client-bundles 400 \
+      --min-client-recorded-ratio 0.85 \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}"
+    echo ""
+    echo "=== Golden baseline: replay vs official Saleor ==="
+    {{compose}} exec harness-backend \
+      python -m app.scripts.self_check \
+      --scope full+client --require-tier2 --min-compat 100 {{ extra }}
+    echo ""
+    echo "BASELINE PASS"

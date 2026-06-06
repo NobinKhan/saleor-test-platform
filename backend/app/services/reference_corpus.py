@@ -51,6 +51,7 @@ class GoldenProbe:
     golden_contract: str | None = None
     http_status: int | None = None
     probe_stability: str | None = None
+    semantic_profile: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         d = {
@@ -70,6 +71,8 @@ class GoldenProbe:
             d["http_status"] = self.http_status
         if self.probe_stability:
             d["probe_stability"] = self.probe_stability
+        if self.semantic_profile:
+            d["semantic_profile"] = self.semantic_profile
         return d
 
     @classmethod
@@ -87,6 +90,7 @@ class GoldenProbe:
             golden_contract=data.get("golden_contract"),
             http_status=data.get("http_status"),
             probe_stability=data.get("probe_stability"),
+            semantic_profile=data.get("semantic_profile"),
         )
 
 
@@ -151,28 +155,86 @@ def write_corpus(
     version: str,
     saleor_url: str,
     probes: list[GoldenProbe],
+    *,
+    merge: bool = False,
 ) -> Path:
     directory = corpus_dir_for_version(version)
     probes_dir = directory / "probes"
     probes_dir.mkdir(parents=True, exist_ok=True)
 
-    for old in probes_dir.glob("*.json"):
-        old.unlink()
+    if not merge:
+        for old in probes_dir.glob("*.json"):
+            old.unlink()
 
     for probe in probes:
         path = probes_dir / probe_filename(probe.endpoint_name, probe.endpoint_kind)
         path.write_text(json.dumps(probe.to_dict(), indent=2), encoding="utf-8")
 
+    manifest_path = directory / "manifest.json"
+    existing_manifest = load_manifest(version) or {}
+    operations_index = existing_manifest.get("operations_index") or {}
+    for probe in probes:
+        key = f"{probe.endpoint_name}__{probe.endpoint_kind}"
+        operations_index[key] = {
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
+            "input_hash": hashlib.sha256(probe.input_sent.encode()).hexdigest()[:16],
+            "golden_contract": probe.golden_contract,
+            "semantic_profile": probe.semantic_profile,
+        }
+
     manifest = {
         "saleor_version": version,
         "saleor_url": saleor_url,
         "captured_at": datetime.now(timezone.utc).isoformat(),
-        "probe_count": len(probes),
+        "probe_count": len(list(probes_dir.glob("*.json"))),
         "corpus_hash": "",
+        "operations_index": operations_index,
     }
+    if existing_manifest.get("catalog_version"):
+        manifest["catalog_version"] = existing_manifest["catalog_version"]
+    if existing_manifest.get("reference_queries"):
+        manifest["reference_queries"] = existing_manifest["reference_queries"]
+    if existing_manifest.get("reference_mutations"):
+        manifest["reference_mutations"] = existing_manifest["reference_mutations"]
     manifest["corpus_hash"] = corpus_hash(version)
-    (directory / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return directory
+
+
+def remove_probes_from_disk(
+    version: str,
+    ops: list[tuple[str, str]],
+) -> int:
+    """Remove probe files by (name, kind) pairs. Returns count removed."""
+    probes_dir = corpus_dir_for_version(version) / "probes"
+    removed = 0
+    for name, kind in ops:
+        path = probes_dir / probe_filename(name, kind)
+        if path.is_file():
+            path.unlink()
+            removed += 1
+    return removed
+
+
+def update_manifest_after_patch(version: str) -> None:
+    """Refresh probe_count, corpus_hash, and operations_index after patch."""
+    directory = corpus_dir_for_version(version)
+    manifest_path = directory / "manifest.json"
+    manifest = load_manifest(version) or {"saleor_version": version}
+    probes = load_all_probes_from_disk(version)
+    operations_index: dict[str, Any] = {}
+    for probe in probes:
+        key = f"{probe.endpoint_name}__{probe.endpoint_kind}"
+        operations_index[key] = {
+            "recorded_at": manifest.get("captured_at"),
+            "input_hash": hashlib.sha256(probe.input_sent.encode()).hexdigest()[:16],
+            "golden_contract": probe.golden_contract,
+            "semantic_profile": probe.semantic_profile,
+        }
+    manifest["operations_index"] = operations_index
+    manifest["probe_count"] = len(probes)
+    manifest["corpus_hash"] = corpus_hash(version)
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
 def _has_probes(version: str) -> bool:

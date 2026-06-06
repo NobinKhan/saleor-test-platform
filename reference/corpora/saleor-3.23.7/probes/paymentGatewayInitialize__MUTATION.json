@@ -79,5 +79,14 @@
   "response_shape_hash": "sha256:7c3960b05faf8173",
   "golden_contract": "not_found",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "paymentGatewayInitialize",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "paymentGatewayInitialize"
+    ]
+  }
 }

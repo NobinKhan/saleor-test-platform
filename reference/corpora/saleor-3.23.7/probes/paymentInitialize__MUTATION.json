@@ -55,5 +55,14 @@
   "response_shape_hash": "sha256:edbeb2aa6c2264c5",
   "golden_contract": "graphql_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "paymentInitialize",
+    "expected_null": true,
+    "message_pattern": "<required>",
+    "optional_path": [
+      "paymentInitialize"
+    ]
+  }
 }

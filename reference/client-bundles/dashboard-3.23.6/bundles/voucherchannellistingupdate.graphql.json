@@ -1,0 +1,60 @@
+{
+  "bundle_id": "voucherchannellistingupdate",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/mutations.ts",
+  "operation_names": [
+    "VoucherChannelListingUpdate"
+  ],
+  "document": "mutation VoucherChannelListingUpdate($id: ID!, $input: VoucherChannelListingInput!) {\n  voucherChannelListingUpdate(id: $id, input: $input) {\n    errors {\n      ...DiscountError\n    }\n    voucher {\n      ...Voucher\n    }\n  }\n}\n\nfragment DiscountError on DiscountError {\n  code\n  field\n  channels\n  message\n}\n\nfragment Voucher on Voucher {\n  ...Metadata\n  id\n  name\n  startDate\n  endDate\n  usageLimit\n  type\n  discountValueType\n  countries {\n    code\n    country\n  }\n  minCheckoutItemsQuantity\n  channelListings {\n    id\n    channel {\n      id\n      name\n      currencyCode\n    }\n    discountValue\n    currency\n    minSpent {\n      amount\n      currency\n    }\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"VoucherChannelListingInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 48
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"VoucherChannelListingInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "voucherchannellistingupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:189fbe82d7dab079"
+}

@@ -1,0 +1,46 @@
+{
+  "bundle_id": "confirmemailchange",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/mutations.ts",
+  "operation_names": [
+    "confirmEmailChange"
+  ],
+  "document": "mutation confirmEmailChange($channel: String!, $token: String!) {\n  confirmEmailChange(channel: $channel, token: $token) {\n    errors {\n      ...AccountErrorFragment\n    }\n    user {\n      ...UserDetailsFragment\n    }\n  }\n}\n\nfragment AccountErrorFragment on AccountError {\n  code\n  field\n  message\n}\n\nfragment UserDetailsFragment on User {\n  ...UserBaseFragment\n  metadata {\n    key\n    value\n  }\n  defaultShippingAddress {\n    ...AddressFragment\n  }\n  defaultBillingAddress {\n    ...AddressFragment\n  }\n  addresses {\n    ...AddressFragment\n  }\n}\n\nfragment UserBaseFragment on User {\n  id\n  email\n  firstName\n  lastName\n  isStaff\n  userPermissions {\n    code\n    name\n  }\n}\n\nfragment AddressFragment on Address {\n  id\n  firstName\n  lastName\n  companyName\n  streetAddress1\n  streetAddress2\n  city\n  cityArea\n  postalCode\n  country {\n    code\n    country\n  }\n  countryArea\n  phone\n  isDefaultBillingAddress\n  isDefaultShippingAddress\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "token": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "confirmEmailChange": {
+        "errors": [
+          {
+            "code": "JWT_INVALID_TOKEN",
+            "field": "token",
+            "message": "Invalid or expired token."
+          }
+        ],
+        "user": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:694f7476cd5af459",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "confirmemailchange",
+    "expected_null": true
+  },
+  "document_hash": "sha256:c220e3b1368ac0c6"
+}

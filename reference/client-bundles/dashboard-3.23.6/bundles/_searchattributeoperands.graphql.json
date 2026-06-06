@@ -1,0 +1,33 @@
+{
+  "bundle_id": "_searchattributeoperands",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_SearchAttributeOperands"
+  ],
+  "document": "query _SearchAttributeOperands($attributesSlugs: [String!], $choicesIds: [ID!], $first: Int!) {\n  attributes(first: $first, filter: {slugs: $attributesSlugs}) {\n    edges {\n      node {\n        id\n        name\n        slug\n        inputType\n        entityType\n        choices(first: 5, filter: {ids: $choicesIds}) {\n          edges {\n            node {\n              slug: id\n              id\n              name\n              originalSlug: slug\n            }\n          }\n        }\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "attributes": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 60,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:e07658083a30aaa8",
+  "document_hash": "sha256:42fab5e306d2b885"
+}

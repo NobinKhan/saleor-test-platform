@@ -1,0 +1,48 @@
+{
+  "bundle_id": "requestemailchange",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/mutations.ts",
+  "operation_names": [
+    "requestEmailChange"
+  ],
+  "document": "mutation requestEmailChange($channel: String!, $newEmail: String!, $password: String!, $redirectUrl: String!) {\n  requestEmailChange(\n    channel: $channel\n    newEmail: $newEmail\n    password: $password\n    redirectUrl: $redirectUrl\n  ) {\n    errors {\n      ...AccountErrorFragment\n    }\n    user {\n      ...UserDetailsFragment\n    }\n  }\n}\n\nfragment AccountErrorFragment on AccountError {\n  code\n  field\n  message\n}\n\nfragment UserDetailsFragment on User {\n  ...UserBaseFragment\n  metadata {\n    key\n    value\n  }\n  defaultShippingAddress {\n    ...AddressFragment\n  }\n  defaultBillingAddress {\n    ...AddressFragment\n  }\n  addresses {\n    ...AddressFragment\n  }\n}\n\nfragment UserBaseFragment on User {\n  id\n  email\n  firstName\n  lastName\n  isStaff\n  userPermissions {\n    code\n    name\n  }\n}\n\nfragment AddressFragment on Address {\n  id\n  firstName\n  lastName\n  companyName\n  streetAddress1\n  streetAddress2\n  city\n  cityArea\n  postalCode\n  country {\n    code\n    country\n  }\n  countryArea\n  phone\n  isDefaultBillingAddress\n  isDefaultShippingAddress\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "newEmail": "",
+    "password": "",
+    "redirectUrl": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "requestEmailChange": {
+        "errors": [
+          {
+            "code": "INVALID_CREDENTIALS",
+            "field": "password",
+            "message": "Password isn't valid."
+          }
+        ],
+        "user": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b144d593980e4eed",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "requestemailchange",
+    "expected_null": true
+  },
+  "document_hash": "sha256:4de64c5f1ab082ad"
+}

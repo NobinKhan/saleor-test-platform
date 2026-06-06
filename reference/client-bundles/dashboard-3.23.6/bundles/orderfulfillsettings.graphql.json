@@ -1,0 +1,32 @@
+{
+  "bundle_id": "orderfulfillsettings",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "OrderFulfillSettings"
+  ],
+  "document": "query OrderFulfillSettings {\n  shop {\n    ...ShopOrderSettings\n  }\n}\n\nfragment ShopOrderSettings on Shop {\n  fulfillmentAutoApprove\n  fulfillmentAllowUnpaid\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "fulfillmentAutoApprove": true,
+        "fulfillmentAllowUnpaid": true
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:80fec47a5bfab4e7",
+  "document_hash": "sha256:46fa0ef0c5ef8f97"
+}

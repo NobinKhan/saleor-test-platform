@@ -1,0 +1,33 @@
+{
+  "bundle_id": "_searchpageoperands",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_SearchPageOperands"
+  ],
+  "document": "query _SearchPageOperands($first: Int!, $pageSlugs: [String!]) {\n  pages(first: $first, filter: {slugs: $pageSlugs}) {\n    edges {\n      node {\n        id\n        name: title\n        slug\n        originalSlug: slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "pages": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:a6d0487113e86168",
+  "document_hash": "sha256:4e8b81d3d479c827"
+}

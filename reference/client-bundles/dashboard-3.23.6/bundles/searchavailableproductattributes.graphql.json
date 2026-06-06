@@ -1,0 +1,101 @@
+{
+  "bundle_id": "searchavailableproductattributes",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useAvailableProductAttributeSearch.ts",
+  "operation_names": [
+    "SearchAvailableProductAttributes"
+  ],
+  "document": "query SearchAvailableProductAttributes($id: ID!, $after: String, $first: Int!, $query: String!) {\n  productType(id: $id) {\n    id\n    availableAttributes(after: $after, first: $first, filter: {search: $query}) {\n      edges {\n        node {\n          ...AvailableAttribute\n        }\n      }\n      pageInfo {\n        ...PageInfo\n      }\n    }\n  }\n}\n\nfragment AvailableAttribute on Attribute {\n  id\n  name\n  slug\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "after": "",
+    "first": 10,
+    "query": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ProductType.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "productType"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/product/schema.py\", line 519, in resolve_product_type",
+              "    _, id = from_global_id_or_error(id, ProductType)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ProductType."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "productType": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 11,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:91f988a3c42cdef9",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "searchavailableproductattributes",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "productType"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "productType"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:788eb700c6526b3a"
+}

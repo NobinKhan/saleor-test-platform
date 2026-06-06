@@ -1,0 +1,44 @@
+{
+  "bundle_id": "attributedelete",
+  "source": "saleor-dashboard",
+  "source_path": "attributes/mutations.ts",
+  "operation_names": [
+    "AttributeDelete"
+  ],
+  "document": "mutation AttributeDelete($id: ID!) {\n  attributeDelete(id: $id) {\n    errors {\n      ...AttributeError\n    }\n  }\n}\n\nfragment AttributeError on AttributeError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "attributeDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Attribute."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:4f4f75b92491449f",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "attributedelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:defb35fd61b3af35"
+}

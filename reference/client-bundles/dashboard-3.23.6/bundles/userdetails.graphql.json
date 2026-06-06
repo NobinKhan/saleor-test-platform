@@ -1,0 +1,138 @@
+{
+  "bundle_id": "userdetails",
+  "source": "saleor-dashboard",
+  "source_path": "auth/queries.ts",
+  "operation_names": [
+    "UserDetails"
+  ],
+  "document": "query UserDetails {\n  me {\n    ...User\n  }\n}\n\nfragment User on User {\n  id\n  email\n  firstName\n  lastName\n  isStaff\n  dateJoined\n  metadata {\n    key\n    value\n  }\n  userPermissions {\n    ...UserPermission\n  }\n  avatar(size: 128) {\n    url\n  }\n  accessibleChannels {\n    ...Channel\n  }\n  restrictedAccessToChannels\n}\n\nfragment UserPermission on UserPermission {\n  code\n  name\n}\n\nfragment Channel on Channel {\n  id\n  isActive\n  name\n  slug\n  currencyCode\n  defaultCountry {\n    code\n    country\n  }\n  stockSettings {\n    allocationStrategy\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "me": {
+        "id": "VXNlcjox",
+        "email": "admin@example.com",
+        "firstName": "",
+        "lastName": "",
+        "isStaff": true,
+        "dateJoined": "2026-06-06T07:19:54.533946+00:00",
+        "metadata": [],
+        "userPermissions": [
+          {
+            "code": "HANDLE_CHECKOUTS",
+            "name": "Handle checkouts"
+          },
+          {
+            "code": "HANDLE_PAYMENTS",
+            "name": "Handle payments"
+          },
+          {
+            "code": "HANDLE_TAXES",
+            "name": "Handle taxes"
+          },
+          {
+            "code": "IMPERSONATE_USER",
+            "name": "Impersonate user."
+          },
+          {
+            "code": "MANAGE_APPS",
+            "name": "Manage apps"
+          },
+          {
+            "code": "MANAGE_CHANNELS",
+            "name": "Manage channels."
+          },
+          {
+            "code": "MANAGE_CHECKOUTS",
+            "name": "Manage checkouts"
+          },
+          {
+            "code": "MANAGE_DISCOUNTS",
+            "name": "Manage promotions and vouchers."
+          },
+          {
+            "code": "MANAGE_GIFT_CARD",
+            "name": "Manage gift cards."
+          },
+          {
+            "code": "MANAGE_MENUS",
+            "name": "Manage navigation."
+          },
+          {
+            "code": "MANAGE_OBSERVABILITY",
+            "name": "Manage observability"
+          },
+          {
+            "code": "MANAGE_ORDERS",
+            "name": "Manage orders."
+          },
+          {
+            "code": "MANAGE_ORDERS_IMPORT",
+            "name": "Manage orders import."
+          },
+          {
+            "code": "MANAGE_PAGES",
+            "name": "Manage pages."
+          },
+          {
+            "code": "MANAGE_PAGE_TYPES_AND_ATTRIBUTES",
+            "name": "Manage page types and attributes."
+          },
+          {
+            "code": "MANAGE_PLUGINS",
+            "name": "Manage plugins"
+          },
+          {
+            "code": "MANAGE_PRODUCTS",
+            "name": "Manage products."
+          },
+          {
+            "code": "MANAGE_PRODUCT_TYPES_AND_ATTRIBUTES",
+            "name": "Manage product types and attributes."
+          },
+          {
+            "code": "MANAGE_SETTINGS",
+            "name": "Manage settings."
+          },
+          {
+            "code": "MANAGE_SHIPPING",
+            "name": "Manage shipping."
+          },
+          {
+            "code": "MANAGE_STAFF",
+            "name": "Manage staff."
+          },
+          {
+            "code": "MANAGE_TAXES",
+            "name": "Manage taxes"
+          },
+          {
+            "code": "MANAGE_TRANSLATIONS",
+            "name": "Manage translations."
+          },
+          {
+            "code": "MANAGE_USERS",
+            "name": "Manage customers."
+          }
+        ],
+        "avatar": null,
+        "accessibleChannels": [],
+        "restrictedAccessToChannels": true
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 3,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b62e094f885cb697",
+  "document_hash": "sha256:861fe852f2501464"
+}

@@ -1,0 +1,17 @@
+{
+  "bundle_id": "producttypeattributereorder",
+  "source": "saleor-dashboard",
+  "source_path": "productTypes/mutations.ts",
+  "operation_names": [
+    "ProductTypeAttributeReorder"
+  ],
+  "document": "mutation ProductTypeAttributeReorder($move: ReorderInput!, $productTypeId: ID!, $type: ProductAttributeType!) {\n  productTypeReorderAttributes(\n    moves: [$move]\n    productTypeId: $productTypeId\n    type: $type\n  ) {\n    errors {\n      ...ProductTypeReorderAttributesErrorFragment\n    }\n    productType {\n      ...ProductTypeDetails\n    }\n  }\n}\n\nfragment ProductTypeReorderAttributesErrorFragment on ProductError {\n  code\n  field\n  message\n}\n\nfragment ProductTypeDetails on ProductType {\n  ...ProductType\n  ...Metadata\n  productAttributes {\n    ...Attribute\n  }\n  variantAttributes {\n    ...Attribute\n  }\n  assignedVariantAttributes {\n    attribute {\n      ...Attribute\n    }\n    variantSelection\n  }\n  weight {\n    unit\n    value\n  }\n}\n\nfragment ProductType on ProductType {\n  id\n  name\n  slug\n  kind\n  hasVariants\n  isShippingRequired\n  taxClass {\n    id\n    name\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment Attribute on Attribute {\n  id\n  name\n  slug\n  type\n  visibleInStorefront\n  filterableInDashboard\n  filterableInStorefront\n  unit\n  inputType\n}",
+  "variables": {
+    "move": null,
+    "productTypeId": "{{fixtures.default_product_id}}",
+    "type": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:40905f053f8d505a"
+}

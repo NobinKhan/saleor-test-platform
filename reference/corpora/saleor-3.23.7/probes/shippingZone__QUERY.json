@@ -76,5 +76,14 @@
   "response_shape_hash": "sha256:65d7f6b7d97ed3d4",
   "golden_contract": "not_found",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "shippingZone",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "shippingZone"
+    ]
+  }
 }

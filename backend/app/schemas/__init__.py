@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 
 
 def _validate_saleor_email(value: str) -> str:
@@ -60,16 +60,37 @@ class UserResponse(BaseModel):
 class TestRunCreate(BaseModel):
     saleor_url: str = Field(description="GraphQL endpoint URL of Saleor server")
     saleor_email: str = Field(min_length=3, max_length=255, description="Saleor admin email")
-    saleor_password: str = Field(min_length=1, description="Saleor admin password")
+    saleor_password: str | None = Field(
+        default=None,
+        description="Saleor admin password (omit when clone_from_run_id reuses stored password)",
+    )
+    clone_from_run_id: UUID | None = Field(
+        default=None,
+        description="Copy stored password from a previous run when saleor_password is omitted",
+    )
 
     @field_validator("saleor_email")
     @classmethod
     def validate_saleor_email(cls, value: str) -> str:
         return _validate_saleor_email(value)
-    test_scope: str = Field(default="full", description="full|catalog|queries|mutations|custom")
+
+    @field_validator("test_scope")
+    @classmethod
+    def validate_test_scope(cls, value: str) -> str:
+        if value != "full+client":
+            raise ValueError("Only full+client certification scope is supported")
+        return value
+
+    @model_validator(mode="after")
+    def password_or_clone(self) -> TestRunCreate:
+        if not self.saleor_password and not self.clone_from_run_id:
+            raise ValueError("saleor_password is required unless clone_from_run_id is set")
+        return self
+
+    test_scope: str = Field(default="full+client", description="Certification scope (L1 + L3)")
     test_mode: str = Field(default="compatibility", description="compatibility|discovery")
     public_only: bool = Field(default=False, description="Only test public endpoints")
-    categories: list[str] | None = Field(default=None, description="Categories when test_scope=custom")
+    categories: list[str] | None = Field(default=None, description="Deprecated; ignored for full+client")
     concurrency: int = Field(default=5, ge=1, le=20)
     timeout_seconds: int = Field(default=30, ge=5, le=120)
 
@@ -121,6 +142,7 @@ class TestResultResponse(BaseModel):
     expected_response: str | None = None
     match_status: str | None = None
     diff_summary: str | None = None
+    client_parity_note: str | None = None
     input_sent: str | None
     actual_response: str | None
     error_message: str | None
@@ -179,6 +201,9 @@ class ReportSummary(BaseModel):
     golden_matched: int = 0
     golden_mismatched: int = 0
     golden_missing: int = 0
+    client_parity_gaps: int = 0
+    client_bundle_count: int = 0
+    tier2_gate_enabled: bool = False
     upgrade_hint: str | None = None
     probe_outcome_rate: float | None = None
     probe_success_count: int = 0

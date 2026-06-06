@@ -1,0 +1,1116 @@
+{
+  "bundle_id": "orderdetailswithmetadata",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "OrderDetailsWithMetadata"
+  ],
+  "document": "query OrderDetailsWithMetadata($id: ID!, $hasManageProducts: Boolean!) {\n  order(id: $id) {\n    ...OrderDetailsWithMetadata\n  }\n  shop {\n    countries {\n      code\n      country\n    }\n    defaultWeightUnit\n    fulfillmentAllowUnpaid\n    fulfillmentAutoApprove\n    availablePaymentGateways {\n      ...PaymentGateway\n    }\n  }\n}\n\nfragment OrderDetailsWithMetadata on Order {\n  ...OrderDetails\n  fulfillments {\n    ...FulfillmentWithMetadata\n  }\n  lines {\n    ...OrderLine\n  }\n}\n\nfragment OrderDetails on Order {\n  id\n  displayGrossPrices\n  ...Metadata\n  billingAddress {\n    ...Address\n  }\n  transactions {\n    ...TransactionItem\n  }\n  payments {\n    ...OrderPayment\n  }\n  giftCards {\n    ...OrderGiftCard\n  }\n  grantedRefunds {\n    ...OrderGrantedRefund\n  }\n  isShippingRequired\n  canFinalize\n  created\n  customerNote\n  discounts {\n    ...OrderDiscount\n  }\n  events {\n    ...OrderEvent\n  }\n  fulfillments {\n    ...Fulfillment\n  }\n  lines {\n    ...OrderLine\n  }\n  number\n  isPaid\n  paymentStatus\n  shippingAddress {\n    ...Address\n  }\n  deliveryMethod {\n    __typename\n    ... on ShippingMethod {\n      id\n    }\n    ... on Warehouse {\n      id\n      clickAndCollectOption\n    }\n  }\n  shippingMethod {\n    id\n  }\n  shippingMethodName\n  collectionPointName\n  shippingPrice {\n    gross {\n      amount\n      currency\n    }\n  }\n  status\n  subtotal {\n    gross {\n      ...Money\n    }\n    net {\n      ...Money\n    }\n  }\n  total {\n    gross {\n      ...Money\n    }\n    net {\n      ...Money\n    }\n    tax {\n      ...Money\n    }\n  }\n  totalRemainingGrant {\n    ...Money\n  }\n  totalGrantedRefund {\n    ...Money\n  }\n  totalRefundPending {\n    ...Money\n  }\n  totalRefunded {\n    ...Money\n  }\n  actions\n  totalAuthorizePending {\n    ...Money\n  }\n  totalAuthorized {\n    ...Money\n  }\n  totalCaptured {\n    ...Money\n  }\n  totalCharged {\n    ...Money\n  }\n  totalChargePending {\n    ...Money\n  }\n  totalCanceled {\n    ...Money\n  }\n  totalCancelPending {\n    ...Money\n  }\n  totalBalance {\n    ...Money\n  }\n  undiscountedTotal {\n    net {\n      ...Money\n    }\n    gross {\n      ...Money\n    }\n  }\n  user {\n    id\n    email\n  }\n  userEmail\n  voucher {\n    id\n    name\n    code\n    type\n  }\n  voucherCode\n  shippingMethods {\n    id\n    name\n    price {\n      ...Money\n    }\n    active\n    message\n  }\n  invoices {\n    ...Invoice\n  }\n  channel {\n    isActive\n    id\n    name\n    currencyCode\n    slug\n    defaultCountry {\n      code\n    }\n    orderSettings {\n      markAsPaidStrategy\n    }\n  }\n  chargeStatus\n  authorizeStatus\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment Address on Address {\n  city\n  cityArea\n  companyName\n  country {\n    __typename\n    code\n    country\n  }\n  countryArea\n  firstName\n  id\n  lastName\n  phone\n  postalCode\n  streetAddress1\n  streetAddress2\n}\n\nfragment TransactionItem on TransactionItem {\n  ...TransactionBaseItem\n  pspReference\n  externalUrl\n  createdAt\n  createdBy {\n    ... on App {\n      name\n      brand {\n        logo {\n          default(size: 64)\n        }\n      }\n    }\n  }\n  paymentMethodDetails {\n    name\n    __typename\n    ... on CardPaymentMethodDetails {\n      ...CardPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n    ... on OtherPaymentMethodDetails {\n      ...OtherPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n  }\n  events {\n    ...TransactionEvent\n  }\n  authorizedAmount {\n    ...Money\n  }\n  chargedAmount {\n    ...Money\n  }\n  refundedAmount {\n    ...Money\n  }\n  canceledAmount {\n    ...Money\n  }\n  authorizePendingAmount {\n    ...Money\n  }\n  chargePendingAmount {\n    ...Money\n  }\n  refundPendingAmount {\n    ...Money\n  }\n  cancelPendingAmount {\n    ...Money\n  }\n}\n\nfragment TransactionBaseItem on TransactionItem {\n  id\n  name\n  actions\n  events {\n    ...TransactionBaseEvent\n  }\n}\n\nfragment TransactionBaseEvent on TransactionEvent {\n  id\n  pspReference\n  amount {\n    ...Money\n  }\n  externalUrl\n  type\n  message\n  createdAt\n  reasonReference {\n    id\n    title\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment CardPaymentMethodDetails on CardPaymentMethodDetails {\n  name\n  brand\n  expMonth\n  expYear\n  firstDigits\n  lastDigits\n}\n\nfragment GiftCardPaymentMethodDetails on GiftCardPaymentMethodDetails {\n  name\n  brand\n  lastChars\n  isSaleorGiftcard\n}\n\nfragment OtherPaymentMethodDetails on OtherPaymentMethodDetails {\n  name\n}\n\nfragment TransactionEvent on TransactionEvent {\n  ...TransactionBaseEvent\n  createdBy {\n    ... on User {\n      ...StaffMemberAvatar\n    }\n    ... on App {\n      ...AppAvatar\n    }\n  }\n  externalUrl\n}\n\nfragment StaffMemberAvatar on User {\n  ...StaffMember\n  avatar(size: 512) {\n    url\n  }\n}\n\nfragment StaffMember on User {\n  id\n  email\n  firstName\n  isActive\n  lastName\n}\n\nfragment AppAvatar on App {\n  id\n  name\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n}\n\nfragment OrderPayment on Payment {\n  id\n  isActive\n  actions\n  gateway\n  paymentMethodType\n  availableCaptureAmount {\n    ...Money\n  }\n  capturedAmount {\n    ...Money\n  }\n  total {\n    ...Money\n  }\n  availableRefundAmount {\n    ...Money\n  }\n  modified\n  transactions {\n    id\n    token\n    created\n    kind\n    isSuccess\n  }\n}\n\nfragment OrderGiftCard on GiftCard {\n  id\n  last4CodeChars\n  events {\n    id\n    type\n    orderId\n    date\n    balance {\n      ...OrderGiftCardEventBalance\n    }\n  }\n}\n\nfragment OrderGiftCardEventBalance on GiftCardEventBalance {\n  initialBalance {\n    ...Money\n  }\n  currentBalance {\n    ...Money\n  }\n  oldInitialBalance {\n    ...Money\n  }\n  oldCurrentBalance {\n    ...Money\n  }\n}\n\nfragment OrderGrantedRefund on OrderGrantedRefund {\n  id\n  createdAt\n  shippingCostsIncluded\n  status\n  amount {\n    currency\n    amount\n  }\n  transactionEvents {\n    id\n  }\n  reason\n  reasonReference {\n    id\n    title\n  }\n  user {\n    ...UserBaseAvatar\n  }\n  app {\n    id\n    name\n    brand {\n      logo {\n        default(format: WEBP, size: 64)\n      }\n    }\n  }\n  lines {\n    id\n    quantity\n    orderLine {\n      id\n    }\n  }\n}\n\nfragment UserBaseAvatar on User {\n  id\n  firstName\n  lastName\n  email\n  avatar {\n    url\n    alt\n  }\n}\n\nfragment OrderDiscount on OrderDiscount {\n  id\n  type\n  name\n  translatedName\n  calculationMode: valueType\n  value\n  reason\n  amount {\n    ...Money\n  }\n  total {\n    ...Money\n  }\n}\n\nfragment OrderEvent on OrderEvent {\n  id\n  amount\n  shippingCostsIncluded\n  date\n  email\n  emailType\n  invoiceNumber\n  discount {\n    valueType\n    value\n    reason\n    amount {\n      amount\n      currency\n    }\n    oldValueType\n    oldValue\n    oldAmount {\n      amount\n      currency\n    }\n  }\n  relatedOrder {\n    id\n    number\n  }\n  related {\n    id\n  }\n  message\n  quantity\n  transactionReference\n  type\n  user {\n    id\n    email\n    firstName\n    lastName\n    avatar(size: 128) {\n      url\n    }\n  }\n  app {\n    id\n    name\n    appUrl\n    brand {\n      logo {\n        default(size: 128)\n      }\n    }\n  }\n  lines {\n    quantity\n    itemName\n    discount {\n      valueType\n      value\n      reason\n      amount {\n        amount\n        currency\n      }\n      oldValueType\n      oldValue\n      oldAmount {\n        amount\n        currency\n      }\n    }\n    orderLine {\n      id\n      productName\n      variantName\n    }\n  }\n}\n\nfragment Fulfillment on Fulfillment {\n  ...Metadata\n  id\n  created\n  lines {\n    id\n    quantity\n    orderLine {\n      ...OrderLine\n    }\n  }\n  fulfillmentOrder\n  status\n  trackingNumber\n  warehouse {\n    id\n    name\n  }\n}\n\nfragment OrderLine on OrderLine {\n  id\n  isShippingRequired\n  allocations {\n    id\n    quantity\n    warehouse {\n      id\n      name\n    }\n  }\n  variant {\n    id\n    name\n    quantityAvailable\n    preorder {\n      endDate\n    }\n    stocks {\n      ...Stock\n    }\n    product {\n      id\n      isAvailableForPurchase\n    }\n  }\n  productName\n  productSku\n  isGift\n  quantity\n  quantityFulfilled\n  quantityToFulfill\n  totalPrice {\n    gross {\n      ...MoneyWithFractionDigits\n    }\n    net {\n      ...Money\n    }\n    tax {\n      ...Money\n    }\n  }\n  undiscountedTotalPrice {\n    ...TaxedMoney\n    tax {\n      ...Money\n    }\n  }\n  unitDiscount {\n    amount\n    currency\n  }\n  unitDiscountValue\n  unitDiscountReason\n  unitDiscountType\n  undiscountedUnitPrice {\n    currency\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  unitPrice {\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  taxRate\n  taxClass {\n    id\n    name\n  }\n  voucherCode\n  thumbnail {\n    url\n  }\n  discounts {\n    ...OrderLineDiscount\n  }\n}\n\nfragment Stock on Stock {\n  id\n  quantity\n  quantityAllocated\n  warehouse {\n    ...Warehouse\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}\n\nfragment MoneyWithFractionDigits on Money {\n  amount\n  currency\n  fractionDigits\n}\n\nfragment TaxedMoney on TaxedMoney {\n  net {\n    ...Money\n  }\n  gross {\n    ...Money\n  }\n}\n\nfragment OrderLineDiscount on OrderLineDiscount {\n  id\n  type\n  name\n  translatedName\n  valueType\n  value\n  reason\n  total {\n    ...Money\n  }\n  unit {\n    ...Money\n  }\n}\n\nfragment Invoice on Invoice {\n  id\n  number\n  createdAt\n  url\n  status\n}\n\nfragment FulfillmentWithMetadata on Fulfillment {\n  ...Fulfillment\n  lines {\n    orderLine {\n      ...OrderLineWithMetadata\n    }\n  }\n}\n\nfragment OrderLineWithMetadata on OrderLine {\n  ...OrderLine\n  ...OrderLineMetadata\n}\n\nfragment OrderLineMetadata on OrderLine {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n  variant {\n    metadata {\n      ...MetadataItem\n    }\n    privateMetadata @include(if: $hasManageProducts) {\n      ...MetadataItem\n    }\n  }\n}\n\nfragment PaymentGateway on PaymentGateway {\n  name\n  id\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "hasManageProducts": true
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Order.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "order"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/order/schema.py\", line 222, in resolve_order",
+              "    _, id = from_global_id_or_error(id, Order)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Order."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "order": null,
+      "shop": {
+        "countries": [
+          {
+            "code": "AF",
+            "country": "Afghanistan"
+          },
+          {
+            "code": "AX",
+            "country": "\u00c5land Islands"
+          },
+          {
+            "code": "AL",
+            "country": "Albania"
+          },
+          {
+            "code": "DZ",
+            "country": "Algeria"
+          },
+          {
+            "code": "AS",
+            "country": "American Samoa"
+          },
+          {
+            "code": "AD",
+            "country": "Andorra"
+          },
+          {
+            "code": "AO",
+            "country": "Angola"
+          },
+          {
+            "code": "AI",
+            "country": "Anguilla"
+          },
+          {
+            "code": "AQ",
+            "country": "Antarctica"
+          },
+          {
+            "code": "AG",
+            "country": "Antigua and Barbuda"
+          },
+          {
+            "code": "AR",
+            "country": "Argentina"
+          },
+          {
+            "code": "AM",
+            "country": "Armenia"
+          },
+          {
+            "code": "AW",
+            "country": "Aruba"
+          },
+          {
+            "code": "AU",
+            "country": "Australia"
+          },
+          {
+            "code": "AT",
+            "country": "Austria"
+          },
+          {
+            "code": "AZ",
+            "country": "Azerbaijan"
+          },
+          {
+            "code": "BS",
+            "country": "Bahamas"
+          },
+          {
+            "code": "BH",
+            "country": "Bahrain"
+          },
+          {
+            "code": "BD",
+            "country": "Bangladesh"
+          },
+          {
+            "code": "BB",
+            "country": "Barbados"
+          },
+          {
+            "code": "BY",
+            "country": "Belarus"
+          },
+          {
+            "code": "BE",
+            "country": "Belgium"
+          },
+          {
+            "code": "BZ",
+            "country": "Belize"
+          },
+          {
+            "code": "BJ",
+            "country": "Benin"
+          },
+          {
+            "code": "BM",
+            "country": "Bermuda"
+          },
+          {
+            "code": "BT",
+            "country": "Bhutan"
+          },
+          {
+            "code": "BO",
+            "country": "Bolivia"
+          },
+          {
+            "code": "BQ",
+            "country": "Bonaire, Sint Eustatius and Saba"
+          },
+          {
+            "code": "BA",
+            "country": "Bosnia and Herzegovina"
+          },
+          {
+            "code": "BW",
+            "country": "Botswana"
+          },
+          {
+            "code": "BV",
+            "country": "Bouvet Island"
+          },
+          {
+            "code": "BR",
+            "country": "Brazil"
+          },
+          {
+            "code": "IO",
+            "country": "British Indian Ocean Territory"
+          },
+          {
+            "code": "BN",
+            "country": "Brunei"
+          },
+          {
+            "code": "BG",
+            "country": "Bulgaria"
+          },
+          {
+            "code": "BF",
+            "country": "Burkina Faso"
+          },
+          {
+            "code": "BI",
+            "country": "Burundi"
+          },
+          {
+            "code": "CV",
+            "country": "Cabo Verde"
+          },
+          {
+            "code": "KH",
+            "country": "Cambodia"
+          },
+          {
+            "code": "CM",
+            "country": "Cameroon"
+          },
+          {
+            "code": "CA",
+            "country": "Canada"
+          },
+          {
+            "code": "KY",
+            "country": "Cayman Islands"
+          },
+          {
+            "code": "CF",
+            "country": "Central African Republic"
+          },
+          {
+            "code": "TD",
+            "country": "Chad"
+          },
+          {
+            "code": "CL",
+            "country": "Chile"
+          },
+          {
+            "code": "CN",
+            "country": "China"
+          },
+          {
+            "code": "CX",
+            "country": "Christmas Island"
+          },
+          {
+            "code": "CC",
+            "country": "Cocos (Keeling) Islands"
+          },
+          {
+            "code": "CO",
+            "country": "Colombia"
+          },
+          {
+            "code": "KM",
+            "country": "Comoros"
+          },
+          {
+            "code": "CG",
+            "country": "Congo"
+          },
+          {
+            "code": "CD",
+            "country": "Congo (the Democratic Republic of the)"
+          },
+          {
+            "code": "CK",
+            "country": "Cook Islands"
+          },
+          {
+            "code": "CR",
+            "country": "Costa Rica"
+          },
+          {
+            "code": "CI",
+            "country": "C\u00f4te d'Ivoire"
+          },
+          {
+            "code": "HR",
+            "country": "Croatia"
+          },
+          {
+            "code": "CU",
+            "country": "Cuba"
+          },
+          {
+            "code": "CW",
+            "country": "Cura\u00e7ao"
+          },
+          {
+            "code": "CY",
+            "country": "Cyprus"
+          },
+          {
+            "code": "CZ",
+            "country": "Czechia"
+          },
+          {
+            "code": "DK",
+            "country": "Denmark"
+          },
+          {
+            "code": "DJ",
+            "country": "Djibouti"
+          },
+          {
+            "code": "DM",
+            "country": "Dominica"
+          },
+          {
+            "code": "DO",
+            "country": "Dominican Republic"
+          },
+          {
+            "code": "EC",
+            "country": "Ecuador"
+          },
+          {
+            "code": "EG",
+            "country": "Egypt"
+          },
+          {
+            "code": "SV",
+            "country": "El Salvador"
+          },
+          {
+            "code": "GQ",
+            "country": "Equatorial Guinea"
+          },
+          {
+            "code": "ER",
+            "country": "Eritrea"
+          },
+          {
+            "code": "EE",
+            "country": "Estonia"
+          },
+          {
+            "code": "SZ",
+            "country": "Eswatini"
+          },
+          {
+            "code": "ET",
+            "country": "Ethiopia"
+          },
+          {
+            "code": "EU",
+            "country": "European Union"
+          },
+          {
+            "code": "FK",
+            "country": "Falkland Islands (Malvinas)"
+          },
+          {
+            "code": "FO",
+            "country": "Faroe Islands"
+          },
+          {
+            "code": "FJ",
+            "country": "Fiji"
+          },
+          {
+            "code": "FI",
+            "country": "Finland"
+          },
+          {
+            "code": "FR",
+            "country": "France"
+          },
+          {
+            "code": "GF",
+            "country": "French Guiana"
+          },
+          {
+            "code": "PF",
+            "country": "French Polynesia"
+          },
+          {
+            "code": "TF",
+            "country": "French Southern Territories"
+          },
+          {
+            "code": "GA",
+            "country": "Gabon"
+          },
+          {
+            "code": "GM",
+            "country": "Gambia"
+          },
+          {
+            "code": "GE",
+            "country": "Georgia"
+          },
+          {
+            "code": "DE",
+            "country": "Germany"
+          },
+          {
+            "code": "GH",
+            "country": "Ghana"
+          },
+          {
+            "code": "GI",
+            "country": "Gibraltar"
+          },
+          {
+            "code": "GR",
+            "country": "Greece"
+          },
+          {
+            "code": "GL",
+            "country": "Greenland"
+          },
+          {
+            "code": "GD",
+            "country": "Grenada"
+          },
+          {
+            "code": "GP",
+            "country": "Guadeloupe"
+          },
+          {
+            "code": "GU",
+            "country": "Guam"
+          },
+          {
+            "code": "GT",
+            "country": "Guatemala"
+          },
+          {
+            "code": "GG",
+            "country": "Guernsey"
+          },
+          {
+            "code": "GN",
+            "country": "Guinea"
+          },
+          {
+            "code": "GW",
+            "country": "Guinea-Bissau"
+          },
+          {
+            "code": "GY",
+            "country": "Guyana"
+          },
+          {
+            "code": "HT",
+            "country": "Haiti"
+          },
+          {
+            "code": "HM",
+            "country": "Heard Island and McDonald Islands"
+          },
+          {
+            "code": "VA",
+            "country": "Holy See"
+          },
+          {
+            "code": "HN",
+            "country": "Honduras"
+          },
+          {
+            "code": "HK",
+            "country": "Hong Kong"
+          },
+          {
+            "code": "HU",
+            "country": "Hungary"
+          },
+          {
+            "code": "IS",
+            "country": "Iceland"
+          },
+          {
+            "code": "IN",
+            "country": "India"
+          },
+          {
+            "code": "ID",
+            "country": "Indonesia"
+          },
+          {
+            "code": "IR",
+            "country": "Iran"
+          },
+          {
+            "code": "IQ",
+            "country": "Iraq"
+          },
+          {
+            "code": "IE",
+            "country": "Ireland"
+          },
+          {
+            "code": "IM",
+            "country": "Isle of Man"
+          },
+          {
+            "code": "IL",
+            "country": "Israel"
+          },
+          {
+            "code": "IT",
+            "country": "Italy"
+          },
+          {
+            "code": "JM",
+            "country": "Jamaica"
+          },
+          {
+            "code": "JP",
+            "country": "Japan"
+          },
+          {
+            "code": "JE",
+            "country": "Jersey"
+          },
+          {
+            "code": "JO",
+            "country": "Jordan"
+          },
+          {
+            "code": "KZ",
+            "country": "Kazakhstan"
+          },
+          {
+            "code": "KE",
+            "country": "Kenya"
+          },
+          {
+            "code": "KI",
+            "country": "Kiribati"
+          },
+          {
+            "code": "XK",
+            "country": "Kosovo"
+          },
+          {
+            "code": "KW",
+            "country": "Kuwait"
+          },
+          {
+            "code": "KG",
+            "country": "Kyrgyzstan"
+          },
+          {
+            "code": "LA",
+            "country": "Laos"
+          },
+          {
+            "code": "LV",
+            "country": "Latvia"
+          },
+          {
+            "code": "LB",
+            "country": "Lebanon"
+          },
+          {
+            "code": "LS",
+            "country": "Lesotho"
+          },
+          {
+            "code": "LR",
+            "country": "Liberia"
+          },
+          {
+            "code": "LY",
+            "country": "Libya"
+          },
+          {
+            "code": "LI",
+            "country": "Liechtenstein"
+          },
+          {
+            "code": "LT",
+            "country": "Lithuania"
+          },
+          {
+            "code": "LU",
+            "country": "Luxembourg"
+          },
+          {
+            "code": "MO",
+            "country": "Macao"
+          },
+          {
+            "code": "MG",
+            "country": "Madagascar"
+          },
+          {
+            "code": "MW",
+            "country": "Malawi"
+          },
+          {
+            "code": "MY",
+            "country": "Malaysia"
+          },
+          {
+            "code": "MV",
+            "country": "Maldives"
+          },
+          {
+            "code": "ML",
+            "country": "Mali"
+          },
+          {
+            "code": "MT",
+            "country": "Malta"
+          },
+          {
+            "code": "MH",
+            "country": "Marshall Islands"
+          },
+          {
+            "code": "MQ",
+            "country": "Martinique"
+          },
+          {
+            "code": "MR",
+            "country": "Mauritania"
+          },
+          {
+            "code": "MU",
+            "country": "Mauritius"
+          },
+          {
+            "code": "YT",
+            "country": "Mayotte"
+          },
+          {
+            "code": "MX",
+            "country": "Mexico"
+          },
+          {
+            "code": "FM",
+            "country": "Micronesia"
+          },
+          {
+            "code": "MD",
+            "country": "Moldova"
+          },
+          {
+            "code": "MC",
+            "country": "Monaco"
+          },
+          {
+            "code": "MN",
+            "country": "Mongolia"
+          },
+          {
+            "code": "ME",
+            "country": "Montenegro"
+          },
+          {
+            "code": "MS",
+            "country": "Montserrat"
+          },
+          {
+            "code": "MA",
+            "country": "Morocco"
+          },
+          {
+            "code": "MZ",
+            "country": "Mozambique"
+          },
+          {
+            "code": "MM",
+            "country": "Myanmar"
+          },
+          {
+            "code": "NA",
+            "country": "Namibia"
+          },
+          {
+            "code": "NR",
+            "country": "Nauru"
+          },
+          {
+            "code": "NP",
+            "country": "Nepal"
+          },
+          {
+            "code": "NL",
+            "country": "Netherlands"
+          },
+          {
+            "code": "NC",
+            "country": "New Caledonia"
+          },
+          {
+            "code": "NZ",
+            "country": "New Zealand"
+          },
+          {
+            "code": "NI",
+            "country": "Nicaragua"
+          },
+          {
+            "code": "NE",
+            "country": "Niger"
+          },
+          {
+            "code": "NG",
+            "country": "Nigeria"
+          },
+          {
+            "code": "NU",
+            "country": "Niue"
+          },
+          {
+            "code": "NF",
+            "country": "Norfolk Island"
+          },
+          {
+            "code": "KP",
+            "country": "North Korea"
+          },
+          {
+            "code": "MK",
+            "country": "North Macedonia"
+          },
+          {
+            "code": "MP",
+            "country": "Northern Mariana Islands"
+          },
+          {
+            "code": "NO",
+            "country": "Norway"
+          },
+          {
+            "code": "OM",
+            "country": "Oman"
+          },
+          {
+            "code": "PK",
+            "country": "Pakistan"
+          },
+          {
+            "code": "PW",
+            "country": "Palau"
+          },
+          {
+            "code": "PS",
+            "country": "Palestine, State of"
+          },
+          {
+            "code": "PA",
+            "country": "Panama"
+          },
+          {
+            "code": "PG",
+            "country": "Papua New Guinea"
+          },
+          {
+            "code": "PY",
+            "country": "Paraguay"
+          },
+          {
+            "code": "PE",
+            "country": "Peru"
+          },
+          {
+            "code": "PH",
+            "country": "Philippines"
+          },
+          {
+            "code": "PN",
+            "country": "Pitcairn"
+          },
+          {
+            "code": "PL",
+            "country": "Poland"
+          },
+          {
+            "code": "PT",
+            "country": "Portugal"
+          },
+          {
+            "code": "PR",
+            "country": "Puerto Rico"
+          },
+          {
+            "code": "QA",
+            "country": "Qatar"
+          },
+          {
+            "code": "RE",
+            "country": "R\u00e9union"
+          },
+          {
+            "code": "RO",
+            "country": "Romania"
+          },
+          {
+            "code": "RU",
+            "country": "Russia"
+          },
+          {
+            "code": "RW",
+            "country": "Rwanda"
+          },
+          {
+            "code": "BL",
+            "country": "Saint Barth\u00e9lemy"
+          },
+          {
+            "code": "SH",
+            "country": "Saint Helena, Ascension and Tristan da Cunha"
+          },
+          {
+            "code": "KN",
+            "country": "Saint Kitts and Nevis"
+          },
+          {
+            "code": "LC",
+            "country": "Saint Lucia"
+          },
+          {
+            "code": "MF",
+            "country": "Saint Martin (French part)"
+          },
+          {
+            "code": "PM",
+            "country": "Saint Pierre and Miquelon"
+          },
+          {
+            "code": "VC",
+            "country": "Saint Vincent and the Grenadines"
+          },
+          {
+            "code": "WS",
+            "country": "Samoa"
+          },
+          {
+            "code": "SM",
+            "country": "San Marino"
+          },
+          {
+            "code": "ST",
+            "country": "Sao Tome and Principe"
+          },
+          {
+            "code": "SA",
+            "country": "Saudi Arabia"
+          },
+          {
+            "code": "SN",
+            "country": "Senegal"
+          },
+          {
+            "code": "RS",
+            "country": "Serbia"
+          },
+          {
+            "code": "SC",
+            "country": "Seychelles"
+          },
+          {
+            "code": "SL",
+            "country": "Sierra Leone"
+          },
+          {
+            "code": "SG",
+            "country": "Singapore"
+          },
+          {
+            "code": "SX",
+            "country": "Sint Maarten (Dutch part)"
+          },
+          {
+            "code": "SK",
+            "country": "Slovakia"
+          },
+          {
+            "code": "SI",
+            "country": "Slovenia"
+          },
+          {
+            "code": "SB",
+            "country": "Solomon Islands"
+          },
+          {
+            "code": "SO",
+            "country": "Somalia"
+          },
+          {
+            "code": "ZA",
+            "country": "South Africa"
+          },
+          {
+            "code": "GS",
+            "country": "South Georgia and the South Sandwich Islands"
+          },
+          {
+            "code": "KR",
+            "country": "South Korea"
+          },
+          {
+            "code": "SS",
+            "country": "South Sudan"
+          },
+          {
+            "code": "ES",
+            "country": "Spain"
+          },
+          {
+            "code": "LK",
+            "country": "Sri Lanka"
+          },
+          {
+            "code": "SD",
+            "country": "Sudan"
+          },
+          {
+            "code": "SR",
+            "country": "Suriname"
+          },
+          {
+            "code": "SJ",
+            "country": "Svalbard and Jan Mayen"
+          },
+          {
+            "code": "SE",
+            "country": "Sweden"
+          },
+          {
+            "code": "CH",
+            "country": "Switzerland"
+          },
+          {
+            "code": "SY",
+            "country": "Syria"
+          },
+          {
+            "code": "TW",
+            "country": "Taiwan"
+          },
+          {
+            "code": "TJ",
+            "country": "Tajikistan"
+          },
+          {
+            "code": "TZ",
+            "country": "Tanzania"
+          },
+          {
+            "code": "TH",
+            "country": "Thailand"
+          },
+          {
+            "code": "TL",
+            "country": "Timor-Leste"
+          },
+          {
+            "code": "TG",
+            "country": "Togo"
+          },
+          {
+            "code": "TK",
+            "country": "Tokelau"
+          },
+          {
+            "code": "TO",
+            "country": "Tonga"
+          },
+          {
+            "code": "TT",
+            "country": "Trinidad and Tobago"
+          },
+          {
+            "code": "TN",
+            "country": "Tunisia"
+          },
+          {
+            "code": "TR",
+            "country": "T\u00fcrkiye"
+          },
+          {
+            "code": "TM",
+            "country": "Turkmenistan"
+          },
+          {
+            "code": "TC",
+            "country": "Turks and Caicos Islands"
+          },
+          {
+            "code": "TV",
+            "country": "Tuvalu"
+          },
+          {
+            "code": "UG",
+            "country": "Uganda"
+          },
+          {
+            "code": "UA",
+            "country": "Ukraine"
+          },
+          {
+            "code": "AE",
+            "country": "United Arab Emirates"
+          },
+          {
+            "code": "GB",
+            "country": "United Kingdom"
+          },
+          {
+            "code": "UM",
+            "country": "United States Minor Outlying Islands"
+          },
+          {
+            "code": "US",
+            "country": "United States of America"
+          },
+          {
+            "code": "UY",
+            "country": "Uruguay"
+          },
+          {
+            "code": "UZ",
+            "country": "Uzbekistan"
+          },
+          {
+            "code": "VU",
+            "country": "Vanuatu"
+          },
+          {
+            "code": "VE",
+            "country": "Venezuela"
+          },
+          {
+            "code": "VN",
+            "country": "Vietnam"
+          },
+          {
+            "code": "VG",
+            "country": "Virgin Islands (British)"
+          },
+          {
+            "code": "VI",
+            "country": "Virgin Islands (U.S.)"
+          },
+          {
+            "code": "WF",
+            "country": "Wallis and Futuna"
+          },
+          {
+            "code": "EH",
+            "country": "Western Sahara"
+          },
+          {
+            "code": "YE",
+            "country": "Yemen"
+          },
+          {
+            "code": "ZM",
+            "country": "Zambia"
+          },
+          {
+            "code": "ZW",
+            "country": "Zimbabwe"
+          }
+        ],
+        "defaultWeightUnit": "KG",
+        "fulfillmentAllowUnpaid": true,
+        "fulfillmentAutoApprove": true,
+        "availablePaymentGateways": [
+          {
+            "name": "Dummy",
+            "id": "mirumee.payments.dummy"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 69,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:90ca4fc72b965778",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "orderdetailswithmetadata",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "order"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "order"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:88777b7b54386319"
+}

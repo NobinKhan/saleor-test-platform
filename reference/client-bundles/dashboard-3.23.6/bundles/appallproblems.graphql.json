@@ -1,0 +1,98 @@
+{
+  "bundle_id": "appallproblems",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "AppAllProblems"
+  ],
+  "document": "query AppAllProblems($id: ID!) {\n  app(id: $id) {\n    id\n    problems {\n      __typename\n      key\n      message\n      createdAt\n      count\n      isCritical\n      dismissed {\n        by\n        userEmail\n      }\n      updatedAt\n      id\n    }\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: App.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "app"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/promise/promise.py\", line 87, in try_catch",
+              "    return (handler(*args, **kwargs), None)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/app/schema.py\", line 147, in resolve_app",
+              "    return resolve_app(info, id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/app/resolvers.py\", line 64, in resolve_app",
+              "    _, id = from_global_id_or_error(id, \"App\")",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: App."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "app": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 2,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:141f7f5c3b2be95f",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "appallproblems",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "app"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "app"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:b0e273463196d58a"
+}

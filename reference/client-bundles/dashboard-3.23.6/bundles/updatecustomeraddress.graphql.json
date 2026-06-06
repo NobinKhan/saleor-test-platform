@@ -1,0 +1,60 @@
+{
+  "bundle_id": "updatecustomeraddress",
+  "source": "saleor-dashboard",
+  "source_path": "customers/mutations.ts",
+  "operation_names": [
+    "UpdateCustomerAddress"
+  ],
+  "document": "mutation UpdateCustomerAddress($id: ID!, $input: AddressInput!) {\n  addressUpdate(id: $id, input: $input) {\n    errors {\n      ...AccountError\n    }\n    address {\n      ...Address\n    }\n  }\n}\n\nfragment AccountError on AccountError {\n  code\n  field\n  addressType\n  message\n}\n\nfragment Address on Address {\n  city\n  cityArea\n  companyName\n  country {\n    __typename\n    code\n    country\n  }\n  countryArea\n  firstName\n  id\n  lastName\n  phone\n  postalCode\n  streetAddress1\n  streetAddress2\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"AddressInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 42
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"AddressInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "updatecustomeraddress",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:7ef86f01f93b1b1c"
+}

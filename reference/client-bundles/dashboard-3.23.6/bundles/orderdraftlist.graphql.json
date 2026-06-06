@@ -1,0 +1,104 @@
+{
+  "bundle_id": "orderdraftlist",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "OrderDraftList"
+  ],
+  "document": "query OrderDraftList($first: Int, $after: String, $last: Int, $before: String, $filter: OrderDraftFilterInput, $sort: OrderSortingInput) {\n  draftOrders(\n    before: $before\n    after: $after\n    first: $first\n    last: $last\n    filter: $filter\n    sortBy: $sort\n  ) {\n    edges {\n      node {\n        __typename\n        billingAddress {\n          ...Address\n        }\n        created\n        channel {\n          name\n          id\n        }\n        id\n        number\n        paymentStatus\n        status\n        total {\n          __typename\n          gross {\n            __typename\n            amount\n            currency\n          }\n        }\n        userEmail\n      }\n    }\n    pageInfo {\n      hasPreviousPage\n      hasNextPage\n      startCursor\n      endCursor\n    }\n  }\n}\n\nfragment Address on Address {\n  city\n  cityArea\n  companyName\n  country {\n    __typename\n    code\n    country\n  }\n  countryArea\n  firstName\n  id\n  lastName\n  phone\n  postalCode\n  streetAddress1\n  streetAddress2\n}",
+  "variables": {
+    "first": 10,
+    "after": "",
+    "last": 10,
+    "before": "",
+    "filter": null,
+    "sort": null
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument `last` cannot be combined with `first`.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "draftOrders"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
+              "    return wrapped_resolver(obj, info, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/order/schema.py\", line 256, in resolve_draft_orders",
+              "    return create_connection_slice_for_sync_webhook_control_context(",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 680, in create_connection_slice_for_sync_webhook_control_context",
+              "    sliced_connection = create_connection_slice(iterable, info, args, connection_type)",
+              "                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
+              "    slice = connection_from_queryset_slice(",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
+              "    _validate_connection_args(args)",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
+              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
+              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "draftOrders": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 60,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:c45dd826bc68a7c0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "orderdraftlist",
+    "expected_null": true,
+    "message_pattern": "Argument `last` cannot be combined with `first`.",
+    "optional_path": [
+      "draftOrders"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "draftOrders"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:3c3e9ffac0dd224d"
+}

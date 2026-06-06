@@ -1,0 +1,77 @@
+---
+description: Saleor Test Platform — compatibility, reference corpus, and infrastructure rules
+alwaysApply: true
+---
+
+# Saleor Test Platform — Hard Rules
+
+## 100% Saleor compatibility (non-negotiable)
+
+- Certification requires **schema gate pass** (L1 + L3) AND **100% SGRC** (Tier 1 always; Tier 2 when `SGRC_TIER2_GATE=true`).
+- Every probe replays the **exact same GraphQL input** recorded from official Saleor.
+- **Tier 1** = message + data semantics for errors; normalized shape for success — **not** byte-identical JSON to Python Saleor.
+- Never require `stacktrace`, `locations`, or `extensions.cost` for certification.
+- Gaps in coverage, auth replay, or comparison logic are **platform failures** — fix the harness, never weaken Tier 1 to make a backend pass.
+
+## SGRC (Saleor GraphQL Response Contract)
+
+- **Tier 1** — always required. Message + data semantics for errors; normalized shape for success.
+- **Tier 2** — `path` + error codes when golden has them. Hard gate when `SGRC_TIER2_GATE=true`; informational as `parity_gap` during migration.
+- **Tier 3** — Python debug artifacts — never required.
+- **L3 bundles** — real Dashboard GraphQL at `reference/client-bundles/`. **No stubs** — documents from `reference/vendor/saleor-dashboard-{VERSION}/`, golden only from live official Saleor.
+
+## Cross-language backends
+
+- Go, Node, Rust backends are **first-class**. Golden is recorded from Python Saleor; comparison uses **semantic profiles**, not Python stack traces.
+
+## Expand, never weaken
+
+- If Dashboard/Storefront breaks against a certified backend → **add probes**, never loosen Tier 1.
+
+## Reference corpus (L1 + L3 unified workflow)
+
+- **One active L1 corpus only** at `reference/corpora/saleor-{VERSION}/`. Delete superseded folders — never archive stray versions.
+- **L3 vendor source** at `reference/vendor/saleor-dashboard-{REFERENCE_BASELINE_VERSION}/`.
+- **Golden baseline** — `just baseline` must pass on official Saleor before testing other backends.
+- **Same corpus commands for L1 and L3** — never add parallel just recipes:
+  - `just corpus-diff` — L1 op drift + L3 bundle document drift
+  - `just patch-corpus --sync-client` — import L3 documents from vendor
+  - `just patch-corpus --client-bundles all` — record L3 golden
+  - `just patch-corpus --apply-diff` — apply L1 + L3 drift together
+  - `just record-reference` — full L1 capture then sync + record all L3
+- **Default Saleor updates** = incremental patch, not full re-record.
+- Full re-record only on **user-requested** minor/major version bump (`bash scripts/upgrade-reference.sh`).
+
+## Saleor version policy
+
+- Pin in `docker-compose.yml` and `GOLDEN_CORPUS_VERSION`.
+- **Only upgrade** when the user explicitly requests it.
+
+## Deprecated / removed Saleor operations
+
+- Remove from `test_runner.py` catalog, delete probe JSON, run `just patch-corpus --remove opName`.
+- Remove L3 bundles with `just patch-corpus --remove bundle-id` (no `__KIND` suffix).
+- Never test APIs Saleor has removed.
+
+## Test defaults
+
+- Default mode: `compatibility`. Default scope: `full`. **Official certification** = `full+client` + L3 schema gate + Tier 2 when gate enabled.
+- `discovery` = legacy/debug only.
+
+## Infrastructure
+
+- Harness backend + Postgres: Chainguard. Frontend: Bun on `node:20-slim`.
+- Saleor API/worker: official `ghcr.io/saleor/saleor:{pin}` only.
+- **No GitHub CI** — verify locally via `just baseline`, pytest.
+
+## Local verification
+
+| Check | Command |
+|-------|---------|
+| Stack | `just up` |
+| Golden baseline | `just baseline` |
+| Corpus integrity | `just verify-corpus` |
+| Corpus diff (L1 + L3) | `just corpus-diff` |
+| Patch reference | `just patch-corpus` |
+| Backend unit tests | `docker compose exec harness-backend pytest tests/ -q` |
+| Frontend types | `cd frontend && bun run check` |

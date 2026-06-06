@@ -45,6 +45,11 @@ class Settings(BaseSettings):
         validation_alias="SALEOR_GRAPHQL_URL",
     )
     allow_insecure_jwt_secret: bool = Field(default=True, validation_alias="ALLOW_INSECURE_JWT_SECRET")
+    sgrc_tier2_gate: bool = Field(default=False, validation_alias="SGRC_TIER2_GATE")
+    client_bundles_dashboard_version: str = Field(
+        default="",
+        validation_alias="CLIENT_BUNDLES_DASHBOARD_VERSION",
+    )
 
     @property
     def is_production(self) -> bool:

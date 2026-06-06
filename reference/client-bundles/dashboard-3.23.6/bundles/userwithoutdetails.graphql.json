@@ -1,0 +1,102 @@
+{
+  "bundle_id": "userwithoutdetails",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/queries.ts",
+  "operation_names": [
+    "UserWithoutDetails"
+  ],
+  "document": "query UserWithoutDetails {\n  user: me {\n    ...UserBaseFragment\n  }\n  authenticated @client\n  authenticating @client\n}\n\nfragment UserBaseFragment on User {\n  id\n  email\n  firstName\n  lastName\n  isStaff\n  userPermissions {\n    code\n    name\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Cannot query field \"authenticated\" on type \"Query\".",
+        "locations": [
+          {
+            "line": 5,
+            "column": 3
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"authenticated\" on type \"Query\"."
+            ]
+          }
+        }
+      },
+      {
+        "message": "Unknown directive \"client\".",
+        "locations": [
+          {
+            "line": 5,
+            "column": 17
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Unknown directive \"client\"."
+            ]
+          }
+        }
+      },
+      {
+        "message": "Cannot query field \"authenticating\" on type \"Query\".",
+        "locations": [
+          {
+            "line": 6,
+            "column": 3
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Cannot query field \"authenticating\" on type \"Query\"."
+            ]
+          }
+        }
+      },
+      {
+        "message": "Unknown directive \"client\".",
+        "locations": [
+          {
+            "line": 6,
+            "column": 18
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Unknown directive \"client\"."
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 2,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "auth_denied",
+  "golden_status": "warn",
+  "golden_contract": "auth_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "auth_error",
+    "data_path": "userwithoutdetails",
+    "expected_null": true,
+    "message_pattern": "<auth>"
+  },
+  "document_hash": "sha256:ac53f1e578f152a6"
+}

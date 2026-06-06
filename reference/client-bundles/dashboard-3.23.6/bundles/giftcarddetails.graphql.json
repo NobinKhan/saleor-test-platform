@@ -1,0 +1,106 @@
+{
+  "bundle_id": "giftcarddetails",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardUpdate/queries.ts",
+  "operation_names": [
+    "GiftCardDetails"
+  ],
+  "document": "query GiftCardDetails($id: ID!, $canSeeApp: Boolean!, $canSeeUser: Boolean!) {\n  giftCard(id: $id) {\n    ...GiftCardData\n    events {\n      ...GiftCardEvent\n      app @include(if: $canSeeApp) {\n        id\n        name\n        brand {\n          logo {\n            default(size: 128)\n          }\n        }\n      }\n      user @include(if: $canSeeUser) {\n        ...UserBase\n        email\n        avatar(size: 128) {\n          url\n        }\n      }\n    }\n  }\n}\n\nfragment GiftCardData on GiftCard {\n  ...Metadata\n  last4CodeChars\n  boughtInChannel\n  createdBy {\n    ...UserBase\n  }\n  product {\n    id\n    name\n  }\n  usedBy {\n    ...UserBase\n  }\n  usedByEmail\n  createdByEmail\n  created\n  expiryDate\n  lastUsedOn\n  isActive\n  initialBalance {\n    ...Money\n  }\n  currentBalance {\n    ...Money\n  }\n  id\n  tags {\n    name\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment UserBase on User {\n  id\n  firstName\n  lastName\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment GiftCardEvent on GiftCardEvent {\n  expiryDate\n  oldExpiryDate\n  id\n  date\n  type\n  message\n  email\n  orderId\n  orderNumber\n  tags\n  oldTags\n  balance {\n    initialBalance {\n      ...Money\n    }\n    currentBalance {\n      ...Money\n    }\n    oldInitialBalance {\n      ...Money\n    }\n    oldCurrentBalance {\n      ...Money\n    }\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "canSeeApp": false,
+    "canSeeUser": false
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: GiftCard.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "giftCard"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/giftcard/schema.py\", line 87, in resolve_gift_card",
+              "    _, id = from_global_id_or_error(id, GiftCard)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: GiftCard."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "giftCard": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 6,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:192c4a59c193d1ec",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "giftcarddetails",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "giftCard"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "giftCard"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:4f954d8fa780679f"
+}

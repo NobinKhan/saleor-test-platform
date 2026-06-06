@@ -1,6 +1,8 @@
 # Saleor API Reference — Test Coverage Schema
 
-> This document lists all Saleor GraphQL queries, mutations, and field types used by the test platform as the reference "truth" for API compatibility testing.
+> **Source of truth for compatibility testing:** the reference corpus at `reference/corpora/saleor-{VERSION}/` (414 probes for 3.23.7). This document lists the **dashboard catalog** subset (134 operations). Schema gate in compatibility mode uses the full corpus operation set.
+>
+> When Saleor deprecates or removes an operation, delete it from the catalog, remove its probe JSON, and re-record the corpus. See [COMPATIBILITY.md](COMPATIBILITY.md).
 
 ## Query Endpoints (100+)
 

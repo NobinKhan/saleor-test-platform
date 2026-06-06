@@ -26,6 +26,21 @@ def test_schema_gate_golden_source_label():
 
 
 def test_certified_requires_both():
-    assert compute_certified(schema_gate_pass=True, compatibility_score=96.0) is True
+    assert compute_certified(schema_gate_pass=True, compatibility_score=100.0) is True
     assert compute_certified(schema_gate_pass=False, compatibility_score=100.0) is False
-    assert compute_certified(schema_gate_pass=True, compatibility_score=90.0) is False
+    assert compute_certified(schema_gate_pass=True, compatibility_score=99.9) is False
+
+
+def test_certified_requires_tier2_when_gaps():
+    assert compute_certified(
+        schema_gate_pass=True,
+        compatibility_score=100.0,
+        tier2_pass=False,
+        parity_gaps=3,
+    ) is False
+    assert compute_certified(
+        schema_gate_pass=True,
+        compatibility_score=100.0,
+        tier2_pass=True,
+        parity_gaps=0,
+    ) is True

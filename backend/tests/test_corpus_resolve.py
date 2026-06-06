@@ -6,6 +6,14 @@ from app.services.reference_corpus import resolve_corpus_version
 def test_resolve_prefers_exact_version_with_probes(monkeypatch):
     monkeypatch.setattr(
         "app.services.reference_corpus._has_probes",
-        lambda v: v == "3.23.8",
+        lambda v: v == "3.23.7",
     )
-    assert resolve_corpus_version("3.23.8", "3.23.7") == "3.23.8"
+    assert resolve_corpus_version("3.23.7", "3.23.7") == "3.23.7"
+
+
+def test_resolve_falls_back_to_baseline(monkeypatch):
+    monkeypatch.setattr(
+        "app.services.reference_corpus._has_probes",
+        lambda v: v == "3.23.7",
+    )
+    assert resolve_corpus_version("3.23.8", "3.23.7") == "3.23.7"

@@ -1,0 +1,45 @@
+{
+  "bundle_id": "accountdelete",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/mutations.ts",
+  "operation_names": [
+    "accountDelete"
+  ],
+  "document": "mutation accountDelete($token: String!) {\n  accountDelete(token: $token) {\n    errors {\n      ...AccountErrorFragment\n    }\n    user {\n      ...UserDetailsFragment\n    }\n  }\n}\n\nfragment AccountErrorFragment on AccountError {\n  code\n  field\n  message\n}\n\nfragment UserDetailsFragment on User {\n  ...UserBaseFragment\n  metadata {\n    key\n    value\n  }\n  defaultShippingAddress {\n    ...AddressFragment\n  }\n  defaultBillingAddress {\n    ...AddressFragment\n  }\n  addresses {\n    ...AddressFragment\n  }\n}\n\nfragment UserBaseFragment on User {\n  id\n  email\n  firstName\n  lastName\n  isStaff\n  userPermissions {\n    code\n    name\n  }\n}\n\nfragment AddressFragment on Address {\n  id\n  firstName\n  lastName\n  companyName\n  streetAddress1\n  streetAddress2\n  city\n  cityArea\n  postalCode\n  country {\n    code\n    country\n  }\n  countryArea\n  phone\n  isDefaultBillingAddress\n  isDefaultShippingAddress\n}",
+  "variables": {
+    "token": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "accountDelete": {
+        "errors": [
+          {
+            "code": "DELETE_STAFF_ACCOUNT",
+            "field": null,
+            "message": "Cannot delete a staff account."
+          }
+        ],
+        "user": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:70db70ba8ac6c98e",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "accountdelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:4e16c26661fee6a1"
+}

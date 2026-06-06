@@ -1,0 +1,213 @@
+{
+  "bundle_id": "plugins",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "Plugins"
+  ],
+  "document": "query Plugins($first: Int, $after: String, $last: Int, $before: String, $filter: PluginFilterInput, $sort: PluginSortingInput) {\n  plugins(\n    before: $before\n    after: $after\n    first: $first\n    last: $last\n    filter: $filter\n    sortBy: $sort\n  ) {\n    edges {\n      node {\n        ...PluginBase\n      }\n    }\n    pageInfo {\n      hasPreviousPage\n      hasNextPage\n      startCursor\n      endCursor\n    }\n  }\n}\n\nfragment PluginBase on Plugin {\n  id\n  name\n  description\n  channelConfigurations {\n    ...PluginConfigurationBase\n  }\n  globalConfiguration {\n    ...PluginConfigurationBase\n  }\n}\n\nfragment PluginConfigurationBase on PluginConfiguration {\n  active\n  channel {\n    id\n    name\n    slug\n  }\n}",
+  "variables": {
+    "first": 10,
+    "after": "",
+    "last": 10,
+    "before": "",
+    "filter": null,
+    "sort": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "plugins": {
+        "edges": [
+          {
+            "node": {
+              "id": "mirumee.notifications.admin_email",
+              "name": "Admin emails",
+              "description": "Plugin responsible for sending the staff emails.",
+              "channelConfigurations": [],
+              "globalConfiguration": {
+                "active": true,
+                "channel": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.payments.authorize_net",
+              "name": "Authorize.Net",
+              "description": "",
+              "channelConfigurations": [
+                {
+                  "active": false,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.taxes.avalara",
+              "name": "Avalara",
+              "description": "",
+              "channelConfigurations": [
+                {
+                  "active": false,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.payments.braintree",
+              "name": "Braintree",
+              "description": "",
+              "channelConfigurations": [
+                {
+                  "active": false,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.payments.dummy",
+              "name": "Dummy",
+              "description": "",
+              "channelConfigurations": [
+                {
+                  "active": true,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.payments.dummy_credit_card",
+              "name": "Dummy Credit Card",
+              "description": "",
+              "channelConfigurations": [
+                {
+                  "active": false,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.authentication.openidconnect",
+              "name": "OpenID Connect",
+              "description": "",
+              "channelConfigurations": [],
+              "globalConfiguration": {
+                "active": false,
+                "channel": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.payments.razorpay",
+              "name": "Razorpay",
+              "description": "",
+              "channelConfigurations": [
+                {
+                  "active": false,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          },
+          {
+            "node": {
+              "id": "mirumee.notifications.sendgrid_email",
+              "name": "Sendgrid",
+              "description": "",
+              "channelConfigurations": [
+                {
+                  "active": false,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          },
+          {
+            "node": {
+              "id": "saleor.payments.stripe",
+              "name": "Stripe (deprecated)",
+              "description": "\nStripe Plugin has been deprecated and will be removed in the future. Use the Stripe App instead.\n\nhttps://docs.saleor.io/developer/app-store/apps/stripe/overview\n",
+              "channelConfigurations": [
+                {
+                  "active": false,
+                  "channel": {
+                    "id": "Q2hhbm5lbDox",
+                    "name": "Default Channel",
+                    "slug": "default-channel"
+                  }
+                }
+              ],
+              "globalConfiguration": null
+            }
+          }
+        ],
+        "pageInfo": {
+          "hasPreviousPage": false,
+          "hasNextPage": true,
+          "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
+          "endCursor": "YXJyYXljb25uZWN0aW9uOjk="
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 20,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:97c0aed9947fceb4",
+  "document_hash": "sha256:8bf787488e02dfba"
+}

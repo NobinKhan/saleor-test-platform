@@ -1,0 +1,16 @@
+{
+  "bundle_id": "customergiftcardlist",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/components/GiftCardCustomerCard/queries.ts",
+  "operation_names": [
+    "CustomerGiftCardList"
+  ],
+  "document": "query CustomerGiftCardList($userId: ID!, $first: Int) {\n  user(id: $userId) {\n    id\n    giftCards(first: $first) {\n      edges {\n        node {\n          ...CustomerGiftCard\n        }\n      }\n    }\n  }\n}\n\nfragment CustomerGiftCard on GiftCard {\n  id\n  last4CodeChars\n  expiryDate\n  isActive\n  currentBalance {\n    ...Money\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}",
+  "variables": {
+    "userId": "{{fixtures.default_customer_id}}",
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "document_hash": "sha256:f2ceddebafe94f94"
+}

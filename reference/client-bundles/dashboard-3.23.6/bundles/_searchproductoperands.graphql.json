@@ -1,0 +1,33 @@
+{
+  "bundle_id": "_searchproductoperands",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_SearchProductOperands"
+  ],
+  "document": "query _SearchProductOperands($first: Int!, $productSlugs: [String!]) {\n  products(first: $first, where: {slug: {oneOf: $productSlugs}}) {\n    edges {\n      node {\n        id\n        name\n        slug\n        originalSlug: slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "products": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:02c2fc7bb518479a",
+  "document_hash": "sha256:84d356827fc94494"
+}

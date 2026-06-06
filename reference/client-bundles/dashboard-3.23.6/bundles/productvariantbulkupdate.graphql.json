@@ -1,0 +1,16 @@
+{
+  "bundle_id": "productvariantbulkupdate",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductVariantBulkUpdate"
+  ],
+  "document": "mutation ProductVariantBulkUpdate($product: ID!, $input: [ProductVariantBulkUpdateInput!]!, $errorPolicy: ErrorPolicyEnum) {\n  productVariantBulkUpdate(\n    errorPolicy: $errorPolicy\n    product: $product\n    variants: $input\n  ) {\n    errors {\n      ...ProductVariantBulkError\n    }\n    results {\n      errors {\n        ...ProductVariantBulkError\n      }\n    }\n  }\n}\n\nfragment ProductVariantBulkError on ProductVariantBulkError {\n  field\n  code\n  message\n  attributes\n  values\n  warehouses\n  channels\n}",
+  "variables": {
+    "product": "{{fixtures.default_product_id}}",
+    "errorPolicy": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:a61293e6f40ba0c3"
+}

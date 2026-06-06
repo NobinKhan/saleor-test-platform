@@ -27,6 +27,8 @@ from app.schemas import (
     TestResultResponse,
 )
 from app.core.config import settings
+from app.services.client_bundles import client_bundle_count
+from app.services.reference_compare import tier2_gate_enabled
 from app.services.reference_corpus import load_manifest, resolve_corpus_version
 from app.services.reference_registry import get_upgrade_hint
 from app.services.run_helpers import catalog_counts, decrypt_saleor_email, run_detail_fields
@@ -119,9 +121,22 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
     )
     results = [TestResultResponse.model_validate(r) for r in results_rows.scalars().all()]
 
-    golden_matched = sum(1 for r in results if r.match_status == "match")
-    golden_mismatched = sum(1 for r in results if r.match_status in ("mismatch", "shape_drift"))
+    gate_on = tier2_gate_enabled()
+    golden_matched = sum(
+        1 for r in results
+        if r.match_status == "match" or (r.match_status == "parity_gap" and not gate_on)
+    )
+    golden_mismatched = sum(
+        1 for r in results
+        if r.match_status in ("mismatch", "shape_drift", "tier2_fail")
+        or (gate_on and r.match_status == "parity_gap")
+    )
     golden_missing = sum(1 for r in results if r.match_status == "missing_golden")
+    client_parity_gaps = sum(
+        1 for r in results if r.match_status in ("parity_gap", "tier2_fail") or r.client_parity_note
+    )
+    tier2_pass = client_parity_gaps == 0
+    l3_bundle_count = client_bundle_count()
     golden_with_status = golden_matched + golden_mismatched
     golden_match_rate = (
         round(golden_matched / golden_with_status * 100, 1) if golden_with_status > 0 else None
@@ -144,6 +159,8 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
     certified = compute_certified(
         schema_gate_pass=schema_gate["schema_gate_pass"],
         compatibility_score=compatibility_score,
+        tier2_pass=tier2_pass,
+        parity_gaps=client_parity_gaps if gate_on else 0,
     )
     run_meta = (run.schema_diff or {}).get("_run_meta") or {}
     test_mode = run_meta.get("test_mode", "compatibility")
@@ -198,6 +215,9 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         golden_matched=golden_matched,
         golden_mismatched=golden_mismatched,
         golden_missing=golden_missing,
+        client_parity_gaps=client_parity_gaps,
+        client_bundle_count=l3_bundle_count,
+        tier2_gate_enabled=gate_on,
         upgrade_hint=upgrade_hint,
         probe_outcome_rate=probe_outcome_rate,
         probe_success_count=probe_success,

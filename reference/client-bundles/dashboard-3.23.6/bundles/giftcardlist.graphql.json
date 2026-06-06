@@ -1,0 +1,102 @@
+{
+  "bundle_id": "giftcardlist",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardsList/queries.ts",
+  "operation_names": [
+    "GiftCardList"
+  ],
+  "document": "query GiftCardList($first: Int, $after: String, $last: Int, $before: String, $filter: GiftCardFilterInput, $sort: GiftCardSortingInput, $search: String) {\n  giftCards(\n    first: $first\n    after: $after\n    before: $before\n    last: $last\n    filter: $filter\n    sortBy: $sort\n    search: $search\n  ) {\n    edges {\n      node {\n        id\n        usedByEmail\n        last4CodeChars\n        isActive\n        expiryDate\n        product {\n          id\n          name\n        }\n        tags {\n          name\n        }\n        usedBy {\n          ...UserBase\n        }\n        currentBalance {\n          ...Money\n        }\n      }\n    }\n    totalCount\n    pageInfo {\n      endCursor\n      hasNextPage\n      hasPreviousPage\n      startCursor\n    }\n  }\n}\n\nfragment UserBase on User {\n  id\n  firstName\n  lastName\n}\n\nfragment Money on Money {\n  amount\n  currency\n}",
+  "variables": {
+    "first": 10,
+    "after": "",
+    "last": 10,
+    "before": "",
+    "filter": null,
+    "sort": null,
+    "search": ""
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument `last` cannot be combined with `first`.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "giftCards"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
+              "    return wrapped_resolver(obj, info, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/giftcard/schema.py\", line 113, in resolve_gift_cards",
+              "    return create_connection_slice(",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
+              "    slice = connection_from_queryset_slice(",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
+              "    _validate_connection_args(args)",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
+              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
+              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "giftCards": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 60,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:2e7e8572dddb71ba",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "giftcardlist",
+    "expected_null": true,
+    "message_pattern": "Argument `last` cannot be combined with `first`.",
+    "optional_path": [
+      "giftCards"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "giftCards"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:3db0f15e7bba63c2"
+}

@@ -1,0 +1,60 @@
+{
+  "bundle_id": "shippingmethodchannellistingupdate",
+  "source": "saleor-dashboard",
+  "source_path": "shipping/mutations.ts",
+  "operation_names": [
+    "ShippingMethodChannelListingUpdate"
+  ],
+  "document": "mutation ShippingMethodChannelListingUpdate($id: ID!, $input: ShippingMethodChannelListingInput!) {\n  shippingMethodChannelListingUpdate(id: $id, input: $input) {\n    shippingMethod {\n      ...ShippingMethodType\n    }\n    errors {\n      ...ShippingChannelsError\n    }\n  }\n}\n\nfragment ShippingMethodType on ShippingMethodType {\n  ...ShippingMethodWithPostalCodes\n  ...Metadata\n  taxClass {\n    name\n    id\n  }\n  minimumOrderWeight {\n    unit\n    value\n  }\n  maximumOrderWeight {\n    unit\n    value\n  }\n  minimumDeliveryDays\n  maximumDeliveryDays\n  name\n  description\n  type\n  channelListings {\n    id\n    channel {\n      id\n      name\n      currencyCode\n    }\n    price {\n      ...Money\n    }\n    minimumOrderPrice {\n      ...Money\n    }\n    maximumOrderPrice {\n      ...Money\n    }\n  }\n}\n\nfragment ShippingMethodWithPostalCodes on ShippingMethodType {\n  id\n  postalCodeRules {\n    id\n    inclusionType\n    start\n    end\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment ShippingChannelsError on ShippingError {\n  code\n  field\n  channels\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"ShippingMethodChannelListingInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 55
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"ShippingMethodChannelListingInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "shippingmethodchannellistingupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:741dadee011279e8"
+}

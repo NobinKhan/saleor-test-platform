@@ -1,0 +1,33 @@
+{
+  "bundle_id": "channelusabilitydata",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "ChannelUsabilityData"
+  ],
+  "document": "query ChannelUsabilityData($channel: String!) {\n  products(channel: $channel) {\n    totalCount\n  }\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "products": {
+        "totalCount": 0
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:7d6736643038a79e",
+  "document_hash": "sha256:8e9bf012e02ebda9"
+}

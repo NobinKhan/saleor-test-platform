@@ -1,0 +1,32 @@
+{
+  "bundle_id": "giftcardsettings",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardSettings/queries.ts",
+  "operation_names": [
+    "GiftCardSettings"
+  ],
+  "document": "query GiftCardSettings {\n  giftCardSettings {\n    ...GiftCardsSettings\n  }\n}\n\nfragment GiftCardsSettings on GiftCardSettings {\n  expiryType\n  expiryPeriod {\n    type\n    amount\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "giftCardSettings": {
+        "expiryType": "NEVER_EXPIRE",
+        "expiryPeriod": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:0a9a421793acf4c8",
+  "document_hash": "sha256:7c258c9d81936c91"
+}

@@ -1,0 +1,17 @@
+{
+  "bundle_id": "pluginupdate",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/mutations.ts",
+  "operation_names": [
+    "PluginUpdate"
+  ],
+  "document": "mutation PluginUpdate($channelId: ID, $id: ID!, $input: PluginUpdateInput!) {\n  pluginUpdate(channelId: $channelId, id: $id, input: $input) {\n    errors {\n      ...PluginError\n    }\n    plugin {\n      ...PluginsDetails\n    }\n  }\n}\n\nfragment PluginError on PluginError {\n  code\n  field\n  message\n}\n\nfragment PluginsDetails on Plugin {\n  id\n  name\n  description\n  globalConfiguration {\n    ...PluginConfigurationExtended\n  }\n  channelConfigurations {\n    ...PluginConfigurationExtended\n  }\n}\n\nfragment PluginConfigurationExtended on PluginConfiguration {\n  ...PluginConfigurationBase\n  configuration {\n    ...ConfigurationItem\n  }\n}\n\nfragment PluginConfigurationBase on PluginConfiguration {\n  active\n  channel {\n    id\n    name\n    slug\n  }\n}\n\nfragment ConfigurationItem on ConfigurationItem {\n  name\n  value\n  type\n  helpText\n  label\n}",
+  "variables": {
+    "channelId": "{{fixtures.default_channel_id}}",
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:ed5cbccb6c8c6fbc"
+}

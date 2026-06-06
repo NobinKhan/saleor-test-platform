@@ -1,0 +1,31 @@
+{
+  "bundle_id": "giftcardproductscount",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardsList/queries.ts",
+  "operation_names": [
+    "GiftCardProductsCount"
+  ],
+  "document": "query GiftCardProductsCount {\n  giftCardProductTypes: productTypes(filter: {kind: GIFT_CARD}) {\n    totalCount\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "giftCardProductTypes": {
+        "totalCount": 0
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b6ca27c5231ea870",
+  "document_hash": "sha256:7c46020d4e4e04a9"
+}

@@ -1,0 +1,16 @@
+{
+  "bundle_id": "variantmediaunassign",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "VariantMediaUnassign"
+  ],
+  "document": "mutation VariantMediaUnassign($variantId: ID!, $mediaId: ID!) {\n  variantMediaUnassign(variantId: $variantId, mediaId: $mediaId) {\n    errors {\n      ...ProductError\n    }\n    productVariant {\n      id\n      media {\n        ...ProductMedia\n      }\n      product {\n        id\n        media {\n          ...ProductMedia\n        }\n        variants {\n          id\n          name\n          sku\n          media {\n            ...ProductMedia\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}\n\nfragment ProductMedia on ProductMedia {\n  id\n  alt\n  sortOrder\n  url(size: 1024)\n  type\n  oembedData\n}",
+  "variables": {
+    "variantId": "{{fixtures.default_variant_id}}",
+    "mediaId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:e44eff73000f5ee5"
+}

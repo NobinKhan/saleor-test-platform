@@ -28,5 +28,10 @@
   "response_shape_hash": "sha256:62cd80213df196a2",
   "golden_contract": "business_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "webhookCreate",
+    "expected_null": false
+  }
 }

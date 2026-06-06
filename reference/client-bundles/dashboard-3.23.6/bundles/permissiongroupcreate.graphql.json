@@ -1,0 +1,59 @@
+{
+  "bundle_id": "permissiongroupcreate",
+  "source": "saleor-dashboard",
+  "source_path": "permissionGroups/mutations.ts",
+  "operation_names": [
+    "PermissionGroupCreate"
+  ],
+  "document": "mutation PermissionGroupCreate($input: PermissionGroupCreateInput!) {\n  permissionGroupCreate(input: $input) {\n    errors {\n      ...PermissionGroupError\n    }\n    group {\n      ...PermissionGroupDetails\n    }\n  }\n}\n\nfragment PermissionGroupError on PermissionGroupError {\n  code\n  field\n  message\n}\n\nfragment PermissionGroupDetails on Group {\n  ...PermissionGroup\n  restrictedAccessToChannels\n  accessibleChannels {\n    ...Channel\n  }\n  permissions {\n    ...Permission\n  }\n  users {\n    ...PermissionGroupMember\n  }\n}\n\nfragment PermissionGroup on Group {\n  id\n  name\n  userCanManage\n  users {\n    id\n    firstName\n    lastName\n  }\n}\n\nfragment Channel on Channel {\n  id\n  isActive\n  name\n  slug\n  currencyCode\n  defaultCountry {\n    code\n    country\n  }\n  stockSettings {\n    allocationStrategy\n  }\n}\n\nfragment Permission on Permission {\n  code\n  name\n}\n\nfragment PermissionGroupMember on User {\n  ...StaffMember\n  avatar(size: 128) {\n    url\n  }\n}\n\nfragment StaffMember on User {\n  id\n  email\n  firstName\n  isActive\n  lastName\n}",
+  "variables": {
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"PermissionGroupCreateInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 32
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"PermissionGroupCreateInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "permissiongroupcreate",
+    "expected_null": true,
+    "message_pattern": "<auth>"
+  },
+  "document_hash": "sha256:a94b668107588674"
+}

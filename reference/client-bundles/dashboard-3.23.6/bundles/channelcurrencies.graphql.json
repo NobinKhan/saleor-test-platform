@@ -1,0 +1,33 @@
+{
+  "bundle_id": "channelcurrencies",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardCreateDialog/queries.ts",
+  "operation_names": [
+    "ChannelCurrencies"
+  ],
+  "document": "query ChannelCurrencies {\n  shop {\n    channelCurrencies\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "channelCurrencies": [
+          "USD"
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:29ba1c3d97ed1dc6",
+  "document_hash": "sha256:95c2cce905d53e78"
+}

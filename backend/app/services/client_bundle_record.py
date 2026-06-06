@@ -1,0 +1,214 @@
+"""
+Record golden responses for L3 dashboard client bundles.
+"""
+
+from __future__ import annotations
+
+import json
+from typing import Any
+
+import httpx
+
+from app.core.config import settings
+from app.services.client_bundle_fixtures import substitute_fixtures
+from app.services.client_bundles import (
+    ClientBundle,
+    bundle_dir_for_version,
+    load_all_bundles_from_disk,
+    load_fixtures,
+    save_fixtures,
+    update_bundle_manifest,
+    write_bundle,
+)
+from app.services.reference_compare import _normalized_hash
+from app.services.response_contract import classify_response_contract, contract_to_legacy_outcome
+from app.services.semantic_compare import build_semantic_profile
+
+
+async def capture_dashboard_fixtures(
+    saleor_url: str,
+    token: str,
+    *,
+    timeout: int = 30,
+) -> dict[str, Any]:
+    """Capture common fixture IDs from a fresh Saleor instance."""
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+    fixtures: dict[str, Any] = {
+        "default_channel": "default-channel",
+        "default_slug": "test-product",
+        "placeholder_id": "00000000-0000-0000-0000-000000000000",
+    }
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.post(
+            saleor_url,
+            json={"query": "query { channels(first: 1) { edges { node { id slug } } } }"},
+            headers=headers,
+        )
+        data = resp.json().get("data") or {}
+        edges = (data.get("channels") or {}).get("edges") or []
+        if edges:
+            node = edges[0].get("node") or {}
+            fixtures["default_channel"] = node.get("slug") or fixtures["default_channel"]
+            fixtures["default_channel_id"] = node.get("id")
+
+        resp = await client.post(
+            saleor_url,
+            json={
+                "query": (
+                    "query($ch: String!) { products(first: 1, channel: $ch) "
+                    "{ edges { node { id slug variants(first:1){edges{node{id}}}} } } }"
+                ),
+                "variables": {"ch": fixtures["default_channel"]},
+            },
+            headers=headers,
+        )
+        data = resp.json().get("data") or {}
+        edges = (data.get("products") or {}).get("edges") or []
+        if edges:
+            node = edges[0].get("node") or {}
+            fixtures["default_slug"] = node.get("slug") or fixtures["default_slug"]
+            fixtures["default_product_id"] = node.get("id")
+            vedges = (node.get("variants") or {}).get("edges") or []
+            if vedges:
+                fixtures["default_variant_id"] = (vedges[0].get("node") or {}).get("id")
+
+        resp = await client.post(
+            saleor_url,
+            json={"query": "query { orders(first: 1) { edges { node { id } } } }"},
+            headers=headers,
+        )
+        data = resp.json().get("data") or {}
+        edges = (data.get("orders") or {}).get("edges") or []
+        if edges:
+            fixtures["default_order_id"] = (edges[0].get("node") or {}).get("id")
+
+        resp = await client.post(
+            saleor_url,
+            json={"query": "query { customers(first: 1) { edges { node { id } } } }"},
+            headers=headers,
+        )
+        data = resp.json().get("data") or {}
+        edges = (data.get("customers") or {}).get("edges") or []
+        if edges:
+            fixtures["default_customer_id"] = (edges[0].get("node") or {}).get("id")
+
+        resp = await client.post(
+            saleor_url,
+            json={"query": "query { warehouses(first: 1) { edges { node { id } } } }"},
+            headers=headers,
+        )
+        data = resp.json().get("data") or {}
+        edges = (data.get("warehouses") or {}).get("edges") or []
+        if edges:
+            fixtures["default_warehouse_id"] = (edges[0].get("node") or {}).get("id")
+
+        resp = await client.post(
+            saleor_url,
+            json={
+                "query": (
+                    "query($ch: String!) { collections(first: 1, channel: $ch) "
+                    "{ edges { node { id } } } }"
+                ),
+                "variables": {"ch": fixtures["default_channel"]},
+            },
+            headers=headers,
+        )
+        data = resp.json().get("data") or {}
+        edges = (data.get("collections") or {}).get("edges") or []
+        if edges:
+            fixtures["default_collection_id"] = (edges[0].get("node") or {}).get("id")
+
+        resp = await client.post(
+            saleor_url,
+            json={"query": "query { categories(first: 1) { edges { node { id } } } }"},
+            headers=headers,
+        )
+        data = resp.json().get("data") or {}
+        edges = (data.get("categories") or {}).get("edges") or []
+        if edges:
+            fixtures["default_category_id"] = (edges[0].get("node") or {}).get("id")
+
+    return fixtures
+
+
+def save_record_failures(version: str, errors: list[str]) -> None:
+    path = bundle_dir_for_version("dashboard", version) / "record_failures.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps({"errors": errors}, indent=2), encoding="utf-8")
+
+
+async def record_dashboard_bundles(
+    *,
+    saleor_url: str,
+    saleor_token: str,
+    version: str | None = None,
+    bundle_ids: list[str] | None = None,
+    priority: str | None = None,
+    timeout: int = 30,
+    capture_fixtures: bool = True,
+) -> dict[str, Any]:
+    ver = version or settings.reference_baseline_version
+    if capture_fixtures:
+        fixtures = await capture_dashboard_fixtures(saleor_url, saleor_token, timeout=timeout)
+        save_fixtures("dashboard", ver, fixtures)
+    else:
+        fixtures = load_fixtures("dashboard", ver)
+
+    bundles = load_all_bundles_from_disk("dashboard", ver, priority=priority)
+    if bundle_ids:
+        wanted = set(bundle_ids)
+        bundles = [b for b in bundles if b.bundle_id in wanted]
+    if not bundles:
+        raise ValueError(f"No bundles to record for dashboard-{ver}")
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {saleor_token.removeprefix('Bearer ')}",
+    }
+    recorded = 0
+    errors: list[str] = []
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        for bundle in bundles:
+            try:
+                variables = substitute_fixtures(bundle.variables, fixtures)
+            except KeyError as exc:
+                errors.append(f"{bundle.bundle_id}: missing fixture {exc}")
+                continue
+            try:
+                resp = await client.post(
+                    saleor_url,
+                    json={"query": bundle.document, "variables": variables},
+                    headers=headers,
+                )
+                resp_json = resp.json()
+            except Exception as exc:
+                errors.append(f"{bundle.bundle_id}: request failed: {exc}")
+                continue
+            contract = classify_response_contract(resp_json, http_status=resp.status_code)
+            profile = build_semantic_profile(
+                golden_response=resp_json,
+                golden_contract=contract,
+                input_sent=bundle.document,
+                endpoint_name=bundle.bundle_id,
+            )
+            bundle.golden_response = resp_json
+            bundle.golden_contract = contract
+            bundle.golden_outcome = contract_to_legacy_outcome(contract)
+            bundle.golden_status = "pass" if contract == "success" else "warn"
+            bundle.http_status = resp.status_code
+            bundle.response_shape_hash = _normalized_hash(resp_json)
+            bundle.semantic_profile = profile
+            write_bundle("dashboard", ver, bundle)
+            recorded += 1
+
+    update_bundle_manifest("dashboard", ver)
+    save_record_failures(ver, errors)
+    return {
+        "version": ver,
+        "recorded": recorded,
+        "errors": errors,
+    }

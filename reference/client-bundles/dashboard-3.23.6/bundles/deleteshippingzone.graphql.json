@@ -1,0 +1,44 @@
+{
+  "bundle_id": "deleteshippingzone",
+  "source": "saleor-dashboard",
+  "source_path": "shipping/mutations.ts",
+  "operation_names": [
+    "DeleteShippingZone"
+  ],
+  "document": "mutation DeleteShippingZone($id: ID!) {\n  shippingZoneDelete(id: $id) {\n    errors {\n      ...ShippingError\n    }\n  }\n}\n\nfragment ShippingError on ShippingError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "shippingZoneDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ShippingZone."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:177b69dce8c1ffd2",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "deleteshippingzone",
+    "expected_null": true
+  },
+  "document_hash": "sha256:b1623a37be5faabe"
+}

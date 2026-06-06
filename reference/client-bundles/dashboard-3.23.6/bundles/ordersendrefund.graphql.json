@@ -1,0 +1,60 @@
+{
+  "bundle_id": "ordersendrefund",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "OrderSendRefund"
+  ],
+  "document": "mutation OrderSendRefund($amount: PositiveDecimal!, $transactionId: ID!) {\n  transactionRequestAction(\n    actionType: REFUND\n    amount: $amount\n    id: $transactionId\n  ) {\n    transaction {\n      ...TransactionItem\n    }\n    errors {\n      ...TransactionRequestActionError\n    }\n  }\n}\n\nfragment TransactionItem on TransactionItem {\n  ...TransactionBaseItem\n  pspReference\n  externalUrl\n  createdAt\n  createdBy {\n    ... on App {\n      name\n      brand {\n        logo {\n          default(size: 64)\n        }\n      }\n    }\n  }\n  paymentMethodDetails {\n    name\n    __typename\n    ... on CardPaymentMethodDetails {\n      ...CardPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n    ... on OtherPaymentMethodDetails {\n      ...OtherPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n  }\n  events {\n    ...TransactionEvent\n  }\n  authorizedAmount {\n    ...Money\n  }\n  chargedAmount {\n    ...Money\n  }\n  refundedAmount {\n    ...Money\n  }\n  canceledAmount {\n    ...Money\n  }\n  authorizePendingAmount {\n    ...Money\n  }\n  chargePendingAmount {\n    ...Money\n  }\n  refundPendingAmount {\n    ...Money\n  }\n  cancelPendingAmount {\n    ...Money\n  }\n}\n\nfragment TransactionBaseItem on TransactionItem {\n  id\n  name\n  actions\n  events {\n    ...TransactionBaseEvent\n  }\n}\n\nfragment TransactionBaseEvent on TransactionEvent {\n  id\n  pspReference\n  amount {\n    ...Money\n  }\n  externalUrl\n  type\n  message\n  createdAt\n  reasonReference {\n    id\n    title\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment CardPaymentMethodDetails on CardPaymentMethodDetails {\n  name\n  brand\n  expMonth\n  expYear\n  firstDigits\n  lastDigits\n}\n\nfragment GiftCardPaymentMethodDetails on GiftCardPaymentMethodDetails {\n  name\n  brand\n  lastChars\n  isSaleorGiftcard\n}\n\nfragment OtherPaymentMethodDetails on OtherPaymentMethodDetails {\n  name\n}\n\nfragment TransactionEvent on TransactionEvent {\n  ...TransactionBaseEvent\n  createdBy {\n    ... on User {\n      ...StaffMemberAvatar\n    }\n    ... on App {\n      ...AppAvatar\n    }\n  }\n  externalUrl\n}\n\nfragment StaffMemberAvatar on User {\n  ...StaffMember\n  avatar(size: 512) {\n    url\n  }\n}\n\nfragment StaffMember on User {\n  id\n  email\n  firstName\n  isActive\n  lastName\n}\n\nfragment AppAvatar on App {\n  id\n  name\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n}\n\nfragment TransactionRequestActionError on TransactionRequestActionError {\n  field\n  message\n  code\n}",
+  "variables": {
+    "amount": null,
+    "transactionId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$amount\" of required type \"PositiveDecimal!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 26
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$amount\" of required type \"PositiveDecimal!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "ordersendrefund",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:6a1dbf0a5d206023"
+}

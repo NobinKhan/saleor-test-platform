@@ -1,0 +1,48 @@
+{
+  "bundle_id": "productvariantbulkcreate",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductVariantBulkCreate"
+  ],
+  "document": "mutation ProductVariantBulkCreate($id: ID!, $inputs: [ProductVariantBulkCreateInput!]!, $errorPolicy: ErrorPolicyEnum) {\n  productVariantBulkCreate(\n    product: $id\n    variants: $inputs\n    errorPolicy: $errorPolicy\n  ) {\n    errors {\n      ...BulkProductError\n    }\n    results {\n      errors {\n        ...ProductVariantBulkError\n      }\n      productVariant {\n        id\n        name\n      }\n    }\n    productVariants {\n      id\n      name\n    }\n  }\n}\n\nfragment BulkProductError on BulkProductError {\n  field\n  code\n  index\n  channels\n  message\n}\n\nfragment ProductVariantBulkError on ProductVariantBulkError {\n  field\n  code\n  message\n  attributes\n  values\n  warehouses\n  channels\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "errorPolicy": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"variants\" of required type [ProductVariantBulkCreateInput!]!\" provided the variable \"$inputs\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"variants\" of required type [ProductVariantBulkCreateInput!]!\" provided the variable \"$inputs\" which was not provided"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "productvariantbulkcreate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:ac2e6990dad587a8"
+}

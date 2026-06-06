@@ -17,4 +17,4 @@ def test_normalizes_uuids():
     uid = "550e8400-e29b-41d4-a716-446655440000"
     resp = {"data": {"product": {"id": uid}}}
     norm = normalize_response(resp)
-    assert norm["data"]["product"]["id"] == "<uuid>"
+    assert norm["data"]["product"]["id"] == "<id>"

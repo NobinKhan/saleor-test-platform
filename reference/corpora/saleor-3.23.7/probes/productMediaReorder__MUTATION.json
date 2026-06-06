@@ -27,5 +27,10 @@
   "response_shape_hash": "sha256:0f0f24bc8eb52f56",
   "golden_contract": "business_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "productMediaReorder",
+    "expected_null": false
+  }
 }

@@ -1,0 +1,52 @@
+{
+  "bundle_id": "ordergrantrefundedit",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "OrderGrantRefundEdit"
+  ],
+  "document": "mutation OrderGrantRefundEdit($refundId: ID!, $amount: Decimal, $reason: String, $addLines: [OrderGrantRefundUpdateLineAddInput!], $removeLines: [ID!], $grantRefundForShipping: Boolean, $transactionId: ID, $reasonReferenceId: ID) {\n  orderGrantRefundUpdate(\n    id: $refundId\n    input: {amount: $amount, reason: $reason, addLines: $addLines, removeLines: $removeLines, grantRefundForShipping: $grantRefundForShipping, transactionId: $transactionId, reasonReference: $reasonReferenceId}\n  ) {\n    errors {\n      ...OrderGrantRefundUpdateError\n    }\n    order {\n      ...OrderDetailsGrantRefund\n    }\n  }\n}\n\nfragment OrderGrantRefundUpdateError on OrderGrantRefundUpdateError {\n  field\n  message\n  code\n  addLines {\n    field\n    message\n    code\n    lineId\n  }\n  removeLines {\n    field\n    message\n    code\n    lineId\n  }\n}\n\nfragment OrderDetailsGrantRefund on Order {\n  id\n  number\n  lines {\n    ...OrderLineGrantRefund\n  }\n  fulfillments {\n    ...OrderFulfillmentGrantRefund\n  }\n  shippingPrice {\n    gross {\n      ...Money\n    }\n  }\n  total {\n    gross {\n      ...Money\n    }\n  }\n  grantedRefunds {\n    ...OrderDetailsGrantedRefund\n  }\n  transactions {\n    ...TransactionItem\n  }\n}\n\nfragment OrderLineGrantRefund on OrderLine {\n  id\n  thumbnail {\n    url\n  }\n  productName\n  quantity\n  quantityToFulfill\n  variantName\n  unitPrice {\n    gross {\n      ...Money\n    }\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment OrderFulfillmentGrantRefund on Fulfillment {\n  id\n  fulfillmentOrder\n  status\n  lines {\n    id\n    quantity\n    orderLine {\n      ...OrderLineGrantRefund\n    }\n  }\n}\n\nfragment OrderDetailsGrantedRefund on OrderGrantedRefund {\n  id\n  reason\n  reasonReference {\n    id\n    title\n  }\n  amount {\n    ...Money\n  }\n  shippingCostsIncluded\n  transaction {\n    id\n  }\n  status\n  lines {\n    id\n    quantity\n    reason\n    orderLine {\n      ...OrderLine\n    }\n  }\n}\n\nfragment OrderLine on OrderLine {\n  id\n  isShippingRequired\n  allocations {\n    id\n    quantity\n    warehouse {\n      id\n      name\n    }\n  }\n  variant {\n    id\n    name\n    quantityAvailable\n    preorder {\n      endDate\n    }\n    stocks {\n      ...Stock\n    }\n    product {\n      id\n      isAvailableForPurchase\n    }\n  }\n  productName\n  productSku\n  isGift\n  quantity\n  quantityFulfilled\n  quantityToFulfill\n  totalPrice {\n    gross {\n      ...MoneyWithFractionDigits\n    }\n    net {\n      ...Money\n    }\n    tax {\n      ...Money\n    }\n  }\n  undiscountedTotalPrice {\n    ...TaxedMoney\n    tax {\n      ...Money\n    }\n  }\n  unitDiscount {\n    amount\n    currency\n  }\n  unitDiscountValue\n  unitDiscountReason\n  unitDiscountType\n  undiscountedUnitPrice {\n    currency\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  unitPrice {\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  taxRate\n  taxClass {\n    id\n    name\n  }\n  voucherCode\n  thumbnail {\n    url\n  }\n  discounts {\n    ...OrderLineDiscount\n  }\n}\n\nfragment Stock on Stock {\n  id\n  quantity\n  quantityAllocated\n  warehouse {\n    ...Warehouse\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}\n\nfragment MoneyWithFractionDigits on Money {\n  amount\n  currency\n  fractionDigits\n}\n\nfragment TaxedMoney on TaxedMoney {\n  net {\n    ...Money\n  }\n  gross {\n    ...Money\n  }\n}\n\nfragment OrderLineDiscount on OrderLineDiscount {\n  id\n  type\n  name\n  translatedName\n  valueType\n  value\n  reason\n  total {\n    ...Money\n  }\n  unit {\n    ...Money\n  }\n}\n\nfragment TransactionItem on TransactionItem {\n  ...TransactionBaseItem\n  pspReference\n  externalUrl\n  createdAt\n  createdBy {\n    ... on App {\n      name\n      brand {\n        logo {\n          default(size: 64)\n        }\n      }\n    }\n  }\n  paymentMethodDetails {\n    name\n    __typename\n    ... on CardPaymentMethodDetails {\n      ...CardPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n    ... on OtherPaymentMethodDetails {\n      ...OtherPaymentMethodDetails\n    }\n    ... on GiftCardPaymentMethodDetails {\n      ...GiftCardPaymentMethodDetails\n    }\n  }\n  events {\n    ...TransactionEvent\n  }\n  authorizedAmount {\n    ...Money\n  }\n  chargedAmount {\n    ...Money\n  }\n  refundedAmount {\n    ...Money\n  }\n  canceledAmount {\n    ...Money\n  }\n  authorizePendingAmount {\n    ...Money\n  }\n  chargePendingAmount {\n    ...Money\n  }\n  refundPendingAmount {\n    ...Money\n  }\n  cancelPendingAmount {\n    ...Money\n  }\n}\n\nfragment TransactionBaseItem on TransactionItem {\n  id\n  name\n  actions\n  events {\n    ...TransactionBaseEvent\n  }\n}\n\nfragment TransactionBaseEvent on TransactionEvent {\n  id\n  pspReference\n  amount {\n    ...Money\n  }\n  externalUrl\n  type\n  message\n  createdAt\n  reasonReference {\n    id\n    title\n  }\n}\n\nfragment CardPaymentMethodDetails on CardPaymentMethodDetails {\n  name\n  brand\n  expMonth\n  expYear\n  firstDigits\n  lastDigits\n}\n\nfragment GiftCardPaymentMethodDetails on GiftCardPaymentMethodDetails {\n  name\n  brand\n  lastChars\n  isSaleorGiftcard\n}\n\nfragment OtherPaymentMethodDetails on OtherPaymentMethodDetails {\n  name\n}\n\nfragment TransactionEvent on TransactionEvent {\n  ...TransactionBaseEvent\n  createdBy {\n    ... on User {\n      ...StaffMemberAvatar\n    }\n    ... on App {\n      ...AppAvatar\n    }\n  }\n  externalUrl\n}\n\nfragment StaffMemberAvatar on User {\n  ...StaffMember\n  avatar(size: 512) {\n    url\n  }\n}\n\nfragment StaffMember on User {\n  id\n  email\n  firstName\n  isActive\n  lastName\n}\n\nfragment AppAvatar on App {\n  id\n  name\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n}",
+  "variables": {
+    "refundId": "{{fixtures.placeholder_id}}",
+    "amount": null,
+    "reason": "",
+    "grantRefundForShipping": false,
+    "transactionId": "{{fixtures.placeholder_id}}",
+    "reasonReferenceId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "orderGrantRefundUpdate": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: OrderGrantedRefund.",
+            "code": "GRAPHQL_ERROR",
+            "addLines": null,
+            "removeLines": null
+          }
+        ],
+        "order": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 13,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:bcd0b9d59055d5af",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "ordergrantrefundedit",
+    "expected_null": true
+  },
+  "document_hash": "sha256:c40008d23fabbc2c"
+}

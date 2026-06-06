@@ -1,0 +1,46 @@
+{
+  "bundle_id": "appfetch",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/mutations.ts",
+  "operation_names": [
+    "AppFetch"
+  ],
+  "document": "mutation AppFetch($manifestUrl: String!) {\n  appFetchManifest(manifestUrl: $manifestUrl) {\n    manifest {\n      ...AppManifest\n    }\n    errors {\n      ...AppError\n    }\n  }\n}\n\nfragment AppManifest on Manifest {\n  identifier\n  version\n  about\n  name\n  appUrl\n  configurationUrl\n  tokenTargetUrl\n  dataPrivacy\n  dataPrivacyUrl\n  homepageUrl\n  supportUrl\n  extensions {\n    targetName\n    permissions {\n      code\n      name\n    }\n    mountName\n    url\n    label\n  }\n  permissions {\n    code\n    name\n  }\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n}\n\nfragment AppError on AppError {\n  field\n  message\n  code\n  permissions\n}",
+  "variables": {
+    "manifestUrl": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "appFetchManifest": {
+        "manifest": null,
+        "errors": [
+          {
+            "field": "manifestUrl",
+            "message": "Enter a valid URL.",
+            "code": "INVALID_URL_FORMAT",
+            "permissions": null
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:083940333966e422",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "appfetch",
+    "expected_null": true
+  },
+  "document_hash": "sha256:0e27a8ed7670f183"
+}

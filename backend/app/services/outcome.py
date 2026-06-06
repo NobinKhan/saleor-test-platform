@@ -7,6 +7,8 @@ from __future__ import annotations
 from typing import Any
 
 from app.services.response_contract import (
+    CONTRACT_BUSINESS_ERROR,
+    CONTRACT_GRAPHQL_ERROR,
     CONTRACT_SUCCESS,
     CONTRACT_TRANSPORT_ERROR,
     classify_response_contract,
@@ -54,9 +56,45 @@ def classify_graphql_response(
             "error_message": error_message or first_msg or f"HTTP {http_status}",
         }
 
+    errors = resp_json.get("errors") or []
+    first_msg = errors[0].get("message", "") if errors else None
+    if contract == CONTRACT_BUSINESS_ERROR or (
+        endpoint_kind == "MUTATION"
+        and errors
+        and (errors[0].get("extensions") or {}).get("code") == "INVALID"
+    ):
+        return {
+            "outcome": "validation_error",
+            "response_contract": contract,
+            "response_valid": False,
+            "has_graphql_data": has_graphql_data,
+            "expected": "Expect business-level validation error in data.errors",
+            "status": "warn",
+            "error_message": first_msg,
+        }
+
+    if contract == CONTRACT_GRAPHQL_ERROR:
+        lower = (first_msg or "").lower()
+        schema_markers = (
+            "field", "argument", "type", "query", "mutation", "required", "unknown",
+        )
+        if any(m in lower for m in schema_markers):
+            resolved_outcome = "schema_error"
+            resolved_status = "fail"
+        else:
+            resolved_outcome = "unexpected_error"
+            resolved_status = "warn"
+        return {
+            "outcome": resolved_outcome,
+            "response_contract": contract,
+            "response_valid": False,
+            "has_graphql_data": has_graphql_data,
+            "expected": "Expect GraphQL validation error for probe input",
+            "status": resolved_status,
+            "error_message": first_msg,
+        }
+
     status = "warn"
-    if contract in ("graphql_error", "schema_error"):
-        status = "warn"
     expected_map = {
         "business_error": "Expect business-level validation error in data.errors",
         "graphql_error": "Expect GraphQL validation error for probe input",

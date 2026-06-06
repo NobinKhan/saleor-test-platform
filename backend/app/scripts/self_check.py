@@ -24,27 +24,43 @@ async def run_self_check(
     password: str,
     min_compat: float,
     version: str,
+    test_scope: str = "full",
+    require_tier2: bool = False,
 ) -> int:
     token, err = await fetch_saleor_token(url, email, password)
     if err or not token:
         print(f"Auth failed: {err}")
         return 1
 
-    runner = TestRunner(
-        run_id=uuid.uuid4(),
-        saleor_url=url,
-        saleor_token=token,
-        test_scope="full",
-        test_mode="compatibility",
-        use_introspection=True,
-        concurrency=1,
-        saleor_email=email,
-        saleor_password=password,
-    )
+    if require_tier2:
+        runner = TestRunner(
+            run_id=uuid.uuid4(),
+            saleor_url=url,
+            saleor_token=token,
+            test_scope=test_scope,
+            test_mode="compatibility",
+            use_introspection=True,
+            concurrency=1,
+            saleor_email=email,
+            saleor_password=password,
+            tier2_required=True,
+        )
+    else:
+        runner = TestRunner(
+            run_id=uuid.uuid4(),
+            saleor_url=url,
+            saleor_token=token,
+            test_scope=test_scope,
+            test_mode="compatibility",
+            use_introspection=True,
+            concurrency=1,
+            saleor_email=email,
+            saleor_password=password,
+        )
 
     from collections import Counter
 
-    total = matched = mismatched = 0
+    total = matched = mismatched = tier2_fail = 0
     mismatch_reasons: Counter[str] = Counter()
     async for event in runner.run():
         if event.get("type") == "result":
@@ -52,13 +68,20 @@ async def run_self_check(
             ms = event.get("match_status")
             if ms == "match":
                 matched += 1
-            elif ms in ("mismatch", "shape_drift"):
+            elif ms == "parity_gap" and not require_tier2:
+                matched += 1
+            elif ms in ("mismatch", "shape_drift", "tier2_fail"):
                 mismatched += 1
+                if ms == "tier2_fail":
+                    tier2_fail += 1
                 mismatch_reasons[event.get("diff_summary", "unknown")[:80]] += 1
 
     compared = matched + mismatched
     rate = matched / compared * 100 if compared else 0
-    print(f"Self-check vs golden {version}: {rate:.1f}% compatible ({matched}/{compared})")
+    tier_label = "Tier1+Tier2" if require_tier2 else "Tier1"
+    print(f"Self-check ({tier_label}, scope={test_scope}) vs {version}: {rate:.1f}% ({matched}/{compared})")
+    if tier2_fail:
+        print(f"  Tier 2 failures: {tier2_fail}")
     if mismatched:
         print(f"  Mismatched: {mismatched}")
         for reason, cnt in mismatch_reasons.most_common(8):
@@ -75,8 +98,10 @@ def main() -> int:
     parser.add_argument("--url", default=settings.reference_saleor_url or "http://saleor-api:8000/graphql/")
     parser.add_argument("--email", default="admin@example.com")
     parser.add_argument("--password", default="admin123456")
-    parser.add_argument("--min-compat", type=float, default=99.0)
+    parser.add_argument("--min-compat", type=float, default=100.0)
     parser.add_argument("--version", default=None)
+    parser.add_argument("--scope", default="full", help="full, full+client, or client-dashboard")
+    parser.add_argument("--require-tier2", action="store_true", help="Enforce SGRC Tier 2 hard gate")
     args = parser.parse_args()
     return asyncio.run(
         run_self_check(
@@ -85,6 +110,8 @@ def main() -> int:
             password=args.password,
             min_compat=args.min_compat,
             version=args.version or settings.golden_corpus_version,
+            test_scope=args.scope,
+            require_tier2=args.require_tier2,
         )
     )
 

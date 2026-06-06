@@ -1,0 +1,40 @@
+{
+  "bundle_id": "channelshippingzones",
+  "source": "saleor-dashboard",
+  "source_path": "shipping/queries.ts",
+  "operation_names": [
+    "ChannelShippingZones"
+  ],
+  "document": "query ChannelShippingZones($filter: ShippingZoneFilterInput) {\n  shippingZones(filter: $filter, first: 100) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}",
+  "variables": {
+    "filter": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "shippingZones": {
+        "edges": [
+          {
+            "node": {
+              "id": "U2hpcHBpbmdab25lOjE=",
+              "name": "Default"
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 100,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:3f1043952bed7933",
+  "document_hash": "sha256:aacc24cd8525cc20"
+}

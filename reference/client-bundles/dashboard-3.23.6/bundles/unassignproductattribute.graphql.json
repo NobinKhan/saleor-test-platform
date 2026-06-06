@@ -1,0 +1,47 @@
+{
+  "bundle_id": "unassignproductattribute",
+  "source": "saleor-dashboard",
+  "source_path": "productTypes/mutations.ts",
+  "operation_names": [
+    "UnassignProductAttribute"
+  ],
+  "document": "mutation UnassignProductAttribute($id: ID!, $ids: [ID!]!) {\n  productAttributeUnassign(productTypeId: $id, attributeIds: $ids) {\n    errors {\n      ...ProductAttributeUnassignErrorFragment\n    }\n    productType {\n      ...ProductTypeDetails\n    }\n  }\n}\n\nfragment ProductAttributeUnassignErrorFragment on ProductError {\n  code\n  field\n  message\n}\n\nfragment ProductTypeDetails on ProductType {\n  ...ProductType\n  ...Metadata\n  productAttributes {\n    ...Attribute\n  }\n  variantAttributes {\n    ...Attribute\n  }\n  assignedVariantAttributes {\n    attribute {\n      ...Attribute\n    }\n    variantSelection\n  }\n  weight {\n    unit\n    value\n  }\n}\n\nfragment ProductType on ProductType {\n  id\n  name\n  slug\n  kind\n  hasVariants\n  isShippingRequired\n  taxClass {\n    id\n    name\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment Attribute on Attribute {\n  id\n  name\n  slug\n  type\n  visibleInStorefront\n  filterableInDashboard\n  filterableInStorefront\n  unit\n  inputType\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"attributeIds\" of required type [ID!]!\" provided the variable \"$ids\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"attributeIds\" of required type [ID!]!\" provided the variable \"$ids\" which was not provided"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "unassignproductattribute",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:e685ff33e1e7ef74"
+}

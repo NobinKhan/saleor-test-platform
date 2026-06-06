@@ -1,0 +1,44 @@
+{
+  "bundle_id": "deletegiftcard",
+  "source": "saleor-dashboard",
+  "source_path": "giftCards/GiftCardsList/mutations.ts",
+  "operation_names": [
+    "DeleteGiftCard"
+  ],
+  "document": "mutation DeleteGiftCard($id: ID!) {\n  giftCardDelete(id: $id) {\n    errors {\n      ...GiftCardError\n    }\n  }\n}\n\nfragment GiftCardError on GiftCardError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "giftCardDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: GiftCard."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9662c89fffb9ddba",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "deletegiftcard",
+    "expected_null": true
+  },
+  "document_hash": "sha256:d59dd1cf300e30ff"
+}

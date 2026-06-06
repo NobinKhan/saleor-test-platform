@@ -1,10 +1,13 @@
+# Saleor reference pin — upgrade only when explicitly requested (see docs/version-upgrade.md)
+# SALEOR_VERSION=3.23.7
+
 name: saleor-test-platform
 
 services:
   # ── Saleor (profile: saleor) ────────────────────────────────────────────────
   saleor-db:
     profiles: [saleor]
-    image: postgres:17-alpine
+    image: cgr.dev/chainguard/postgres:latest
     container_name: saleor-db
     restart: unless-stopped
     networks: [app]
@@ -78,7 +81,7 @@ services:
   # ── Test harness (profile: harness) ───────────────────────────────────────
   harness-db:
     profiles: [harness]
-    image: postgres:17-alpine
+    image: cgr.dev/chainguard/postgres:latest
     container_name: harness-db
     restart: unless-stopped
     networks: [app]
@@ -126,13 +129,21 @@ services:
       REFERENCE_BASELINE_VERSION: "3.23.6"
       REFERENCE_BASELINE_SOURCE: saleor-dashboard
       GOLDEN_CORPUS_VERSION: "3.23.7"
+      SGRC_TIER2_GATE: "true"
+      CLIENT_BUNDLES_DASHBOARD_VERSION: "3.23.6"
       REFERENCE_CORPUS_ROOT: /app/reference/corpora
       REFERENCE_SALEOR_URL: http://saleor-api:8000/graphql/
     depends_on:
       harness-db:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5998/api/health"]
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5998/api/health')",
+        ]
       interval: 15s
       timeout: 10s
       retries: 5

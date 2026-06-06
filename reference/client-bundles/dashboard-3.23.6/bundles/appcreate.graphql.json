@@ -1,0 +1,60 @@
+{
+  "bundle_id": "appcreate",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/mutations.ts",
+  "operation_names": [
+    "AppCreate"
+  ],
+  "document": "mutation AppCreate($input: AppInput!, $hasManagedAppsPermission: Boolean = true) {\n  appCreate(input: $input) {\n    authToken\n    app {\n      ...App\n    }\n    errors {\n      ...AppError\n    }\n  }\n}\n\nfragment App on App {\n  id\n  name\n  created\n  isActive\n  type\n  homepageUrl\n  appUrl\n  manifestUrl\n  configurationUrl\n  supportUrl\n  version\n  accessToken\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n  privateMetadata @include(if: $hasManagedAppsPermission) {\n    key\n    value\n  }\n  metadata @include(if: $hasManagedAppsPermission) {\n    key\n    value\n  }\n  tokens @include(if: $hasManagedAppsPermission) {\n    authToken\n    id\n    name\n  }\n  webhooks @include(if: $hasManagedAppsPermission) {\n    ...Webhook\n  }\n}\n\nfragment Webhook on Webhook {\n  id\n  name\n  isActive\n  app {\n    id\n    name\n  }\n}\n\nfragment AppError on AppError {\n  field\n  message\n  code\n  permissions\n}",
+  "variables": {
+    "input": null,
+    "hasManagedAppsPermission": true
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"AppInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 20
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"AppInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "appcreate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:fc9687f826a6609f"
+}

@@ -1,0 +1,31 @@
+{
+  "bundle_id": "refundsettings",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "RefundSettings"
+  ],
+  "document": "query RefundSettings {\n  refundSettings {\n    reasonReferenceType {\n      id\n      name\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "refundSettings": {
+        "reasonReferenceType": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:43efcdd74323296e",
+  "document_hash": "sha256:3913d970f8e99867"
+}

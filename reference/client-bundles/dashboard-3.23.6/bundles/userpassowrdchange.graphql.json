@@ -1,0 +1,46 @@
+{
+  "bundle_id": "userpassowrdchange",
+  "source": "saleor-dashboard",
+  "source_path": "staff/mutations.ts",
+  "operation_names": [
+    "UserPassowrdChange"
+  ],
+  "document": "mutation UserPassowrdChange($newPassword: String!, $oldPassword: String!) {\n  passwordChange(newPassword: $newPassword, oldPassword: $oldPassword) {\n    errors {\n      ...AccountError\n    }\n  }\n}\n\nfragment AccountError on AccountError {\n  code\n  field\n  addressType\n  message\n}",
+  "variables": {
+    "newPassword": "",
+    "oldPassword": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "passwordChange": {
+        "errors": [
+          {
+            "code": "INVALID_CREDENTIALS",
+            "field": "oldPassword",
+            "addressType": null,
+            "message": "Old password isn't valid."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:2da50c1ab14249d1",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "userpassowrdchange",
+    "expected_null": true
+  },
+  "document_hash": "sha256:d8d4813235f9159a"
+}

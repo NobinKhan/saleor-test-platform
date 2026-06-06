@@ -1,0 +1,47 @@
+{
+  "bundle_id": "productvariantchannellistingupdate",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductVariantChannelListingUpdate"
+  ],
+  "document": "mutation ProductVariantChannelListingUpdate($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) {\n  productVariantChannelListingUpdate(id: $id, input: $input) {\n    variant {\n      id\n      channelListings {\n        ...ChannelListingProductVariant\n      }\n      product {\n        id\n        channelListings {\n          ...ChannelListingProductWithoutPricing\n        }\n      }\n    }\n    errors {\n      ...ProductChannelListingError\n    }\n  }\n}\n\nfragment ChannelListingProductVariant on ProductVariantChannelListing {\n  id\n  channel {\n    id\n    name\n    currencyCode\n  }\n  price {\n    ...Money\n  }\n  costPrice {\n    ...Money\n  }\n  preorderThreshold {\n    quantity\n    soldUnits\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment ChannelListingProductWithoutPricing on ProductChannelListing {\n  id\n  isPublished\n  publishedAt\n  isAvailableForPurchase\n  availableForPurchaseAt\n  visibleInListings\n  channel {\n    id\n    name\n    slug\n    currencyCode\n  }\n}\n\nfragment ProductChannelListingError on ProductChannelListingError {\n  code\n  field\n  message\n  channels\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"input\" of required type [ProductVariantChannelListingAddInput!]!\" provided the variable \"$input\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"input\" of required type [ProductVariantChannelListingAddInput!]!\" provided the variable \"$input\" which was not provided"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 5,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "productvariantchannellistingupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:09559b77a5755244"
+}

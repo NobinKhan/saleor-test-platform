@@ -1,0 +1,42 @@
+{
+  "bundle_id": "_getpagetypeschoices",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_GetPageTypesChoices"
+  ],
+  "document": "query _GetPageTypesChoices($first: Int!, $query: String!) {\n  pageTypes(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10,
+    "query": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "pageTypes": {
+        "edges": [
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6MQ==",
+              "name": "Default Type",
+              "slug": "default-type"
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:20876572ff6a1901",
+  "document_hash": "sha256:cf19928514848e04"
+}

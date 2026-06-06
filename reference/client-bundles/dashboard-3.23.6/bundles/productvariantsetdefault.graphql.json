@@ -1,0 +1,16 @@
+{
+  "bundle_id": "productvariantsetdefault",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductVariantSetDefault"
+  ],
+  "document": "mutation ProductVariantSetDefault($productId: ID!, $variantId: ID!) {\n  productVariantSetDefault(productId: $productId, variantId: $variantId) {\n    errors {\n      ...ProductError\n    }\n    product {\n      id\n      defaultVariant {\n        id\n        name\n      }\n      variants {\n        id\n        name\n      }\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "productId": "{{fixtures.default_product_id}}",
+    "variantId": "{{fixtures.default_variant_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:7c075c5386497ad9"
+}

@@ -13,7 +13,8 @@ UUID_RE = re.compile(
     re.I,
 )
 GLOBAL_ID_RE = re.compile(r"^[A-Za-z0-9+/=_-]{8,}$")
-SKIP_KEYS = frozenset({"extensions", "__typename", "stacktrace"})
+SKIP_KEYS = frozenset({"extensions", "__typename", "stacktrace", "locations", "path"})
+ERROR_STRIP_KEYS = frozenset({"extensions", "locations", "path"})
 ISO_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
 
 
@@ -25,7 +26,9 @@ def normalize_response(resp: dict[str, Any]) -> dict[str, Any]:
 def normalize_error_message(msg: str) -> str:
     """Reduce error messages to category keys for comparison."""
     lower = msg.lower()
-    if "invalid value" in lower or "expected" in lower and "found" in lower:
+    if "invalid id" in lower and "expected" in lower:
+        return "<invalid_id>"
+    if "invalid value" in lower or ("expected" in lower and "found" in lower):
         return "<validation>"
     if "not found" in lower or "does not exist" in lower:
         return "<not_found>"
@@ -39,20 +42,13 @@ def normalize_error_message(msg: str) -> str:
 def _walk(obj: Any, *, in_errors: bool = False) -> Any:
     if isinstance(obj, dict):
         if in_errors and "message" in obj and isinstance(obj["message"], str):
-            out = {k: v for k, v in obj.items() if k not in SKIP_KEYS}
-            out["message"] = normalize_error_message(obj["message"])
-            for k, v in out.items():
-                if k != "message":
-                    out[k] = _walk(v, in_errors=True)
+            out: dict[str, Any] = {"message": normalize_error_message(obj["message"])}
             return out
         out: dict[str, Any] = {}
         for k, v in obj.items():
             if k in SKIP_KEYS:
                 continue
             if k == "exception" and isinstance(v, dict):
-                code = v.get("code")
-                if code:
-                    out["exception"] = {"code": code}
                 continue
             child_in_errors = in_errors or k == "errors"
             out[k] = _walk(v, in_errors=child_in_errors)

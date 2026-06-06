@@ -1,0 +1,65 @@
+{
+  "bundle_id": "channels",
+  "source": "saleor-dashboard",
+  "source_path": "channels/queries.ts",
+  "operation_names": [
+    "Channels"
+  ],
+  "document": "query Channels {\n  channels {\n    ...ChannelDetails\n  }\n}\n\nfragment ChannelDetails on Channel {\n  ...Channel\n  hasOrders\n  warehouses {\n    ...Warehouse\n  }\n  orderSettings {\n    markAsPaidStrategy\n    deleteExpiredOrdersAfter\n    allowUnpaidOrders\n  }\n  paymentSettings {\n    defaultTransactionFlowStrategy\n  }\n  checkoutSettings {\n    automaticallyCompleteFullyPaidCheckouts\n    automaticCompletionDelay\n    automaticCompletionCutOffDate\n    allowLegacyGiftCardUse\n  }\n}\n\nfragment Channel on Channel {\n  id\n  isActive\n  name\n  slug\n  currencyCode\n  defaultCountry {\n    code\n    country\n  }\n  stockSettings {\n    allocationStrategy\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "channels": [
+        {
+          "id": "Q2hhbm5lbDox",
+          "isActive": true,
+          "name": "Default Channel",
+          "slug": "default-channel",
+          "currencyCode": "USD",
+          "defaultCountry": {
+            "code": "US",
+            "country": "United States of America"
+          },
+          "stockSettings": {
+            "allocationStrategy": "PRIORITIZE_HIGH_STOCK"
+          },
+          "hasOrders": false,
+          "warehouses": [
+            {
+              "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
+              "name": "Default Warehouse"
+            }
+          ],
+          "orderSettings": {
+            "markAsPaidStrategy": "PAYMENT_FLOW",
+            "deleteExpiredOrdersAfter": 60,
+            "allowUnpaidOrders": false
+          },
+          "paymentSettings": {
+            "defaultTransactionFlowStrategy": "CHARGE"
+          },
+          "checkoutSettings": {
+            "automaticallyCompleteFullyPaidCheckouts": false,
+            "automaticCompletionDelay": null,
+            "automaticCompletionCutOffDate": null,
+            "allowLegacyGiftCardUse": true
+          }
+        }
+      ]
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6a20228a428f03c3",
+  "document_hash": "sha256:f576077b756f5c77"
+}

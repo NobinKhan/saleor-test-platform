@@ -1,0 +1,19 @@
+{
+  "bundle_id": "unassigncollectionproduct",
+  "source": "saleor-dashboard",
+  "source_path": "collections/mutations.ts",
+  "operation_names": [
+    "UnassignCollectionProduct"
+  ],
+  "document": "mutation UnassignCollectionProduct($collectionId: ID!, $productIds: [ID!]!, $first: Int, $after: String, $last: Int, $before: String) {\n  collectionRemoveProducts(collectionId: $collectionId, products: $productIds) {\n    collection {\n      id\n      products(\n        first: $first\n        after: $after\n        before: $before\n        last: $last\n        sortBy: {field: COLLECTION, direction: ASC}\n      ) {\n        edges {\n          node {\n            ...CollectionProduct\n          }\n        }\n        pageInfo {\n          endCursor\n          hasNextPage\n          hasPreviousPage\n          startCursor\n        }\n      }\n    }\n    errors {\n      ...CollectionError\n    }\n  }\n}\n\nfragment CollectionProduct on Product {\n  id\n  name\n  productType {\n    id\n    name\n  }\n  thumbnail {\n    url\n  }\n  channelListings {\n    ...ChannelListingProductWithoutPricing\n  }\n}\n\nfragment ChannelListingProductWithoutPricing on ProductChannelListing {\n  id\n  isPublished\n  publishedAt\n  isAvailableForPurchase\n  availableForPurchaseAt\n  visibleInListings\n  channel {\n    id\n    name\n    slug\n    currencyCode\n  }\n}\n\nfragment CollectionError on CollectionError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "collectionId": "{{fixtures.default_collection_id}}",
+    "first": 10,
+    "after": "",
+    "last": 10,
+    "before": ""
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "document_hash": "sha256:89001624015262db"
+}

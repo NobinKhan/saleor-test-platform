@@ -1,0 +1,112 @@
+{
+  "bundle_id": "voucherdetails",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/queries.ts",
+  "operation_names": [
+    "VoucherDetails"
+  ],
+  "document": "query VoucherDetails($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $includeProducts: Boolean!, $includeCollections: Boolean!, $includeCategories: Boolean!, $includeVariants: Boolean!) {\n  voucher(id: $id) {\n    ...VoucherDetails\n  }\n}\n\nfragment VoucherDetails on Voucher {\n  ...Voucher\n  usageLimit\n  used\n  applyOncePerOrder\n  applyOncePerCustomer\n  onlyForStaff\n  singleUse\n  variantsCount: variants {\n    totalCount\n  }\n  productsCount: products {\n    totalCount\n  }\n  collectionsCount: collections {\n    totalCount\n  }\n  categoriesCount: categories {\n    totalCount\n  }\n  products(after: $after, before: $before, first: $first, last: $last) @include(if: $includeProducts) {\n    edges {\n      node {\n        id\n        name\n        productType {\n          id\n          name\n        }\n        thumbnail {\n          url\n        }\n        channelListings {\n          ...ChannelListingProductWithoutPricing\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n  collections(after: $after, before: $before, first: $first, last: $last) @include(if: $includeCollections) {\n    edges {\n      node {\n        id\n        name\n        products {\n          totalCount\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n  categories(after: $after, before: $before, first: $first, last: $last) @include(if: $includeCategories) {\n    edges {\n      node {\n        id\n        name\n        products {\n          totalCount\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n  variants(after: $after, before: $before, first: $first, last: $last) @include(if: $includeVariants) {\n    edges {\n      node {\n        id\n        name\n        product {\n          id\n          name\n          thumbnail {\n            url\n            __typename\n          }\n          productType {\n            id\n            name\n            __typename\n          }\n          channelListings {\n            ...ChannelListingProductWithoutPricing\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    pageInfo {\n      ...PageInfo\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment Voucher on Voucher {\n  ...Metadata\n  id\n  name\n  startDate\n  endDate\n  usageLimit\n  type\n  discountValueType\n  countries {\n    code\n    country\n  }\n  minCheckoutItemsQuantity\n  channelListings {\n    id\n    channel {\n      id\n      name\n      currencyCode\n    }\n    discountValue\n    currency\n    minSpent {\n      amount\n      currency\n    }\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment ChannelListingProductWithoutPricing on ProductChannelListing {\n  id\n  isPublished\n  publishedAt\n  isAvailableForPurchase\n  availableForPurchaseAt\n  visibleInListings\n  channel {\n    id\n    name\n    slug\n    currencyCode\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "after": "",
+    "before": "",
+    "first": 10,
+    "last": 10,
+    "includeProducts": false,
+    "includeCollections": false,
+    "includeCategories": false,
+    "includeVariants": false
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Voucher.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "voucher"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/discount/schema.py\", line 179, in resolve_voucher",
+              "    _, id = from_global_id_or_error(id, Voucher)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Voucher."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "voucher": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 308,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:70a3161dc1485f4f",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "voucherdetails",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "voucher"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "voucher"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:79a641acf64f6a56"
+}

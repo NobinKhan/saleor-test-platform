@@ -73,5 +73,14 @@
   "golden_outcome": "unexpected_error",
   "golden_status": "warn",
   "error_pattern": null,
-  "response_shape_hash": "sha256:6927851efa56eb79"
+  "response_shape_hash": "sha256:6927851efa56eb79",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "transaction",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "transaction"
+    ]
+  }
 }

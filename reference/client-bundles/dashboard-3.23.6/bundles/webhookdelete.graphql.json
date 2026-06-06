@@ -1,0 +1,44 @@
+{
+  "bundle_id": "webhookdelete",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/mutations.ts",
+  "operation_names": [
+    "WebhookDelete"
+  ],
+  "document": "mutation WebhookDelete($id: ID!) {\n  webhookDelete(id: $id) {\n    errors {\n      ...WebhookError\n    }\n  }\n}\n\nfragment WebhookError on WebhookError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "webhookDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Webhook."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:4c81779e1b7c7442",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "webhookdelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:5398f6c1785f2d61"
+}

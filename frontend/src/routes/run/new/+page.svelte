@@ -1,21 +1,18 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import { api } from "$lib/api";
 
   let saleor_url = "http://localhost:8000/graphql/";
   let saleor_email = "";
   let saleor_password = "";
-  let test_scope = "catalog";
-  let public_only = false;
   let concurrency = 5;
   let timeout_seconds = 30;
-  const categories = [
-    "products", "orders", "checkout", "payments", "shipping", "discounts",
-    "channels", "categories", "collections", "attributes", "account",
-    "giftcards", "pages", "warehouse", "meta", "shop", "plugins", "webhooks",
-  ];
-  let selectedCategories: string[] = [...categories];
+  let cloneFromRunId: string | null = null;
+  let prefillMessage = "";
   let loading = false;
+  let prefillLoading = false;
   let startMessage = "";
   let error = "";
 
@@ -25,14 +22,40 @@
     return parts.length === 2 && parts[0].length > 0 && parts[1].length > 0;
   }
 
+  onMount(async () => {
+    const from = $page.url.searchParams.get("from");
+    if (!from) return;
+
+    cloneFromRunId = from;
+    prefillLoading = true;
+    try {
+      const run = await api.get(`/api/runs/${from}`);
+      saleor_url = run.saleor_url;
+      saleor_email = run.saleor_email ?? "";
+      concurrency = run.concurrency ?? 5;
+      timeout_seconds = run.timeout_seconds ?? 30;
+      prefillMessage =
+        "Prefilled from previous run — review settings and click Start when ready.";
+    } catch (e: unknown) {
+      error = e instanceof Error ? e.message : "Could not load previous run settings";
+      cloneFromRunId = null;
+    } finally {
+      prefillLoading = false;
+    }
+  });
+
   async function startTest() {
     error = "";
     if (!saleor_url) {
       error = "Saleor server URL is required";
       return;
     }
-    if (!saleor_email || !saleor_password) {
-      error = "Saleor admin email and password are required";
+    if (!saleor_email) {
+      error = "Saleor admin email is required";
+      return;
+    }
+    if (!saleor_password && !cloneFromRunId) {
+      error = "Saleor admin password is required";
       return;
     }
     if (!isValidSaleorEmail(saleor_email)) {
@@ -49,20 +72,25 @@
     loading = true;
     startMessage = "Authenticating and creating test run…";
     try {
-      const run = await api.post("/api/runs", {
+      const payload: Record<string, unknown> = {
         saleor_url,
         saleor_email: saleor_email.trim(),
-        saleor_password,
-        test_scope,
-        public_only,
+        test_scope: "full+client",
+        public_only: false,
         concurrency,
         timeout_seconds,
-        categories: test_scope === "custom" ? selectedCategories : null,
-      });
+      };
+      if (saleor_password) {
+        payload.saleor_password = saleor_password;
+      }
+      if (cloneFromRunId) {
+        payload.clone_from_run_id = cloneFromRunId;
+      }
+      const run = await api.post("/api/runs", payload);
       startMessage = "Opening live progress…";
       await goto(`/run/${run.id}/stream`);
-    } catch (e: any) {
-      error = e.message || "Failed to start test run";
+    } catch (e: unknown) {
+      error = e instanceof Error ? e.message : "Failed to start test run";
       loading = false;
       startMessage = "";
     }
@@ -81,10 +109,16 @@
 <div class="new-run-page" class:dimmed={loading}>
   <div class="page-header">
     <h1>New Test Run</h1>
-    <p class="subtitle">Configure and start a new Saleor API compatibility test</p>
+    <p class="subtitle">Full certification run — L1 reference probes + L3 Dashboard bundles (798 endpoints)</p>
   </div>
 
   <div class="form-card card">
+    {#if prefillLoading}
+      <div class="info-banner">Loading previous run settings…</div>
+    {/if}
+    {#if prefillMessage}
+      <div class="info-banner">{prefillMessage}</div>
+    {/if}
     {#if error}
       <div class="error-banner">{error}</div>
     {/if}
@@ -106,38 +140,15 @@
         </div>
         <div class="field">
           <label for="saleor_password">Admin Password</label>
-          <input id="saleor_password" type="password" bind:value={saleor_password} required placeholder="••••••••" />
+          <input
+            id="saleor_password"
+            type="password"
+            bind:value={saleor_password}
+            placeholder={cloneFromRunId ? "Leave blank to reuse stored password" : "••••••••"}
+            required={!cloneFromRunId}
+          />
         </div>
       </div>
-
-      <div class="field">
-        <label for="scope">Test Scope</label>
-        <select id="scope" bind:value={test_scope}>
-          <option value="catalog">Catalog (recommended — static list only)</option>
-          <option value="full">Full exhaustive (catalog + all introspected endpoints)</option>
-          <option value="queries">Queries Only</option>
-          <option value="mutations">Mutations Only</option>
-          <option value="custom">Custom (by category)</option>
-        </select>
-      </div>
-
-      {#if test_scope === "custom"}
-        <div class="field">
-          <span class="section-label">Categories</span>
-          <div class="category-grid">
-            {#each categories as cat}
-              <label class="cat-check">
-                <input type="checkbox" value={cat} checked={selectedCategories.includes(cat)}
-                  on:change={(e) => {
-                    if (e.currentTarget.checked) selectedCategories = [...selectedCategories, cat];
-                    else selectedCategories = selectedCategories.filter(c => c !== cat);
-                  }} />
-                {cat}
-              </label>
-            {/each}
-          </div>
-        </div>
-      {/if}
 
       <div class="field-row">
         <div class="field">
@@ -150,14 +161,9 @@
         </div>
       </div>
 
-      <div class="field checkbox-field">
-        <input id="public" type="checkbox" bind:checked={public_only} />
-        <label for="public">Test public endpoints only (skip authenticated)</label>
-      </div>
-
       <div class="form-actions">
         <a href="/dashboard" class="btn-secondary">Cancel</a>
-        <button class="btn-primary" type="submit" disabled={loading}>
+        <button class="btn-primary" type="submit" disabled={loading || prefillLoading}>
           {loading ? "Starting..." : "Start Test Run"}
         </button>
       </div>
@@ -200,6 +206,16 @@
   .subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem; }
   .form-card { padding: 1.5rem; }
 
+  .info-banner {
+    background: var(--surface-elevated, rgba(255, 255, 255, 0.05));
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+
   .error-banner {
     background: var(--danger-bg);
     color: var(--danger);
@@ -218,15 +234,5 @@
   .hint { font-size: 0.8rem; color: var(--text-muted); }
   .field-row { display: flex; gap: 0.75rem; align-items: flex-end; }
   .field-row .field { flex: 1; }
-  .checkbox-field { flex-direction: row; align-items: center; gap: 0.5rem; }
-  .checkbox-field input { width: auto; }
-  .checkbox-field label { font-weight: 400; color: var(--text-primary); }
   .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
-  .category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-  }
-  .cat-check { display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; cursor: pointer; }
 </style>

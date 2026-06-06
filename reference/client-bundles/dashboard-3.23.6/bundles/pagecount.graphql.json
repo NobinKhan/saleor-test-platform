@@ -1,0 +1,33 @@
+{
+  "bundle_id": "pagecount",
+  "source": "saleor-dashboard",
+  "source_path": "modeling/queries.ts",
+  "operation_names": [
+    "PageCount"
+  ],
+  "document": "query PageCount($filter: PageFilterInput) {\n  pages(filter: $filter) {\n    totalCount\n  }\n}",
+  "variables": {
+    "filter": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "pages": {
+        "totalCount": 0
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:20dacf968cdd7352",
+  "document_hash": "sha256:84d0d3097076184f"
+}

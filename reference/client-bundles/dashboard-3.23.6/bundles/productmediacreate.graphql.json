@@ -1,0 +1,18 @@
+{
+  "bundle_id": "productmediacreate",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductMediaCreate"
+  ],
+  "document": "mutation ProductMediaCreate($product: ID!, $image: Upload, $alt: String, $mediaUrl: String) {\n  productMediaCreate(\n    input: {alt: $alt, image: $image, product: $product, mediaUrl: $mediaUrl}\n  ) {\n    errors {\n      ...ProductError\n    }\n    product {\n      id\n      media {\n        ...ProductMedia\n      }\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}\n\nfragment ProductMedia on ProductMedia {\n  id\n  alt\n  sortOrder\n  url(size: 1024)\n  type\n  oembedData\n}",
+  "variables": {
+    "product": "{{fixtures.default_product_id}}",
+    "image": null,
+    "alt": "",
+    "mediaUrl": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:ccd8d15f48f9851d"
+}

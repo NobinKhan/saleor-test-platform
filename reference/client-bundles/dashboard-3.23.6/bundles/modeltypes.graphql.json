@@ -1,0 +1,38 @@
+{
+  "bundle_id": "modeltypes",
+  "source": "saleor-dashboard",
+  "source_path": "refundsSettings/queries.ts",
+  "operation_names": [
+    "ModelTypes"
+  ],
+  "document": "query ModelTypes {\n  pageTypes(first: 100, sortBy: {field: NAME, direction: ASC}) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "pageTypes": {
+        "edges": [
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6MQ==",
+              "name": "Default Type"
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 100,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:e6101a864438b2ef",
+  "document_hash": "sha256:2c40f17353660a12"
+}

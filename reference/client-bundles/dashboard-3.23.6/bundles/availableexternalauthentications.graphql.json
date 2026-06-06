@@ -1,0 +1,32 @@
+{
+  "bundle_id": "availableexternalauthentications",
+  "source": "saleor-dashboard",
+  "source_path": "auth/queries.ts",
+  "operation_names": [
+    "AvailableExternalAuthentications"
+  ],
+  "document": "query AvailableExternalAuthentications {\n  shop {\n    availableExternalAuthentications {\n      id\n      name\n    }\n    passwordLoginMode\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "availableExternalAuthentications": [],
+        "passwordLoginMode": "ENABLED"
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:657eb7c6eae21974",
+  "document_hash": "sha256:705f71224644c182"
+}

@@ -1,0 +1,42 @@
+{
+  "bundle_id": "_searchcategoriesoperands",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_SearchCategoriesOperands"
+  ],
+  "document": "query _SearchCategoriesOperands($after: String, $first: Int!, $categoriesSlugs: [String!]) {\n  categories(after: $after, first: $first, filter: {slugs: $categoriesSlugs}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "after": "",
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "categories": {
+        "edges": [
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MQ==",
+              "name": "Default Category",
+              "slug": "default-category"
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:48e9f43928b548e6",
+  "document_hash": "sha256:20b0c5de0280de7b"
+}

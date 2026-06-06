@@ -1,0 +1,47 @@
+{
+  "bundle_id": "appdelete",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/mutations.ts",
+  "operation_names": [
+    "AppDelete"
+  ],
+  "document": "mutation AppDelete($id: ID!, $hasManagedAppsPermission: Boolean = true) {\n  appDelete(id: $id) {\n    app {\n      ...App\n    }\n    errors {\n      ...AppError\n    }\n  }\n}\n\nfragment App on App {\n  id\n  name\n  created\n  isActive\n  type\n  homepageUrl\n  appUrl\n  manifestUrl\n  configurationUrl\n  supportUrl\n  version\n  accessToken\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n  privateMetadata @include(if: $hasManagedAppsPermission) {\n    key\n    value\n  }\n  metadata @include(if: $hasManagedAppsPermission) {\n    key\n    value\n  }\n  tokens @include(if: $hasManagedAppsPermission) {\n    authToken\n    id\n    name\n  }\n  webhooks @include(if: $hasManagedAppsPermission) {\n    ...Webhook\n  }\n}\n\nfragment Webhook on Webhook {\n  id\n  name\n  isActive\n  app {\n    id\n    name\n  }\n}\n\nfragment AppError on AppError {\n  field\n  message\n  code\n  permissions\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "hasManagedAppsPermission": true
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "appDelete": {
+        "app": null,
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: App.",
+            "code": "GRAPHQL_ERROR",
+            "permissions": null
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 2,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:add4c9630eb2ee78",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "appdelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:2b7413a8c398b3ca"
+}

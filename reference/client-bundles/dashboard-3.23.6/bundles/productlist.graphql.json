@@ -1,0 +1,95 @@
+{
+  "bundle_id": "productlist",
+  "source": "saleor-dashboard",
+  "source_path": "products/queries.ts",
+  "operation_names": [
+    "ProductList"
+  ],
+  "document": "query ProductList($first: Int, $after: String, $last: Int, $before: String, $filter: ProductFilterInput, $search: String, $where: ProductWhereInput, $channel: String, $sort: ProductOrder, $hasChannel: Boolean!, $includeCategories: Boolean!, $includeCollections: Boolean!) {\n  products(\n    before: $before\n    after: $after\n    first: $first\n    last: $last\n    filter: $filter\n    search: $search\n    where: $where\n    sortBy: $sort\n    channel: $channel\n  ) {\n    edges {\n      node {\n        ...ProductWithChannelListings\n        updatedAt\n        created\n        description\n        attributes {\n          ...ProductListAttribute\n        }\n      }\n    }\n    pageInfo {\n      hasPreviousPage\n      hasNextPage\n      startCursor\n      endCursor\n    }\n    totalCount\n  }\n}\n\nfragment ProductWithChannelListings on Product {\n  id\n  name\n  thumbnail(size: 1024) {\n    url\n  }\n  productType {\n    id\n    name\n    hasVariants\n  }\n  category @include(if: $includeCategories) {\n    id\n    name\n  }\n  collections @include(if: $includeCollections) {\n    id\n    name\n  }\n  channelListings {\n    ...ChannelListingProductWithoutPricing\n    pricing @include(if: $hasChannel) {\n      priceRange {\n        ...PriceRange\n      }\n    }\n  }\n}\n\nfragment ChannelListingProductWithoutPricing on ProductChannelListing {\n  id\n  isPublished\n  publishedAt\n  isAvailableForPurchase\n  availableForPurchaseAt\n  visibleInListings\n  channel {\n    id\n    name\n    slug\n    currencyCode\n  }\n}\n\nfragment PriceRange on TaxedMoneyRange {\n  start {\n    net {\n      ...Money\n    }\n  }\n  stop {\n    net {\n      ...Money\n    }\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment ProductListAttribute on SelectedAttribute {\n  attribute {\n    id\n  }\n  values {\n    ...AttributeValue\n  }\n}\n\nfragment AttributeValue on AttributeValue {\n  id\n  name\n  slug\n  file {\n    ...File\n  }\n  reference\n  boolean\n  date\n  dateTime\n  value\n}\n\nfragment File on File {\n  url\n  contentType\n}",
+  "variables": {
+    "first": 10,
+    "after": "",
+    "last": 10,
+    "before": "",
+    "filter": null,
+    "search": "",
+    "where": null,
+    "channel": "{{fixtures.default_channel}}",
+    "sort": null,
+    "hasChannel": true,
+    "includeCategories": false,
+    "includeCollections": false
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument `last` cannot be combined with `first`.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "products"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/promise/promise.py\", line 87, in try_catch",
+              "    return (handler(*args, **kwargs), None)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/product/schema.py\", line 507, in _resolve_products",
+              "    return create_connection_slice(qs, info, kwargs, ProductCountableConnection)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
+              "    slice = connection_from_queryset_slice(",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
+              "    _validate_connection_args(args)",
+              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
+              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
+              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "products": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 240,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9731be5cc44d8e7c",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "productlist",
+    "expected_null": true,
+    "message_pattern": "Argument `last` cannot be combined with `first`.",
+    "optional_path": [
+      "products"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "products"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:94cf91f91d568590"
+}

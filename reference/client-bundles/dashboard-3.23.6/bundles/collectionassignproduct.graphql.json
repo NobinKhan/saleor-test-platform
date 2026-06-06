@@ -1,0 +1,15 @@
+{
+  "bundle_id": "collectionassignproduct",
+  "source": "saleor-dashboard",
+  "source_path": "collections/mutations.ts",
+  "operation_names": [
+    "CollectionAssignProduct"
+  ],
+  "document": "mutation CollectionAssignProduct($collectionId: ID!, $productIds: [ID!]!, $moves: [MoveProductInput!]!) {\n  collectionAddProducts(collectionId: $collectionId, products: $productIds) {\n    errors {\n      ...CollectionError\n    }\n  }\n  collectionReorderProducts(collectionId: $collectionId, moves: $moves) {\n    errors {\n      message\n    }\n  }\n}\n\nfragment CollectionError on CollectionError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "collectionId": "{{fixtures.default_collection_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:5d2ebc0483ee2046"
+}

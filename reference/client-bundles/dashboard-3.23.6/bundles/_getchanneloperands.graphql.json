@@ -1,0 +1,35 @@
+{
+  "bundle_id": "_getchanneloperands",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_GetChannelOperands"
+  ],
+  "document": "query _GetChannelOperands {\n  channels {\n    id: slug\n    name\n    slug\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "channels": [
+        {
+          "id": "default-channel",
+          "name": "Default Channel",
+          "slug": "default-channel"
+        }
+      ]
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:a4d8ed53380464ed",
+  "document_hash": "sha256:4a5e9ab23d24feb7"
+}

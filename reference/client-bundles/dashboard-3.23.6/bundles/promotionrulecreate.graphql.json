@@ -1,0 +1,59 @@
+{
+  "bundle_id": "promotionrulecreate",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/mutations.ts",
+  "operation_names": [
+    "PromotionRuleCreate"
+  ],
+  "document": "mutation PromotionRuleCreate($input: PromotionRuleCreateInput!) {\n  promotionRuleCreate(input: $input) {\n    errors {\n      ...PromotionRuleCreateError\n    }\n    promotionRule {\n      ...PromotionRuleDetails\n    }\n  }\n}\n\nfragment PromotionRuleCreateError on PromotionRuleCreateError {\n  field\n  message\n  code\n}\n\nfragment PromotionRuleDetails on PromotionRule {\n  id\n  name\n  description\n  channels {\n    ...PromotionRuleChannel\n  }\n  giftIds\n  rewardType\n  rewardValueType\n  rewardValue\n  cataloguePredicate\n  orderPredicate\n}\n\nfragment PromotionRuleChannel on Channel {\n  id\n  isActive\n  name\n  slug\n  currencyCode\n  defaultCountry {\n    code\n    country\n  }\n}",
+  "variables": {
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"PromotionRuleCreateInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 30
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"PromotionRuleCreateInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "promotionrulecreate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:a726e12511762a4e"
+}

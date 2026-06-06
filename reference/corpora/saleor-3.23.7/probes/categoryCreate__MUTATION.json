@@ -33,5 +33,10 @@
   "response_shape_hash": "sha256:c133ba5bdaeb31a2",
   "golden_contract": "business_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "categoryCreate",
+    "expected_null": false
+  }
 }

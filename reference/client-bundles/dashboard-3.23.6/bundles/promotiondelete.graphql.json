@@ -1,0 +1,44 @@
+{
+  "bundle_id": "promotiondelete",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/mutations.ts",
+  "operation_names": [
+    "PromotionDelete"
+  ],
+  "document": "mutation PromotionDelete($id: ID!) {\n  promotionDelete(id: $id) {\n    errors {\n      ...PromotionDeleteError\n    }\n  }\n}\n\nfragment PromotionDeleteError on PromotionDeleteError {\n  field\n  message\n  code\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "promotionDelete": {
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Promotion.",
+            "code": "GRAPHQL_ERROR"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:fe204c6d9d5d6795",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "promotiondelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:ea24442a76ea596e"
+}

@@ -1,0 +1,42 @@
+{
+  "bundle_id": "searchpages",
+  "source": "saleor-dashboard",
+  "source_path": "searches/usePageSearch.ts",
+  "operation_names": [
+    "SearchPages"
+  ],
+  "document": "query SearchPages($after: String, $first: Int!, $query: String!, $where: PageWhereInput) {\n  search: pages(after: $after, first: $first, search: $query, where: $where) {\n    edges {\n      node {\n        id\n        title\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "after": "",
+    "first": 10,
+    "query": "",
+    "where": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "search": {
+        "edges": [],
+        "pageInfo": {
+          "endCursor": null,
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": null
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
+  "document_hash": "sha256:8ca9fbca1927e826"
+}

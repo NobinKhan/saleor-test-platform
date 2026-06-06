@@ -25,7 +25,18 @@ from app.services.introspection import compare_schema, introspect_saleor, schema
 from app.services.saleor_auth import ensure_valid_token, refresh_saleor_token
 from app.services.outcome import classify_graphql_response, classify_transport_error
 from app.services.query_builder import build_query_with_schema, introspect_field_args
-from app.services.reference_compare import compare_to_golden
+from app.services.client_bundle_fixtures import substitute_fixtures
+from app.services.client_bundles import (
+    build_client_bundle_endpoints,
+    CLIENT_BUNDLE_KIND,
+    load_all_bundles_from_disk,
+    resolve_dashboard_bundle_version,
+)
+from app.services.client_bundle_schema_gate import (
+    compute_client_bundle_schema_gate,
+    merge_client_schema_into_diff,
+)
+from app.services.reference_compare import compare_to_golden, tier2_gate_enabled
 from app.services.response_contract import CONTRACT_AUTH_ERROR, CONTRACT_SUCCESS, classify_response_contract
 
 # Saleor reference queries/mutations
@@ -449,6 +460,7 @@ class TestRunner:
         test_mode: str = "compatibility",
         saleor_email: str | None = None,
         saleor_password: str | None = None,
+        tier2_required: bool | None = None,
     ):
         self.run_id = run_id
         self.saleor_url = resolve_saleor_url_for_runner(saleor_url)
@@ -462,6 +474,7 @@ class TestRunner:
         self.categories = categories
         self.use_introspection = use_introspection
         self.test_mode = test_mode if test_mode in ("compatibility", "discovery") else "compatibility"
+        self.tier2_required = tier2_required
         self._stopped = False
         self.saleor_version: str | None = None
         self.schema_fields: dict[str, list[dict]] | None = None
@@ -522,9 +535,25 @@ class TestRunner:
             yield {"type": "schema_diff", "diff": {"version_warning": ver_warn}}
 
         if self.test_mode == "compatibility":
-            endpoints = build_golden_endpoints(
-                corpus_ver, self.test_scope, self.public_only, self.categories
-            )
+            # Fixed certification L3 set from golden reference schema (not target introspection).
+            certification_schema = load_reference_schema(corpus_ver)
+            if self.test_scope == "client-dashboard":
+                endpoints = build_client_bundle_endpoints(
+                    recorded_only=True, schema_intro=certification_schema
+                )
+            elif self.test_scope == "full+client":
+                endpoints = build_golden_endpoints(
+                    corpus_ver, "full", self.public_only, self.categories
+                )
+                endpoints.extend(
+                    build_client_bundle_endpoints(
+                        recorded_only=True, schema_intro=certification_schema
+                    )
+                )
+            else:
+                endpoints = build_golden_endpoints(
+                    corpus_ver, self.test_scope, self.public_only, self.categories
+                )
         else:
             endpoints = build_endpoints_list(
                 self.test_scope, self.public_only, self.categories
@@ -593,9 +622,15 @@ class TestRunner:
         semaphore = asyncio.Semaphore(effective_concurrency)
 
         async with httpx.AsyncClient(timeout=self.timeout) as http_client:
-            if self.test_mode == "compatibility" and self.saleor_token:
+            if self.test_mode == "compatibility":
                 yield {"type": "progress", "message": "Validating staff authentication…"}
-                await self._ensure_valid_token(http_client)
+                force = bool(self.saleor_email and self.saleor_password)
+                await self._ensure_valid_token(http_client, force_refresh=force)
+                if not self.saleor_token and force:
+                    yield {
+                        "type": "schema_diff",
+                        "diff": {"introspection_error": "Staff authentication failed"},
+                    }
 
             async def test_one(idx: int, endpoint: dict) -> dict:
                 async with semaphore:
@@ -662,6 +697,7 @@ class TestRunner:
                     "expected_response": result.get("expected_response"),
                     "match_status": result.get("match_status"),
                     "diff_summary": result.get("diff_summary"),
+                    "client_parity_note": result.get("client_parity_note"),
                     "field_items": result.get("field_items"),
                     "compatible": result.get("compatible"),
                     "response_contract": result.get("response_contract"),
@@ -682,12 +718,23 @@ class TestRunner:
         if defer_schema:
             yield {"type": "progress", "message": "Introspecting GraphQL schema (post-replay)…"}
             try:
-                await self._ensure_valid_token()
+                await self._ensure_valid_token(
+                    force_refresh=bool(self.saleor_email and self.saleor_password),
+                )
                 intro = await introspect_saleor(
                     self.saleor_url, self.saleor_token, self.timeout
                 )
                 ref_schema = load_reference_schema(corpus_ver)
                 diff = schema_gate_diff(intro, ref_schema, source="golden")
+                if self.test_scope in ("client-dashboard", "full+client"):
+                    dash_ver = resolve_dashboard_bundle_version()
+                    bundles = load_all_bundles_from_disk(
+                        "dashboard", dash_ver, recorded_only=True
+                    )
+                    client_gate = compute_client_bundle_schema_gate(
+                        bundles, intro, recorded_only=True
+                    )
+                    diff = merge_client_schema_into_diff(diff, client_gate)
                 yield {"type": "schema_diff", "diff": diff}
             except Exception as exc:
                 yield {"type": "schema_diff", "diff": {"introspection_error": str(exc)}}
@@ -725,6 +772,15 @@ class TestRunner:
             query = endpoint["golden_input"]
         else:
             query = build_query_with_schema(name, kind, self.schema_fields)
+        payload: dict[str, Any] = {"query": query}
+        if endpoint.get("bundle_document"):
+            payload["query"] = endpoint["bundle_document"]
+            variables = endpoint.get("bundle_variables") or {}
+            fixtures = endpoint.get("bundle_fixtures") or {}
+            try:
+                payload["variables"] = substitute_fixtures(variables, fixtures)
+            except KeyError:
+                payload["variables"] = variables
         start = time.time()
 
         try:
@@ -734,10 +790,14 @@ class TestRunner:
                 resp_json = {}
                 resp_status = 500
                 for attempt in range(3):
+                    if self.test_mode == "compatibility" and (
+                        not endpoint.get("is_public") or kind == CLIENT_BUNDLE_KIND
+                    ):
+                        await self._ensure_valid_token(client)
                     headers = self._auth_headers()
                     resp = await client.post(
                         self.saleor_url,
-                        json={"query": query},
+                        json=payload,
                         headers=headers,
                     )
                     resp_status = resp.status_code
@@ -762,6 +822,7 @@ class TestRunner:
                     resp_json,
                     meta,
                     http_status=resp_status,
+                    tier2_required=tier2_gate_enabled(self.tier2_required),
                 )
                 if self.test_mode == "compatibility":
                     status = "pass" if comparison.compatible else (
@@ -784,6 +845,7 @@ class TestRunner:
                     "expected_response": comparison.expected_response,
                     "match_status": comparison.match_status,
                     "diff_summary": comparison.diff_summary,
+                    "client_parity_note": comparison.client_parity_note,
                     "field_items": comparison.field_items,
                     "compatible": comparison.compatible,
                     "response_contract": contract,
@@ -794,7 +856,7 @@ class TestRunner:
                     "is_public": is_public,
                     "response_time_ms": elapsed_ms,
                     "error_message": meta.get("error_message"),
-                    "input_sent": query,
+                    "input_sent": json.dumps(payload) if endpoint.get("bundle_document") else query,
                     "actual_response": json.dumps(resp_json),
                 }
             finally:

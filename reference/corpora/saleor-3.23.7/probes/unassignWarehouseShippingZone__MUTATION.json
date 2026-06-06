@@ -24,5 +24,10 @@
   "golden_outcome": "success_with_data",
   "golden_status": "pass",
   "error_pattern": null,
-  "response_shape_hash": "sha256:032de7ba1a6937d5"
+  "response_shape_hash": "sha256:032de7ba1a6937d5",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "unassignWarehouseShippingZone",
+    "expected_null": false
+  }
 }

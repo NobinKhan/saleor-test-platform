@@ -1,0 +1,15 @@
+{
+  "bundle_id": "invoicerequest",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "InvoiceRequest"
+  ],
+  "document": "mutation InvoiceRequest($orderId: ID!) {\n  invoiceRequest(orderId: $orderId) {\n    errors {\n      ...InvoiceError\n    }\n    invoice {\n      ...Invoice\n    }\n    order {\n      id\n      invoices {\n        ...Invoice\n      }\n    }\n  }\n}\n\nfragment InvoiceError on InvoiceError {\n  code\n  field\n  message\n}\n\nfragment Invoice on Invoice {\n  id\n  number\n  createdAt\n  url\n  status\n}",
+  "variables": {
+    "orderId": "{{fixtures.default_order_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:4c6a44bdbb9325d5"
+}

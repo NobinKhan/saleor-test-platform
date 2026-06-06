@@ -1,0 +1,33 @@
+{
+  "bundle_id": "apphasproblems",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "AppHasProblems"
+  ],
+  "document": "query AppHasProblems($first: Int!) {\n  apps(first: $first) {\n    edges {\n      node {\n        id\n        problems(limit: 1) {\n          __typename\n        }\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "apps": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 20,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9f8c63de8c3592cb",
+  "document_hash": "sha256:7b65df9a38ec76f0"
+}

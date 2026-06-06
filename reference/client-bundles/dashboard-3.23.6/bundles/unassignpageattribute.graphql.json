@@ -1,0 +1,47 @@
+{
+  "bundle_id": "unassignpageattribute",
+  "source": "saleor-dashboard",
+  "source_path": "modelTypes/mutations.ts",
+  "operation_names": [
+    "UnassignPageAttribute"
+  ],
+  "document": "mutation UnassignPageAttribute($id: ID!, $ids: [ID!]!) {\n  pageAttributeUnassign(pageTypeId: $id, attributeIds: $ids) {\n    errors {\n      ...PageError\n    }\n    pageType {\n      ...PageTypeDetails\n    }\n  }\n}\n\nfragment PageError on PageError {\n  code\n  field\n  message\n}\n\nfragment PageTypeDetails on PageType {\n  ...PageType\n  ...Metadata\n  attributes {\n    ...Attribute\n  }\n}\n\nfragment PageType on PageType {\n  id\n  name\n  hasPages\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment Attribute on Attribute {\n  id\n  name\n  slug\n  type\n  visibleInStorefront\n  filterableInDashboard\n  filterableInStorefront\n  unit\n  inputType\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"attributeIds\" of required type [ID!]!\" provided the variable \"$ids\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"attributeIds\" of required type [ID!]!\" provided the variable \"$ids\" which was not provided"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "unassignpageattribute",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:f855438fe4ae682b"
+}

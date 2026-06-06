@@ -1,0 +1,40 @@
+{
+  "bundle_id": "ruleconditionsselectedoptionsdetails",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/queries.ts",
+  "operation_names": [
+    "RuleConditionsSelectedOptionsDetails"
+  ],
+  "document": "query RuleConditionsSelectedOptionsDetails($categoriesIds: [ID!], $collectionsIds: [ID!], $productsIds: [ID!], $variantsIds: [ID!]) {\n  categories(first: 100, where: {ids: $categoriesIds}) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n  collections(first: 100, where: {ids: $collectionsIds}) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n  products(first: 100, where: {ids: $productsIds}) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n  productVariants(first: 100, where: {ids: $variantsIds}) {\n    edges {\n      node {\n        id\n        name\n        product {\n          name\n        }\n      }\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "categories": {
+        "edges": []
+      },
+      "collections": {
+        "edges": []
+      },
+      "products": {
+        "edges": []
+      },
+      "productVariants": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 500,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:d2ba12bd246892ca",
+  "document_hash": "sha256:96311ba0183092b2"
+}

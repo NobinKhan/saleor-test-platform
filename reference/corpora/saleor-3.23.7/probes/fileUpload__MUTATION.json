@@ -67,5 +67,14 @@
   "response_shape_hash": "sha256:dd090c0b7f9f53c1",
   "golden_contract": "graphql_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "fileUpload",
+    "expected_null": true,
+    "message_pattern": "StringValue(value='test')",
+    "optional_path": [
+      "fileUpload"
+    ]
+  }
 }

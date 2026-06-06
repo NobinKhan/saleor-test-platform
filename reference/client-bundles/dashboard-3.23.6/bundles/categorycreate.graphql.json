@@ -1,0 +1,60 @@
+{
+  "bundle_id": "categorycreate",
+  "source": "saleor-dashboard",
+  "source_path": "categories/mutations.ts",
+  "operation_names": [
+    "CategoryCreate"
+  ],
+  "document": "mutation CategoryCreate($parent: ID, $input: CategoryInput!) {\n  categoryCreate(parent: $parent, input: $input) {\n    category {\n      ...CategoryDetails\n    }\n    errors {\n      ...ProductError\n    }\n  }\n}\n\nfragment CategoryDetails on Category {\n  id\n  ...Metadata\n  backgroundImage {\n    alt\n    url\n  }\n  name\n  slug\n  description\n  seoDescription\n  seoTitle\n  parent {\n    id\n  }\n  ancestors(first: 100) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "parent": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"CategoryInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 38
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"CategoryInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "categorycreate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:03ebe701442731e5"
+}

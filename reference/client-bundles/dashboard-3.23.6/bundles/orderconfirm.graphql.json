@@ -1,0 +1,46 @@
+{
+  "bundle_id": "orderconfirm",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "OrderConfirm"
+  ],
+  "document": "mutation OrderConfirm($id: ID!) {\n  orderConfirm(id: $id) {\n    errors {\n      ...OrderError\n    }\n  }\n}\n\nfragment OrderError on OrderError {\n  code\n  field\n  addressType\n  message\n  orderLines\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "orderConfirm": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "addressType": null,
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Order.",
+            "orderLines": null
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:10f547b75ddf503f",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "orderconfirm",
+    "expected_null": true
+  },
+  "document_hash": "sha256:2ed58087121e4108"
+}

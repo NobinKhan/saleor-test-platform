@@ -1,0 +1,44 @@
+{
+  "bundle_id": "warehousedelete",
+  "source": "saleor-dashboard",
+  "source_path": "warehouses/mutations.ts",
+  "operation_names": [
+    "WarehouseDelete"
+  ],
+  "document": "mutation WarehouseDelete($id: ID!) {\n  deleteWarehouse(id: $id) {\n    errors {\n      ...WarehouseError\n    }\n  }\n}\n\nfragment WarehouseError on WarehouseError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "deleteWarehouse": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Warehouse."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:c4aa48984a2333f6",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "warehousedelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:2e958b5717f50baa"
+}

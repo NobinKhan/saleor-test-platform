@@ -1,0 +1,49 @@
+{
+  "bundle_id": "attributevaluedelete",
+  "source": "saleor-dashboard",
+  "source_path": "attributes/mutations.ts",
+  "operation_names": [
+    "AttributeValueDelete"
+  ],
+  "document": "mutation AttributeValueDelete($id: ID!, $firstValues: Int, $afterValues: String, $lastValues: Int, $beforeValues: String) {\n  attributeValueDelete(id: $id) {\n    attribute {\n      id\n      choices(\n        first: $firstValues\n        after: $afterValues\n        last: $lastValues\n        before: $beforeValues\n      ) {\n        ...AttributeValueList\n      }\n    }\n    errors {\n      ...AttributeError\n    }\n  }\n}\n\nfragment AttributeValueList on AttributeValueCountableConnection {\n  pageInfo {\n    ...PageInfo\n  }\n  edges {\n    cursor\n    node {\n      ...AttributeValueDetails\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}\n\nfragment AttributeValueDetails on AttributeValue {\n  ...AttributeValue\n  plainText\n  richText\n}\n\nfragment AttributeValue on AttributeValue {\n  id\n  name\n  slug\n  file {\n    ...File\n  }\n  reference\n  boolean\n  date\n  dateTime\n  value\n}\n\nfragment File on File {\n  url\n  contentType\n}\n\nfragment AttributeError on AttributeError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "firstValues": 0,
+    "afterValues": "",
+    "lastValues": 0,
+    "beforeValues": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "attributeValueDelete": {
+        "attribute": null,
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: AttributeValue."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:ba006af1dc757374",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "attributevaluedelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:412098a31222a627"
+}

@@ -22,6 +22,8 @@ from app.services.reference_corpus import (
     corpus_hash,
     load_all_probes_from_disk,
     load_manifest,
+    remove_probes_from_disk,
+    update_manifest_after_patch,
     write_corpus,
 )
 from app.services.response_contract import CONTRACT_AUTH_ERROR, classify_response_contract
@@ -265,7 +267,7 @@ async def capture_reference_probes(
             probes.append(existing)
             captured_keys.add(key)
 
-    directory = write_corpus(version, saleor_url, probes)
+    directory = write_corpus(version, saleor_url, probes, merge=False)
     manifest_path = directory / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest["auth_mode"] = "staff" if saleor_token else "anonymous"
@@ -374,3 +376,160 @@ async def sync_corpus_from_disk(db: AsyncSession, version: str | None = None) ->
 
 def catalog_endpoint_count() -> tuple[int, int]:
     return len(SALEOR_QUERIES), len(SALEOR_MUTATIONS)
+
+
+async def _capture_single_probe(
+    client: httpx.AsyncClient,
+    *,
+    saleor_url: str,
+    token: str,
+    endpoint: dict,
+    schema_fields: dict[str, list[dict]] | None,
+    saleor_email: str | None,
+    saleor_password: str | None,
+    timeout: int,
+) -> tuple[Any | None, str | None]:
+    from app.services.query_builder import build_query_with_schema
+
+    query = build_query_with_schema(endpoint["name"], endpoint["kind"], schema_fields)
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+    resp = await client.post(saleor_url, json={"query": query}, headers=headers)
+    resp_json = resp.json()
+    contract = classify_response_contract(resp_json, http_status=resp.status_code)
+
+    if contract == CONTRACT_AUTH_ERROR and _requires_staff_auth(endpoint):
+        token = await ensure_valid_token(
+            saleor_url=saleor_url,
+            token=token,
+            email=saleor_email,
+            password=saleor_password,
+            timeout=timeout,
+            client=client,
+        ) or token
+        headers["Authorization"] = f"Bearer {token}"
+        resp = await client.post(saleor_url, json={"query": query}, headers=headers)
+        resp_json = resp.json()
+        contract = classify_response_contract(resp_json, http_status=resp.status_code)
+        if contract == CONTRACT_AUTH_ERROR:
+            return None, f"{endpoint['name']} ({endpoint['kind']}): auth_error after refresh"
+
+    classified = classify_graphql_response(
+        resp_json,
+        http_status=resp.status_code,
+        endpoint_kind=endpoint["kind"],
+    )
+    return (
+        probe_from_capture(
+            endpoint, query, resp_json, classified, http_status=resp.status_code
+        ),
+        None,
+    )
+
+
+async def capture_subset_probes(
+    *,
+    saleor_url: str,
+    saleor_token: str | None,
+    saleor_version: str | None = None,
+    ops: list[tuple[str, str]],
+    replace: bool = True,
+    timeout: int = 30,
+    db: AsyncSession | None = None,
+    saleor_email: str | None = None,
+    saleor_password: str | None = None,
+) -> dict[str, Any]:
+    version = saleor_version or await detect_saleor_version(saleor_url, saleor_token, timeout)
+    if not version:
+        version = settings.reference_baseline_version
+    if not saleor_token:
+        raise ValueError("Capture requires staff authentication token")
+
+    endpoints, schema_fields, intro = await build_capture_endpoints(
+        saleor_url, saleor_token, "full", timeout
+    )
+    by_key = {(e["name"], e["kind"]): e for e in endpoints}
+    new_probes = []
+    errors: list[str] = []
+
+    token = saleor_token
+    if saleor_email and saleor_password:
+        fresh, _err = await refresh_saleor_token(
+            saleor_url, saleor_email, saleor_password, timeout
+        )
+        if fresh:
+            token = fresh
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        for name, kind in ops:
+            endpoint = by_key.get((name, kind))
+            if not endpoint:
+                errors.append(f"Unknown op {name} ({kind})")
+                continue
+            probe, err = await _capture_single_probe(
+                client,
+                saleor_url=saleor_url,
+                token=token,
+                endpoint=endpoint,
+                schema_fields=schema_fields,
+                saleor_email=saleor_email,
+                saleor_password=saleor_password,
+                timeout=timeout,
+            )
+            if err:
+                errors.append(err)
+            elif probe:
+                new_probes.append(probe)
+
+    if replace:
+        existing = {
+            (p.endpoint_name, p.endpoint_kind): p
+            for p in load_all_probes_from_disk(version)
+        }
+        for probe in new_probes:
+            existing[(probe.endpoint_name, probe.endpoint_kind)] = probe
+        all_probes = list(existing.values())
+    else:
+        all_probes = load_all_probes_from_disk(version)
+        keys = {(p.endpoint_name, p.endpoint_kind) for p in new_probes}
+        all_probes = [p for p in all_probes if (p.endpoint_name, p.endpoint_kind) not in keys]
+        all_probes.extend(new_probes)
+
+    directory = write_corpus(version, saleor_url, all_probes, merge=True)
+    manifest_path = directory / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if intro:
+        manifest["reference_queries"] = intro.get("queries", [])
+        manifest["reference_mutations"] = intro.get("mutations", [])
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    update_manifest_after_patch(version)
+    chash = corpus_hash(version)
+
+    if db is not None:
+        await _sync_probes_to_db(db, version, all_probes, chash)
+
+    from app.services.reference_registry import register_corpus_version
+
+    register_corpus_version(
+        version,
+        probe_count=len(all_probes),
+        saleor_url=saleor_url,
+        set_default=False,
+    )
+
+    return {
+        "saleor_version": version,
+        "recorded": len(new_probes),
+        "corpus_path": str(directory),
+        "corpus_hash": chash,
+        "errors": errors,
+    }
+
+
+async def remove_corpus_ops(version: str, ops: list[tuple[str, str]]) -> int:
+    removed = remove_probes_from_disk(version, ops)
+    update_manifest_after_patch(version)
+    return removed

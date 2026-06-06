@@ -1,0 +1,95 @@
+{
+  "bundle_id": "welcomepageanalytics",
+  "source": "saleor-dashboard",
+  "source_path": "welcomePage/queries.ts",
+  "operation_names": [
+    "WelcomePageAnalytics"
+  ],
+  "document": "query WelcomePageAnalytics($channel: String!, $hasPermissionToManageOrders: Boolean!) {\n  salesToday: ordersTotal(period: TODAY, channel: $channel) @include(if: $hasPermissionToManageOrders) {\n    gross {\n      amount\n      currency\n    }\n  }\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "hasPermissionToManageOrders": true
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "You do not have access to the default-channel channel.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "salesToday"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "PermissionDenied",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/api.py\", line 83, in _wrapper",
+              "    return original(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/order/schema.py\", line 262, in resolve_orders_total",
+              "    return resolve_orders_total(info, period, channel)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/tracing.py\", line 19, in wrapper",
+              "    return func(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/order/resolvers.py\", line 76, in resolve_orders_total",
+              "    raise PermissionDenied(",
+              "saleor.core.exceptions.PermissionDenied: You do not have access to the default-channel channel."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "salesToday": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:56e25ce51d65fbb4",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "welcomepageanalytics",
+    "expected_null": true,
+    "message_pattern": "You do not have access to the default-channel channel.",
+    "optional_path": [
+      "salesToday"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "salesToday"
+      ],
+      "requires_code": true,
+      "expected_code": "PermissionDenied"
+    }
+  },
+  "document_hash": "sha256:ef28a439092998f2"
+}

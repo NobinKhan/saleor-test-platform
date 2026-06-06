@@ -1,0 +1,45 @@
+{
+  "bundle_id": "removecustomer",
+  "source": "saleor-dashboard",
+  "source_path": "customers/mutations.ts",
+  "operation_names": [
+    "RemoveCustomer"
+  ],
+  "document": "mutation RemoveCustomer($id: ID!) {\n  customerDelete(id: $id) {\n    errors {\n      ...AccountError\n    }\n  }\n}\n\nfragment AccountError on AccountError {\n  code\n  field\n  addressType\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "customerDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "addressType": null,
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: User."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:471deb38438e18c5",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "removecustomer",
+    "expected_null": true
+  },
+  "document_hash": "sha256:40eb6f469e807e99"
+}

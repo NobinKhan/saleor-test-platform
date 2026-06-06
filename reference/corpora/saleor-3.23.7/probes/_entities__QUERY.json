@@ -51,5 +51,14 @@
   "response_shape_hash": "sha256:fd2b446e54f69a8f",
   "golden_contract": "graphql_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "_entities",
+    "expected_null": true,
+    "message_pattern": "Invalid type for 'representation' field: must be an object",
+    "optional_path": [
+      "_entities"
+    ]
+  }
 }

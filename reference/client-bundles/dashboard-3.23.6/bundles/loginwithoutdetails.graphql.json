@@ -1,0 +1,48 @@
+{
+  "bundle_id": "loginwithoutdetails",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/mutations.ts",
+  "operation_names": [
+    "loginWithoutDetails"
+  ],
+  "document": "mutation loginWithoutDetails($email: String!, $password: String!) {\n  tokenCreate(email: $email, password: $password) {\n    refreshToken\n    token\n    errors {\n      ...AccountErrorFragment\n    }\n    user {\n      ...UserBaseFragment\n    }\n  }\n}\n\nfragment AccountErrorFragment on AccountError {\n  code\n  field\n  message\n}\n\nfragment UserBaseFragment on User {\n  id\n  email\n  firstName\n  lastName\n  isStaff\n  userPermissions {\n    code\n    name\n  }\n}",
+  "variables": {
+    "email": "",
+    "password": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "tokenCreate": {
+        "refreshToken": null,
+        "token": null,
+        "errors": [
+          {
+            "code": "LOGIN_ATTEMPT_DELAYED",
+            "field": null,
+            "message": "Logging has been suspended till 2026-06-06 07:23:40.053806+00:00 due to too many logging attempts originating from the same IP address."
+          }
+        ],
+        "user": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:0b8221bae908823e",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "loginwithoutdetails",
+    "expected_null": true
+  },
+  "document_hash": "sha256:aa6a40d5279a48cf"
+}

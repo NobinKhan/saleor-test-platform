@@ -1,0 +1,42 @@
+{
+  "bundle_id": "_getwarehousechoices",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_GetWarehouseChoices"
+  ],
+  "document": "query _GetWarehouseChoices($first: Int!, $query: String!) {\n  warehouses(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10,
+    "query": ""
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "warehouses": {
+        "edges": [
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
+              "name": "Default Warehouse",
+              "slug": "default-warehouse"
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:5652a7fb5ef32a8a",
+  "document_hash": "sha256:3c727e59ffd36372"
+}

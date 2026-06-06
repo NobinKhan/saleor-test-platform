@@ -24,5 +24,10 @@
   "golden_outcome": "success_with_data",
   "golden_status": "pass",
   "error_pattern": null,
-  "response_shape_hash": "sha256:7d3a525964a61777"
+  "response_shape_hash": "sha256:7d3a525964a61777",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "transactionRequestRefundForGrantedRefund",
+    "expected_null": false
+  }
 }

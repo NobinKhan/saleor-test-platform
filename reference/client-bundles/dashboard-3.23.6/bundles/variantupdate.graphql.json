@@ -1,0 +1,68 @@
+{
+  "bundle_id": "variantupdate",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "VariantUpdate"
+  ],
+  "document": "mutation VariantUpdate($addStocks: [StockInput!]!, $removeStocks: [ID!]!, $id: ID!, $attributes: [AttributeValueInput!], $sku: String, $quantityLimitPerCustomer: Int, $trackInventory: Boolean!, $stocks: [StockInput!]!, $preorder: PreorderSettingsInput, $weight: WeightScalar, $firstValues: Int, $afterValues: String, $lastValues: Int, $beforeValues: String, $name: String!) {\n  productVariantStocksDelete(warehouseIds: $removeStocks, variantId: $id) {\n    errors {\n      ...ProductVariantStocksDeleteError\n    }\n    productVariant {\n      id\n      stocks {\n        ...Stock\n      }\n    }\n  }\n  productVariantStocksCreate(stocks: $addStocks, variantId: $id) {\n    errors {\n      ...BulkStockError\n    }\n    productVariant {\n      id\n      stocks {\n        ...Stock\n      }\n    }\n  }\n  productVariantStocksUpdate(stocks: $stocks, variantId: $id) {\n    errors {\n      ...BulkStockError\n    }\n    productVariant {\n      ...ProductVariant\n    }\n  }\n  productVariantUpdate(\n    id: $id\n    input: {attributes: $attributes, sku: $sku, trackInventory: $trackInventory, preorder: $preorder, weight: $weight, quantityLimitPerCustomer: $quantityLimitPerCustomer, name: $name}\n  ) {\n    errors {\n      ...ProductErrorWithAttributes\n    }\n    productVariant {\n      ...ProductVariant\n    }\n  }\n}\n\nfragment ProductVariantStocksDeleteError on StockError {\n  code\n  field\n  message\n}\n\nfragment Stock on Stock {\n  id\n  quantity\n  quantityAllocated\n  warehouse {\n    ...Warehouse\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}\n\nfragment BulkStockError on BulkStockError {\n  code\n  field\n  index\n  message\n}\n\nfragment ProductVariant on ProductVariant {\n  id\n  ...Metadata\n  selectionAttributes: attributes(variantSelection: VARIANT_SELECTION) {\n    ...SelectedVariantAttribute\n  }\n  nonSelectionAttributes: attributes(variantSelection: NOT_VARIANT_SELECTION) {\n    ...SelectedVariantAttribute\n  }\n  media {\n    id\n    url\n    type\n    oembedData\n  }\n  name\n  product {\n    id\n    defaultVariant {\n      id\n    }\n    media {\n      ...ProductMedia\n    }\n    name\n    thumbnail {\n      url\n    }\n    productType {\n      id\n      name\n      hasVariants\n    }\n    channelListings {\n      id\n      publishedAt\n      isPublished\n      channel {\n        id\n        name\n        currencyCode\n      }\n    }\n    variants {\n      id\n      name\n      sku\n      media {\n        id\n        url(size: 200)\n        type\n        oembedData\n      }\n    }\n  }\n  channelListings {\n    ...ChannelListingProductVariant\n  }\n  sku\n  stocks {\n    ...Stock\n  }\n  trackInventory\n  preorder {\n    ...Preorder\n  }\n  weight {\n    ...Weight\n  }\n  quantityLimitPerCustomer\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment SelectedVariantAttribute on SelectedAttribute {\n  attribute {\n    ...VariantAttribute\n  }\n  values {\n    ...AttributeValueDetails\n  }\n}\n\nfragment VariantAttribute on Attribute {\n  id\n  name\n  slug\n  inputType\n  entityType\n  valueRequired\n  unit\n  referenceTypes {\n    ... on ProductType {\n      id\n      name\n    }\n    ... on PageType {\n      id\n      name\n    }\n  }\n  choices(\n    first: $firstValues\n    after: $afterValues\n    last: $lastValues\n    before: $beforeValues\n  ) {\n    ...AttributeValueList\n  }\n}\n\nfragment AttributeValueList on AttributeValueCountableConnection {\n  pageInfo {\n    ...PageInfo\n  }\n  edges {\n    cursor\n    node {\n      ...AttributeValueDetails\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}\n\nfragment AttributeValueDetails on AttributeValue {\n  ...AttributeValue\n  plainText\n  richText\n}\n\nfragment AttributeValue on AttributeValue {\n  id\n  name\n  slug\n  file {\n    ...File\n  }\n  reference\n  boolean\n  date\n  dateTime\n  value\n}\n\nfragment File on File {\n  url\n  contentType\n}\n\nfragment ProductMedia on ProductMedia {\n  id\n  alt\n  sortOrder\n  url(size: 1024)\n  type\n  oembedData\n}\n\nfragment ChannelListingProductVariant on ProductVariantChannelListing {\n  id\n  channel {\n    id\n    name\n    currencyCode\n  }\n  price {\n    ...Money\n  }\n  costPrice {\n    ...Money\n  }\n  preorderThreshold {\n    quantity\n    soldUnits\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment Preorder on PreorderData {\n  globalThreshold\n  globalSoldUnits\n  endDate\n}\n\nfragment Weight on Weight {\n  unit\n  value\n}\n\nfragment ProductErrorWithAttributes on ProductError {\n  ...ProductError\n  attributes\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "sku": "",
+    "quantityLimitPerCustomer": 0,
+    "trackInventory": false,
+    "preorder": null,
+    "weight": null,
+    "firstValues": 0,
+    "afterValues": "",
+    "lastValues": 0,
+    "beforeValues": "",
+    "name": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"stocks\" of required type [StockInput!]!\" provided the variable \"$addStocks\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"stocks\" of required type [StockInput!]!\" provided the variable \"$addStocks\" which was not provided"
+            ]
+          }
+        }
+      },
+      {
+        "message": "Argument \"stocks\" of required type [StockInput!]!\" provided the variable \"$stocks\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"stocks\" of required type [StockInput!]!\" provided the variable \"$stocks\" which was not provided"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 446,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "variantupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:0e7857feb3f0dce0"
+}

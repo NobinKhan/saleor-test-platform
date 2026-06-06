@@ -1,0 +1,115 @@
+{
+  "bundle_id": "saledetails",
+  "source": "saleor-dashboard",
+  "source_path": "discounts/queries.ts",
+  "operation_names": [
+    "SaleDetails"
+  ],
+  "document": "query SaleDetails($id: ID!, $after: String, $before: String, $first: Int, $last: Int, $includeVariants: Boolean!, $includeProducts: Boolean!, $includeCollections: Boolean!, $includeCategories: Boolean!) {\n  sale(id: $id) {\n    ...SaleDetails\n  }\n}\n\nfragment SaleDetails on Sale {\n  ...Sale\n  variantsCount: variants {\n    totalCount\n  }\n  productsCount: products {\n    totalCount\n  }\n  collectionsCount: collections {\n    totalCount\n  }\n  categoriesCount: categories {\n    totalCount\n  }\n  variants(after: $after, before: $before, first: $first, last: $last) @include(if: $includeVariants) {\n    edges {\n      node {\n        id\n        name\n        product {\n          id\n          name\n          thumbnail {\n            url\n          }\n          productType {\n            id\n            name\n          }\n          channelListings {\n            ...ChannelListingProductWithoutPricing\n          }\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n  products(after: $after, before: $before, first: $first, last: $last) @include(if: $includeProducts) {\n    edges {\n      node {\n        id\n        name\n        productType {\n          id\n          name\n        }\n        thumbnail {\n          url\n        }\n        channelListings {\n          ...ChannelListingProductWithoutPricing\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n  categories(after: $after, before: $before, first: $first, last: $last) @include(if: $includeCategories) {\n    edges {\n      node {\n        id\n        name\n        products {\n          totalCount\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n  collections(after: $after, before: $before, first: $first, last: $last) @include(if: $includeCollections) {\n    edges {\n      node {\n        id\n        name\n        products {\n          totalCount\n        }\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment Sale on Sale {\n  ...Metadata\n  id\n  name\n  type\n  startDate\n  endDate\n  channelListings {\n    id\n    channel {\n      id\n      name\n      currencyCode\n    }\n    discountValue\n    currency\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment ChannelListingProductWithoutPricing on ProductChannelListing {\n  id\n  isPublished\n  publishedAt\n  isAvailableForPurchase\n  availableForPurchaseAt\n  visibleInListings\n  channel {\n    id\n    name\n    slug\n    currencyCode\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "after": "",
+    "before": "",
+    "first": 10,
+    "last": 10,
+    "includeVariants": false,
+    "includeProducts": false,
+    "includeCollections": false,
+    "includeCategories": false
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Sale.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "sale"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/api.py\", line 83, in _wrapper",
+              "    return original(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
+              "    return func(info.context, *args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
+              "    return f(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/discount/schema.py\", line 165, in resolve_sale",
+              "    _, id = from_global_id_or_error(id, Sale)",
+              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Sale."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "sale": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 307,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:65a459c764295e4f",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "saledetails",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "sale"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "sale"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:1b39d3276737e886"
+}

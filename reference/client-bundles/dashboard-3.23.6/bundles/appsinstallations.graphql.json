@@ -1,0 +1,29 @@
+{
+  "bundle_id": "appsinstallations",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "AppsInstallations"
+  ],
+  "document": "query AppsInstallations {\n  appsInstallations {\n    ...AppInstallation\n  }\n}\n\nfragment AppInstallation on AppInstallation {\n  status\n  message\n  appName\n  manifestUrl\n  id\n  brand {\n    logo {\n      default(format: WEBP, size: 64)\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "appsInstallations": []
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:8b80e9e88b922731",
+  "document_hash": "sha256:7185b71b7bf811f8"
+}

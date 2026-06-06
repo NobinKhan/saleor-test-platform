@@ -88,7 +88,7 @@ class TestRun(Base):
     failed: Mapped[int] = mapped_column(Integer, default=0)
     warnings: Mapped[int] = mapped_column(Integer, default=0)
     skipped: Mapped[int] = mapped_column(Integer, default=0)
-    test_scope: Mapped[str] = mapped_column(String(50), default="full")
+    test_scope: Mapped[str] = mapped_column(String(50), default="full+client")
     public_only: Mapped[bool] = mapped_column(Boolean, default=False)
     schema_diff: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
     saleor_email: Mapped[str | None] = mapped_column(Text, nullable=True)
@@ -125,6 +125,7 @@ class TestResult(Base):
     expected_response: Mapped[str | None] = mapped_column(Text, nullable=True)
     match_status: Mapped[str | None] = mapped_column(String(20), nullable=True)
     diff_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
+    client_parity_note: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     items: Mapped[list["TestItem"]] = relationship(back_populates="test_result", lazy="selectin", cascade="all, delete-orphan")

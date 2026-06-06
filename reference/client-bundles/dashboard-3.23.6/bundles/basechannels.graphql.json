@@ -1,0 +1,44 @@
+{
+  "bundle_id": "basechannels",
+  "source": "saleor-dashboard",
+  "source_path": "channels/queries.ts",
+  "operation_names": [
+    "BaseChannels"
+  ],
+  "document": "query BaseChannels {\n  channels {\n    ...Channel\n  }\n}\n\nfragment Channel on Channel {\n  id\n  isActive\n  name\n  slug\n  currencyCode\n  defaultCountry {\n    code\n    country\n  }\n  stockSettings {\n    allocationStrategy\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "channels": [
+        {
+          "id": "Q2hhbm5lbDox",
+          "isActive": true,
+          "name": "Default Channel",
+          "slug": "default-channel",
+          "currencyCode": "USD",
+          "defaultCountry": {
+            "code": "US",
+            "country": "United States of America"
+          },
+          "stockSettings": {
+            "allocationStrategy": "PRIORITIZE_HIGH_STOCK"
+          }
+        }
+      ]
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:496e6f4d9db23983",
+  "document_hash": "sha256:174d77aa3298debb"
+}

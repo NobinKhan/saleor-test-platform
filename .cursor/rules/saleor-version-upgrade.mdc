@@ -1,0 +1,49 @@
+---
+description: User-triggered Saleor reference version upgrade and incremental patching
+alwaysApply: false
+---
+
+# Saleor Version Upgrade (user-triggered only)
+
+Do **not** upgrade the Saleor reference pin unless the user explicitly requests it.
+
+## Patch release (default — incremental)
+
+When Saleor ships a patch (e.g. 3.23.7 → 3.23.8):
+
+```bash
+just corpus-diff
+just patch-corpus --apply-diff
+just patch-corpus --remove deprecatedOp
+just verify-corpus
+just baseline
+```
+
+Do **not** wipe the full corpus or run `just record-reference` unless many ops changed.
+
+## Dashboard tag bump (with or without Saleor bump)
+
+1. Update `reference/vendor/saleor-dashboard-{TAG}/` from upstream.
+2. `just patch-corpus --sync-client` — re-import all L3 documents.
+3. `just corpus-diff` — review L3 bundle drift.
+4. `just patch-corpus --client-bundles all` — re-record golden against official Saleor.
+5. `just baseline`.
+
+## Minor/major bump (user request only)
+
+```bash
+bash scripts/upgrade-reference.sh 3.24.0
+```
+
+Or manually:
+
+1. Pin `ghcr.io/saleor/saleor:{VERSION}` in `docker-compose.yml`.
+2. `just fresh` if needed for clean Saleor DB.
+3. `just corpus-diff` then `just patch-corpus --apply-diff` for all changed ops.
+4. Update `GOLDEN_CORPUS_VERSION` in compose/env.
+5. **Delete** old corpus folder — do not archive.
+6. `just baseline`.
+
+Migrations (rare): `docker compose exec harness-backend python -m app.scripts.migrate_semantic_profiles --version X`
+
+Never use floating tags (`:latest`, `:3.23`) — pin exact release tags.

@@ -4,6 +4,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VERSION="${1:-}"
+COMPOSE=(docker compose -f "${ROOT}/docker-compose.yml")
 
 if [[ -z "$VERSION" ]]; then
   echo "Usage: $0 <saleor-version>"
@@ -24,8 +25,12 @@ fi
 
 cd "$ROOT"
 just fresh
-just record-reference-docker
-just golden-gate --min-probes 400 --version "$VERSION"
+just corpus-diff || true
+just patch-corpus --apply-diff || just record-reference
+"${COMPOSE[@]}" exec harness-backend \
+  python -m app.scripts.migrate_semantic_profiles --version "$VERSION"
+just verify-corpus --min-probes 400 --version "$VERSION"
+just baseline
 
 echo ""
 echo "==> Done. Update env:"

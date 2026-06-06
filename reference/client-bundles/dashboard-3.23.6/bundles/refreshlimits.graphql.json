@@ -1,0 +1,40 @@
+{
+  "bundle_id": "refreshlimits",
+  "source": "saleor-dashboard",
+  "source_path": "components/Shop/queries.ts",
+  "operation_names": [
+    "RefreshLimits"
+  ],
+  "document": "query RefreshLimits($channels: Boolean!, $orders: Boolean!, $productVariants: Boolean!, $staffUsers: Boolean!, $warehouses: Boolean!) {\n  shop {\n    ...ShopLimit\n  }\n}\n\nfragment ShopLimit on Shop {\n  limits {\n    currentUsage {\n      ...LimitInfo\n    }\n    allowedUsage {\n      ...LimitInfo\n    }\n  }\n}\n\nfragment LimitInfo on Limits {\n  channels @include(if: $channels)\n  orders @include(if: $orders)\n  productVariants @include(if: $productVariants)\n  staffUsers @include(if: $staffUsers)\n  warehouses @include(if: $warehouses)\n}",
+  "variables": {
+    "channels": false,
+    "orders": false,
+    "productVariants": false,
+    "staffUsers": false,
+    "warehouses": false
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "limits": {
+          "currentUsage": {},
+          "allowedUsage": {}
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6d3e145389be140b",
+  "document_hash": "sha256:ffc7fd0b50cef4ef"
+}

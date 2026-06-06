@@ -1,0 +1,16 @@
+{
+  "bundle_id": "productvariantreorder",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductVariantReorder"
+  ],
+  "document": "mutation ProductVariantReorder($move: ReorderInput!, $productId: ID!) {\n  productVariantReorder(moves: [$move], productId: $productId) {\n    errors {\n      ...ProductError\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "move": null,
+    "productId": "{{fixtures.default_product_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:4032e5e94e1087c0"
+}

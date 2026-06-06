@@ -1,0 +1,74 @@
+{
+  "bundle_id": "channeldiagnostics",
+  "source": "saleor-dashboard",
+  "source_path": "products/queries.ts",
+  "operation_names": [
+    "ChannelDiagnostics"
+  ],
+  "document": "query ChannelDiagnostics {\n  shop {\n    id\n    useLegacyShippingZoneStockAvailability\n  }\n  channels {\n    id\n    name\n    slug\n    currencyCode\n    isActive\n    warehouses {\n      id\n      name\n    }\n  }\n  shippingZones(first: 100) {\n    edges {\n      node {\n        id\n        name\n        channels {\n          id\n        }\n        warehouses {\n          id\n          name\n        }\n        countries {\n          code\n          country\n        }\n      }\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "id": "U2hvcDox",
+        "useLegacyShippingZoneStockAvailability": true
+      },
+      "channels": [
+        {
+          "id": "Q2hhbm5lbDox",
+          "name": "Default Channel",
+          "slug": "default-channel",
+          "currencyCode": "USD",
+          "isActive": true,
+          "warehouses": [
+            {
+              "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
+              "name": "Default Warehouse"
+            }
+          ]
+        }
+      ],
+      "shippingZones": {
+        "edges": [
+          {
+            "node": {
+              "id": "U2hpcHBpbmdab25lOjE=",
+              "name": "Default",
+              "channels": [
+                {
+                  "id": "Q2hhbm5lbDox"
+                }
+              ],
+              "warehouses": [
+                {
+                  "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
+                  "name": "Default Warehouse"
+                }
+              ],
+              "countries": [
+                {
+                  "code": "US",
+                  "country": "United States of America"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 401,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:48a136c704c7bda6",
+  "document_hash": "sha256:b9c44aa60b9de7a7"
+}

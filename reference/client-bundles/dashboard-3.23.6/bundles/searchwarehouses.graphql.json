@@ -1,0 +1,49 @@
+{
+  "bundle_id": "searchwarehouses",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useWarehouseSearch.ts",
+  "operation_names": [
+    "SearchWarehouses"
+  ],
+  "document": "query SearchWarehouses($after: String, $first: Int!, $query: String!, $channnelsId: [ID!]) {\n  search: warehouses(\n    after: $after\n    first: $first\n    sortBy: {direction: ASC, field: NAME}\n    filter: {search: $query, channels: $channnelsId}\n  ) {\n    totalCount\n    edges {\n      node {\n        id\n        name\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "after": "",
+    "first": 10,
+    "query": ""
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "search": {
+        "totalCount": 1,
+        "edges": [
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
+              "name": "Default Warehouse"
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": "WyJEZWZhdWx0IFdhcmVob3VzZSIsImRlZmF1bHQtd2FyZWhvdXNlIl0=",
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": "WyJEZWZhdWx0IFdhcmVob3VzZSIsImRlZmF1bHQtd2FyZWhvdXNlIl0="
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:c5b25fd4ce8a9512",
+  "document_hash": "sha256:09fe2c06955d6bbb"
+}

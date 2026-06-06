@@ -1,0 +1,45 @@
+{
+  "bundle_id": "channeldelete",
+  "source": "saleor-dashboard",
+  "source_path": "channels/mutations.ts",
+  "operation_names": [
+    "ChannelDelete"
+  ],
+  "document": "mutation ChannelDelete($id: ID!, $input: ChannelDeleteInput) {\n  channelDelete(id: $id, input: $input) {\n    errors {\n      ...ChannelError\n    }\n  }\n}\n\nfragment ChannelError on ChannelError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "channelDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Channel."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:8575160054ea956b",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "channeldelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:6f8eca77351b01aa"
+}

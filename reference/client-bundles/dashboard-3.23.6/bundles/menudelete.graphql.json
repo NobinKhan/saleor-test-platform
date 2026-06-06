@@ -1,0 +1,44 @@
+{
+  "bundle_id": "menudelete",
+  "source": "saleor-dashboard",
+  "source_path": "structures/mutations.ts",
+  "operation_names": [
+    "MenuDelete"
+  ],
+  "document": "mutation MenuDelete($id: ID!) {\n  menuDelete(id: $id) {\n    errors {\n      ...MenuError\n    }\n  }\n}\n\nfragment MenuError on MenuError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "menuDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Menu."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:a5d9892ffb9ba5df",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "menudelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:eb13c8dcc0712ba6"
+}

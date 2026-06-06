@@ -1,0 +1,15 @@
+{
+  "bundle_id": "orderfulfilldata",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "OrderFulfillData"
+  ],
+  "document": "query OrderFulfillData($orderId: ID!) {\n  order(id: $orderId) {\n    id\n    isPaid\n    deliveryMethod {\n      __typename\n      ... on ShippingMethod {\n        id\n      }\n      ... on Warehouse {\n        id\n        clickAndCollectOption\n      }\n    }\n    lines {\n      ...OrderFulfillLine\n    }\n    number\n  }\n}\n\nfragment OrderFulfillLine on OrderLine {\n  ...OrderLineStockData\n  isShippingRequired\n  productName\n  allocations {\n    id\n    warehouse {\n      name\n    }\n  }\n  quantityFulfilled\n  variant {\n    id\n    name\n    sku\n    preorder {\n      endDate\n    }\n    attributes {\n      values {\n        id\n        name\n      }\n    }\n    trackInventory\n  }\n  thumbnail(size: 64) {\n    url\n  }\n}\n\nfragment OrderLineStockData on OrderLine {\n  id\n  allocations {\n    quantity\n    warehouse {\n      id\n    }\n  }\n  quantity\n  quantityToFulfill\n  variant {\n    stocks {\n      ...Stock\n    }\n  }\n}\n\nfragment Stock on Stock {\n  id\n  quantity\n  quantityAllocated\n  warehouse {\n    ...Warehouse\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}",
+  "variables": {
+    "orderId": "{{fixtures.default_order_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "document_hash": "sha256:4c7ce392a0b6d4d3"
+}

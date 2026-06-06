@@ -1,0 +1,42 @@
+{
+  "bundle_id": "searchavailableingridattributes",
+  "source": "saleor-dashboard",
+  "source_path": "searches/useAvailableInGridAttributesSearch.ts",
+  "operation_names": [
+    "SearchAvailableInGridAttributes"
+  ],
+  "document": "query SearchAvailableInGridAttributes($first: Int!, $after: String, $query: String!) {\n  availableInGrid: attributes(\n    first: $first\n    after: $after\n    filter: {isVariantOnly: false, type: PRODUCT_TYPE, search: $query}\n  ) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n    totalCount\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
+  "variables": {
+    "first": 10,
+    "after": "",
+    "query": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "availableInGrid": {
+        "edges": [],
+        "pageInfo": {
+          "endCursor": null,
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": null
+        },
+        "totalCount": 0
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 10,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:cdeec060ddbd5c37",
+  "document_hash": "sha256:1ed1c6ce0d61652c"
+}

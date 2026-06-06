@@ -1,0 +1,31 @@
+{
+  "bundle_id": "taxstrategychoices",
+  "source": "saleor-dashboard",
+  "source_path": "taxes/queries.ts",
+  "operation_names": [
+    "TaxStrategyChoices"
+  ],
+  "document": "query TaxStrategyChoices {\n  shop {\n    availableTaxApps {\n      id\n      name\n      version\n      identifier\n      created\n      brand {\n        logo {\n          default\n        }\n      }\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "availableTaxApps": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:27ac22d855bd5d1d",
+  "document_hash": "sha256:3856f852893ac867"
+}

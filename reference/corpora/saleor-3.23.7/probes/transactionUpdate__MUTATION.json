@@ -24,5 +24,10 @@
   "golden_outcome": "success_with_data",
   "golden_status": "pass",
   "error_pattern": null,
-  "response_shape_hash": "sha256:79ca81a5a84f895b"
+  "response_shape_hash": "sha256:79ca81a5a84f895b",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "transactionUpdate",
+    "expected_null": false
+  }
 }

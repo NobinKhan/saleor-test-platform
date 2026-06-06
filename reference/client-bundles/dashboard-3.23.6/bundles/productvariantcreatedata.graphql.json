@@ -1,0 +1,111 @@
+{
+  "bundle_id": "productvariantcreatedata",
+  "source": "saleor-dashboard",
+  "source_path": "products/queries.ts",
+  "operation_names": [
+    "ProductVariantCreateData"
+  ],
+  "document": "query ProductVariantCreateData($id: ID!, $firstValues: Int, $afterValues: String, $lastValues: Int, $beforeValues: String) {\n  product(id: $id) {\n    id\n    media {\n      id\n      sortOrder\n      url\n    }\n    channelListings {\n      isPublished\n      publishedAt\n      channel {\n        id\n        name\n        currencyCode\n      }\n    }\n    name\n    productType {\n      id\n      name\n      hasVariants\n      selectionVariantAttributes: variantAttributes(\n        variantSelection: VARIANT_SELECTION\n      ) {\n        ...VariantAttribute\n      }\n      nonSelectionVariantAttributes: variantAttributes(\n        variantSelection: NOT_VARIANT_SELECTION\n      ) {\n        ...VariantAttribute\n      }\n    }\n    thumbnail {\n      url\n    }\n    defaultVariant {\n      id\n    }\n    variants {\n      id\n      name\n      sku\n      media {\n        id\n        url\n        type\n      }\n    }\n  }\n}\n\nfragment VariantAttribute on Attribute {\n  id\n  name\n  slug\n  inputType\n  entityType\n  valueRequired\n  unit\n  referenceTypes {\n    ... on ProductType {\n      id\n      name\n    }\n    ... on PageType {\n      id\n      name\n    }\n  }\n  choices(\n    first: $firstValues\n    after: $afterValues\n    last: $lastValues\n    before: $beforeValues\n  ) {\n    ...AttributeValueList\n  }\n}\n\nfragment AttributeValueList on AttributeValueCountableConnection {\n  pageInfo {\n    ...PageInfo\n  }\n  edges {\n    cursor\n    node {\n      ...AttributeValueDetails\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}\n\nfragment AttributeValueDetails on AttributeValue {\n  ...AttributeValue\n  plainText\n  richText\n}\n\nfragment AttributeValue on AttributeValue {\n  id\n  name\n  slug\n  file {\n    ...File\n  }\n  reference\n  boolean\n  date\n  dateTime\n  value\n}\n\nfragment File on File {\n  url\n  contentType\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "firstValues": 0,
+    "afterValues": "",
+    "lastValues": 0,
+    "beforeValues": ""
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Product.",
+        "locations": [
+          {
+            "line": 2,
+            "column": 3
+          }
+        ],
+        "path": [
+          "product"
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
+              "    type_, id_ = graphene.Node.from_global_id(global_id)",
+              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
+              "    return from_global_id(global_id)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
+              "    unbased_global_id = unbase64(global_id)",
+              "                        ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
+              "    return _unbase64(s).decode('utf-8')",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
+              "",
+              "The above exception was the direct cause of the following exception:",
+              "Traceback (most recent call last):",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
+              "    return executor.execute(resolve_fn, source, info, **args)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
+              "    return fn(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/tracing.py\", line 19, in wrapper",
+              "    return func(*args, **kwargs)",
+              "           ^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/product/schema.py\", line 477, in resolve_product",
+              "    return _resolve_product(None)",
+              "           ^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/product/schema.py\", line 456, in _resolve_product",
+              "    product = resolve_product(",
+              "              ^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/product/resolvers.py\", line 103, in resolve_product",
+              "    _type, id = from_global_id_or_error(id, \"Product\")",
+              "                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Product."
+            ]
+          }
+        }
+      }
+    ],
+    "data": {
+      "product": null
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 213,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:177f00490cbb202e",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "productvariantcreatedata",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "product"
+    ],
+    "tier2": {
+      "requires_path": true,
+      "expected_path": [
+        "product"
+      ],
+      "requires_code": true,
+      "expected_code": "GraphQLError"
+    }
+  },
+  "document_hash": "sha256:0b5c5bfe00fcfbec"
+}

@@ -44,6 +44,7 @@
     expected_response: string | null;
     match_status: string | null;
     diff_summary: string | null;
+    client_parity_note: string | null;
     items: {
       item_key: string;
       item_status: string;
@@ -98,6 +99,9 @@
       golden_matched: number;
       golden_mismatched: number;
       golden_missing: number;
+      client_parity_gaps: number;
+      client_bundle_count: number;
+      tier2_gate_enabled: boolean;
       upgrade_hint: string | null;
       probe_outcome_rate: number | null;
       probe_success_count: number;
@@ -127,7 +131,6 @@
   let loading = false;
   let error = "";
   let loadToken = 0;
-  let retesting = false;
   let resultFilter: "all" | "fail" | "warn" | "slow" = "all";
   let expandedId: string | null = null;
   let showSchemaDiffRaw = false;
@@ -264,9 +267,18 @@
 
   function matchBadgeClass(status: string | null): string {
     if (status === "match") return "pass";
+    if (status === "parity_gap") return "warn";
+    if (status === "tier2_fail") return "fail";
     if (status === "missing_golden") return "skip";
     if (status === "shape_drift") return "warn";
     return "fail";
+  }
+
+  function parityGapResults(): TestResultRow[] {
+    if (!report) return [];
+    return report.results.filter(
+      (r) => r.match_status === "parity_gap" || r.client_parity_note
+    );
   }
 
   function filteredResults(): TestResultRow[] {
@@ -287,17 +299,9 @@
     }
   }
 
-  async function retest() {
-    if (!runId || retesting) return;
-    retesting = true;
-    error = "";
-    try {
-      const run = await api.post(`/api/runs/${runId}/retest`);
-      await goto(`/run/${run.id}/stream`);
-    } catch (e: unknown) {
-      error = e instanceof Error ? e.message : "Retest failed";
-      retesting = false;
-    }
+  function retest() {
+    if (!runId) return;
+    goto(`/run/new?from=${runId}`);
   }
 
   onDestroy(() => {
@@ -323,9 +327,7 @@
         </p>
       </div>
       <div class="header-actions">
-        <button class="btn-primary btn-sm" on:click={retest} disabled={retesting}>
-          {retesting ? "Starting…" : "Retest"}
-        </button>
+        <button class="btn-primary btn-sm" on:click={retest}>Retest</button>
         <a href={downloadUrl("csv")} class="btn-secondary btn-sm" download>CSV</a>
         <a href={downloadUrl("json")} class="btn-secondary btn-sm" download>JSON</a>
         <a href={downloadUrl("pdf")} class="btn-secondary btn-sm" download>PDF</a>
@@ -372,7 +374,7 @@
                 <strong>{report.summary.compatibility_score}%</strong>
                 ({report.summary.golden_matched} matched, {report.summary.golden_mismatched} mismatched, {report.summary.golden_missing} no golden)
               {:else if report.summary.golden_missing > 0}
-                No golden corpus — run <code>just record-reference-docker</code>
+                No golden corpus — run <code>just record-reference</code>
               {:else}
                 —
               {/if}
@@ -383,11 +385,8 @@
             <td>{report.summary.test_mode ?? "compatibility"} — replays exact golden inputs</td>
           </tr>
           <tr>
-            <th>Test scope</th>
-            <td>
-              {report.summary.test_scope}
-              {#if report.summary.public_only}(public only){/if}
-            </td>
+            <th>Certification scope</th>
+            <td>Full + L3 Dashboard (798 endpoints)</td>
           </tr>
         </tbody>
       </table>
@@ -461,7 +460,7 @@
       {/if}
       {#if report.summary.certified != null}
         <div class="summary-card {report.summary.certified ? 'pass' : 'warn'}">
-          <span class="summary-label">Certified</span>
+          <span class="summary-label">Certified (100% + schema pass)</span>
           <span class="summary-value">{report.summary.certified ? "YES" : "NO"}</span>
         </div>
       {/if}
@@ -469,6 +468,32 @@
         <span class="summary-label">Total probes</span>
         <span class="summary-value">{report.summary.total}</span>
       </div>
+      <div class="summary-card">
+        <span class="summary-label">L1 corpus probes</span>
+        <span class="summary-value">{report.summary.golden_probe_count}</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">L2 catalog ops</span>
+        <span class="summary-value" title="Dashboard catalog query + mutation count">
+          {(report.summary.reference_catalog_queries ?? 0) + (report.summary.reference_catalog_mutations ?? 0)}
+        </span>
+      </div>
+      {#if report.summary.client_parity_gaps != null && report.summary.client_parity_gaps > 0}
+        <div class="summary-card warn">
+          <span class="summary-label">Tier 2 parity gaps</span>
+          <span class="summary-value">{report.summary.client_parity_gaps}</span>
+        </div>
+      {/if}
+      <div class="summary-card">
+        <span class="summary-label">L3 dashboard bundles</span>
+        <span class="summary-value">{report.summary.client_bundle_count ?? 0}</span>
+      </div>
+      {#if report.summary.tier2_gate_enabled}
+        <div class="summary-card warn" title="SGRC Tier 2 is a hard certification gate">
+          <span class="summary-label">Tier 2 gate</span>
+          <span class="summary-value">ON</span>
+        </div>
+      {/if}
       <div class="summary-card pass">
         <span class="summary-label">Compatible</span>
         <span class="summary-value">{report.summary.passed}</span>
@@ -488,6 +513,24 @@
         <span class="summary-value">{report.summary.avg_response_time_ms}ms</span>
       </div>
     </div>
+
+    {#if parityGapResults().length > 0}
+      <div class="card parity-panel">
+        <h3>Client parity gaps (SGRC Tier 2)</h3>
+        <p class="text-muted">
+          Certified = SGRC Tier 1 pass. Parity gaps are recommended fixes for Dashboard/Storefront — they do not block certification.
+        </p>
+        <ul class="parity-list">
+          {#each parityGapResults() as row}
+            <li>
+              <code>{row.endpoint_name}</code>
+              <span class="text-muted">{row.endpoint_kind}</span>
+              <span class="parity-note">{row.client_parity_note ?? row.diff_summary}</span>
+            </li>
+          {/each}
+        </ul>
+      </div>
+    {/if}
 
     <div class="card latency-panel">
       <h3>Response time</h3>
@@ -582,6 +625,7 @@
                           <p class="text-muted">{row.expected ?? "No golden reference recorded"}</p>
                         {/if}
                         {#if row.diff_summary}<p class="text-warning diff-note">{row.diff_summary}</p>{/if}
+                        {#if row.client_parity_note}<p class="text-muted parity-note">{row.client_parity_note}</p>{/if}
                       </div>
                       <div>
                         <h4>Actual response</h4>
@@ -766,6 +810,12 @@
     margin-bottom: 1rem;
   }
   .slow-list { list-style: none; padding: 0; margin: 0.75rem 0 0; font-size: 0.85rem; }
+  .parity-list { list-style: none; padding: 0; margin: 0.75rem 0 0; font-size: 0.85rem; }
+  .parity-list li {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: baseline;
+    padding: 0.35rem 0; border-bottom: 1px solid var(--border, #eee);
+  }
+  .parity-note { flex: 1 1 100%; color: var(--muted, #666); font-size: 0.8rem; }
   .slow-list li {
     display: flex;
     align-items: center;

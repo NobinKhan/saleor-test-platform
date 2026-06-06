@@ -1,0 +1,31 @@
+{
+  "bundle_id": "shippingzonescount",
+  "source": "saleor-dashboard",
+  "source_path": "shipping/queries.ts",
+  "operation_names": [
+    "ShippingZonesCount"
+  ],
+  "document": "query ShippingZonesCount {\n  shippingZones {\n    totalCount\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "shippingZones": {
+        "totalCount": 1
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:db81f6122b7073ec",
+  "document_hash": "sha256:8d92b71fea4ea03c"
+}

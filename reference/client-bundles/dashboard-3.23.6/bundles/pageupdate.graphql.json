@@ -1,0 +1,65 @@
+{
+  "bundle_id": "pageupdate",
+  "source": "saleor-dashboard",
+  "source_path": "modeling/mutations.ts",
+  "operation_names": [
+    "PageUpdate"
+  ],
+  "document": "mutation PageUpdate($id: ID!, $input: PageInput!, $firstValues: Int, $afterValues: String, $lastValues: Int, $beforeValues: String, $searchValues: String) {\n  pageUpdate(id: $id, input: $input) {\n    errors {\n      ...PageErrorWithAttributes\n    }\n    page {\n      ...PageDetails\n    }\n  }\n}\n\nfragment PageErrorWithAttributes on PageError {\n  ...PageError\n  attributes\n}\n\nfragment PageError on PageError {\n  code\n  field\n  message\n}\n\nfragment PageDetails on Page {\n  ...Page\n  ...PageAttributes\n  ...Metadata\n  content\n  seoTitle\n  seoDescription\n  publishedAt\n}\n\nfragment Page on Page {\n  id\n  title\n  slug\n  isPublished\n  pageType {\n    id\n    name\n  }\n}\n\nfragment PageAttributes on Page {\n  attributes {\n    ...PageSelectedAttribute\n  }\n  pageType {\n    id\n    name\n    attributes {\n      id\n      name\n      inputType\n      entityType\n      valueRequired\n      choices(\n        first: $firstValues\n        after: $afterValues\n        last: $lastValues\n        before: $beforeValues\n      ) {\n        ...AttributeValueList\n      }\n    }\n  }\n}\n\nfragment PageSelectedAttribute on SelectedAttribute {\n  attribute {\n    ...AttributeDetails\n  }\n  values {\n    ...AttributeValueDetails\n  }\n}\n\nfragment AttributeDetails on Attribute {\n  ...Attribute\n  availableInGrid\n  entityType\n  storefrontSearchPosition\n  valueRequired\n  referenceTypes {\n    ... on ProductType {\n      id\n      name\n    }\n    ... on PageType {\n      id\n      name\n    }\n  }\n  choices(\n    first: $firstValues\n    after: $afterValues\n    last: $lastValues\n    before: $beforeValues\n    search: $searchValues\n  ) {\n    ...AttributeValueList\n  }\n}\n\nfragment Attribute on Attribute {\n  id\n  name\n  slug\n  type\n  visibleInStorefront\n  filterableInDashboard\n  filterableInStorefront\n  unit\n  inputType\n}\n\nfragment AttributeValueList on AttributeValueCountableConnection {\n  pageInfo {\n    ...PageInfo\n  }\n  edges {\n    cursor\n    node {\n      ...AttributeValueDetails\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}\n\nfragment AttributeValueDetails on AttributeValue {\n  ...AttributeValue\n  plainText\n  richText\n}\n\nfragment AttributeValue on AttributeValue {\n  id\n  name\n  slug\n  file {\n    ...File\n  }\n  reference\n  boolean\n  date\n  dateTime\n  value\n}\n\nfragment File on File {\n  url\n  contentType\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null,
+    "firstValues": 0,
+    "afterValues": "",
+    "lastValues": 0,
+    "beforeValues": "",
+    "searchValues": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"PageInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 31
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"PageInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "pageupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:06e6940c94c73510"
+}

@@ -1,0 +1,16 @@
+{
+  "bundle_id": "productmediabyid",
+  "source": "saleor-dashboard",
+  "source_path": "products/queries.ts",
+  "operation_names": [
+    "ProductMediaById"
+  ],
+  "document": "query ProductMediaById($productId: ID!, $mediaId: ID!) {\n  product(id: $productId) {\n    id\n    name\n    mainImage: mediaById(id: $mediaId) {\n      id\n      alt\n      url\n      type\n      oembedData\n    }\n    media {\n      id\n      url(size: 48)\n      alt\n      type\n      oembedData\n    }\n  }\n}",
+  "variables": {
+    "productId": "{{fixtures.default_product_id}}",
+    "mediaId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "document_hash": "sha256:d0cdc61dcbb55df0"
+}

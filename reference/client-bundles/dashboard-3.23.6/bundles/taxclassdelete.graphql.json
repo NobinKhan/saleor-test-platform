@@ -1,0 +1,44 @@
+{
+  "bundle_id": "taxclassdelete",
+  "source": "saleor-dashboard",
+  "source_path": "taxes/mutations.ts",
+  "operation_names": [
+    "TaxClassDelete"
+  ],
+  "document": "mutation TaxClassDelete($id: ID!) {\n  taxClassDelete(id: $id) {\n    errors {\n      ...TaxClassDeleteError\n    }\n  }\n}\n\nfragment TaxClassDeleteError on TaxClassDeleteError {\n  field\n  code\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "taxClassDelete": {
+        "errors": [
+          {
+            "field": "id",
+            "code": "GRAPHQL_ERROR",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: TaxClass."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:99b56ca6062cb15a",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "taxclassdelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:7b867b47f48b92d5"
+}

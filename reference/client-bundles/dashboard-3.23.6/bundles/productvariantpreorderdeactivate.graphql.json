@@ -1,0 +1,44 @@
+{
+  "bundle_id": "productvariantpreorderdeactivate",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductVariantPreorderDeactivate"
+  ],
+  "document": "mutation ProductVariantPreorderDeactivate($id: ID!) {\n  productVariantPreorderDeactivate(id: $id) {\n    errors {\n      ...ProductError\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "productVariantPreorderDeactivate": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ProductVariant."
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:4dc1d4f96860b5f6",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "productvariantpreorderdeactivate",
+    "expected_null": true
+  },
+  "document_hash": "sha256:a335606cc859451b"
+}

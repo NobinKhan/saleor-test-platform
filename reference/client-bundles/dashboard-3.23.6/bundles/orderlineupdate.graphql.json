@@ -1,0 +1,60 @@
+{
+  "bundle_id": "orderlineupdate",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "OrderLineUpdate"
+  ],
+  "document": "mutation OrderLineUpdate($id: ID!, $input: OrderLineInput!) {\n  orderLineUpdate(id: $id, input: $input) {\n    errors {\n      ...OrderError\n    }\n    orderLine {\n      ...OrderLine\n    }\n    order {\n      ...OrderLinesUpdate\n    }\n  }\n}\n\nfragment OrderError on OrderError {\n  code\n  field\n  addressType\n  message\n  orderLines\n}\n\nfragment OrderLine on OrderLine {\n  id\n  isShippingRequired\n  allocations {\n    id\n    quantity\n    warehouse {\n      id\n      name\n    }\n  }\n  variant {\n    id\n    name\n    quantityAvailable\n    preorder {\n      endDate\n    }\n    stocks {\n      ...Stock\n    }\n    product {\n      id\n      isAvailableForPurchase\n    }\n  }\n  productName\n  productSku\n  isGift\n  quantity\n  quantityFulfilled\n  quantityToFulfill\n  totalPrice {\n    gross {\n      ...MoneyWithFractionDigits\n    }\n    net {\n      ...Money\n    }\n    tax {\n      ...Money\n    }\n  }\n  undiscountedTotalPrice {\n    ...TaxedMoney\n    tax {\n      ...Money\n    }\n  }\n  unitDiscount {\n    amount\n    currency\n  }\n  unitDiscountValue\n  unitDiscountReason\n  unitDiscountType\n  undiscountedUnitPrice {\n    currency\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  unitPrice {\n    gross {\n      amount\n      currency\n    }\n    net {\n      amount\n      currency\n    }\n    tax {\n      amount\n      currency\n    }\n  }\n  taxRate\n  taxClass {\n    id\n    name\n  }\n  voucherCode\n  thumbnail {\n    url\n  }\n  discounts {\n    ...OrderLineDiscount\n  }\n}\n\nfragment Stock on Stock {\n  id\n  quantity\n  quantityAllocated\n  warehouse {\n    ...Warehouse\n  }\n}\n\nfragment Warehouse on Warehouse {\n  id\n  name\n}\n\nfragment MoneyWithFractionDigits on Money {\n  amount\n  currency\n  fractionDigits\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment TaxedMoney on TaxedMoney {\n  net {\n    ...Money\n  }\n  gross {\n    ...Money\n  }\n}\n\nfragment OrderLineDiscount on OrderLineDiscount {\n  id\n  type\n  name\n  translatedName\n  valueType\n  value\n  reason\n  total {\n    ...Money\n  }\n  unit {\n    ...Money\n  }\n}\n\nfragment OrderLinesUpdate on Order {\n  id\n  lines {\n    ...OrderLine\n  }\n  subtotal {\n    gross {\n      ...Money\n    }\n    net {\n      ...Money\n    }\n  }\n  total {\n    gross {\n      ...Money\n    }\n    net {\n      ...Money\n    }\n    tax {\n      ...Money\n    }\n  }\n  undiscountedTotal {\n    gross {\n      ...Money\n    }\n    net {\n      ...Money\n    }\n  }\n  isShippingRequired\n  shippingMethod {\n    id\n  }\n  shippingPrice {\n    gross {\n      amount\n      currency\n    }\n  }\n  shippingMethodName\n  collectionPointName\n  shippingMethods {\n    id\n    name\n    price {\n      ...Money\n    }\n    active\n    message\n  }\n  discounts {\n    ...OrderDiscount\n  }\n}\n\nfragment OrderDiscount on OrderDiscount {\n  id\n  type\n  name\n  translatedName\n  calculationMode: valueType\n  value\n  reason\n  amount {\n    ...Money\n  }\n  total {\n    ...Money\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"OrderLineInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 36
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"OrderLineInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "orderlineupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:7ab90a4113f5830b"
+}

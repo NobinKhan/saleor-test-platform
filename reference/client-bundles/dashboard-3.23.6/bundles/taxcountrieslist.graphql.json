@@ -1,0 +1,29 @@
+{
+  "bundle_id": "taxcountrieslist",
+  "source": "saleor-dashboard",
+  "source_path": "taxes/queries.ts",
+  "operation_names": [
+    "TaxCountriesList"
+  ],
+  "document": "query TaxCountriesList {\n  taxCountryConfigurations {\n    ...TaxCountryConfiguration\n  }\n}\n\nfragment TaxCountryConfiguration on TaxCountryConfiguration {\n  country {\n    ...CountryWithCode\n  }\n  taxClassCountryRates {\n    rate\n    taxClass {\n      id\n      name\n    }\n  }\n}\n\nfragment CountryWithCode on CountryDisplay {\n  country\n  code\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "taxCountryConfigurations": []
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 3,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:8a44194af498442c",
+  "document_hash": "sha256:25d85fdd2c65c360"
+}

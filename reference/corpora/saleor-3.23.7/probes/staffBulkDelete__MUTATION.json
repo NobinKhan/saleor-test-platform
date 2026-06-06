@@ -72,5 +72,14 @@
   "response_shape_hash": "sha256:1abaf67ed4d1788f",
   "golden_contract": "graphql_error",
   "http_status": 200,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "staffBulkDelete",
+    "expected_null": true,
+    "message_pattern": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000",
+    "optional_path": [
+      "staffBulkDelete"
+    ]
+  }
 }

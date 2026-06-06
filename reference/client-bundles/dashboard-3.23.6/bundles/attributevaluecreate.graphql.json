@@ -1,0 +1,64 @@
+{
+  "bundle_id": "attributevaluecreate",
+  "source": "saleor-dashboard",
+  "source_path": "attributes/mutations.ts",
+  "operation_names": [
+    "AttributeValueCreate"
+  ],
+  "document": "mutation AttributeValueCreate($id: ID!, $input: AttributeValueCreateInput!, $firstValues: Int, $afterValues: String, $lastValues: Int, $beforeValues: String) {\n  attributeValueCreate(attribute: $id, input: $input) {\n    attribute {\n      id\n      choices(\n        first: $firstValues\n        after: $afterValues\n        last: $lastValues\n        before: $beforeValues\n      ) {\n        ...AttributeValueList\n      }\n    }\n    errors {\n      ...AttributeError\n    }\n  }\n}\n\nfragment AttributeValueList on AttributeValueCountableConnection {\n  pageInfo {\n    ...PageInfo\n  }\n  edges {\n    cursor\n    node {\n      ...AttributeValueDetails\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}\n\nfragment AttributeValueDetails on AttributeValue {\n  ...AttributeValue\n  plainText\n  richText\n}\n\nfragment AttributeValue on AttributeValue {\n  id\n  name\n  slug\n  file {\n    ...File\n  }\n  reference\n  boolean\n  date\n  dateTime\n  value\n}\n\nfragment File on File {\n  url\n  contentType\n}\n\nfragment AttributeError on AttributeError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "input": null,
+    "firstValues": 0,
+    "afterValues": "",
+    "lastValues": 0,
+    "beforeValues": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$input\" of required type \"AttributeValueCreateInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 41
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"AttributeValueCreateInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "attributevaluecreate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:08dfbd79d0110fac"
+}

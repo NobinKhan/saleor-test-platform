@@ -37,5 +37,11 @@
   "response_shape_hash": "sha256:a78ac8d9655acd0d",
   "golden_contract": "graphql_error",
   "http_status": 400,
-  "probe_stability": "stateless"
+  "probe_stability": "stateless",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "stockBulkUpdate",
+    "expected_null": true,
+    "message_pattern": "<validation>"
+  }
 }

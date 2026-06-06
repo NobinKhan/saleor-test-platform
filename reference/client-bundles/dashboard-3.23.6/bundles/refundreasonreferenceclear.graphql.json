@@ -1,0 +1,31 @@
+{
+  "bundle_id": "refundreasonreferenceclear",
+  "source": "saleor-dashboard",
+  "source_path": "siteSettings/mutations.ts",
+  "operation_names": [
+    "RefundReasonReferenceClear"
+  ],
+  "document": "mutation RefundReasonReferenceClear {\n  refundReasonReferenceClear {\n    errors {\n      code\n      message\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "refundReasonReferenceClear": {
+        "errors": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6e805c2422f858c8",
+  "document_hash": "sha256:58c6561b7f67d57d"
+}

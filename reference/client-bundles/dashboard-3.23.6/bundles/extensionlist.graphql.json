@@ -1,0 +1,59 @@
+{
+  "bundle_id": "extensionlist",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/queries.ts",
+  "operation_names": [
+    "ExtensionList"
+  ],
+  "document": "query ExtensionList($filter: AppExtensionFilterInput!) {\n  appExtensions(filter: $filter, first: 100) {\n    edges {\n      node {\n        id\n        label\n        url\n        mountName\n        targetName\n        settings\n        accessToken\n        permissions {\n          code\n        }\n        app {\n          id\n          appUrl\n          name\n          brand {\n            logo {\n              default(size: 32, format: WEBP)\n            }\n          }\n        }\n      }\n    }\n  }\n}",
+  "variables": {
+    "filter": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$filter\" of required type \"AppExtensionFilterInput!\" was not provided.",
+        "locations": [
+          {
+            "line": 1,
+            "column": 21
+          }
+        ],
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "Traceback (most recent call last):",
+              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
+              "    response = document.execute(",
+              "               ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
+              "    exe_context = ExecutionContext(",
+              "                  ^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
+              "    variable_values = get_variable_values(",
+              "                      ^^^^^^^^^^^^^^^^^^^^",
+              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
+              "    raise GraphQLError(",
+              "graphql.error.base.GraphQLError: Variable \"$filter\" of required type \"AppExtensionFilterInput!\" was not provided."
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "extensionlist",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:112f481289572425"
+}

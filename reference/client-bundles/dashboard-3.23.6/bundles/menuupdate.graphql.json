@@ -1,0 +1,59 @@
+{
+  "bundle_id": "menuupdate",
+  "source": "saleor-dashboard",
+  "source_path": "structures/mutations.ts",
+  "operation_names": [
+    "MenuUpdate"
+  ],
+  "document": "mutation MenuUpdate($id: ID!, $name: String!, $moves: [MenuItemMoveInput!]!, $removeIds: [ID!]!) {\n  menuUpdate(id: $id, input: {name: $name}) {\n    errors {\n      ...MenuError\n    }\n  }\n  menuItemMove(menu: $id, moves: $moves) {\n    errors {\n      ...MenuError\n    }\n  }\n  menuItemBulkDelete(ids: $removeIds) {\n    errors {\n      ...MenuError\n    }\n  }\n}\n\nfragment MenuError on MenuError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "name": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"moves\" of required type [MenuItemMoveInput!]!\" provided the variable \"$moves\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"moves\" of required type [MenuItemMoveInput!]!\" provided the variable \"$moves\" which was not provided"
+            ]
+          }
+        }
+      },
+      {
+        "message": "Argument \"ids\" of required type [ID!]!\" provided the variable \"$removeIds\" which was not provided",
+        "extensions": {
+          "exception": {
+            "code": "GraphQLError",
+            "stacktrace": [
+              "graphql.error.base.GraphQLError: Argument \"ids\" of required type [ID!]!\" provided the variable \"$removeIds\" which was not provided"
+            ]
+          }
+        }
+      }
+    ],
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "menuupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:c0f9a106a6a8c9d3"
+}

@@ -1,0 +1,31 @@
+{
+  "bundle_id": "warehousescount",
+  "source": "saleor-dashboard",
+  "source_path": "warehouses/queries.ts",
+  "operation_names": [
+    "WarehousesCount"
+  ],
+  "document": "query WarehousesCount {\n  warehouses {\n    totalCount\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "warehouses": {
+        "totalCount": 1
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:3e6dda5342485fdb",
+  "document_hash": "sha256:f255520ba6786bcd"
+}

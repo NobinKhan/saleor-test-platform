@@ -12,6 +12,8 @@ from app.models import TestRun, TestResult
 from app.services.reference_corpus import load_manifest, resolve_corpus_version
 from app.services.reference_registry import get_upgrade_hint
 from app.services.run_helpers import catalog_counts
+from app.services.client_bundles import client_bundle_count
+from app.services.reference_compare import tier2_gate_enabled
 from app.services.schema_gate import compute_certified, compute_schema_gate
 from app.services.response_contract import CONTRACT_SUCCESS
 
@@ -41,20 +43,34 @@ def _golden_context(run: TestRun) -> dict[str, Any]:
         "golden_corpus_version": resolved,
         "golden_saleor_url": manifest.get("saleor_url", settings.reference_saleor_url),
         "golden_probe_count": manifest.get("probe_count", 0),
+        "client_bundle_count": client_bundle_count(),
         "upgrade_hint": get_upgrade_hint(target if target != "unknown" else None, resolved),
     }
 
 
 def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
-    matched = sum(1 for r in results if r.match_status == "match")
-    mismatched = sum(1 for r in results if r.match_status in ("mismatch", "shape_drift"))
+    gate_on = tier2_gate_enabled()
+    matched = sum(
+        1 for r in results
+        if r.match_status == "match" or (r.match_status == "parity_gap" and not gate_on)
+    )
+    mismatched = sum(
+        1 for r in results
+        if r.match_status in ("mismatch", "shape_drift", "tier2_fail")
+        or (gate_on and r.match_status == "parity_gap")
+    )
     missing = sum(1 for r in results if r.match_status == "missing_golden")
+    parity_gaps = sum(
+        1 for r in results if r.match_status in ("parity_gap", "tier2_fail") or r.client_parity_note
+    )
     with_status = matched + mismatched
     compatibility = round(matched / with_status * 100, 1) if with_status > 0 else None
     return {
         "golden_matched": matched,
         "golden_mismatched": mismatched,
         "golden_missing": missing,
+        "client_parity_gaps": parity_gaps,
+        "tier2_gate_enabled": gate_on,
         "compatibility_score": compatibility,
     }
 
@@ -73,6 +89,8 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
     certified = compute_certified(
         schema_gate_pass=schema_gate["schema_gate_pass"],
         compatibility_score=compat_rate,
+        tier2_pass=stats["client_parity_gaps"] == 0,
+        parity_gaps=stats["client_parity_gaps"] if stats.get("tier2_gate_enabled") else 0,
     )
     run_meta = (run.schema_diff or {}).get("_run_meta") or {}
     test_mode = run_meta.get("test_mode", "compatibility")
@@ -98,13 +116,29 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         f"- Schema gate ({schema_gate.get('schema_gate_source', 'dashboard catalog')}): "
         f"**{'PASS' if schema_gate['schema_gate_pass'] else 'FAIL'}** "
         f"(missing {schema_gate['missing_queries']} queries, {schema_gate['missing_mutations']} mutations)",
-        f"- Certified Saleor-compatible: **{'YES' if certified else 'NO'}** (requires schema gate + compatibility ≥ 95%)",
+        f"- Certified Saleor-compatible: **{'YES' if certified else 'NO'}** (requires schema gate + compatibility 100%)",
         f"- Probe outcome rate (informational): **{probe_outcome_rate}%** returned success-class responses ({probe_success}/{total})",
         f"- Incompatible: {run.failed}, Warnings: {run.warnings}, Compatible: {run.passed}",
         f"- Golden: {stats['golden_matched']} matched, {stats['golden_mismatched']} mismatched, {stats['golden_missing']} missing",
+        f"- Client parity gaps (Tier 2, informational): {stats.get('client_parity_gaps', 0)}",
     ]
     if ctx["upgrade_hint"]:
         lines.extend(["", f"**Upgrade recommendation:** {ctx['upgrade_hint']}"])
+
+    parity_rows = [r for r in results if r.match_status == "parity_gap" or r.client_parity_note]
+    if parity_rows:
+        lines.extend([
+            "",
+            "## Client parity gaps (SGRC Tier 2 — informational)",
+            "Certified = SGRC Tier 1 pass. These probes match semantically but lack optional path/code fields "
+            "recommended for Dashboard/Storefront parity.",
+            "",
+            "| Endpoint | Kind | Note |",
+            "|----------|------|------|",
+        ])
+        for r in parity_rows[:50]:
+            note = r.client_parity_note or r.diff_summary or "—"
+            lines.append(f"| {r.endpoint_name} | {r.endpoint_kind} | {note} |")
 
     if run.schema_diff:
         lines.extend(["", "## Schema drift"])
@@ -207,6 +241,7 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
             "outcome": r.outcome,
             "match_status": r.match_status,
             "diff_summary": r.diff_summary,
+            "client_parity_note": r.client_parity_note,
             "response_time_ms": r.response_time_ms,
             "error_message": r.error_message,
         }
@@ -222,6 +257,7 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
 
     priority = [r for r in results if r.match_status in ("mismatch", "shape_drift")]
     warnings = [r for r in results if r.status == "warn" and r not in priority]
+    parity_gaps = [r for r in results if r.match_status == "parity_gap" or r.client_parity_note]
 
     return {
         "purpose": f"Saleor API compatibility report vs golden {ctx['golden_corpus_version']}",
@@ -239,6 +275,7 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
         },
         "schema_diff": run.schema_diff,
         "failures": [row(r, full=True) for r in priority[:50]],
+        "client_parity_gaps": [row(r, full=False) for r in parity_gaps[:50]],
         "warnings": [row(r, full=False) for r in warnings[:30]],
         "results_index": [row(r, full=False) for r in results],
     }

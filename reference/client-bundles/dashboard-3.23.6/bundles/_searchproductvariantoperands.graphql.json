@@ -1,0 +1,33 @@
+{
+  "bundle_id": "_searchproductvariantoperands",
+  "source": "saleor-dashboard",
+  "source_path": "components/ConditionalFilter/API/queries.ts",
+  "operation_names": [
+    "_SearchProductVariantOperands"
+  ],
+  "document": "query _SearchProductVariantOperands($first: Int!, $ids: [ID!]) {\n  productVariants(first: $first, where: {ids: $ids}) {\n    edges {\n      node {\n        id\n        name\n        slug: id\n        originalSlug: name\n        product {\n          name\n        }\n      }\n    }\n  }\n}",
+  "variables": {
+    "first": 10
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "productVariants": {
+        "edges": []
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 20,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b9a8e86f40cfb175",
+  "document_hash": "sha256:0db2fd38bf7999b5"
+}

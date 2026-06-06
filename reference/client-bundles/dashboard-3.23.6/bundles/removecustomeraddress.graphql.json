@@ -1,0 +1,46 @@
+{
+  "bundle_id": "removecustomeraddress",
+  "source": "saleor-dashboard",
+  "source_path": "customers/mutations.ts",
+  "operation_names": [
+    "RemoveCustomerAddress"
+  ],
+  "document": "mutation RemoveCustomerAddress($id: ID!) {\n  addressDelete(id: $id) {\n    errors {\n      ...AccountError\n    }\n    user {\n      ...CustomerAddresses\n    }\n  }\n}\n\nfragment AccountError on AccountError {\n  code\n  field\n  addressType\n  message\n}\n\nfragment CustomerAddresses on User {\n  ...Customer\n  addresses {\n    ...Address\n  }\n  defaultBillingAddress {\n    id\n  }\n  defaultShippingAddress {\n    id\n  }\n}\n\nfragment Customer on User {\n  id\n  email\n  firstName\n  lastName\n}\n\nfragment Address on Address {\n  city\n  cityArea\n  companyName\n  country {\n    __typename\n    code\n    country\n  }\n  countryArea\n  firstName\n  id\n  lastName\n  phone\n  postalCode\n  streetAddress1\n  streetAddress2\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "addressDelete": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "addressType": null,
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Address."
+          }
+        ],
+        "user": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:add9b81e6209f2aa",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "removecustomeraddress",
+    "expected_null": true
+  },
+  "document_hash": "sha256:e18a541b24276157"
+}

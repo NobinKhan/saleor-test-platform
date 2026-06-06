@@ -1,0 +1,31 @@
+{
+  "bundle_id": "producttypecreatedata",
+  "source": "saleor-dashboard",
+  "source_path": "productTypes/queries.ts",
+  "operation_names": [
+    "ProductTypeCreateData"
+  ],
+  "document": "query ProductTypeCreateData {\n  shop {\n    defaultWeightUnit\n  }\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "defaultWeightUnit": "KG"
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:df997d4a2ffb3208",
+  "document_hash": "sha256:2c3731b0332aea19"
+}

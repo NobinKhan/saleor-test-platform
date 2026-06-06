@@ -348,3 +348,20 @@ The platform will detect the Saleor version from the `shop { version }` query.
 - Multi-tenant isolation testing
 - Frontend E2E testing
 - Test scheduling / CI integration
+
+---
+
+## 13. Implementation truth (2026)
+
+The live platform differs from sections above in these ways. **Cursor rules** (`.cursor/rules/`) and [COMPATIBILITY.md](COMPATIBILITY.md) are authoritative.
+
+| Topic | SPEC (original) | Implemented |
+|-------|-----------------|-------------|
+| Saleor auth | Optional API token | Admin email + password via `tokenCreate` |
+| Live progress | WebSocket | SSE (`/api/runs/{id}/stream`) |
+| Test strategy | Introspection probes | Default **compatibility mode** — replays reference corpus inputs |
+| Certification | Not defined | Schema gate + **100%** compatibility match |
+| Frontend | Bun (mentioned in stack table) | Bun + Chainguard in Docker |
+| CI | Not specified | **No GitHub CI** — local `just self-check`, `just verify-corpus`, pytest |
+| Reference version | Saleor Cloud | Pinned official Saleor **3.23.7** corpus on disk |
+| Default scope | Full | **Full** (all corpus probes) |

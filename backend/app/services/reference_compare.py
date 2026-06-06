@@ -9,8 +9,9 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.core.config import settings
+from app.services.client_bundles import CLIENT_BUNDLE_KIND, load_bundle_from_disk, resolve_dashboard_bundle_version
 from app.services.field_compare import compare_response_fields
-from app.services.reference_corpus import GoldenProbe, load_probe_from_disk, response_shape_hash
+from app.services.reference_corpus import GoldenProbe, load_probe_from_disk, resolve_corpus_version, response_shape_hash
 from app.services.response_contract import (
     classify_response_contract,
     contract_family,
@@ -19,6 +20,13 @@ from app.services.response_contract import (
     infer_probe_stability,
 )
 from app.services.response_normalize import normalize_response
+from app.services.semantic_compare import compare_semantic_error, is_error_contract
+
+
+def tier2_gate_enabled(explicit: bool | None = None) -> bool:
+    if explicit is not None:
+        return explicit
+    return settings.sgrc_tier2_gate
 
 
 @dataclass
@@ -33,6 +41,7 @@ class ComparisonResult:
     field_items: list[dict[str, str | None]] | None = None
     resolved_corpus_version: str | None = None
     compatible: bool = False
+    client_parity_note: str | None = None
 
 
 def _normalized_hash(resp: dict[str, Any]) -> str:
@@ -48,32 +57,19 @@ def _resolve_golden_contract(golden: GoldenProbe) -> str:
     )
 
 
-def compare_to_golden(
-    saleor_version: str | None,
-    endpoint_name: str,
-    endpoint_kind: str,
+def compare_probe_to_actual(
+    golden: GoldenProbe,
     actual_response_json: dict[str, Any],
-    classified: dict[str, Any],
     *,
     http_status: int = 200,
-    baseline_version: str | None = None,
+    resolved_corpus_version: str | None = None,
+    tier2_required: bool | None = None,
+    input_sent: str | None = None,
 ) -> ComparisonResult:
-    from app.services.reference_corpus import resolve_corpus_version
-
-    baseline = baseline_version or settings.golden_corpus_version
-    corpus_version = resolve_corpus_version(saleor_version, baseline)
-    golden = load_probe_from_disk(corpus_version, endpoint_name, endpoint_kind)
-
-    if golden is None:
-        return ComparisonResult(
-            match_status="missing_golden",
-            expected_response=None,
-            diff_summary="No golden reference recorded for this endpoint",
-            recommended_status="warn",
-            golden_outcome=None,
-            resolved_corpus_version=corpus_version,
-            compatible=False,
-        )
+    endpoint_name = golden.endpoint_name
+    endpoint_kind = golden.endpoint_kind
+    query_input = input_sent or golden.input_sent
+    gate_on = tier2_gate_enabled(tier2_required)
 
     expected_str = json.dumps(golden.golden_response, indent=2)
     golden_contract = _resolve_golden_contract(golden)
@@ -94,7 +90,7 @@ def compare_to_golden(
             golden_outcome=golden.golden_outcome,
             golden_contract=golden_contract,
             actual_contract=actual_contract,
-            resolved_corpus_version=corpus_version,
+            resolved_corpus_version=resolved_corpus_version,
             compatible=False,
         )
 
@@ -102,17 +98,57 @@ def compare_to_golden(
     if golden_contract != actual_contract:
         strict_contract_note = f"Contract detail: golden {golden_contract}, actual {actual_contract}"
 
-    if golden_family == "rejection":
+    if is_error_contract(golden_contract):
+        semantic_profile = getattr(golden, "semantic_profile", None)
+        semantic = compare_semantic_error(
+            golden.golden_response,
+            actual_response_json,
+            golden_contract=golden_contract,
+            endpoint_name=endpoint_name,
+            endpoint_kind=endpoint_kind,
+            input_sent=query_input,
+            semantic_profile=semantic_profile,
+            tier2_required=gate_on,
+        )
+        if not semantic.tier1_match:
+            return ComparisonResult(
+                match_status="mismatch",
+                expected_response=expected_str,
+                diff_summary=semantic.diff_summary or "SGRC Tier 1 semantic mismatch",
+                recommended_status="fail",
+                golden_outcome=golden.golden_outcome,
+                golden_contract=golden_contract,
+                actual_contract=actual_contract,
+                resolved_corpus_version=resolved_corpus_version,
+                compatible=False,
+            )
+        parity_note = "; ".join(semantic.client_parity_notes) if semantic.client_parity_notes else None
+        diff_parts = [p for p in (strict_contract_note, parity_note) if p]
+        if gate_on and not semantic.tier2_match:
+            return ComparisonResult(
+                match_status="tier2_fail",
+                expected_response=expected_str,
+                diff_summary="; ".join(diff_parts) if diff_parts else "SGRC Tier 2 parity failure",
+                recommended_status="fail",
+                golden_outcome=golden.golden_outcome,
+                golden_contract=golden_contract,
+                actual_contract=actual_contract,
+                resolved_corpus_version=resolved_corpus_version,
+                compatible=False,
+                client_parity_note=parity_note,
+            )
+        match_status = "parity_gap" if parity_note else "match"
         return ComparisonResult(
-            match_status="match",
+            match_status=match_status,
             expected_response=expected_str,
-            diff_summary=strict_contract_note,
+            diff_summary="; ".join(diff_parts) if diff_parts else None,
             recommended_status="pass",
             golden_outcome=contract_to_legacy_outcome(golden_contract),
             golden_contract=golden_contract,
             actual_contract=actual_contract,
-            resolved_corpus_version=corpus_version,
+            resolved_corpus_version=resolved_corpus_version,
             compatible=True,
+            client_parity_note=parity_note,
         )
 
     norm_golden = normalize_response(golden.golden_response)
@@ -134,7 +170,7 @@ def compare_to_golden(
                 golden_contract=golden_contract,
                 actual_contract=actual_contract,
                 field_items=field_items,
-                resolved_corpus_version=corpus_version,
+                resolved_corpus_version=resolved_corpus_version,
                 compatible=True,
             )
         if mismatches:
@@ -147,7 +183,7 @@ def compare_to_golden(
                 golden_contract=golden_contract,
                 actual_contract=actual_contract,
                 field_items=field_items,
-                resolved_corpus_version=corpus_version,
+                resolved_corpus_version=resolved_corpus_version,
                 compatible=False,
             )
 
@@ -161,8 +197,65 @@ def compare_to_golden(
         golden_contract=golden_contract,
         actual_contract=actual_contract,
         field_items=field_items,
-        resolved_corpus_version=corpus_version,
+        resolved_corpus_version=resolved_corpus_version,
         compatible=True,
+    )
+
+
+def compare_to_golden(
+    saleor_version: str | None,
+    endpoint_name: str,
+    endpoint_kind: str,
+    actual_response_json: dict[str, Any],
+    classified: dict[str, Any],
+    *,
+    http_status: int = 200,
+    baseline_version: str | None = None,
+    tier2_required: bool | None = None,
+) -> ComparisonResult:
+    baseline = baseline_version or settings.golden_corpus_version
+    corpus_version = resolve_corpus_version(saleor_version, baseline)
+
+    if endpoint_kind == CLIENT_BUNDLE_KIND:
+        dash_ver = resolve_dashboard_bundle_version()
+        bundle = load_bundle_from_disk("dashboard", dash_ver, endpoint_name)
+        if bundle is None or not bundle.has_golden():
+            return ComparisonResult(
+                match_status="missing_golden",
+                expected_response=None,
+                diff_summary="No golden reference recorded for this client bundle",
+                recommended_status="warn",
+                golden_outcome=None,
+                resolved_corpus_version=dash_ver,
+                compatible=False,
+            )
+        return compare_probe_to_actual(
+            bundle.to_golden_probe(),
+            actual_response_json,
+            http_status=http_status,
+            resolved_corpus_version=dash_ver,
+            tier2_required=tier2_required,
+            input_sent=bundle.document,
+        )
+
+    golden = load_probe_from_disk(corpus_version, endpoint_name, endpoint_kind)
+    if golden is None:
+        return ComparisonResult(
+            match_status="missing_golden",
+            expected_response=None,
+            diff_summary="No golden reference recorded for this endpoint",
+            recommended_status="warn",
+            golden_outcome=None,
+            resolved_corpus_version=corpus_version,
+            compatible=False,
+        )
+
+    return compare_probe_to_actual(
+        golden,
+        actual_response_json,
+        http_status=http_status,
+        resolved_corpus_version=corpus_version,
+        tier2_required=tier2_required,
     )
 
 
@@ -175,9 +268,17 @@ def probe_from_capture(
     http_status: int = 200,
 ) -> GoldenProbe:
     from app.services.reference_corpus import GoldenProbe
+    from app.services.semantic_compare import build_semantic_profile
 
     contract = classify_response_contract(resp_json, http_status=http_status)
     stability = infer_probe_stability(contract, endpoint["kind"])
+
+    semantic_profile = build_semantic_profile(
+        golden_response=resp_json,
+        golden_contract=contract,
+        input_sent=query,
+        endpoint_name=endpoint["name"],
+    )
 
     return GoldenProbe(
         endpoint_name=endpoint["name"],
@@ -192,4 +293,5 @@ def probe_from_capture(
         golden_contract=contract,
         http_status=http_status,
         probe_stability=stability,
+        semantic_profile=semantic_profile,
     )

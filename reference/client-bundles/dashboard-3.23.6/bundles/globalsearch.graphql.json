@@ -1,0 +1,41 @@
+{
+  "bundle_id": "globalsearch",
+  "source": "saleor-dashboard",
+  "source_path": "search/queries.ts",
+  "operation_names": [
+    "GlobalSearch"
+  ],
+  "document": "query GlobalSearch($query: String!, $includeOrders: Boolean!, $includeCategories: Boolean!, $includeCollections: Boolean!, $includeProducts: Boolean!, $includeVariants: Boolean!, $includeModels: Boolean!, $includeModelTypes: Boolean!) {\n  orders(first: 10, filter: {search: $query}) @include(if: $includeOrders) {\n    edges {\n      node {\n        id\n        number\n        status\n        updatedAt\n        paymentStatus\n        chargeStatus\n        total {\n          gross {\n            amount\n            currency\n          }\n        }\n      }\n    }\n  }\n  categories(first: 10, filter: {search: $query}) @include(if: $includeCategories) {\n    edges {\n      node {\n        id\n        name\n        updatedAt\n        backgroundImage(size: 64) {\n          url\n          alt\n        }\n        products(first: 1) {\n          totalCount\n        }\n        parent {\n          id\n          name\n        }\n        level\n        ancestors(first: 1) {\n          edges {\n            node {\n              id\n              name\n            }\n          }\n        }\n      }\n    }\n  }\n  collections(first: 10, filter: {search: $query}) @include(if: $includeCollections) {\n    edges {\n      node {\n        id\n        name\n        products(first: 1) {\n          totalCount\n        }\n        backgroundImage(size: 64) {\n          url\n          alt\n        }\n      }\n    }\n  }\n  products(first: 10, filter: {search: $query}) @include(if: $includeProducts) {\n    edges {\n      node {\n        id\n        category {\n          name\n        }\n        name\n        updatedAt\n        thumbnail(size: 64) {\n          alt\n          url\n        }\n      }\n    }\n  }\n  productVariants(first: 10, filter: {search: $query}) @include(if: $includeVariants) {\n    edges {\n      node {\n        id\n        name\n        sku\n        updatedAt\n        media {\n          alt\n          url(size: 64)\n        }\n        product {\n          id\n          name\n          category {\n            name\n          }\n        }\n      }\n    }\n  }\n  models: pages(first: 10, filter: {search: $query}) @include(if: $includeModels) {\n    edges {\n      node {\n        id\n        title\n        publishedAt\n        pageType {\n          name\n        }\n      }\n    }\n  }\n  modelTypes: pageTypes(first: 5, filter: {search: $query}) @include(if: $includeModelTypes) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}",
+  "variables": {
+    "query": "",
+    "includeOrders": false,
+    "includeCategories": false,
+    "includeCollections": false,
+    "includeProducts": false,
+    "includeVariants": false,
+    "includeModels": false,
+    "includeModelTypes": false
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {},
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 175,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:598cf9d2ffa24983",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "globalsearch",
+    "expected_null": true
+  },
+  "document_hash": "sha256:d428ee4f940c2ea1"
+}

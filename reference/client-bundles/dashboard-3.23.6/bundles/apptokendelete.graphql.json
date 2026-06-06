@@ -1,0 +1,46 @@
+{
+  "bundle_id": "apptokendelete",
+  "source": "saleor-dashboard",
+  "source_path": "extensions/mutations.ts",
+  "operation_names": [
+    "AppTokenDelete"
+  ],
+  "document": "mutation AppTokenDelete($id: ID!) {\n  appTokenDelete(id: $id) {\n    appToken {\n      name\n      authToken\n      id\n    }\n    errors {\n      ...AppError\n    }\n  }\n}\n\nfragment AppError on AppError {\n  field\n  message\n  code\n  permissions\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "appTokenDelete": {
+        "appToken": null,
+        "errors": [
+          {
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: AppToken.",
+            "code": "GRAPHQL_ERROR",
+            "permissions": null
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:34253df8b5f0baaa",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "apptokendelete",
+    "expected_null": true
+  },
+  "document_hash": "sha256:226dc02629f9d192"
+}

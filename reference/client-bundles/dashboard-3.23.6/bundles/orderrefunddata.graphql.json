@@ -1,0 +1,15 @@
+{
+  "bundle_id": "orderrefunddata",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "OrderRefundData"
+  ],
+  "document": "query OrderRefundData($orderId: ID!) {\n  order(id: $orderId) {\n    id\n    number\n    total {\n      gross {\n        ...Money\n      }\n    }\n    totalCaptured {\n      ...Money\n    }\n    shippingPrice {\n      gross {\n        ...Money\n      }\n    }\n    lines {\n      ...RefundOrderLine\n      quantityToFulfill\n    }\n    fulfillments {\n      id\n      status\n      fulfillmentOrder\n      lines {\n        id\n        quantity\n        orderLine {\n          ...RefundOrderLine\n        }\n      }\n    }\n  }\n}\n\nfragment Money on Money {\n  amount\n  currency\n}\n\nfragment RefundOrderLine on OrderLine {\n  id\n  productName\n  quantity\n  unitPrice {\n    gross {\n      ...Money\n    }\n  }\n  thumbnail(size: 64) {\n    url\n  }\n}",
+  "variables": {
+    "orderId": "{{fixtures.default_order_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "document_hash": "sha256:c95de3f27632d712"
+}

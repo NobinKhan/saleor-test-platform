@@ -1,0 +1,45 @@
+{
+  "bundle_id": "refreshtoken",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/mutations.ts",
+  "operation_names": [
+    "refreshToken"
+  ],
+  "document": "mutation refreshToken($refreshToken: String!) {\n  tokenRefresh(refreshToken: $refreshToken) {\n    token\n    errors {\n      ...AccountErrorFragment\n    }\n  }\n}\n\nfragment AccountErrorFragment on AccountError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "refreshToken": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "tokenRefresh": {
+        "token": null,
+        "errors": [
+          {
+            "code": "JWT_DECODE_ERROR",
+            "field": "refreshToken",
+            "message": "Error decoding signature"
+          }
+        ]
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 0,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9b2c3267a8e9511a",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "refreshtoken",
+    "expected_null": true
+  },
+  "document_hash": "sha256:81fe396a7e97ae57"
+}

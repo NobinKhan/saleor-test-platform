@@ -1,0 +1,16 @@
+{
+  "bundle_id": "permissiongroupdetails",
+  "source": "saleor-dashboard",
+  "source_path": "permissionGroups/queries.ts",
+  "operation_names": [
+    "PermissionGroupDetails"
+  ],
+  "document": "query PermissionGroupDetails($id: ID!, $userId: ID!) {\n  permissionGroup(id: $id) {\n    ...PermissionGroupDetails\n  }\n  user: me {\n    editableGroups {\n      id\n    }\n    userPermissions {\n      code\n      sourcePermissionGroups(userId: $userId) {\n        id\n      }\n    }\n  }\n}\n\nfragment PermissionGroupDetails on Group {\n  ...PermissionGroup\n  restrictedAccessToChannels\n  accessibleChannels {\n    ...Channel\n  }\n  permissions {\n    ...Permission\n  }\n  users {\n    ...PermissionGroupMember\n  }\n}\n\nfragment PermissionGroup on Group {\n  id\n  name\n  userCanManage\n  users {\n    id\n    firstName\n    lastName\n  }\n}\n\nfragment Channel on Channel {\n  id\n  isActive\n  name\n  slug\n  currencyCode\n  defaultCountry {\n    code\n    country\n  }\n  stockSettings {\n    allocationStrategy\n  }\n}\n\nfragment Permission on Permission {\n  code\n  name\n}\n\nfragment PermissionGroupMember on User {\n  ...StaffMember\n  avatar(size: 128) {\n    url\n  }\n}\n\nfragment StaffMember on User {\n  id\n  email\n  firstName\n  isActive\n  lastName\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "userId": "{{fixtures.default_customer_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "document_hash": "sha256:d756ed2f142ac312"
+}

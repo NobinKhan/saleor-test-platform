@@ -1,0 +1,46 @@
+{
+  "bundle_id": "productmediaupdate",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductMediaUpdate"
+  ],
+  "document": "mutation ProductMediaUpdate($id: ID!, $alt: String!) {\n  productMediaUpdate(id: $id, input: {alt: $alt}) {\n    errors {\n      ...ProductError\n    }\n    product {\n      id\n      media {\n        ...ProductMedia\n      }\n    }\n  }\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}\n\nfragment ProductMedia on ProductMedia {\n  id\n  alt\n  sortOrder\n  url(size: 1024)\n  type\n  oembedData\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "alt": ""
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "productMediaUpdate": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "id",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ProductMedia."
+          }
+        ],
+        "product": null
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 2,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:a1ff87b1125d1740",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "productmediaupdate",
+    "expected_null": true
+  },
+  "document_hash": "sha256:ca6c0372e03ed287"
+}

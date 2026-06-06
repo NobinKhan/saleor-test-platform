@@ -1,0 +1,35 @@
+{
+  "bundle_id": "useravatardelete",
+  "source": "saleor-dashboard",
+  "source_path": "staff/mutations.ts",
+  "operation_names": [
+    "UserAvatarDelete"
+  ],
+  "document": "mutation UserAvatarDelete {\n  userAvatarDelete {\n    errors {\n      ...AccountError\n    }\n    user {\n      id\n      avatar {\n        url\n      }\n    }\n  }\n}\n\nfragment AccountError on AccountError {\n  code\n  field\n  addressType\n  message\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "userAvatarDelete": {
+        "errors": [],
+        "user": {
+          "id": "VXNlcjox",
+          "avatar": null
+        }
+      }
+    },
+    "extensions": {
+      "cost": {
+        "requestedQueryCost": 1,
+        "maximumAvailable": 50000
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:c44df4ae7c68b4c6",
+  "document_hash": "sha256:c11cf1418bf6991f"
+}

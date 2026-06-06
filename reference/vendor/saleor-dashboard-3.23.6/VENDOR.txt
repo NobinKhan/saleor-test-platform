@@ -1,0 +1,4 @@
+source: https://github.com/saleor/saleor-dashboard.git
+tag: 3.23.6
+commit: 7ecb4f646f93a19bbde9bad178428a9ebeb8c8ac
+layout: src/ (TypeScript gql template literals; import extracts operations at sync-client)
