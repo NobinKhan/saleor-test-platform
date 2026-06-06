@@ -18,6 +18,31 @@ ERROR_STRIP_KEYS = frozenset({"extensions", "locations", "path"})
 ISO_TS_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
 
 
+def sanitize_for_sgrc(resp: dict[str, Any]) -> dict[str, Any]:
+    """SGRC contract view — message + data only; no Python debug fields."""
+    out = copy.deepcopy(resp)
+    top_ext = out.get("extensions")
+    if isinstance(top_ext, dict) and ("cost" in top_ext or not top_ext):
+        out.pop("extensions", None)
+
+    errors = out.get("errors")
+    if isinstance(errors, list):
+        cleaned: list[Any] = []
+        for err in errors:
+            if not isinstance(err, dict):
+                cleaned.append(err)
+                continue
+            clean_err: dict[str, Any] = {}
+            if "message" in err:
+                clean_err["message"] = err["message"]
+            ext = err.get("extensions")
+            if isinstance(ext, dict) and ext.get("code") and "exception" not in ext:
+                clean_err["extensions"] = {"code": ext["code"]}
+            cleaned.append(clean_err)
+        out["errors"] = cleaned
+    return out
+
+
 def normalize_response(resp: dict[str, Any]) -> dict[str, Any]:
     """Strip volatile fields and placeholder dynamic values for comparison."""
     return _walk(copy.deepcopy(resp))

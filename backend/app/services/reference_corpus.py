@@ -237,6 +237,43 @@ def update_manifest_after_patch(version: str) -> None:
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 
+def strip_debug_golden_corpus(version: str) -> int:
+    """Remove Python debug fields from stored L1 golden_response payloads."""
+    from app.services.response_contract import classify_response_contract
+    from app.services.response_normalize import sanitize_for_sgrc
+    from app.services.semantic_compare import build_semantic_profile
+
+    probes_dir = corpus_dir_for_version(version) / "probes"
+    if not probes_dir.is_dir():
+        return 0
+    updated = 0
+    for path in sorted(probes_dir.glob("*.json")):
+        data = json.loads(path.read_text(encoding="utf-8"))
+        raw = data.get("golden_response") or {}
+        sanitized = sanitize_for_sgrc(raw)
+        contract = data.get("golden_contract") or classify_response_contract(
+            raw, http_status=data.get("http_status") or 200
+        )
+        profile = build_semantic_profile(
+            golden_response=raw,
+            golden_contract=contract,
+            input_sent=data.get("input_sent", ""),
+            endpoint_name=data.get("endpoint_name", ""),
+        )
+        if sanitized == raw and profile == data.get("semantic_profile"):
+            continue
+        data["golden_response"] = sanitized
+        if profile:
+            data["semantic_profile"] = profile
+        elif "semantic_profile" in data:
+            del data["semantic_profile"]
+        path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        updated += 1
+    if updated:
+        update_manifest_after_patch(version)
+    return updated
+
+
 def _has_probes(version: str) -> bool:
     probes_dir = corpus_dir_for_version(version) / "probes"
     return probes_dir.is_dir() and any(probes_dir.glob("*.json"))

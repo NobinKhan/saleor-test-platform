@@ -6,30 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"moves\" has invalid value \"test\".\nExpected \"MoveProductInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 99
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"moves\" has invalid value \"test\".",
-              "Expected \"MoveProductInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"moves\" has invalid value \"test\".\nExpected \"MoveProductInput\", found not an object."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

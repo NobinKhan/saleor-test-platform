@@ -8,12 +8,6 @@
       "_service": {
         "__typename": "_Service"
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

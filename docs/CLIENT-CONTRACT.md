@@ -22,12 +22,13 @@ The golden corpus is **recorded from official Python Saleor** but certification 
 | **Error** (`not_found`, `auth_error`, `graphql_error`, `business_error`) | HTTP 200; `errors[0].message` matches golden pattern; `data.<rootField>` null or mutation error payload | `stacktrace`, `extensions.exception` body, `extensions.cost`, `locations` |
 | **Success** | Normalized `data` shape (IDs/timestamps normalized) | `extensions.cost`, `__typename` |
 
-### Tier 2 — Client parity (hard gate when `SGRC_TIER2_GATE=true`)
+### Tier 2 — Client parity (informational + hard gate for client codes)
 
-Required for **Certified** when the gate is enabled (default after official Saleor validates):
+When `SGRC_TIER2_GATE=true` (default after official Saleor validates):
 
-- `errors[].path` when golden records a stable path
-- `errors[].extensions.code` or `exception.code` when golden records a stable code
+- `errors[].path` — **informational** (`parity_gap`); Go/Rust backends often omit it
+- `extensions.code` (Saleor/Dashboard codes) — **required** when golden records a non-Python code
+- `extensions.exception.code` = `GraphQLError` — **never required** (Python debug)
 
 When the gate is off (migration period), gaps appear as `parity_gap` — informational only.
 

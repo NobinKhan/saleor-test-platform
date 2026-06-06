@@ -94,9 +94,23 @@ async def main() -> int:
         default=None,
         help="Record L3 golden for bundle IDs or 'all'",
     )
+    parser.add_argument(
+        "--strip-debug-golden",
+        action="store_true",
+        help="Strip Python debug fields from L1 golden_response on disk",
+    )
     args = parser.parse_args()
 
     dashboard_version = args.dashboard_version or settings.reference_baseline_version
+
+    if args.strip_debug_golden:
+        from app.services.reference_corpus import strip_debug_golden_corpus
+
+        version = args.version or settings.golden_corpus_version
+        count = strip_debug_golden_corpus(version)
+        print(f"Stripped debug fields from {count} probe(s) in saleor-{version}")
+        if not args.sync_client and not args.client_bundles and not args.apply_diff and not args.ops and not args.remove:
+            return 0
 
     if (
         args.sync_client

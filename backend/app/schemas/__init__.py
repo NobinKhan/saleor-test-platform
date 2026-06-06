@@ -212,6 +212,12 @@ class ReportSummary(BaseModel):
     schema_score: float | None = None
     certified: bool | None = None
     test_mode: str | None = None
+    deprecated_queries: list[str] = []
+    deprecated_mutations: list[str] = []
+    extra_queries: list[str] = []
+    extra_mutations: list[str] = []
+    deprecation_note: str | None = None
+    sgrc_note: str | None = None
 
 
 class LatencySummary(BaseModel):

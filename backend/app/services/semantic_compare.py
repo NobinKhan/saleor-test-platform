@@ -19,6 +19,8 @@ INVALID_ID_RE = re.compile(
     re.I,
 )
 
+PYTHON_DEBUG_CODES = frozenset({"GraphQLError"})
+
 
 @dataclass
 class SemanticMatchResult:
@@ -90,12 +92,19 @@ def _extract_error_code(err: dict[str, Any] | None) -> str | None:
     ext = err.get("extensions")
     if not isinstance(ext, dict):
         return None
-    exc = ext.get("exception")
-    if isinstance(exc, dict) and exc.get("code"):
-        return str(exc["code"])
     if ext.get("code"):
         return str(ext["code"])
+    exc = ext.get("exception")
+    if isinstance(exc, dict) and exc.get("code"):
+        code = str(exc["code"])
+        if code in PYTHON_DEBUG_CODES:
+            return None
+        return code
     return None
+
+
+def _is_client_tier2_code(code: str | None) -> bool:
+    return bool(code) and code not in PYTHON_DEBUG_CODES
 
 
 def _compare_data_semantics(
@@ -136,16 +145,17 @@ def _compare_data_semantics(
 
 def _tier2_requirements(profile: dict[str, Any], g_err: dict[str, Any] | None) -> tuple[bool, bool, list | None, str | None]:
     tier2 = profile.get("tier2") or {}
-    requires_path = tier2.get("requires_path")
-    if requires_path is None:
-        requires_path = bool(profile.get("optional_path") or _extract_error_path(g_err))
+    requires_path = tier2.get("requires_path", False)
     expected_path = tier2.get("expected_path") or profile.get("optional_path") or _extract_error_path(g_err)
 
-    requires_code = tier2.get("requires_code")
     g_code = _extract_error_code(g_err)
+    requires_code = tier2.get("requires_code")
     if requires_code is None:
-        requires_code = bool(g_code)
+        requires_code = _is_client_tier2_code(g_code)
     expected_code = tier2.get("expected_code") or g_code
+    if not _is_client_tier2_code(expected_code):
+        requires_code = False
+        expected_code = None
     return requires_path, requires_code, expected_path, expected_code
 
 
@@ -202,38 +212,48 @@ def compare_semantic_error(
         )
 
     parity_notes: list[str] = []
+    hard_fail_notes: list[str] = []
     requires_path, requires_code, expected_path, expected_code = _tier2_requirements(profile, g_err)
     actual_path = _extract_error_path(a_err)
     if requires_path and expected_path:
         if actual_path != expected_path:
             parity_notes.append(
-                f"Tier 2: errors[].path expected {expected_path}, got {actual_path}"
+                f"Tier 2 (info): errors[].path expected {expected_path}, got {actual_path}"
             )
         elif not actual_path:
             parity_notes.append(
-                f"Tier 2: missing errors[].path (required {expected_path})"
+                f"Tier 2 (info): missing errors[].path (golden had {expected_path})"
             )
+    elif expected_path and actual_path != expected_path:
+        parity_notes.append(
+            f"Tier 2 (info): errors[].path expected {expected_path}, got {actual_path}"
+        )
+    elif expected_path and not actual_path:
+        parity_notes.append(
+            f"Tier 2 (info): missing errors[].path (golden had {expected_path})"
+        )
 
     a_code = _extract_error_code(a_err)
     if requires_code and expected_code:
         if a_code != expected_code:
-            parity_notes.append(f"Tier 2: error code expected {expected_code!r}, got {a_code!r}")
+            hard_fail_notes.append(f"Tier 2: error code expected {expected_code!r}, got {a_code!r}")
         elif not a_code:
-            parity_notes.append(f"Tier 2: missing error code (required {expected_code!r})")
+            hard_fail_notes.append(f"Tier 2: missing error code (required {expected_code!r})")
 
-    tier2_match = len(parity_notes) == 0
-    diff = "; ".join(parity_notes) if parity_notes else None
-    if tier2_required and parity_notes:
+    all_notes = parity_notes + hard_fail_notes
+    tier2_match = len(hard_fail_notes) == 0
+    diff = "; ".join(all_notes) if all_notes else None
+    if tier2_required and hard_fail_notes:
         return SemanticMatchResult(
             tier1_match=True,
             tier2_match=False,
-            client_parity_notes=parity_notes,
-            diff_summary=diff,
+            client_parity_notes=all_notes,
+            diff_summary="; ".join(hard_fail_notes),
         )
     return SemanticMatchResult(
         tier1_match=True,
         tier2_match=tier2_match,
-        client_parity_notes=parity_notes,
+        client_parity_notes=all_notes,
         diff_summary=diff,
     )
 
@@ -275,11 +295,12 @@ def build_semantic_profile(
         profile["message_pattern"] = message_pattern
     if optional_path:
         profile["optional_path"] = optional_path
+    client_code = _extract_error_code(err if isinstance(err, dict) else None)
+    if _is_client_tier2_code(client_code):
         profile["tier2"] = {
-            "requires_path": True,
-            "expected_path": optional_path,
-            "requires_code": bool(_extract_error_code(err if isinstance(err, dict) else None)),
-            "expected_code": _extract_error_code(err if isinstance(err, dict) else None),
+            "requires_path": False,
+            "requires_code": True,
+            "expected_code": client_code,
         }
     return profile
 

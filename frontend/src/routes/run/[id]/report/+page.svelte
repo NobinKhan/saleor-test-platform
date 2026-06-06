@@ -110,6 +110,12 @@
       schema_score: number | null;
       certified: boolean | null;
       test_mode: string | null;
+      deprecated_queries: string[];
+      deprecated_mutations: string[];
+      extra_queries: string[];
+      extra_mutations: string[];
+      deprecation_note: string | null;
+      sgrc_note: string | null;
     };
     category_breakdown: CategoryBreakdown[];
     response_time_distribution: ResponseTimeBucket[];
@@ -445,6 +451,40 @@
       </div>
     {/if}
 
+    {#if report.summary.sgrc_note || report.summary.deprecation_note || report.summary.deprecated_queries.length || report.summary.deprecated_mutations.length}
+      <div class="card deprecation-panel">
+        <h2>SGRC and schema notes</h2>
+        {#if report.summary.sgrc_note}
+          <p class="sgrc-note">{report.summary.sgrc_note}</p>
+        {/if}
+        {#if report.summary.deprecation_note}
+          <p class="deprecation-note">{report.summary.deprecation_note}</p>
+          {#if report.summary.deprecated_queries.length}
+            <h3>Missing queries on target ({report.summary.deprecated_queries.length})</h3>
+            <div class="diff-tags">
+              {#each report.summary.deprecated_queries.slice(0, SCHEMA_TAG_LIMIT) as name}
+                <code class="diff-tag">{name}</code>
+              {/each}
+            </div>
+          {/if}
+          {#if report.summary.deprecated_mutations.length}
+            <h3>Missing mutations on target ({report.summary.deprecated_mutations.length})</h3>
+            <div class="diff-tags">
+              {#each report.summary.deprecated_mutations.slice(0, SCHEMA_TAG_LIMIT) as name}
+                <code class="diff-tag">{name}</code>
+              {/each}
+            </div>
+          {/if}
+        {/if}
+        {#if report.summary.extra_queries.length || report.summary.extra_mutations.length}
+          <p class="text-muted extra-note">
+            Target exposes {report.summary.extra_queries.length + report.summary.extra_mutations.length} operation(s)
+            not in the golden reference (informational only).
+          </p>
+        {/if}
+      </div>
+    {/if}
+
     <div class="summary-row">
       {#if report.summary.compatibility_score != null}
         <div class="summary-card big">
@@ -618,7 +658,7 @@
                   <td colspan="8">
                     <div class="detail-grid">
                       <div>
-                        <h4>Expected response</h4>
+                        <h4>Expected (SGRC contract)</h4>
                         {#if row.expected_response}
                           <pre>{prettyJson(row.expected_response)}</pre>
                         {:else}

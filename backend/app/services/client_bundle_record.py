@@ -195,12 +195,15 @@ async def record_dashboard_bundles(
                 input_sent=bundle.document,
                 endpoint_name=bundle.bundle_id,
             )
-            bundle.golden_response = resp_json
+            from app.services.response_normalize import sanitize_for_sgrc
+
+            sanitized = sanitize_for_sgrc(resp_json)
+            bundle.golden_response = sanitized
             bundle.golden_contract = contract
             bundle.golden_outcome = contract_to_legacy_outcome(contract)
             bundle.golden_status = "pass" if contract == "success" else "warn"
             bundle.http_status = resp.status_code
-            bundle.response_shape_hash = _normalized_hash(resp_json)
+            bundle.response_shape_hash = _normalized_hash(sanitized)
             bundle.semantic_profile = profile
             write_bundle("dashboard", ver, bundle)
             recorded += 1

@@ -13,12 +13,6 @@
           }
         ]
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "validation_error",

@@ -6,47 +6,11 @@
   "golden_response": {
     "errors": [
       {
-        "message": "PaymentInitialize.perform_mutation() missing 2 required keyword-only arguments: 'channel' and 'payment_data'",
-        "locations": [
-          {
-            "line": 1,
-            "column": 12
-          }
-        ],
-        "path": [
-          "paymentInitialize"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "TypeError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
-              "    return executor.execute(resolve_fn, source, info, **args)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
-              "    return fn(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/contextlib.py\", line 81, in inner",
-              "    return func(*args, **kwds)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 526, in mutate",
-              "    response = cls.perform_mutation(root, info, **data)",
-              "               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "TypeError: PaymentInitialize.perform_mutation() missing 2 required keyword-only arguments: 'channel' and 'payment_data'"
-            ]
-          }
-        }
+        "message": "PaymentInitialize.perform_mutation() missing 2 required keyword-only arguments: 'channel' and 'payment_data'"
       }
     ],
     "data": {
       "paymentInitialize": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "schema_error",
@@ -60,9 +24,6 @@
     "contract": "graphql_error",
     "data_path": "paymentInitialize",
     "expected_null": true,
-    "message_pattern": "<required>",
-    "optional_path": [
-      "paymentInitialize"
-    ]
+    "message_pattern": "<required>"
   }
 }

@@ -6,59 +6,11 @@
   "golden_response": {
     "errors": [
       {
-        "message": "StringValue(value='test')",
-        "locations": [
-          {
-            "line": 1,
-            "column": 12
-          }
-        ],
-        "path": [
-          "fileUpload"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "MultiValueDictKeyError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/utils/datastructures.py\", line 84, in __getitem__",
-              "    list_ = super().__getitem__(key)",
-              "            ^^^^^^^^^^^^^^^^^^^^^^^^",
-              "KeyError: StringValue(value='test')",
-              "",
-              "During handling of the above exception, another exception occurred:",
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
-              "    return executor.execute(resolve_fn, source, info, **args)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
-              "    return fn(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/contextlib.py\", line 81, in inner",
-              "    return func(*args, **kwds)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 526, in mutate",
-              "    response = cls.perform_mutation(root, info, **data)",
-              "               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 1206, in perform_mutation",
-              "    file_data: UploadedFile = cast(UploadedFile, info.context.FILES[file])",
-              "                                                 ~~~~~~~~~~~~~~~~~~^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/django/utils/datastructures.py\", line 86, in __getitem__",
-              "    raise MultiValueDictKeyError(key)",
-              "django.utils.datastructures.MultiValueDictKeyError: StringValue(value='test')"
-            ]
-          }
-        }
+        "message": "StringValue(value='test')"
       }
     ],
     "data": {
       "fileUpload": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "schema_error",
@@ -72,9 +24,6 @@
     "contract": "graphql_error",
     "data_path": "fileUpload",
     "expected_null": true,
-    "message_pattern": "StringValue(value='test')",
-    "optional_path": [
-      "fileUpload"
-    ]
+    "message_pattern": "StringValue(value='test')"
   }
 }

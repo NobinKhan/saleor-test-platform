@@ -6,30 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"lines\" has invalid value \"test\".\nExpected \"CheckoutLineInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 36
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"lines\" has invalid value \"test\".",
-              "Expected \"CheckoutLineInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"lines\" has invalid value \"test\".\nExpected \"CheckoutLineInput\", found not an object."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

@@ -6,48 +6,12 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"moves\" has invalid value \"test\".\nExpected \"ReorderInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 48
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"moves\" has invalid value \"test\".",
-              "Expected \"ReorderInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"moves\" has invalid value \"test\".\nExpected \"ReorderInput\", found not an object."
       },
       {
-        "message": "Argument \"type\" has invalid value \"test\".\nExpected type \"ProductAttributeType\", found \"test\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 117
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"type\" has invalid value \"test\".",
-              "Expected type \"ProductAttributeType\", found \"test\"."
-            ]
-          }
-        }
+        "message": "Argument \"type\" has invalid value \"test\".\nExpected type \"ProductAttributeType\", found \"test\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

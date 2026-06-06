@@ -6,47 +6,12 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"translations\" has invalid value \"test\".\nExpected \"ProductBulkTranslateInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 47
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"translations\" has invalid value \"test\".",
-              "Expected \"ProductBulkTranslateInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"translations\" has invalid value \"test\".\nExpected \"ProductBulkTranslateInput\", found not an object."
       },
       {
-        "message": "Cannot query field \"field\" on type \"ProductBulkTranslateError\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 66
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"field\" on type \"ProductBulkTranslateError\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"field\" on type \"ProductBulkTranslateError\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

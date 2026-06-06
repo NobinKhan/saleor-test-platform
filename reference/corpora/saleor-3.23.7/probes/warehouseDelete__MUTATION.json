@@ -6,29 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Cannot query field \"warehouseDelete\" on type \"Mutation\". Did you mean \"webhookDelete\", \"categoryDelete\", \"pageBulkDelete\", \"pageTypeDelete\" or \"saleBulkDelete\"?",
-        "locations": [
-          {
-            "line": 1,
-            "column": 12
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"warehouseDelete\" on type \"Mutation\". Did you mean \"webhookDelete\", \"categoryDelete\", \"pageBulkDelete\", \"pageTypeDelete\" or \"saleBulkDelete\"?"
-            ]
-          }
-        }
+        "message": "Cannot query field \"warehouseDelete\" on type \"Mutation\". Did you mean \"webhookDelete\", \"categoryDelete\", \"pageBulkDelete\", \"pageTypeDelete\" or \"saleBulkDelete\"?"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

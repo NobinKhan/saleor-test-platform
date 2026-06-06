@@ -6,30 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"paymentGateway\" has invalid value \"test\".\nExpected \"PaymentGatewayToInitialize\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 94
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"paymentGateway\" has invalid value \"test\".",
-              "Expected \"PaymentGatewayToInitialize\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"paymentGateway\" has invalid value \"test\".\nExpected \"PaymentGatewayToInitialize\", found not an object."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

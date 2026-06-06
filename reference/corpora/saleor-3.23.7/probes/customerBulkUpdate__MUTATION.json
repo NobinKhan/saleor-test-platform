@@ -6,47 +6,12 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"customers\" has invalid value \"test\".\nExpected \"CustomerBulkUpdateInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 42
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"customers\" has invalid value \"test\".",
-              "Expected \"CustomerBulkUpdateInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"customers\" has invalid value \"test\".\nExpected \"CustomerBulkUpdateInput\", found not an object."
       },
       {
-        "message": "Cannot query field \"field\" on type \"CustomerBulkUpdateError\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 61
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"field\" on type \"CustomerBulkUpdateError\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"field\" on type \"CustomerBulkUpdateError\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

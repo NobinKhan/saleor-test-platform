@@ -6,29 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Cannot query field \"languages\" on type \"Query\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 9
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"languages\" on type \"Query\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"languages\" on type \"Query\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

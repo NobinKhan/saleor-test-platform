@@ -36,12 +36,6 @@
           }
         ]
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 3,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

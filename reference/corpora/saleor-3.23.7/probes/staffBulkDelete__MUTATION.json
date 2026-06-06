@@ -6,64 +6,11 @@
   "golden_response": {
     "errors": [
       {
-        "message": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.\"]}",
-        "locations": [
-          {
-            "line": 1,
-            "column": 12
-          }
-        ],
-        "path": [
-          "staffBulkDelete"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "ValidationError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 416, in get_nodes_or_error",
-              "    instances = get_nodes(ids, only_type, qs=qs, schema=schema)",
-              "                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/utils/__init__.py\", line 118, in get_nodes",
-              "    nodes_type, pks = resolve_global_ids_to_primary_keys(",
-              "                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/utils/__init__.py\", line 88, in resolve_global_ids_to_primary_keys",
-              "    raise GraphQLError(ERROR_COULD_NO_RESOLVE_GLOBAL_ID % invalid_ids)",
-              "graphql.error.base.GraphQLError: Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.",
-              "",
-              "The above exception was the direct cause of the following exception:",
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
-              "    return executor.execute(resolve_fn, source, info, **args)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
-              "    return fn(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/contextlib.py\", line 81, in inner",
-              "    return func(*args, **kwds)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 1118, in mutate",
-              "    count, errors = cls.perform_mutation(root, info, **data)",
-              "                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/account/bulk_mutations/staff_bulk_delete.py\", line 41, in perform_mutation",
-              "    instances = cls.get_nodes_or_error(ids, \"id\", User)",
-              "                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/mutations.py\", line 418, in get_nodes_or_error",
-              "    raise ValidationError(",
-              "django.core.exceptions.ValidationError: {'id': [\"Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.\"]}"
-            ]
-          }
-        }
+        "message": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000-0000-0000-000000000000']'.\"]}"
       }
     ],
     "data": {
       "staffBulkDelete": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "schema_error",
@@ -77,9 +24,6 @@
     "contract": "graphql_error",
     "data_path": "staffBulkDelete",
     "expected_null": true,
-    "message_pattern": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000",
-    "optional_path": [
-      "staffBulkDelete"
-    ]
+    "message_pattern": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000"
   }
 }

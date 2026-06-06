@@ -19,7 +19,7 @@ from app.services.response_contract import (
     contract_to_status,
     infer_probe_stability,
 )
-from app.services.response_normalize import normalize_response
+from app.services.response_normalize import normalize_response, sanitize_for_sgrc
 from app.services.semantic_compare import compare_semantic_error, is_error_contract
 
 
@@ -71,7 +71,7 @@ def compare_probe_to_actual(
     query_input = input_sent or golden.input_sent
     gate_on = tier2_gate_enabled(tier2_required)
 
-    expected_str = json.dumps(golden.golden_response, indent=2)
+    expected_str = json.dumps(sanitize_for_sgrc(golden.golden_response), indent=2)
     golden_contract = _resolve_golden_contract(golden)
     actual_contract = classify_response_contract(actual_response_json, http_status=http_status)
 
@@ -280,16 +280,18 @@ def probe_from_capture(
         endpoint_name=endpoint["name"],
     )
 
+    sanitized = sanitize_for_sgrc(resp_json)
+
     return GoldenProbe(
         endpoint_name=endpoint["name"],
         endpoint_kind=endpoint["kind"],
         category=endpoint.get("category", "unknown"),
         input_sent=query,
-        golden_response=resp_json,
+        golden_response=sanitized,
         golden_outcome=contract_to_legacy_outcome(contract),
         golden_status="pass" if contract == "success" else "warn",
         error_pattern=None,
-        response_shape_hash=_normalized_hash(resp_json),
+        response_shape_hash=_normalized_hash(sanitized),
         golden_contract=contract,
         http_status=http_status,
         probe_stability=stability,

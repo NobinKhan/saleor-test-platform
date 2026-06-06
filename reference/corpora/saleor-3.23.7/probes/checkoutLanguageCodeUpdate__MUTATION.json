@@ -6,30 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"languageCode\" has invalid value \"test\".\nExpected type \"LanguageCodeEnum\", found \"test\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 53
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"languageCode\" has invalid value \"test\".",
-              "Expected type \"LanguageCodeEnum\", found \"test\"."
-            ]
-          }
-        }
+        "message": "Argument \"languageCode\" has invalid value \"test\".\nExpected type \"LanguageCodeEnum\", found \"test\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

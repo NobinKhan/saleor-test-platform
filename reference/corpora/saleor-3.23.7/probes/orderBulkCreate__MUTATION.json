@@ -6,47 +6,12 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"orders\" has invalid value \"test\".\nExpected \"OrderBulkCreateInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 36
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"orders\" has invalid value \"test\".",
-              "Expected \"OrderBulkCreateInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"orders\" has invalid value \"test\".\nExpected \"OrderBulkCreateInput\", found not an object."
       },
       {
-        "message": "Cannot query field \"field\" on type \"OrderBulkCreateError\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 55
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"field\" on type \"OrderBulkCreateError\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"field\" on type \"OrderBulkCreateError\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

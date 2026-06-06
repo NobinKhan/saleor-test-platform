@@ -6,29 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Cannot query field \"ordersByUser\" on type \"Query\". Did you mean \"orderByToken\", \"orders\" or \"ordersTotal\"?",
-        "locations": [
-          {
-            "line": 1,
-            "column": 9
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"ordersByUser\" on type \"Query\". Did you mean \"orderByToken\", \"orders\" or \"ordersTotal\"?"
-            ]
-          }
-        }
+        "message": "Cannot query field \"ordersByUser\" on type \"Query\". Did you mean \"orderByToken\", \"orders\" or \"ordersTotal\"?"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

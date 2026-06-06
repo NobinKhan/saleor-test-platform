@@ -6,30 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"transaction\" has invalid value \"test\".\nExpected \"TransactionCreateInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 87
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"transaction\" has invalid value \"test\".",
-              "Expected \"TransactionCreateInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"transaction\" has invalid value \"test\".\nExpected \"TransactionCreateInput\", found not an object."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

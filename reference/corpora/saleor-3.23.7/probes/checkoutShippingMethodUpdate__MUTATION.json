@@ -6,29 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Unknown argument \"input\" on field \"checkoutShippingMethodUpdate\" of type \"Mutation\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 41
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Unknown argument \"input\" on field \"checkoutShippingMethodUpdate\" of type \"Mutation\"."
-            ]
-          }
-        }
+        "message": "Unknown argument \"input\" on field \"checkoutShippingMethodUpdate\" of type \"Mutation\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

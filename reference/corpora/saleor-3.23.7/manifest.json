@@ -3,7 +3,7 @@
   "saleor_url": "http://saleor-api:8000/graphql/",
   "captured_at": "2026-06-06T07:28:06.796735+00:00",
   "probe_count": 414,
-  "corpus_hash": "sha256:c6a77dea7bd64226d19bd7327410152db07806e10d2a2e55d0b7af3037207cf4",
+  "corpus_hash": "sha256:b4e009023e686276f653af1d4888a778b983f55bafe1a876db1f948191360e7f",
   "operations_index": {
     "_entities__QUERY": {
       "recorded_at": "2026-06-06T07:28:06.796735+00:00",
@@ -13,10 +13,7 @@
         "contract": "graphql_error",
         "data_path": "_entities",
         "expected_null": true,
-        "message_pattern": "Invalid type for 'representation' field: must be an object",
-        "optional_path": [
-          "_entities"
-        ]
+        "message_pattern": "Invalid type for 'representation' field: must be an object"
       }
     },
     "_service__QUERY": {
@@ -166,10 +163,7 @@
         "contract": "not_found",
         "data_path": "address",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "address"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "appActivate__MUTATION": {
@@ -230,10 +224,7 @@
         "contract": "not_found",
         "data_path": "appExtension",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "appExtension"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "appExtensions__QUERY": {
@@ -350,10 +341,7 @@
         "contract": "not_found",
         "data_path": "app",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "app"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "appsInstallations__QUERY": {
@@ -408,10 +396,7 @@
         "contract": "graphql_error",
         "data_path": "attributeBulkDelete",
         "expected_null": true,
-        "message_pattern": "Could not resolve to a node with the global id list of '['00000000-0000-0000-000",
-        "optional_path": [
-          "attributeBulkDelete"
-        ]
+        "message_pattern": "Could not resolve to a node with the global id list of '['00000000-0000-0000-000"
       }
     },
     "attributeBulkTranslate__MUTATION": {
@@ -497,10 +482,7 @@
         "contract": "graphql_error",
         "data_path": "attributeValueBulkDelete",
         "expected_null": true,
-        "message_pattern": "Could not resolve to a node with the global id list of '['00000000-0000-0000-000",
-        "optional_path": [
-          "attributeValueBulkDelete"
-        ]
+        "message_pattern": "Could not resolve to a node with the global id list of '['00000000-0000-0000-000"
       }
     },
     "attributeValueBulkTranslate__MUTATION": {
@@ -564,10 +546,7 @@
         "contract": "not_found",
         "data_path": "attribute",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "attribute"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "attributes__QUERY": {
@@ -642,10 +621,7 @@
         "contract": "not_found",
         "data_path": "category",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "category"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "channelActivate__MUTATION": {
@@ -720,10 +696,7 @@
         "contract": "not_found",
         "data_path": "channel",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "channel"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "channels__QUERY": {
@@ -955,10 +928,7 @@
         "contract": "not_found",
         "data_path": "checkout",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "checkout"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "checkouts__QUERY": {
@@ -1069,10 +1039,7 @@
         "contract": "not_found",
         "data_path": "collection",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "collection"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "collections__QUERY": {
@@ -1283,10 +1250,7 @@
         "contract": "not_found",
         "data_path": "exportFile",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "exportFile"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "exportFiles__QUERY": {
@@ -1358,10 +1322,7 @@
         "contract": "graphql_error",
         "data_path": "fileUpload",
         "expected_null": true,
-        "message_pattern": "StringValue(value='test')",
-        "optional_path": [
-          "fileUpload"
-        ]
+        "message_pattern": "StringValue(value='test')"
       }
     },
     "giftCardActivate__MUTATION": {
@@ -1516,10 +1477,7 @@
         "contract": "not_found",
         "data_path": "giftCard",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "giftCard"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "giftCards__QUERY": {
@@ -1710,10 +1668,7 @@
         "contract": "not_found",
         "data_path": "menuItem",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "menuItem"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "menuItems__QUERY": {
@@ -1741,10 +1696,7 @@
         "contract": "not_found",
         "data_path": "menu",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "menu"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "menus__QUERY": {
@@ -1824,10 +1776,7 @@
         "contract": "graphql_error",
         "data_path": "orderCreateFromCheckout",
         "expected_null": true,
-        "message_pattern": "<auth>",
-        "optional_path": [
-          "orderCreateFromCheckout"
-        ]
+        "message_pattern": "<auth>"
       }
     },
     "orderCreate__MUTATION": {
@@ -2117,10 +2066,7 @@
         "contract": "not_found",
         "data_path": "order",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "order"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "ordersByUser__QUERY": {
@@ -2293,10 +2239,7 @@
         "contract": "not_found",
         "data_path": "pageType",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "pageType"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "pageTypes__QUERY": {
@@ -2324,10 +2267,7 @@
         "contract": "not_found",
         "data_path": "page",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "page"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "pages__QUERY": {
@@ -2385,10 +2325,7 @@
         "contract": "not_found",
         "data_path": "paymentGatewayInitialize",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "paymentGatewayInitialize"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "paymentGateways__QUERY": {
@@ -2410,10 +2347,7 @@
         "contract": "graphql_error",
         "data_path": "paymentInitialize",
         "expected_null": true,
-        "message_pattern": "<required>",
-        "optional_path": [
-          "paymentInitialize"
-        ]
+        "message_pattern": "<required>"
       }
     },
     "paymentMethodInitializeTokenization__MUTATION": {
@@ -2465,10 +2399,7 @@
         "contract": "not_found",
         "data_path": "payment",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "payment"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "payments__QUERY": {
@@ -2517,10 +2448,7 @@
         "contract": "not_found",
         "data_path": "permissionGroup",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "permissionGroup"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "permissionGroups__QUERY": {
@@ -2782,10 +2710,7 @@
         "contract": "not_found",
         "data_path": "productType",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "productType"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "productTypes__QUERY": {
@@ -2823,10 +2748,7 @@
         "contract": "graphql_error",
         "data_path": "productVariantBulkDelete",
         "expected_null": true,
-        "message_pattern": "<required>",
-        "optional_path": [
-          "productVariantBulkDelete"
-        ]
+        "message_pattern": "<required>"
       }
     },
     "productVariantBulkTranslate__MUTATION": {
@@ -2986,10 +2908,7 @@
         "contract": "not_found",
         "data_path": "productVariant",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "productVariant"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "productVariants__QUERY": {
@@ -3006,10 +2925,7 @@
         "contract": "not_found",
         "data_path": "product",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "product"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "products__QUERY": {
@@ -3122,10 +3038,7 @@
         "contract": "not_found",
         "data_path": "promotion",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "promotion"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "promotions__QUERY": {
@@ -3196,10 +3109,7 @@
         "contract": "not_found",
         "data_path": "saleBulkDelete",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "saleBulkDelete"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "saleCreate__MUTATION": {
@@ -3439,10 +3349,7 @@
         "contract": "not_found",
         "data_path": "shippingZone",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "shippingZone"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "shippingZones__QUERY": {
@@ -3498,10 +3405,7 @@
         "contract": "graphql_error",
         "data_path": "staffBulkDelete",
         "expected_null": true,
-        "message_pattern": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000",
-        "optional_path": [
-          "staffBulkDelete"
-        ]
+        "message_pattern": "{'id': [\"Could not resolve to a node with the global id list of '['00000000-0000"
       }
     },
     "staffCreate__MUTATION": {
@@ -3591,10 +3495,7 @@
         "contract": "not_found",
         "data_path": "stock",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "stock"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "stocks__QUERY": {
@@ -3653,10 +3554,7 @@
         "contract": "not_found",
         "data_path": "taxClass",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "taxClass"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "taxClasses__QUERY": {
@@ -3684,10 +3582,7 @@
         "contract": "not_found",
         "data_path": "taxConfiguration",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "taxConfiguration"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "taxConfigurations__QUERY": {
@@ -3863,10 +3758,7 @@
         "contract": "not_found",
         "data_path": "transaction",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "transaction"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "transactions__QUERY": {
@@ -3973,10 +3865,7 @@
         "contract": "not_found",
         "data_path": "user",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "user"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "users__QUERY": {
@@ -4114,10 +4003,7 @@
         "contract": "not_found",
         "data_path": "voucher",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "voucher"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "vouchers__QUERY": {
@@ -4167,10 +4053,7 @@
         "contract": "not_found",
         "data_path": "warehouse",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "warehouse"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     },
     "warehouses__QUERY": {
@@ -4260,10 +4143,7 @@
         "contract": "not_found",
         "data_path": "webhook",
         "expected_null": true,
-        "message_pattern": "<invalid_id>",
-        "optional_path": [
-          "webhook"
-        ]
+        "message_pattern": "<invalid_id>"
       }
     }
   },

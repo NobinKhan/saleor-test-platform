@@ -175,9 +175,46 @@ def test_checkout_minimal_response_matches_golden(tmp_path, monkeypatch):
         http_status=200,
     )
     assert result.compatible
-    assert result.match_status == "parity_gap"
-    assert result.client_parity_note
-    assert "path" in (result.client_parity_note or "").lower()
+    assert result.match_status in ("match", "parity_gap")
+    if result.match_status == "parity_gap":
+        assert result.client_parity_note
+        assert "path" in (result.client_parity_note or "").lower()
+    assert "stacktrace" not in (result.expected_response or "").lower()
+
+
+def test_expected_response_omits_stacktrace(tmp_path, monkeypatch):
+    golden_response = {
+        "errors": [
+            {
+                "message": "Invalid ID: x. Expected: Checkout.",
+                "extensions": {"exception": {"stacktrace": ["Traceback..."], "code": "GraphQLError"}},
+            }
+        ],
+        "data": {"checkout": None},
+    }
+    golden = GoldenProbe(
+        endpoint_name="checkout",
+        endpoint_kind="QUERY",
+        category="checkout",
+        input_sent='query { checkout(id: "x") { id } }',
+        golden_response=golden_response,
+        golden_outcome="not_found_probe",
+        golden_status="warn",
+        golden_contract="not_found",
+    )
+    monkeypatch.setattr(
+        "app.services.reference_compare.load_probe_from_disk",
+        lambda *a, **k: golden,
+    )
+    result = compare_to_golden(
+        "3.23.7",
+        "checkout",
+        "QUERY",
+        {"data": {"checkout": None}, "errors": [{"message": "Invalid ID: x. Expected: Checkout."}]},
+        {"outcome": "not_found_probe", "status": "warn"},
+    )
+    assert "stacktrace" not in (result.expected_response or "").lower()
+    assert "GraphQLError" not in (result.expected_response or "")
 
 
 def test_checkout_wrong_message_mismatch(tmp_path, monkeypatch):
@@ -255,31 +292,31 @@ def test_golden_stacktrace_actual_without_still_matches(tmp_path, monkeypatch):
     assert result.match_status in ("match", "parity_gap")
 
 
-def test_tier2_gate_fails_on_missing_path(tmp_path, monkeypatch):
+def test_tier2_gate_fails_on_missing_client_code(tmp_path):
     golden = GoldenProbe(
-        endpoint_name="checkout",
+        endpoint_name="order",
         endpoint_kind="QUERY",
-        category="checkout",
-        input_sent='query { checkout(id: "x") { id } }',
+        category="orders",
+        input_sent='query { order(id: "x") { id } }',
         golden_response={
             "errors": [
                 {
-                    "message": "Invalid ID: x. Expected: Checkout.",
-                    "path": ["checkout"],
+                    "message": "Order not found.",
+                    "extensions": {"code": "NOT_FOUND"},
                 }
             ],
-            "data": {"checkout": None},
+            "data": {"order": None},
         },
         golden_outcome="not_found_probe",
         golden_status="warn",
         golden_contract="not_found",
         semantic_profile={
-            "tier2": {"requires_path": True, "expected_path": ["checkout"]},
+            "tier2": {"requires_code": True, "expected_code": "NOT_FOUND"},
         },
     )
     actual = {
-        "data": {"checkout": None},
-        "errors": [{"message": "Invalid ID: x. Expected: Checkout."}],
+        "data": {"order": None},
+        "errors": [{"message": "Order not found."}],
     }
     result = compare_probe_to_actual(
         golden,

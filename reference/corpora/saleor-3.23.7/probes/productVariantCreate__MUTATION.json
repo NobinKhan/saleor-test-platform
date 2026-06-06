@@ -6,31 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"input\" has invalid value {}.\nIn field \"attributes\": Expected \"[AttributeValueInput!]!\", found null.\nIn field \"product\": Expected \"ID!\", found null.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 40
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
-              "In field \"attributes\": Expected \"[AttributeValueInput!]!\", found null.",
-              "In field \"product\": Expected \"ID!\", found null."
-            ]
-          }
-        }
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"attributes\": Expected \"[AttributeValueInput!]!\", found null.\nIn field \"product\": Expected \"ID!\", found null."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

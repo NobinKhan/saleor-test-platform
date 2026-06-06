@@ -6,68 +6,11 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: AppExtension.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 9
-          }
-        ],
-        "path": [
-          "appExtension"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 80, in from_global_id_or_error",
-              "    type_, id_ = graphene.Node.from_global_id(global_id)",
-              "                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphene/relay/node.py\", line 115, in from_global_id",
-              "    return from_global_id(global_id)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/node/node.py\", line 66, in from_global_id",
-              "    unbased_global_id = unbase64(global_id)",
-              "                        ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql_relay/utils.py\", line 11, in unbase64",
-              "    return _unbase64(s).decode('utf-8')",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd3 in position 0: invalid continuation byte",
-              "",
-              "The above exception was the direct cause of the following exception:",
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
-              "    return executor.execute(resolve_fn, source, info, **args)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
-              "    return fn(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
-              "    return func(info.context, *args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
-              "    return f(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/app/schema.py\", line 174, in resolve_app_extension",
-              "    _, id = from_global_id_or_error(id, \"AppExtension\")",
-              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/utils/__init__.py\", line 87, in from_global_id_or_error",
-              "    raise GraphQLError(",
-              "graphql.error.base.GraphQLError: Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: AppExtension."
-            ]
-          }
-        }
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: AppExtension."
       }
     ],
     "data": {
       "appExtension": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "not_found_probe",
@@ -81,9 +24,6 @@
     "contract": "not_found",
     "data_path": "appExtension",
     "expected_null": true,
-    "message_pattern": "<invalid_id>",
-    "optional_path": [
-      "appExtension"
-    ]
+    "message_pattern": "<invalid_id>"
   }
 }

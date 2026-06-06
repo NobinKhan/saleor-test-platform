@@ -37,6 +37,37 @@ from app.services.response_contract import CONTRACT_SUCCESS
 
 router = APIRouter(prefix="/api/reports", tags=["reports"])
 
+SGRC_REPORT_NOTE = (
+    "Expected responses show the SGRC client contract only. Python stacktraces, "
+    "locations, query cost extensions, and GraphQLError exception codes are never "
+    "required for certification."
+)
+
+
+def _deprecation_fields(schema_diff: dict[str, Any] | None) -> dict[str, Any]:
+    diff = schema_diff or {}
+    missing_q = list(diff.get("missing_queries") or [])
+    missing_m = list(diff.get("missing_mutations") or [])
+    extra_q = list(diff.get("extra_queries") or [])
+    extra_m = list(diff.get("extra_mutations") or [])
+    total_missing = len(missing_q) + len(missing_m)
+    note = None
+    if total_missing:
+        note = (
+            f"{total_missing} golden operation(s) are not on this target schema. "
+            "They may be deprecated in Saleor or absent from your custom backend. "
+            "After verifying against official Saleor, run `just corpus-diff` and "
+            "`just patch-corpus --apply-diff` to remove them from the reference corpus."
+        )
+    return {
+        "deprecated_queries": missing_q,
+        "deprecated_mutations": missing_m,
+        "extra_queries": extra_q,
+        "extra_mutations": extra_m,
+        "deprecation_note": note,
+        "sgrc_note": SGRC_REPORT_NOTE,
+    }
+
 try:
     from reportlab.lib.pagesizes import A4
     from reportlab.lib import colors
@@ -156,6 +187,7 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
     probe_outcome_rate = round(probe_success / total * 100, 1) if total > 0 else None
 
     schema_gate = compute_schema_gate(run.schema_diff)
+    dep = _deprecation_fields(run.schema_diff)
     certified = compute_certified(
         schema_gate_pass=schema_gate["schema_gate_pass"],
         compatibility_score=compatibility_score,
@@ -226,6 +258,7 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         schema_score=schema_gate["schema_score"],
         certified=certified,
         test_mode=test_mode,
+        **dep,
     )
     return ReportData(
         summary=summary,

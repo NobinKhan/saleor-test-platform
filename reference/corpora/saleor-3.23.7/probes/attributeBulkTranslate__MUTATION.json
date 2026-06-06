@@ -6,47 +6,12 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"translations\" has invalid value \"test\".\nExpected \"AttributeBulkTranslateInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 49
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"translations\" has invalid value \"test\".",
-              "Expected \"AttributeBulkTranslateInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"translations\" has invalid value \"test\".\nExpected \"AttributeBulkTranslateInput\", found not an object."
       },
       {
-        "message": "Cannot query field \"field\" on type \"AttributeBulkTranslateError\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 68
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"field\" on type \"AttributeBulkTranslateError\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"field\" on type \"AttributeBulkTranslateError\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

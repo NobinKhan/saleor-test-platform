@@ -6,23 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"kind\" of required type TranslatableKinds!\" was not provided.",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"kind\" of required type TranslatableKinds!\" was not provided."
-            ]
-          }
-        }
+        "message": "Argument \"kind\" of required type TranslatableKinds!\" was not provided."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

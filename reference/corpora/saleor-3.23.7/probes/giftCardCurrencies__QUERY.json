@@ -6,29 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Field \"giftCardCurrencies\" of type \"[String!]!\" must not have a sub selection.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 28
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Field \"giftCardCurrencies\" of type \"[String!]!\" must not have a sub selection."
-            ]
-          }
-        }
+        "message": "Field \"giftCardCurrencies\" of type \"[String!]!\" must not have a sub selection."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

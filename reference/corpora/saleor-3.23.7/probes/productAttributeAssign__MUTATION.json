@@ -6,30 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"operations\" has invalid value \"test\".\nExpected \"ProductAttributeAssignInput\", found not an object.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 47
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"operations\" has invalid value \"test\".",
-              "Expected \"ProductAttributeAssignInput\", found not an object."
-            ]
-          }
-        }
+        "message": "Argument \"operations\" has invalid value \"test\".\nExpected \"ProductAttributeAssignInput\", found not an object."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

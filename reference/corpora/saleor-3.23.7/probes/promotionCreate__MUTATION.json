@@ -6,31 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"input\" has invalid value {}.\nIn field \"name\": Expected \"String!\", found null.\nIn field \"type\": Expected \"PromotionTypeEnum!\", found null.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 35
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"input\" has invalid value {}.",
-              "In field \"name\": Expected \"String!\", found null.",
-              "In field \"type\": Expected \"PromotionTypeEnum!\", found null."
-            ]
-          }
-        }
+        "message": "Argument \"input\" has invalid value {}.\nIn field \"name\": Expected \"String!\", found null.\nIn field \"type\": Expected \"PromotionTypeEnum!\", found null."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

@@ -6,23 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"userId\" of required type ID!\" was not provided.",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"userId\" of required type ID!\" was not provided."
-            ]
-          }
-        }
+        "message": "Argument \"userId\" of required type ID!\" was not provided."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

@@ -6,29 +6,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Cannot query field \"price\" on type \"ShippingMethodType\".",
-        "locations": [
-          {
-            "line": 1,
-            "column": 76
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"price\" on type \"ShippingMethodType\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"price\" on type \"ShippingMethodType\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",
