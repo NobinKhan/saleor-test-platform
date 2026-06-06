@@ -3,3 +3,9 @@ backend/.venv/
 frontend/.env
 backend/.env
 saleor-test-*.md
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
