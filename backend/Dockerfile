@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+# Legacy local build — production compose uses deploy/harness/Dockerfile (repo root).
 
 FROM cgr.dev/chainguard/python:latest-dev AS builder
 

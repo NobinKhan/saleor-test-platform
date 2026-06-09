@@ -13,14 +13,9 @@
     "data": {
       "shop": {
         "channelCurrencies": [
-          "USD"
+          "USD",
+          "PLN"
         ]
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
       }
     }
   },

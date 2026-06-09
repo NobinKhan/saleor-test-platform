@@ -14,7 +14,40 @@
   "golden_response": {
     "data": {
       "orders": {
-        "edges": []
+        "edges": [
+          {
+            "node": {
+              "id": "T3JkZXI6YmEyYTliYTctNTRmMy00ZDU4LWJkMmItYTgyNjIyOTY5YWM3",
+              "number": "20",
+              "status": "UNFULFILLED",
+              "updatedAt": "2026-06-09T01:03:26.594542+00:00",
+              "paymentStatus": "NOT_CHARGED",
+              "chargeStatus": "NONE",
+              "total": {
+                "gross": {
+                  "amount": 185.71,
+                  "currency": "USD"
+                }
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "T3JkZXI6N2FhNmI4MjgtMTRiZi00OTQyLThhNTYtNzBjZjNhMGFjNzJl",
+              "number": "19",
+              "status": "UNFULFILLED",
+              "updatedAt": "2026-06-09T01:03:26.513025+00:00",
+              "paymentStatus": "NOT_CHARGED",
+              "chargeStatus": "NONE",
+              "total": {
+                "gross": {
+                  "amount": 131.38,
+                  "currency": "USD"
+                }
+              }
+            }
+          }
+        ]
       },
       "categories": {
         "edges": [
@@ -22,10 +55,26 @@
             "node": {
               "id": "Q2F0ZWdvcnk6MQ==",
               "name": "Default Category",
-              "updatedAt": "2026-06-06T07:19:13.481768+00:00",
+              "updatedAt": "2026-06-09T01:02:07.715420+00:00",
               "backgroundImage": null,
               "products": {
                 "totalCount": 0
+              },
+              "parent": null,
+              "level": 0,
+              "ancestors": {
+                "edges": []
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MjU=",
+              "name": "Accessories",
+              "updatedAt": "2026-06-09T01:03:12.292763+00:00",
+              "backgroundImage": null,
+              "products": {
+                "totalCount": 10
               },
               "parent": null,
               "level": 0,
@@ -37,32 +86,130 @@
         ]
       },
       "collections": {
-        "edges": []
+        "edges": [
+          {
+            "node": {
+              "id": "Q29sbGVjdGlvbjo0",
+              "name": "Featured Products",
+              "products": {
+                "totalCount": 5
+              },
+              "backgroundImage": null
+            }
+          },
+          {
+            "node": {
+              "id": "Q29sbGVjdGlvbjo1",
+              "name": "Summer Picks",
+              "products": {
+                "totalCount": 4
+              },
+              "backgroundImage": null
+            }
+          }
+        ]
       },
       "products": {
-        "edges": []
+        "edges": [
+          {
+            "node": {
+              "id": "UHJvZHVjdDoxNTI=",
+              "category": {
+                "name": "Juices"
+              },
+              "name": "Apple Juice",
+              "updatedAt": "2026-06-09T01:03:14.928019+00:00",
+              "thumbnail": null
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdDoxMzQ=",
+              "category": {
+                "name": "T-shirts"
+              },
+              "name": "Monospace Tee",
+              "updatedAt": "2026-06-09T01:03:13.776957+00:00",
+              "thumbnail": null
+            }
+          }
+        ]
       },
       "productVariants": {
-        "edges": []
+        "edges": [
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU4",
+              "name": "S",
+              "sku": "111223580",
+              "updatedAt": "2026-06-09T01:03:26.807212+00:00",
+              "media": [],
+              "product": {
+                "id": "UHJvZHVjdDoxMzY=",
+                "name": "Darko Polo",
+                "category": {
+                  "name": "Polo shirts"
+                }
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzY0",
+              "name": "S",
+              "sku": "112223580",
+              "updatedAt": "2026-06-09T01:03:26.817486+00:00",
+              "media": [],
+              "product": {
+                "id": "UHJvZHVjdDoxMzg=",
+                "name": "Dark Polygon Tee",
+                "category": {
+                  "name": "T-shirts"
+                }
+              }
+            }
+          }
+        ]
       },
       "models": {
-        "edges": []
+        "edges": [
+          {
+            "node": {
+              "id": "UGFnZToz",
+              "title": "About",
+              "publishedAt": "2022-05-13T00:00:00+00:00",
+              "pageType": {
+                "name": "Simple"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo2",
+              "title": "CozyNest",
+              "publishedAt": "2025-10-14T06:38:16+00:00",
+              "pageType": {
+                "name": "Brand"
+              }
+            }
+          }
+        ]
       },
       "modelTypes": {
         "edges": [
           {
             "node": {
-              "id": "UGFnZVR5cGU6MQ==",
-              "name": "Default Type"
+              "id": "UGFnZVR5cGU6NQ==",
+              "name": "Brand"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6NA==",
+              "name": "Simple"
             }
           }
         ]
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 36,
-        "maximumAvailable": 50000
       }
     }
   },
@@ -70,6 +217,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:3d5c3ef6a46075f6",
+  "response_shape_hash": "sha256:b20c2ea1ff49e2aa",
   "document_hash": "sha256:258d4b3e216afa5e"
 }

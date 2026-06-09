@@ -16,12 +16,6 @@
       "apps": {
         "edges": []
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 20,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

@@ -12,13 +12,7 @@
   "golden_response": {
     "data": {
       "warehouses": {
-        "totalCount": 1
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
+        "totalCount": 8
       }
     }
   },

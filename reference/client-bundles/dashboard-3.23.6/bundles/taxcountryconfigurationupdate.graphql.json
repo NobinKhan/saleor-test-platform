@@ -14,23 +14,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"updateTaxClassRates\" of required type [TaxClassRateInput!]!\" provided the variable \"$updateTaxClassRates\" which was not provided",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"updateTaxClassRates\" of required type [TaxClassRateInput!]!\" provided the variable \"$updateTaxClassRates\" which was not provided"
-            ]
-          }
-        }
+        "message": "Argument \"updateTaxClassRates\" of required type [TaxClassRateInput!]!\" provided the variable \"$updateTaxClassRates\" which was not provided"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

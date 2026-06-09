@@ -14,23 +14,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"input\" of required type [OrderLineCreateInput!]!\" provided the variable \"$input\" which was not provided",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"input\" of required type [OrderLineCreateInput!]!\" provided the variable \"$input\" which was not provided"
-            ]
-          }
-        }
+        "message": "Argument \"input\" of required type [OrderLineCreateInput!]!\" provided the variable \"$input\" which was not provided"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 9,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

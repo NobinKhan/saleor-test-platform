@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import json
 import uuid
 
 from sqlalchemy import select
@@ -21,6 +22,7 @@ from app.services.client_bundle_schema_gate import compute_client_bundle_schema_
 from app.services.client_bundles import (
     bundles_compatible_with_schema,
     bundles_hash,
+    bundle_dir_for_version,
     is_stub_bundle,
     load_all_bundles_from_disk,
     load_bundle_manifest,
@@ -84,6 +86,18 @@ async def check_client_bundles(
     messages.append(
         f"L3 bundles OK: {len(bundles)} imported, {recorded} recorded ({ratio:.1%})"
     )
+
+    failures_path = bundle_dir_for_version("dashboard", dashboard_version) / "record_failures.json"
+    if failures_path.is_file():
+        try:
+            failures = json.loads(failures_path.read_text(encoding="utf-8")).get("errors") or []
+        except json.JSONDecodeError:
+            failures = ["record_failures.json is invalid JSON"]
+        if failures:
+            return False, [
+                f"L3 record_failures.json has {len(failures)} error(s) — "
+                "run just seed-reference && just patch-corpus --client-bundles all"
+            ]
 
     if saleor_url and saleor_token:
         intro = await introspect_saleor(saleor_url, saleor_token)

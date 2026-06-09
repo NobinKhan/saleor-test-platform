@@ -44,13 +44,13 @@ async def capture_dashboard_fixtures(
     async with httpx.AsyncClient(timeout=timeout) as client:
         resp = await client.post(
             saleor_url,
-            json={"query": "query { channels(first: 1) { edges { node { id slug } } } }"},
+            json={"query": "query { channels { id slug } }"},
             headers=headers,
         )
         data = resp.json().get("data") or {}
-        edges = (data.get("channels") or {}).get("edges") or []
-        if edges:
-            node = edges[0].get("node") or {}
+        channels = data.get("channels") or []
+        if channels:
+            node = channels[0]
             fixtures["default_channel"] = node.get("slug") or fixtures["default_channel"]
             fixtures["default_channel_id"] = node.get("id")
 
@@ -59,7 +59,7 @@ async def capture_dashboard_fixtures(
             json={
                 "query": (
                     "query($ch: String!) { products(first: 1, channel: $ch) "
-                    "{ edges { node { id slug variants(first:1){edges{node{id}}}} } } }"
+                    "{ edges { node { id slug variants { id } } } } }"
                 ),
                 "variables": {"ch": fixtures["default_channel"]},
             },
@@ -71,9 +71,9 @@ async def capture_dashboard_fixtures(
             node = edges[0].get("node") or {}
             fixtures["default_slug"] = node.get("slug") or fixtures["default_slug"]
             fixtures["default_product_id"] = node.get("id")
-            vedges = (node.get("variants") or {}).get("edges") or []
-            if vedges:
-                fixtures["default_variant_id"] = (vedges[0].get("node") or {}).get("id")
+            variants = node.get("variants") or []
+            if variants:
+                fixtures["default_variant_id"] = variants[0].get("id")
 
         resp = await client.post(
             saleor_url,
@@ -152,8 +152,18 @@ async def record_dashboard_bundles(
 ) -> dict[str, Any]:
     ver = version or settings.reference_baseline_version
     if capture_fixtures:
-        fixtures = await capture_dashboard_fixtures(saleor_url, saleor_token, timeout=timeout)
-        save_fixtures("dashboard", ver, fixtures)
+        from app.services.reference_seed import seed_reference_data
+
+        try:
+            fixtures = await seed_reference_data(
+                saleor_url,
+                saleor_token,
+                timeout=timeout,
+                dashboard_version=ver,
+            )
+        except Exception:
+            fixtures = await capture_dashboard_fixtures(saleor_url, saleor_token, timeout=timeout)
+            save_fixtures("dashboard", ver, fixtures)
     else:
         fixtures = load_fixtures("dashboard", ver)
 

@@ -12,5 +12,30 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "data": {
+      "productVariantSetDefault": {
+        "errors": [],
+        "product": {
+          "id": "UHJvZHVjdDoxNTI=",
+          "defaultVariant": {
+            "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
+            "name": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
+          },
+          "variants": [
+            {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:d213f2c2d5f93e77",
   "document_hash": "sha256:7c075c5386497ad9"
 }

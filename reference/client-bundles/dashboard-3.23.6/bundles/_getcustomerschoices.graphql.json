@@ -15,13 +15,88 @@
   "golden_response": {
     "data": {
       "customers": {
-        "edges": []
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
+        "edges": [
+          {
+            "node": {
+              "id": "VXNlcjo3",
+              "email": "ashley.cook@example.com",
+              "firstName": "Ashley",
+              "lastName": "Cook"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoxMA==",
+              "email": "cassidy.villarreal@example.com",
+              "firstName": "Cassidy",
+              "lastName": "Villarreal"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoxMg==",
+              "email": "crystal.miller@example.com",
+              "firstName": "Crystal",
+              "lastName": "Miller"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoxMQ==",
+              "email": "david.evans@example.com",
+              "firstName": "David",
+              "lastName": "Evans"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjo4",
+              "email": "deborah.lee@example.com",
+              "firstName": "Deborah",
+              "lastName": "Lee"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjo1",
+              "email": "dustin.gonzalez@example.com",
+              "firstName": "Dustin",
+              "lastName": "Gonzalez"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoz",
+              "email": "edward.cook@example.com",
+              "firstName": "Edward",
+              "lastName": "Cook"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjo0",
+              "email": "garrett.cunningham@example.com",
+              "firstName": "Garrett",
+              "lastName": "Cunningham"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoxOQ==",
+              "email": "jade.guerrero@example.com",
+              "firstName": "Jade",
+              "lastName": "Guerrero"
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoxOA==",
+              "email": "james.phillips@example.com",
+              "firstName": "James",
+              "lastName": "Phillips"
+            }
+          }
+        ]
       }
     }
   },
@@ -29,6 +104,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:ab86c23b3db59604",
+  "response_shape_hash": "sha256:407d125f92e02500",
   "document_hash": "sha256:9a1def11d11947e8"
 }

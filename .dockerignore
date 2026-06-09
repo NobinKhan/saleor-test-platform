@@ -2,6 +2,10 @@
 __pycache__/
 .git/
 node_modules/
+frontend/node_modules/
+frontend/.svelte-kit/
+**/.pytest_cache/
+**/.venv/
 *.md
 .env
 *.log

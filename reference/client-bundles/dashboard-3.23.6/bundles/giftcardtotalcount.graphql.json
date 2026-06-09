@@ -12,13 +12,7 @@
   "golden_response": {
     "data": {
       "giftCards": {
-        "totalCount": 0
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
+        "totalCount": 10
       }
     }
   },

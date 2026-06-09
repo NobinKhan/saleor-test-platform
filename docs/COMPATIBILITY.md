@@ -33,7 +33,9 @@ just up
 just baseline
 ```
 
-This chains corpus integrity (L1 + L3 + schema gate) and full replay (`full+client`, Tier 2, 100%).
+This chains corpus integrity (388 L1 + 428 L3 recorded, schema gate) and full replay (`full+client`, Tier 2, 100% on **805** certification endpoints).
+
+L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFERENCE-SEED.md). `just fresh` runs `populatedb` and `just seed-reference` automatically.
 
 ## How testing works
 
@@ -41,6 +43,10 @@ This chains corpus integrity (L1 + L3 + schema gate) and full replay (`full+clie
 2. **L3 dashboard bundles** — real Dashboard GraphQL (`reference/client-bundles/dashboard-{VERSION}/`).
 3. **Compatibility mode** — replays golden inputs; compares SGRC Tier 1 (+ Tier 2 when gate on).
 4. **Schema gate** — introspects target; verifies corpus operations exist.
+
+**805 endpoints** = 388 L1 + **417** L3 bundles that pass the L3 schema gate on the pinned Saleor version. **428** dashboard bundles are recorded; **11** are excluded because Dashboard vendor root fields are not on Saleor 3.23.7 (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
+
+Certification is **Dashboard L3 + operation-level L1**, not Storefront client replay. Storefront-relevant **operation names** are largely in L1 already; **Storefront GraphQL documents** are not.
 
 ## Recording and patching
 
@@ -57,6 +63,7 @@ just self-check --min-compat 100
 
 ```bash
 just patch-corpus --sync-client              # import from reference/vendor/
+just seed-reference                          # fixture IDs for bundle variables
 just patch-corpus --client-bundles all       # record golden on official Saleor
 just baseline
 ```
@@ -68,8 +75,10 @@ L3 **schema gate**: every recorded bundle's root query/mutation field must exist
 ```bash
 just up-harness
 just register
-# UI: compatibility mode, scope full+client (after L3 P0 recorded)
+# UI: compatibility mode, scope full+client
 ```
+
+Point the UI at your backend with scope **`full+client`**. Seed fixture data on the target DB when testing L3 (see [REFERENCE-SEED.md](REFERENCE-SEED.md)).
 
 ## Local verification (no CI)
 
@@ -79,3 +88,7 @@ just register
 | Build + start harness | `just up-harness` |
 | Corpus integrity | `just verify-corpus` |
 | Backend unit tests | `docker compose exec harness-backend pytest tests/ -q` |
+
+## Coverage gaps (out of scope today)
+
+What passing certification does **not** yet guarantee: Storefront L3 bundles, customer-session JWT replay, multi-step scenario chains, async webhooks/workers, and live payment plugins. Prioritized gap list and follow-up work: [COVERAGE-GAPS.md](COVERAGE-GAPS.md).

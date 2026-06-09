@@ -3,9 +3,9 @@
   "dashboard_version": "3.23.6",
   "dashboard_git_tag": "3.23.6",
   "bundle_count": 428,
-  "recorded_count": 395,
-  "bundles_hash": "sha256:f57bb58cd4c35c52230192de64e38c21f73accbcaa1f9a18a7ea5a1ae8a7fdd2",
-  "updated_at": "2026-06-06T07:23:42.111798+00:00",
+  "recorded_count": 428,
+  "bundles_hash": "sha256:9b4abb586c7f3018ef401f68c9c6d24b6bde33e908b5cbfdd59b9ea623c0f29c",
+  "updated_at": "2026-06-09T01:05:59.050455+00:00",
   "bundles_index": {
     "_getattributechoices": {
       "document_hash": "sha256:1f0b22d55265cfe9",
@@ -787,8 +787,8 @@
         "ChannelReorderWarehouses"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "channels": {
       "document_hash": "sha256:f576077b756f5c77",
@@ -868,8 +868,8 @@
         "CollectionAssignProduct"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "collectionbulkdelete": {
       "document_hash": "sha256:a5cf17d73cff1d2d",
@@ -994,8 +994,8 @@
         "CreateManualTransactionCapture"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "createmanualtransactionrefund": {
       "document_hash": "sha256:c3225822af160490",
@@ -1003,8 +1003,8 @@
         "CreateManualTransactionRefund"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "createshippingrate": {
       "document_hash": "sha256:4e20c642983717b3",
@@ -1057,8 +1057,8 @@
         "CustomerGiftCardList"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "success"
     },
     "deleteaccountaddress": {
       "document_hash": "sha256:c39a87b1e6886bf3",
@@ -1201,8 +1201,8 @@
         "FulfillOrder"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "giftcardactivate": {
       "document_hash": "sha256:1b741d722c0d24ac",
@@ -1408,8 +1408,8 @@
         "InvoiceRequest"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "business_error"
     },
     "listcustomers": {
       "document_hash": "sha256:cb8a54b46667d73d",
@@ -1624,8 +1624,8 @@
         "OrderDiscountAdd"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "orderdiscountdelete": {
       "document_hash": "sha256:a9d060d10b75234c",
@@ -1705,8 +1705,8 @@
         "OrderFulfillData"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "success"
     },
     "orderfulfillmentapprove": {
       "document_hash": "sha256:1d633bead77805be",
@@ -1732,8 +1732,8 @@
         "OrderFulfillmentRefundProducts"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "orderfulfillmentupdatetracking": {
       "document_hash": "sha256:fbef8cfb596d59b2",
@@ -1759,8 +1759,8 @@
         "OrderGrantRefundAdd"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "business_error"
     },
     "ordergrantrefundaddwithorder": {
       "document_hash": "sha256:bc7a8340c951ae09",
@@ -1768,8 +1768,8 @@
         "OrderGrantRefundAddWithOrder"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "business_error"
     },
     "ordergrantrefundedit": {
       "document_hash": "sha256:c40008d23fabbc2c",
@@ -1795,8 +1795,8 @@
         "OrderLineDiscountRemove"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "business_error"
     },
     "orderlinediscountupdate": {
       "document_hash": "sha256:041cd344fd2e7083",
@@ -1804,8 +1804,8 @@
         "OrderLineDiscountUpdate"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "orderlinesadd": {
       "document_hash": "sha256:4596875ef228514b",
@@ -1858,8 +1858,8 @@
         "OrderNoteAdd"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "ordernoteupdate": {
       "document_hash": "sha256:0aaa943ec58ffc7f",
@@ -1867,8 +1867,8 @@
         "OrderNoteUpdate"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "orderrefund": {
       "document_hash": "sha256:f4b90d92de08da3a",
@@ -1885,8 +1885,8 @@
         "OrderRefundData"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "success"
     },
     "ordersendrefund": {
       "document_hash": "sha256:6a1dbf0a5d206023",
@@ -1948,8 +1948,8 @@
         "OrderTransactionsData"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "success"
     },
     "orderupdate": {
       "document_hash": "sha256:165e21853aa16f54",
@@ -2164,8 +2164,8 @@
         "PermissionGroupDetails"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "not_found"
     },
     "permissiongrouplist": {
       "document_hash": "sha256:835da041781370a8",
@@ -2209,8 +2209,8 @@
         "PluginUpdate"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "productattributeassignmentupdate": {
       "document_hash": "sha256:af2282f34f66a0ce",
@@ -2218,8 +2218,8 @@
         "ProductAttributeAssignmentUpdate"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "productbulkdelete": {
       "document_hash": "sha256:ca7101206532d650",
@@ -2299,8 +2299,8 @@
         "ProductMediaById"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "not_found"
     },
     "productmediacreate": {
       "document_hash": "sha256:ccd8d15f48f9851d",
@@ -2308,8 +2308,8 @@
         "ProductMediaCreate"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "business_error"
     },
     "productmediadelete": {
       "document_hash": "sha256:9ea8021e76e81723",
@@ -2326,8 +2326,8 @@
         "ProductMediaReorder"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "productmediaupdate": {
       "document_hash": "sha256:ca6c0372e03ed287",
@@ -2371,8 +2371,8 @@
         "ProductTypeAttributeReorder"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "producttypebulkdelete": {
       "document_hash": "sha256:47e46f5dfbd533d0",
@@ -2470,8 +2470,8 @@
         "ProductVariantBulkUpdate"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "productvariantchannellistingupdate": {
       "document_hash": "sha256:09559b77a5755244",
@@ -2524,8 +2524,8 @@
         "ProductVariantReorder"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "productvariantsetdefault": {
       "document_hash": "sha256:7c075c5386497ad9",
@@ -2533,8 +2533,8 @@
         "ProductVariantSetDefault"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "success"
     },
     "productvarianttranslationdetails": {
       "document_hash": "sha256:dd81c9e9ff8c5cf8",
@@ -2713,8 +2713,8 @@
         "ReorderProductsInCollection"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "requestemailchange": {
       "document_hash": "sha256:4de64c5f1ab082ad",
@@ -3010,8 +3010,8 @@
         "SetCustomerDefaultAddress"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "setpassword": {
       "document_hash": "sha256:9c31465af35f03b3",
@@ -3316,8 +3316,8 @@
         "UnassignCollectionProduct"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "graphql_error"
     },
     "unassignpageattribute": {
       "document_hash": "sha256:f855438fe4ae682b",
@@ -3595,8 +3595,8 @@
         "VariantMediaAssign"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "business_error"
     },
     "variantmediaunassign": {
       "document_hash": "sha256:e44eff73000f5ee5",
@@ -3604,8 +3604,8 @@
         "VariantMediaUnassign"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null
+      "recorded": true,
+      "golden_contract": "business_error"
     },
     "variantupdate": {
       "document_hash": "sha256:0e7857feb3f0dce0",
@@ -3848,7 +3848,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error"
+      "golden_contract": "success"
     },
     "welcomepagenotifications": {
       "document_hash": "sha256:6870644cd3cf1626",

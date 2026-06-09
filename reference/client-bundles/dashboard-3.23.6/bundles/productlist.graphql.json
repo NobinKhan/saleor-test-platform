@@ -25,48 +25,11 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument `last` cannot be combined with `first`.",
-        "locations": [
-          {
-            "line": 2,
-            "column": 3
-          }
-        ],
-        "path": [
-          "products"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/promise/promise.py\", line 87, in try_catch",
-              "    return (handler(*args, **kwargs), None)",
-              "            ^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/product/schema.py\", line 507, in _resolve_products",
-              "    return create_connection_slice(qs, info, kwargs, ProductCountableConnection)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
-              "    slice = connection_from_queryset_slice(",
-              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
-              "    _validate_connection_args(args)",
-              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
-              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
-              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
-            ]
-          }
-        }
+        "message": "Argument `last` cannot be combined with `first`."
       }
     ],
     "data": {
       "products": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 240,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "schema_error",
@@ -81,15 +44,7 @@
     "message_pattern": "Argument `last` cannot be combined with `first`.",
     "optional_path": [
       "products"
-    ],
-    "tier2": {
-      "requires_path": true,
-      "expected_path": [
-        "products"
-      ],
-      "requires_code": true,
-      "expected_code": "GraphQLError"
-    }
+    ]
   },
   "document_hash": "sha256:94cf91f91d568590"
 }

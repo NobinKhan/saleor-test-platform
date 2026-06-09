@@ -15,13 +15,14 @@
   "golden_response": {
     "data": {
       "giftCardTags": {
-        "edges": []
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
+        "edges": [
+          {
+            "node": {
+              "id": "R2lmdENhcmRUYWc6MQ==",
+              "name": "issued-gift-cards"
+            }
+          }
+        ]
       }
     }
   },
@@ -29,6 +30,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:7220b3447ee1952a",
+  "response_shape_hash": "sha256:becedf9b3cdc31ae",
   "document_hash": "sha256:d794983bdf1150b6"
 }

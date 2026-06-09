@@ -18,18 +18,61 @@
         "edges": [
           {
             "node": {
-              "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
+              "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
+              "name": "Oceania",
+              "slug": "oceania"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
+              "name": "Europe",
+              "slug": "europe"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmFlYjM4YjM2LWU5MmQtNGE2OC05NjY5LTAzMGE5OGVlZDI1Zg==",
               "name": "Default Warehouse",
               "slug": "default-warehouse"
             }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmNmMzc1ZDVkLWIyYWMtNDQwZi05NjZlLThmNjdjODYzMjA0ZQ==",
+              "name": "Default for click and collect",
+              "slug": "default-for-click-and-collect"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
+              "name": "Default",
+              "slug": "default"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+              "name": "Asia",
+              "slug": "asia"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
+              "name": "Americas",
+              "slug": "americas"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
+              "name": "Africa",
+              "slug": "africa"
+            }
           }
         ]
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },

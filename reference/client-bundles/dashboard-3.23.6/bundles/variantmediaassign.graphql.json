@@ -12,5 +12,29 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "data": {
+      "variantMediaAssign": {
+        "errors": [
+          {
+            "code": "GRAPHQL_ERROR",
+            "field": "mediaId",
+            "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ProductMedia."
+          }
+        ],
+        "productVariant": null
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:5312560e1429836a",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "variantmediaassign",
+    "expected_null": true
+  },
   "document_hash": "sha256:f8387d018e897a77"
 }

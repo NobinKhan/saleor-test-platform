@@ -26,20 +26,104 @@
               "isActive": true,
               "avatar": null
             }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoyOA==",
+              "email": "app.manager@example.com",
+              "firstName": "Matthew",
+              "lastName": "Rios",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoyOQ==",
+              "email": "channel.manager@example.com",
+              "firstName": "William",
+              "lastName": "Archer",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoyNA==",
+              "email": "checkout.manager@example.com",
+              "firstName": "Jennifer",
+              "lastName": "Murphy",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoyMw==",
+              "email": "christopher.johnson@example.com",
+              "firstName": "Christopher",
+              "lastName": "Johnson",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjozMA==",
+              "email": "discount.manager@example.com",
+              "firstName": "Robert",
+              "lastName": "Johnson",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjozMQ==",
+              "email": "gift.card.manager@example.com",
+              "firstName": "Michaela",
+              "lastName": "Nichols",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjoyMg==",
+              "email": "jacob.chang@example.com",
+              "firstName": "Jacob",
+              "lastName": "Chang",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjozMg==",
+              "email": "menu.manager@example.com",
+              "firstName": "Eric",
+              "lastName": "Kelley",
+              "isActive": true,
+              "avatar": null
+            }
+          },
+          {
+            "node": {
+              "id": "VXNlcjozMw==",
+              "email": "observability.manager@example.com",
+              "firstName": "Mark",
+              "lastName": "Burch",
+              "isActive": true,
+              "avatar": null
+            }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyJhZG1pbkBleGFtcGxlLmNvbSJd",
-          "hasNextPage": false,
+          "endCursor": "WyJvYnNlcnZhYmlsaXR5Lm1hbmFnZXJAZXhhbXBsZS5jb20iXQ==",
+          "hasNextPage": true,
           "hasPreviousPage": false,
           "startCursor": "WyJhZG1pbkBleGFtcGxlLmNvbSJd"
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 20,
-        "maximumAvailable": 50000
       }
     }
   },

@@ -15,23 +15,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"variants\" of required type [ProductVariantBulkCreateInput!]!\" provided the variable \"$inputs\" which was not provided",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"variants\" of required type [ProductVariantBulkCreateInput!]!\" provided the variable \"$inputs\" which was not provided"
-            ]
-          }
-        }
+        "message": "Argument \"variants\" of required type [ProductVariantBulkCreateInput!]!\" provided the variable \"$inputs\" which was not provided"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

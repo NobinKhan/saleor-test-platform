@@ -24,12 +24,6 @@
         ],
         "product": null
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 2,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "validation_error",

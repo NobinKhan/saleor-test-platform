@@ -14,23 +14,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"products\" of required type [ID!]!\" provided the variable \"$products\" which was not provided",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"products\" of required type [ID!]!\" provided the variable \"$products\" which was not provided"
-            ]
-          }
-        }
+        "message": "Argument \"products\" of required type [ID!]!\" provided the variable \"$products\" which was not provided"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

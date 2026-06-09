@@ -19,13 +19,7 @@
   "auth_context": "staff",
   "priority": "P0",
   "golden_response": {
-    "data": {},
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 175,
-        "maximumAvailable": 50000
-      }
-    }
+    "data": {}
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

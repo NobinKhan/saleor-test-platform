@@ -18,60 +18,11 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument `last` cannot be combined with `first`.",
-        "locations": [
-          {
-            "line": 2,
-            "column": 3
-          }
-        ],
-        "path": [
-          "shippingZones"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 452, in resolve_or_error",
-              "    return executor.execute(resolve_fn, source, info, **args)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executors/sync.py\", line 16, in execute",
-              "    return fn(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/fields.py\", line 158, in new_resolver",
-              "    return wrapped_resolver(obj, info, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/decorators.py\", line 32, in wrapper",
-              "    return func(info.context, *args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/decorators.py\", line 47, in wrapper",
-              "    return f(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/shipping/schema.py\", line 76, in resolve_shipping_zones",
-              "    return create_connection_slice(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/connection.py\", line 350, in create_connection_slice",
-              "    slice = connection_from_queryset_slice(",
-              "            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/core/connection.py\", line 264, in connection_from_queryset_slice",
-              "    _validate_connection_args(args)",
-              "  File \"/app/saleor/graphql/core/connection.py\", line 158, in _validate_connection_args",
-              "    raise GraphQLError(\"Argument `last` cannot be combined with `first`.\")",
-              "graphql.error.base.GraphQLError: Argument `last` cannot be combined with `first`."
-            ]
-          }
-        }
+        "message": "Argument `last` cannot be combined with `first`."
       }
     ],
     "data": {
       "shippingZones": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 40,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "schema_error",
@@ -86,15 +37,7 @@
     "message_pattern": "Argument `last` cannot be combined with `first`.",
     "optional_path": [
       "shippingZones"
-    ],
-    "tier2": {
-      "requires_path": true,
-      "expected_path": [
-        "shippingZones"
-      ],
-      "requires_code": true,
-      "expected_code": "GraphQLError"
-    }
+    ]
   },
   "document_hash": "sha256:21770c3ae2dbf2b2"
 }

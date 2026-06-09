@@ -23,12 +23,6 @@
         ],
         "giftCard": null
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 3,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "validation_error",

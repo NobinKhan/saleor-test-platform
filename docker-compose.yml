@@ -102,17 +102,18 @@ services:
   harness-backend:
     profiles: [harness]
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: deploy/harness/Dockerfile
     container_name: harness-backend
     restart: unless-stopped
+    user: "0:0"
     networks: [app]
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
       - "5998:5998"
     volumes:
-      - ./reference:/app/reference
+      - harness_reference:/app/reference
     environment:
       DATABASE_URL: postgresql+asyncpg://saleor_test:saleor_test_pass@harness-db:5432/saleor_test
       JWT_SECRET_KEY: CHANGE_ME_IN_PRODUCTION_USE_64CHAR_SECRET
@@ -175,3 +176,4 @@ volumes:
   saleor_cache_data:
   saleor_media:
   harness_db_data:
+  harness_reference:

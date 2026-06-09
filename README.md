@@ -11,9 +11,12 @@ Everything runs from **one** [`docker-compose.yml`](docker-compose.yml) — no `
 | Service | Port | Profile | Image |
 |---------|------|---------|-------|
 | Saleor GraphQL (`saleor-api`) | 8000 | `saleor` | Official `ghcr.io/saleor/saleor:3.23.7` |
+| Saleor DB (`saleor-db`) | — | `saleor` | Chainguard Postgres |
 | Harness UI (`harness-frontend`) | 5999 | `harness` | Bun on `node:20-slim` |
 | Harness API (`harness-backend`) | 5998 | `harness` | Chainguard Python |
 | Harness DB (`harness-db`) | 5997 | `harness` | Chainguard Postgres |
+
+The **harness** stack (backend + DB) uses Chainguard images with no host bind mounts for reference data — corpus is baked into the image and stored in the `harness_reference` named volume. Saleor DB also uses Chainguard Postgres (with a small init SQL mount for replica user setup).
 
 ```text
 Browser → harness-frontend:5999 → harness-backend:5998 → target Saleor GraphQL
@@ -43,13 +46,16 @@ just baseline   # re-verify golden baseline
 | `just up` | Saleor + harness (full local stack) |
 | `just up-harness` | Harness only — point tests at an external API |
 | `just down` | Stop all services |
-| `just fresh` | Reset DB volumes + Saleor migrate + admin user |
+| `just fresh` | Reset DB volumes + Saleor migrate + populatedb + reference seed |
+| `just seed-reference` | Seed L3 fixture IDs (products, orders, customers, …) on official Saleor |
 | `just register` | Create harness user `test@example.com` |
 | `just baseline` | Golden proof: corpus integrity + 100% replay (L1 + L3, Tier 2) |
 | `just verify-corpus` | Check reference corpus on disk (L1 + L3) |
 | `just self-check` | Replay golden corpus against official Saleor |
 | `just corpus-diff` | Diff live Saleor vs on-disk reference (L1 + L3) |
 | `just patch-corpus` | Incrementally patch L1 probes and/or L3 bundles |
+| `just export-reference` | Copy runtime reference volume from container to `./reference/` (git) |
+| `just import-reference` | Rebuild harness-backend after pulling corpus changes from git |
 | `just record-reference` | Full L1 re-record (+ L3 sync/record unless `--no-client-sync`) |
 | `just logs api` | Logs: `api`, `worker`, `backend`, `frontend`, `db`, `saleor-db` |
 | `just status` | `docker compose ps` |
@@ -67,7 +73,7 @@ just up
 just baseline
 ```
 
-This runs `verify-corpus` (414 L1 probes + 395 L3 bundles, schema gate) then `self-check --scope full+client --require-tier2` (798 endpoints, 100% SGRC).
+This runs `verify-corpus` (388 L1 probes + 428 L3 bundles recorded, schema gate) then `self-check --scope full+client --require-tier2` (**805** certification endpoints, 100% SGRC).
 
 ## UI certification smoke (manual)
 
@@ -105,7 +111,7 @@ Test runs use **Saleor admin email and password** (via `tokenCreate`). Credentia
 
 Certification requires **schema gate pass** (L1 + L3) AND **100% SGRC** (Tier 1 + Tier 2 when gate enabled). See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
-Official certification scope: **798 endpoints** (414 L1 probes + 384 L3 dashboard bundles on schema-compatible Saleor).
+Official certification scope: **805 endpoints** (388 L1 probes + 417 L3 dashboard bundles on schema-compatible Saleor with seeded fixture data). **Storefront client GraphQL is not in scope yet** — see [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md).
 
 ## Local verification (no CI)
 
@@ -120,6 +126,7 @@ Official certification scope: **798 endpoints** (414 L1 probes + 384 L3 dashboar
 ## Related
 
 - [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) — 100% compatibility standard
+- [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md) — what certification covers vs planned gaps (Storefront, customer JWT, scenarios)
 - [docs/SPEC.md](docs/SPEC.md) — product spec (some sections superseded)
 - [docs/saleor-reference-schema.md](docs/saleor-reference-schema.md) — catalog reference
-- [docs/version-upgrade.md](docs/version-upgrade.md) — version upgrade playbook
+- [docs/REFERENCE-SEED.md](docs/REFERENCE-SEED.md) — fixture seeding for L3 certification

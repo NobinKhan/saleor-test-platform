@@ -13,9 +13,23 @@
     "data": {
       "channels": [
         {
+          "id": "Q2hhbm5lbDoy",
+          "isActive": true,
+          "name": "Channel-PLN",
+          "slug": "channel-pln",
+          "currencyCode": "PLN",
+          "defaultCountry": {
+            "code": "PL",
+            "country": "Poland"
+          },
+          "stockSettings": {
+            "allocationStrategy": "PRIORITIZE_SORTING_ORDER"
+          }
+        },
+        {
           "id": "Q2hhbm5lbDox",
           "isActive": true,
-          "name": "Default Channel",
+          "name": "Channel-USD",
           "slug": "default-channel",
           "currencyCode": "USD",
           "defaultCountry": {
@@ -27,12 +41,6 @@
           }
         }
       ]
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

@@ -14,5 +14,29 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "data": {
+      "productMediaCreate": {
+        "errors": [
+          {
+            "code": "REQUIRED",
+            "field": "input",
+            "message": "Image or external URL is required."
+          }
+        ],
+        "product": null
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9a3d7b991263d46d",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "productmediacreate",
+    "expected_null": true
+  },
   "document_hash": "sha256:ccd8d15f48f9851d"
 }

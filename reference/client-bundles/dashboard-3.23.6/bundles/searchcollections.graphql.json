@@ -17,19 +17,26 @@
   "golden_response": {
     "data": {
       "search": {
-        "edges": [],
+        "edges": [
+          {
+            "node": {
+              "id": "Q29sbGVjdGlvbjo0",
+              "name": "Featured Products"
+            }
+          },
+          {
+            "node": {
+              "id": "Q29sbGVjdGlvbjo1",
+              "name": "Summer Picks"
+            }
+          }
+        ],
         "pageInfo": {
-          "endCursor": null,
+          "endCursor": "WyJzdW1tZXItcGlja3MiXQ==",
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": null
+          "startCursor": "WyJmZWF0dXJlZC1wcm9kdWN0cyJd"
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },
@@ -37,6 +44,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:448ff6a3c5ff587c",
+  "response_shape_hash": "sha256:9be3102f81b99076",
   "document_hash": "sha256:d665cf60cbd4e101"
 }

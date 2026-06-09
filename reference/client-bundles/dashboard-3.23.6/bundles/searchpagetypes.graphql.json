@@ -19,23 +19,35 @@
         "edges": [
           {
             "node": {
+              "id": "UGFnZVR5cGU6NQ==",
+              "name": "Brand"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6NA==",
+              "name": "Simple"
+            }
+          },
+          {
+            "node": {
               "id": "UGFnZVR5cGU6MQ==",
               "name": "Default Type"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6Ng==",
+              "name": "Refund Reason"
             }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyJkZWZhdWx0LXR5cGUiXQ==",
+          "endCursor": "WyJyZWZ1bmQtcmVhc29uIl0=",
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyJkZWZhdWx0LXR5cGUiXQ=="
+          "startCursor": "WyJicmFuZCJd"
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },

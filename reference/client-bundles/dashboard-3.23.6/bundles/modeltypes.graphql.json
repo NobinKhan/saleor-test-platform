@@ -15,17 +15,29 @@
         "edges": [
           {
             "node": {
+              "id": "UGFnZVR5cGU6NQ==",
+              "name": "Brand"
+            }
+          },
+          {
+            "node": {
               "id": "UGFnZVR5cGU6MQ==",
               "name": "Default Type"
             }
+          },
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6Ng==",
+              "name": "Refund Reason"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZVR5cGU6NA==",
+              "name": "Simple"
+            }
           }
         ]
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 100,
-        "maximumAvailable": 50000
       }
     }
   },

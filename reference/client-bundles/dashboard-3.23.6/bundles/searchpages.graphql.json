@@ -17,19 +17,62 @@
   "golden_response": {
     "data": {
       "search": {
-        "edges": [],
+        "edges": [
+          {
+            "node": {
+              "id": "UGFnZToz",
+              "title": "About"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo2",
+              "title": "CozyNest"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo3",
+              "title": "Damaged Item"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo0",
+              "title": "Frutello"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo5",
+              "title": "Incorrect Address"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo4",
+              "title": "Package Lost"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZToxMA==",
+              "title": "Package Not Picked Up by Customer"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo1",
+              "title": "Saleor Loom"
+            }
+          }
+        ],
         "pageInfo": {
-          "endCursor": null,
+          "endCursor": "WyJzYWxlb3ItbG9vbSJd",
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": null
+          "startCursor": "WyJhYm91dCJd"
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },
@@ -37,6 +80,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:448ff6a3c5ff587c",
+  "response_shape_hash": "sha256:d9c9a786cf0907ac",
   "document_hash": "sha256:8ca9fbca1927e826"
 }

@@ -15,34 +15,12 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"moves\" of required type [MenuItemMoveInput!]!\" provided the variable \"$moves\" which was not provided",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"moves\" of required type [MenuItemMoveInput!]!\" provided the variable \"$moves\" which was not provided"
-            ]
-          }
-        }
+        "message": "Argument \"moves\" of required type [MenuItemMoveInput!]!\" provided the variable \"$moves\" which was not provided"
       },
       {
-        "message": "Argument \"ids\" of required type [ID!]!\" provided the variable \"$removeIds\" which was not provided",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"ids\" of required type [ID!]!\" provided the variable \"$removeIds\" which was not provided"
-            ]
-          }
-        }
+        "message": "Argument \"ids\" of required type [ID!]!\" provided the variable \"$removeIds\" which was not provided"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

@@ -15,33 +15,7 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Variable \"$input\" of required type \"JSONString!\" was not provided.",
-        "locations": [
-          {
-            "line": 1,
-            "column": 94
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/app/saleor/graphql/views.py\", line 476, in execute_graphql_request",
-              "    response = document.execute(",
-              "               ^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 113, in execute",
-              "    exe_context = ExecutionContext(",
-              "                  ^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/utils.py\", line 113, in __init__",
-              "    variable_values = get_variable_values(",
-              "                      ^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/values.py\", line 64, in get_variable_values",
-              "    raise GraphQLError(",
-              "graphql.error.base.GraphQLError: Variable \"$input\" of required type \"JSONString!\" was not provided."
-            ]
-          }
-        }
+        "message": "Variable \"$input\" of required type \"JSONString!\" was not provided."
       }
     ]
   },

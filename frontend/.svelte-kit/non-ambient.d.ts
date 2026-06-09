@@ -36,11 +36,11 @@ declare module "$app/types" {
 			"/run/[id]/stream": { id: string }
 		};
 		LayoutParams(): {
-			"/": { id?: string | undefined };
+			"/": { id?: string };
 			"/dashboard": Record<string, never>;
 			"/login": Record<string, never>;
 			"/register": Record<string, never>;
-			"/run": { id?: string | undefined };
+			"/run": { id?: string };
 			"/run/new": Record<string, never>;
 			"/run/[id]": { id: string };
 			"/run/[id]/report": { id: string };

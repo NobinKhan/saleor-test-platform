@@ -17,13 +17,7 @@
       },
       "shop": {
         "fulfillmentAutoApprove": true,
-        "fulfillmentAllowUnpaid": true
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
+        "fulfillmentAllowUnpaid": false
       }
     }
   },

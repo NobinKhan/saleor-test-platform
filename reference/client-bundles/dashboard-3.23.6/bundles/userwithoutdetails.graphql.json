@@ -12,80 +12,18 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Cannot query field \"authenticated\" on type \"Query\".",
-        "locations": [
-          {
-            "line": 5,
-            "column": 3
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"authenticated\" on type \"Query\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"authenticated\" on type \"Query\"."
       },
       {
-        "message": "Unknown directive \"client\".",
-        "locations": [
-          {
-            "line": 5,
-            "column": 17
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Unknown directive \"client\"."
-            ]
-          }
-        }
+        "message": "Unknown directive \"client\"."
       },
       {
-        "message": "Cannot query field \"authenticating\" on type \"Query\".",
-        "locations": [
-          {
-            "line": 6,
-            "column": 3
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Cannot query field \"authenticating\" on type \"Query\"."
-            ]
-          }
-        }
+        "message": "Cannot query field \"authenticating\" on type \"Query\"."
       },
       {
-        "message": "Unknown directive \"client\".",
-        "locations": [
-          {
-            "line": 6,
-            "column": 18
-          }
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Unknown directive \"client\"."
-            ]
-          }
-        }
+        "message": "Unknown directive \"client\"."
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 2,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "auth_denied",
   "golden_status": "warn",

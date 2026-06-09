@@ -28,7 +28,8 @@ Full corpus re-record (`just record-reference`) is only for **user-requested maj
 ```bash
 just corpus-diff
 just patch-corpus --apply-diff
-just patch-corpus --remove deprecatedOp
+just seed-reference
+just patch-corpus --client-bundles all
 just baseline
 ```
 

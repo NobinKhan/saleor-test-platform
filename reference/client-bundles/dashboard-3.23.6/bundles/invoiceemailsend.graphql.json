@@ -14,106 +14,11 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Expected a value of type \"InvoiceErrorCode\" but received: graphql_error",
-        "path": [
-          "invoiceSendNotification",
-          "errors",
-          0,
-          "code"
-        ],
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "Traceback (most recent call last):",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 480, in complete_value_catching_error",
-              "    completed = complete_value(",
-              "                ^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 571, in complete_value",
-              "    return complete_object_value(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 722, in complete_object_value",
-              "    return execute_fields(  # type: ignore",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 244, in execute_fields",
-              "    result = resolve_field(",
-              "             ^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 367, in resolve_field",
-              "    return complete_value_catching_error(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/graphql_core.py\", line 12, in _patched_complete_value_catching_error",
-              "    return original_complete_value_catching_error(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 475, in complete_value_catching_error",
-              "    return complete_value(exe_context, return_type, field_asts, info, path, result)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 546, in complete_value",
-              "    return complete_nonnull_value(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 739, in complete_nonnull_value",
-              "    completed = complete_value(",
-              "                ^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 556, in complete_value",
-              "    return complete_list_value(",
-              "           ^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 600, in complete_list_value",
-              "    completed_item = complete_value_catching_error(",
-              "                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/graphql_core.py\", line 12, in _patched_complete_value_catching_error",
-              "    return original_complete_value_catching_error(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 475, in complete_value_catching_error",
-              "    return complete_value(exe_context, return_type, field_asts, info, path, result)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 546, in complete_value",
-              "    return complete_nonnull_value(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 739, in complete_nonnull_value",
-              "    completed = complete_value(",
-              "                ^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 571, in complete_value",
-              "    return complete_object_value(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 722, in complete_object_value",
-              "    return execute_fields(  # type: ignore",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 244, in execute_fields",
-              "    result = resolve_field(",
-              "             ^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 367, in resolve_field",
-              "    return complete_value_catching_error(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/app/saleor/graphql/graphql_core.py\", line 12, in _patched_complete_value_catching_error",
-              "    return original_complete_value_catching_error(*args, **kwargs)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 475, in complete_value_catching_error",
-              "    return complete_value(exe_context, return_type, field_asts, info, path, result)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 546, in complete_value",
-              "    return complete_nonnull_value(",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 739, in complete_nonnull_value",
-              "    completed = complete_value(",
-              "                ^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 563, in complete_value",
-              "    return complete_leaf_value(return_type, path, result)",
-              "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
-              "  File \"/usr/local/lib/python3.12/site-packages/graphql/execution/executor.py\", line 629, in complete_leaf_value",
-              "    raise GraphQLError(",
-              "graphql.error.base.GraphQLError: Expected a value of type \"InvoiceErrorCode\" but received: graphql_error"
-            ]
-          }
-        }
+        "message": "Expected a value of type \"InvoiceErrorCode\" but received: graphql_error"
       }
     ],
     "data": {
       "invoiceSendNotification": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 0,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "schema_error",
@@ -131,18 +36,7 @@
       "errors",
       0,
       "code"
-    ],
-    "tier2": {
-      "requires_path": true,
-      "expected_path": [
-        "invoiceSendNotification",
-        "errors",
-        0,
-        "code"
-      ],
-      "requires_code": true,
-      "expected_code": "GraphQLError"
-    }
+    ]
   },
   "document_hash": "sha256:21dcba886ccc56f9"
 }

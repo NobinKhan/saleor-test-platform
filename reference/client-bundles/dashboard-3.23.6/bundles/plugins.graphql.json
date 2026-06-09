@@ -41,8 +41,16 @@
                 {
                   "active": false,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": false,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -59,8 +67,16 @@
                 {
                   "active": false,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": false,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -77,8 +93,16 @@
                 {
                   "active": false,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": false,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -95,8 +119,16 @@
                 {
                   "active": true,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": true,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -113,8 +145,16 @@
                 {
                   "active": false,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": false,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -143,8 +183,16 @@
                 {
                   "active": false,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": false,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -161,8 +209,16 @@
                 {
                   "active": false,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": false,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -179,8 +235,16 @@
                 {
                   "active": false,
                   "channel": {
+                    "id": "Q2hhbm5lbDoy",
+                    "name": "Channel-PLN",
+                    "slug": "channel-pln"
+                  }
+                },
+                {
+                  "active": false,
+                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Default Channel",
+                    "name": "Channel-USD",
                     "slug": "default-channel"
                   }
                 }
@@ -195,12 +259,6 @@
           "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
           "endCursor": "YXJyYXljb25uZWN0aW9uOjk="
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 20,
-        "maximumAvailable": 50000
       }
     }
   },

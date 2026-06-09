@@ -17,7 +17,7 @@
         "firstName": "",
         "lastName": "",
         "isStaff": true,
-        "dateJoined": "2026-06-06T07:19:54.533946+00:00",
+        "dateJoined": "2026-06-09T01:03:05.461747+00:00",
         "metadata": [],
         "userPermissions": [
           {
@@ -118,14 +118,37 @@
           }
         ],
         "avatar": null,
-        "accessibleChannels": [],
-        "restrictedAccessToChannels": true
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 3,
-        "maximumAvailable": 50000
+        "accessibleChannels": [
+          {
+            "id": "Q2hhbm5lbDox",
+            "isActive": true,
+            "name": "Channel-USD",
+            "slug": "default-channel",
+            "currencyCode": "USD",
+            "defaultCountry": {
+              "code": "US",
+              "country": "United States of America"
+            },
+            "stockSettings": {
+              "allocationStrategy": "PRIORITIZE_HIGH_STOCK"
+            }
+          },
+          {
+            "id": "Q2hhbm5lbDoy",
+            "isActive": true,
+            "name": "Channel-PLN",
+            "slug": "channel-pln",
+            "currencyCode": "PLN",
+            "defaultCountry": {
+              "code": "PL",
+              "country": "Poland"
+            },
+            "stockSettings": {
+              "allocationStrategy": "PRIORITIZE_SORTING_ORDER"
+            }
+          }
+        ],
+        "restrictedAccessToChannels": false
       }
     }
   },
@@ -133,6 +156,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:b62e094f885cb697",
+  "response_shape_hash": "sha256:16d2ba00c897122a",
   "document_hash": "sha256:861fe852f2501464"
 }

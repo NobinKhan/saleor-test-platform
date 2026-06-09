@@ -20,14 +20,38 @@
               "id": "U2hpcHBpbmdab25lOjE=",
               "name": "Default"
             }
+          },
+          {
+            "node": {
+              "id": "U2hpcHBpbmdab25lOjI=",
+              "name": "Europe"
+            }
+          },
+          {
+            "node": {
+              "id": "U2hpcHBpbmdab25lOjM=",
+              "name": "Oceania"
+            }
+          },
+          {
+            "node": {
+              "id": "U2hpcHBpbmdab25lOjQ=",
+              "name": "Asia"
+            }
+          },
+          {
+            "node": {
+              "id": "U2hpcHBpbmdab25lOjU=",
+              "name": "Americas"
+            }
+          },
+          {
+            "node": {
+              "id": "U2hpcHBpbmdab25lOjY=",
+              "name": "Africa"
+            }
           }
         ]
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 100,
-        "maximumAvailable": 50000
       }
     }
   },

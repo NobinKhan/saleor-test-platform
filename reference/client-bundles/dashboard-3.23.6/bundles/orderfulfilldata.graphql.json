@@ -11,5 +11,218 @@
   },
   "auth_context": "staff",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "order": {
+        "id": "T3JkZXI6YmEyYTliYTctNTRmMy00ZDU4LWJkMmItYTgyNjIyOTY5YWM3",
+        "isPaid": true,
+        "deliveryMethod": {
+          "__typename": "ShippingMethod",
+          "id": "U2hpcHBpbmdNZXRob2Q6MTI="
+        },
+        "lines": [
+          {
+            "id": "T3JkZXJMaW5lOjMyNGZlMzMzLTk1MDgtNDgxYi05NWI4LTI4NjIzMzM2OTY1Nw==",
+            "allocations": [
+              {
+                "quantity": 2,
+                "warehouse": {
+                  "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+                  "name": "Asia"
+                },
+                "id": "QWxsb2NhdGlvbjo0OA=="
+              }
+            ],
+            "quantity": 2,
+            "quantityToFulfill": 2,
+            "variant": {
+              "stocks": [
+                {
+                  "id": "U3RvY2s6NTc3",
+                  "quantity": 269,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
+                    "name": "Oceania"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NTc4",
+                  "quantity": 269,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
+                    "name": "Europe"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NTc5",
+                  "quantity": 269,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmFlYjM4YjM2LWU5MmQtNGE2OC05NjY5LTAzMGE5OGVlZDI1Zg==",
+                    "name": "Default Warehouse"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NTgx",
+                  "quantity": 269,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
+                    "name": "Default"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NTgy",
+                  "quantity": 271,
+                  "quantityAllocated": 2,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+                    "name": "Asia"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NTgz",
+                  "quantity": 269,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
+                    "name": "Americas"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NTg0",
+                  "quantity": 269,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
+                    "name": "Africa"
+                  }
+                }
+              ],
+              "id": "UHJvZHVjdFZhcmlhbnQ6NDAx",
+              "name": "UHJvZHVjdFZhcmlhbnQ6NDAx",
+              "sku": null,
+              "preorder": null,
+              "attributes": [],
+              "trackInventory": false
+            },
+            "isShippingRequired": false,
+            "productName": "Gift card 50",
+            "quantityFulfilled": 0,
+            "thumbnail": null
+          },
+          {
+            "id": "T3JkZXJMaW5lOmExY2RkMzcyLTkwNzItNDI0MC1iOGVkLTg3YjJmMTQ4MmNkZg==",
+            "allocations": [
+              {
+                "quantity": 4,
+                "warehouse": {
+                  "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+                  "name": "Asia"
+                },
+                "id": "QWxsb2NhdGlvbjo0OQ=="
+              }
+            ],
+            "quantity": 4,
+            "quantityToFulfill": 4,
+            "variant": {
+              "stocks": [
+                {
+                  "id": "U3RvY2s6Mzc3",
+                  "quantity": 181,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
+                    "name": "Oceania"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6Mzc4",
+                  "quantity": 181,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
+                    "name": "Europe"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6Mzc5",
+                  "quantity": 181,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmFlYjM4YjM2LWU5MmQtNGE2OC05NjY5LTAzMGE5OGVlZDI1Zg==",
+                    "name": "Default Warehouse"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6Mzgx",
+                  "quantity": 181,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
+                    "name": "Default"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6Mzgy",
+                  "quantity": 185,
+                  "quantityAllocated": 4,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+                    "name": "Asia"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6Mzgz",
+                  "quantity": 181,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
+                    "name": "Americas"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6Mzg0",
+                  "quantity": 181,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
+                    "name": "Africa"
+                  }
+                }
+              ],
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzcz",
+              "name": "iTunes",
+              "sku": "9018223583",
+              "preorder": null,
+              "attributes": [
+                {
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTM1",
+                      "name": "iTunes"
+                    }
+                  ]
+                }
+              ],
+              "trackInventory": true
+            },
+            "isShippingRequired": false,
+            "productName": "Battle-tested at brands like Lush",
+            "quantityFulfilled": 0,
+            "thumbnail": null
+          }
+        ],
+        "number": "20"
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:0f9b0593815127d7",
   "document_hash": "sha256:4c7ce392a0b6d4d3"
 }

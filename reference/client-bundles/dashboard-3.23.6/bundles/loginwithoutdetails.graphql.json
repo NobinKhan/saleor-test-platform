@@ -21,16 +21,10 @@
           {
             "code": "LOGIN_ATTEMPT_DELAYED",
             "field": null,
-            "message": "Logging has been suspended till 2026-06-06 07:23:40.053806+00:00 due to too many logging attempts originating from the same IP address."
+            "message": "Logging has been suspended till 2026-06-09 01:05:53.923207+00:00 due to too many logging attempts originating from the same IP address."
           }
         ],
         "user": null
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
       }
     }
   },

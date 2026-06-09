@@ -16,12 +16,6 @@
   "golden_response": {
     "data": {
       "attribute": null
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 11,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

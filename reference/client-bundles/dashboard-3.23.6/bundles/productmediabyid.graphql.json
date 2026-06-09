@@ -12,5 +12,35 @@
   },
   "auth_context": "staff",
   "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: ProductMedia."
+      }
+    ],
+    "data": {
+      "product": {
+        "id": "UHJvZHVjdDoxNTI=",
+        "name": "Apple Juice",
+        "mainImage": null,
+        "media": []
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:03cf058949907940",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "productmediabyid",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "product",
+      "mainImage"
+    ]
+  },
   "document_hash": "sha256:d0cdc61dcbb55df0"
 }

@@ -13,5 +13,23 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$type\" of required type \"AddressTypeEnum!\" was not provided."
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "setcustomerdefaultaddress",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
   "document_hash": "sha256:77a73c123aa05b4b"
 }

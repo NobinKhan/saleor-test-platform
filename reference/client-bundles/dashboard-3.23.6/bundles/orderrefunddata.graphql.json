@@ -11,5 +11,63 @@
   },
   "auth_context": "staff",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "order": {
+        "id": "T3JkZXI6YmEyYTliYTctNTRmMy00ZDU4LWJkMmItYTgyNjIyOTY5YWM3",
+        "number": "20",
+        "total": {
+          "gross": {
+            "amount": 185.71,
+            "currency": "USD"
+          }
+        },
+        "totalCaptured": {
+          "amount": 0.0,
+          "currency": "USD"
+        },
+        "shippingPrice": {
+          "gross": {
+            "amount": 75.71,
+            "currency": "USD"
+          }
+        },
+        "lines": [
+          {
+            "id": "T3JkZXJMaW5lOjMyNGZlMzMzLTk1MDgtNDgxYi05NWI4LTI4NjIzMzM2OTY1Nw==",
+            "productName": "Gift card 50",
+            "quantity": 2,
+            "unitPrice": {
+              "gross": {
+                "amount": 35.0,
+                "currency": "USD"
+              }
+            },
+            "thumbnail": null,
+            "quantityToFulfill": 2
+          },
+          {
+            "id": "T3JkZXJMaW5lOmExY2RkMzcyLTkwNzItNDI0MC1iOGVkLTg3YjJmMTQ4MmNkZg==",
+            "productName": "Battle-tested at brands like Lush",
+            "quantity": 4,
+            "unitPrice": {
+              "gross": {
+                "amount": 10.0,
+                "currency": "USD"
+              }
+            },
+            "thumbnail": null,
+            "quantityToFulfill": 4
+          }
+        ],
+        "fulfillments": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:736469d23e4af65f",
   "document_hash": "sha256:c95de3f27632d712"
 }

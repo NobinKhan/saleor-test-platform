@@ -49,8 +49,6 @@ SALEOR_QUERIES: list[dict] = [
     # Orders
     {"name": "orders", "kind": "QUERY", "category": "orders", "is_public": False},
     {"name": "order", "kind": "QUERY", "category": "orders", "is_public": False},
-    {"name": "ordersDraft", "kind": "QUERY", "category": "orders", "is_public": False},
-    {"name": "ordersByUser", "kind": "QUERY", "category": "orders", "is_public": False},
     # Checkout
     {"name": "checkout", "kind": "QUERY", "category": "checkout", "is_public": True},
     {"name": "checkouts", "kind": "QUERY", "category": "checkout", "is_public": True},
@@ -68,7 +66,6 @@ SALEOR_QUERIES: list[dict] = [
     {"name": "attribute", "kind": "QUERY", "category": "attributes", "is_public": True},
     # Account
     {"name": "me", "kind": "QUERY", "category": "account", "is_public": False},
-    {"name": "users", "kind": "QUERY", "category": "account", "is_public": False},
     {"name": "user", "kind": "QUERY", "category": "account", "is_public": False},
     {"name": "permissionGroups", "kind": "QUERY", "category": "account", "is_public": False},
     # Gift cards
@@ -77,13 +74,10 @@ SALEOR_QUERIES: list[dict] = [
     # Shipping
     {"name": "shippingZones", "kind": "QUERY", "category": "shipping", "is_public": True},
     {"name": "shippingZone", "kind": "QUERY", "category": "shipping", "is_public": True},
-    {"name": "shippingMethods", "kind": "QUERY", "category": "shipping", "is_public": True},
     # Payments
     {"name": "payments", "kind": "QUERY", "category": "payments", "is_public": False},
     {"name": "payment", "kind": "QUERY", "category": "payments", "is_public": False},
     # Discounts
-    {"name": "sales", "kind": "QUERY", "category": "discounts", "is_public": True},
-    {"name": "sale", "kind": "QUERY", "category": "discounts", "is_public": True},
     {"name": "vouchers", "kind": "QUERY", "category": "discounts", "is_public": True},
     {"name": "voucher", "kind": "QUERY", "category": "discounts", "is_public": True},
     {"name": "promotions", "kind": "QUERY", "category": "discounts", "is_public": True},
@@ -92,8 +86,6 @@ SALEOR_QUERIES: list[dict] = [
     {"name": "warehouse", "kind": "QUERY", "category": "warehouse", "is_public": False},
     # Shop
     {"name": "shop", "kind": "QUERY", "category": "shop", "is_public": True},
-    {"name": "paymentGateways", "kind": "QUERY", "category": "shop", "is_public": True},
-    {"name": "languages", "kind": "QUERY", "category": "shop", "is_public": True},
     # Pages
     {"name": "pages", "kind": "QUERY", "category": "pages", "is_public": True},
     {"name": "page", "kind": "QUERY", "category": "pages", "is_public": True},
@@ -101,9 +93,6 @@ SALEOR_QUERIES: list[dict] = [
     {"name": "plugins", "kind": "QUERY", "category": "plugins", "is_public": False},
     {"name": "plugin", "kind": "QUERY", "category": "plugins", "is_public": False},
     # Webhooks
-    {"name": "webhookEvents", "kind": "QUERY", "category": "webhooks", "is_public": False},
-    # Meta
-    {"name": "meta", "kind": "QUERY", "category": "meta", "is_public": True},
 ]
 
 SALEOR_MUTATIONS: list[dict] = [
@@ -118,26 +107,21 @@ SALEOR_MUTATIONS: list[dict] = [
     {"name": "productTypeUpdate", "kind": "MUTATION", "category": "products", "is_public": False},
     {"name": "productTypeDelete", "kind": "MUTATION", "category": "products", "is_public": False},
     # Orders
-    {"name": "orderCreate", "kind": "MUTATION", "category": "orders", "is_public": False},
     {"name": "orderUpdate", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderDelete", "kind": "MUTATION", "category": "orders", "is_public": False},
     {"name": "orderConfirm", "kind": "MUTATION", "category": "orders", "is_public": False},
     {"name": "orderCancel", "kind": "MUTATION", "category": "orders", "is_public": False},
     {"name": "orderFulfill", "kind": "MUTATION", "category": "orders", "is_public": False},
     {"name": "orderRefund", "kind": "MUTATION", "category": "orders", "is_public": False},
     {"name": "orderLineDelete", "kind": "MUTATION", "category": "orders", "is_public": False},
     {"name": "orderLineUpdate", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderLineAdd", "kind": "MUTATION", "category": "orders", "is_public": False},
     # Checkout
     {"name": "checkoutCreate", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutUpdate", "kind": "MUTATION", "category": "checkout", "is_public": True},
     {"name": "checkoutDelete", "kind": "MUTATION", "category": "checkout", "is_public": False},
     {"name": "checkoutComplete", "kind": "MUTATION", "category": "checkout", "is_public": True},
     {"name": "checkoutAddPromoCode", "kind": "MUTATION", "category": "checkout", "is_public": True},
     {"name": "checkoutRemovePromoCode", "kind": "MUTATION", "category": "checkout", "is_public": True},
     {"name": "checkoutEmailUpdate", "kind": "MUTATION", "category": "checkout", "is_public": True},
     {"name": "checkoutShippingAddressUpdate", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutShippingMethodUpdate", "kind": "MUTATION", "category": "checkout", "is_public": True},
     {"name": "checkoutPaymentCreate", "kind": "MUTATION", "category": "checkout", "is_public": True},
     # Channels
     {"name": "channelCreate", "kind": "MUTATION", "category": "channels", "is_public": False},
@@ -163,7 +147,6 @@ SALEOR_MUTATIONS: list[dict] = [
     {"name": "accountRequestDeletion", "kind": "MUTATION", "category": "account", "is_public": False},
     {"name": "confirmAccount", "kind": "MUTATION", "category": "account", "is_public": True},
     {"name": "requestPasswordReset", "kind": "MUTATION", "category": "account", "is_public": True},
-    {"name": "resetPassword", "kind": "MUTATION", "category": "account", "is_public": True},
     {"name": "passwordChange", "kind": "MUTATION", "category": "account", "is_public": False},
     # Gift cards
     {"name": "giftCardCreate", "kind": "MUTATION", "category": "giftcards", "is_public": False},
@@ -174,18 +157,12 @@ SALEOR_MUTATIONS: list[dict] = [
     {"name": "shippingZoneCreate", "kind": "MUTATION", "category": "shipping", "is_public": False},
     {"name": "shippingZoneUpdate", "kind": "MUTATION", "category": "shipping", "is_public": False},
     {"name": "shippingZoneDelete", "kind": "MUTATION", "category": "shipping", "is_public": False},
-    {"name": "shippingMethodCreate", "kind": "MUTATION", "category": "shipping", "is_public": False},
-    {"name": "shippingMethodUpdate", "kind": "MUTATION", "category": "shipping", "is_public": False},
-    {"name": "shippingMethodDelete", "kind": "MUTATION", "category": "shipping", "is_public": False},
     # Payments
     {"name": "paymentInitialize", "kind": "MUTATION", "category": "payments", "is_public": False},
     {"name": "paymentCapture", "kind": "MUTATION", "category": "payments", "is_public": False},
     {"name": "paymentRefund", "kind": "MUTATION", "category": "payments", "is_public": False},
     {"name": "paymentVoid", "kind": "MUTATION", "category": "payments", "is_public": False},
     # Discounts
-    {"name": "saleCreate", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    {"name": "saleUpdate", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    {"name": "saleDelete", "kind": "MUTATION", "category": "discounts", "is_public": False},
     {"name": "voucherCreate", "kind": "MUTATION", "category": "discounts", "is_public": False},
     {"name": "voucherUpdate", "kind": "MUTATION", "category": "discounts", "is_public": False},
     {"name": "voucherDelete", "kind": "MUTATION", "category": "discounts", "is_public": False},
@@ -193,15 +170,11 @@ SALEOR_MUTATIONS: list[dict] = [
     {"name": "promotionUpdate", "kind": "MUTATION", "category": "discounts", "is_public": False},
     {"name": "promotionDelete", "kind": "MUTATION", "category": "discounts", "is_public": False},
     # Warehouse
-    {"name": "warehouseCreate", "kind": "MUTATION", "category": "warehouse", "is_public": False},
-    {"name": "warehouseUpdate", "kind": "MUTATION", "category": "warehouse", "is_public": False},
-    {"name": "warehouseDelete", "kind": "MUTATION", "category": "warehouse", "is_public": False},
     # Pages
     {"name": "pageCreate", "kind": "MUTATION", "category": "pages", "is_public": False},
     {"name": "pageUpdate", "kind": "MUTATION", "category": "pages", "is_public": False},
     {"name": "pageDelete", "kind": "MUTATION", "category": "pages", "is_public": False},
     # Shop
-    {"name": "shopDomainUpdate", "kind": "MUTATION", "category": "shop", "is_public": False},
     {"name": "shopSettingsUpdate", "kind": "MUTATION", "category": "shop", "is_public": False},
     {"name": "shopAddressUpdate", "kind": "MUTATION", "category": "shop", "is_public": False},
     # Webhooks

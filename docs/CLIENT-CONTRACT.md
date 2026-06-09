@@ -64,13 +64,13 @@ just patch-corpus --client-bundles all
 just baseline
 ```
 
-Test scopes: `client-dashboard` (L3 only), `full+client` (L1 + L3). L3 schema gate verifies bundle root fields exist on target schema without executing documents.
+Test scopes: `client-dashboard` (L3 only), `full+client` (L1 + L3). L3 schema gate verifies bundle root fields exist on target schema without executing documents. L3 replays require fixture IDs from [REFERENCE-SEED.md](REFERENCE-SEED.md).
 
 ## Coverage layers
 
 | Layer | Description |
 |-------|-------------|
-| L1 | Introspection corpus (~414 probes for 3.23.7) |
+| L1 | Introspection corpus (**388** probes for 3.23.7 after deprecated-op prune) |
 | L2 | Dashboard catalog (static op lists in `test_runner.py`) |
 | L3 | Dashboard query bundles (real documents from vendor + fixtures + golden) |
 | L4 | SGRC Tier 2 parity (hard gate when enabled) |

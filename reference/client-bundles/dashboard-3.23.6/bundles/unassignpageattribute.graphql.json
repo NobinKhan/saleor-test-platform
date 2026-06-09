@@ -14,23 +14,9 @@
   "golden_response": {
     "errors": [
       {
-        "message": "Argument \"attributeIds\" of required type [ID!]!\" provided the variable \"$ids\" which was not provided",
-        "extensions": {
-          "exception": {
-            "code": "GraphQLError",
-            "stacktrace": [
-              "graphql.error.base.GraphQLError: Argument \"attributeIds\" of required type [ID!]!\" provided the variable \"$ids\" which was not provided"
-            ]
-          }
-        }
+        "message": "Argument \"attributeIds\" of required type [ID!]!\" provided the variable \"$ids\" which was not provided"
       }
-    ],
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
-    }
+    ]
   },
   "golden_outcome": "schema_error",
   "golden_status": "warn",

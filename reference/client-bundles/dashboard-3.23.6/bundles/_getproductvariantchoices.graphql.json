@@ -15,13 +15,118 @@
   "golden_response": {
     "data": {
       "productVariants": {
-        "edges": []
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 20,
-        "maximumAvailable": 50000
+        "edges": [
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU4",
+              "name": "S",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6MzU4",
+              "originalSlug": "S",
+              "product": {
+                "name": "Darko Polo"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzY0",
+              "name": "S",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6MzY0",
+              "originalSlug": "S",
+              "product": {
+                "name": "Dark Polygon Tee"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc1",
+              "name": "Vinyl",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6Mzc1",
+              "originalSlug": "Vinyl",
+              "product": {
+                "name": "Enterprise Cloud + On-premises"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQw",
+              "name": "39",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6MzQw",
+              "originalSlug": "39",
+              "product": {
+                "name": "Paul's Balance 420"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc5",
+              "name": "iTunes",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6Mzc5",
+              "originalSlug": "iTunes",
+              "product": {
+                "name": "Own your stack and data"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzUz",
+              "name": "S",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6MzUz",
+              "originalSlug": "S",
+              "product": {
+                "name": "Team Shirt"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzYx",
+              "name": "M",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6MzYx",
+              "originalSlug": "M",
+              "product": {
+                "name": "Blue Polygon Shirt"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ4",
+              "name": "S",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6MzQ4",
+              "originalSlug": "S",
+              "product": {
+                "name": "Monospace Tee"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk0",
+              "name": "S",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6Mzk0",
+              "originalSlug": "S",
+              "product": {
+                "name": "Cubes Fountain Tee"
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzM1",
+              "name": "39",
+              "slug": "UHJvZHVjdFZhcmlhbnQ6MzM1",
+              "originalSlug": "39",
+              "product": {
+                "name": "Dash Force"
+              }
+            }
+          }
+        ]
       }
     }
   },
@@ -29,6 +134,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:b9a8e86f40cfb175",
+  "response_shape_hash": "sha256:339556fc82b3c8dc",
   "document_hash": "sha256:ea09b524fe104ab1"
 }

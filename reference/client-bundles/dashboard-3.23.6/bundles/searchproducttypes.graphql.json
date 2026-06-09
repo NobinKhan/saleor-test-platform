@@ -19,23 +19,65 @@
         "edges": [
           {
             "node": {
+              "id": "UHJvZHVjdFR5cGU6MTc=",
+              "name": "Audiobook"
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MjE=",
+              "name": "Beanies & Scarfs"
+            }
+          },
+          {
+            "node": {
               "id": "UHJvZHVjdFR5cGU6MQ==",
               "name": "Default Type"
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MjQ=",
+              "name": "Simple Gift Card"
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MjM=",
+              "name": "Juice"
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MjA=",
+              "name": "Top"
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MTg=",
+              "name": "Shoe"
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MjI=",
+              "name": "Simple"
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFR5cGU6MTk=",
+              "name": "Sweatshirt"
             }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyJkZWZhdWx0LXR5cGUiXQ==",
+          "endCursor": "WyJzd2VhdHNoaXJ0Il0=",
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyJkZWZhdWx0LXR5cGUiXQ=="
+          "startCursor": "WyJhdWRpb2Jvb2siXQ=="
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },

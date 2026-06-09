@@ -12,5 +12,203 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Group."
+      }
+    ],
+    "data": {
+      "permissionGroup": null,
+      "user": {
+        "editableGroups": [
+          {
+            "id": "R3JvdXA6MQ=="
+          },
+          {
+            "id": "R3JvdXA6Mg=="
+          },
+          {
+            "id": "R3JvdXA6Mw=="
+          },
+          {
+            "id": "R3JvdXA6NA=="
+          },
+          {
+            "id": "R3JvdXA6NQ=="
+          },
+          {
+            "id": "R3JvdXA6Ng=="
+          },
+          {
+            "id": "R3JvdXA6Nw=="
+          },
+          {
+            "id": "R3JvdXA6OA=="
+          },
+          {
+            "id": "R3JvdXA6OQ=="
+          },
+          {
+            "id": "R3JvdXA6MTA="
+          },
+          {
+            "id": "R3JvdXA6MTE="
+          },
+          {
+            "id": "R3JvdXA6MTI="
+          },
+          {
+            "id": "R3JvdXA6MTM="
+          },
+          {
+            "id": "R3JvdXA6MTQ="
+          },
+          {
+            "id": "R3JvdXA6MTU="
+          },
+          {
+            "id": "R3JvdXA6MTY="
+          },
+          {
+            "id": "R3JvdXA6MTc="
+          },
+          {
+            "id": "R3JvdXA6MTg="
+          },
+          {
+            "id": "R3JvdXA6MTk="
+          },
+          {
+            "id": "R3JvdXA6MjA="
+          },
+          {
+            "id": "R3JvdXA6MjE="
+          },
+          {
+            "id": "R3JvdXA6MjI="
+          },
+          {
+            "id": "R3JvdXA6MjM="
+          },
+          {
+            "id": "R3JvdXA6MjQ="
+          }
+        ],
+        "userPermissions": [
+          {
+            "code": "HANDLE_CHECKOUTS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "HANDLE_PAYMENTS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "HANDLE_TAXES",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "IMPERSONATE_USER",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_APPS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_CHANNELS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_CHECKOUTS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_DISCOUNTS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_GIFT_CARD",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_MENUS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_OBSERVABILITY",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_ORDERS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_ORDERS_IMPORT",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_PAGES",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_PAGE_TYPES_AND_ATTRIBUTES",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_PLUGINS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_PRODUCTS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_PRODUCT_TYPES_AND_ATTRIBUTES",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_SETTINGS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_SHIPPING",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_STAFF",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_TAXES",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_TRANSLATIONS",
+            "sourcePermissionGroups": []
+          },
+          {
+            "code": "MANAGE_USERS",
+            "sourcePermissionGroups": []
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6a577f18c86553f9",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "permissiongroupdetails",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "permissionGroup"
+    ]
+  },
   "document_hash": "sha256:d756ed2f142ac312"
 }

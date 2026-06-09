@@ -16,19 +16,84 @@
   "golden_response": {
     "data": {
       "search": {
-        "edges": [],
+        "edges": [
+          {
+            "node": {
+              "id": "R3JvdXA6MQ==",
+              "name": "Full Access",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6Mg==",
+              "name": "Customer Support",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6Mw==",
+              "name": "Checkouts management",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6NA==",
+              "name": "Payments management",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6NQ==",
+              "name": "Taxes management",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6Ng==",
+              "name": "User management",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6Nw==",
+              "name": "Apps management",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6OA==",
+              "name": "Channels management",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6OQ==",
+              "name": "Discounts management",
+              "userCanManage": true
+            }
+          },
+          {
+            "node": {
+              "id": "R3JvdXA6MTA=",
+              "name": "Gift card management",
+              "userCanManage": true
+            }
+          }
+        ],
         "pageInfo": {
-          "endCursor": null,
-          "hasNextPage": false,
+          "endCursor": "WyIxMCJd",
+          "hasNextPage": true,
           "hasPreviousPage": false,
-          "startCursor": null
+          "startCursor": "WyIxIl0="
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },
@@ -36,6 +101,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:448ff6a3c5ff587c",
+  "response_shape_hash": "sha256:c40d92e988ed795c",
   "document_hash": "sha256:367db520670081bb"
 }

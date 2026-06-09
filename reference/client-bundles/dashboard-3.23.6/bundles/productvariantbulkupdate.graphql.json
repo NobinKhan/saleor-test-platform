@@ -12,5 +12,23 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Argument \"variants\" of required type [ProductVariantBulkUpdateInput!]!\" provided the variable \"$input\" which was not provided"
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "productvariantbulkupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
   "document_hash": "sha256:a61293e6f40ba0c3"
 }

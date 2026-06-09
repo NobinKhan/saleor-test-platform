@@ -16,5 +16,42 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "data": {
+      "orderGrantRefundCreate": {
+        "errors": [
+          {
+            "field": "amount",
+            "message": "You must provide at least one of `amount`, `lines`, `grantRefundForShipping`.",
+            "code": "REQUIRED",
+            "lines": null
+          },
+          {
+            "field": "lines",
+            "message": "You must provide at least one of `amount`, `lines`, `grantRefundForShipping`.",
+            "code": "REQUIRED",
+            "lines": null
+          },
+          {
+            "field": "grantRefundForShipping",
+            "message": "You must provide at least one of `amount`, `lines`, `grantRefundForShipping`.",
+            "code": "REQUIRED",
+            "lines": null
+          }
+        ],
+        "grantedRefund": null
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:260f28fe58009eca",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "ordergrantrefundadd",
+    "expected_null": true
+  },
   "document_hash": "sha256:0c8dcdc88f2342ee"
 }

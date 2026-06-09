@@ -14,13 +14,22 @@
   "golden_response": {
     "data": {
       "collections": {
-        "edges": []
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
+        "edges": [
+          {
+            "node": {
+              "id": "Q29sbGVjdGlvbjo0",
+              "name": "Featured Products",
+              "slug": "featured-products"
+            }
+          },
+          {
+            "node": {
+              "id": "Q29sbGVjdGlvbjo1",
+              "name": "Summer Picks",
+              "slug": "summer-picks"
+            }
+          }
+        ]
       }
     }
   },
@@ -28,6 +37,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:4e32f82c8ab5becc",
+  "response_shape_hash": "sha256:aa7815e3a6a32601",
   "document_hash": "sha256:f2d225603329b014"
 }

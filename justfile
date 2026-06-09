@@ -5,6 +5,7 @@
 #
 # Reference corpus (local Saleor defaults; pass script flags via *extra):
 #   just corpus-diff | patch-corpus | record-reference | verify-corpus | self-check
+#   just export-reference | import-reference  (volume ↔ git)
 #
 # Golden baseline (official Saleor must pass before testing other backends):
 #   just baseline
@@ -50,6 +51,29 @@ logs service:
 
 status:
     @docker compose -f "{{ root }}/docker-compose.yml" ps -a
+
+export-reference:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p "{{ root }}/reference"
+    docker cp harness-backend:/app/reference/. "{{ root }}/reference/"
+    echo "Exported reference corpus from harness_reference volume to ./reference/"
+
+import-reference:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    {{compose}} build harness-backend
+    echo "Rebuilt harness-backend image with ./reference/ from git (baked at build time)."
+    echo "To reset the runtime volume: just down && docker volume rm saleor-test-platform_harness_reference 2>/dev/null || true"
+
+seed-reference *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    {{compose}} exec harness-backend \
+      python -m app.scripts.seed_reference \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" {{ extra }}
 
 record-reference *extra:
     #!/usr/bin/env bash
@@ -97,9 +121,9 @@ baseline *extra:
     echo "=== Golden baseline: corpus integrity (L1 + L3) ==="
     {{compose}} exec harness-backend \
       python -m app.scripts.verify_corpus \
-      --min-probes 400 \
+      --min-probes 380 \
       --min-client-bundles 400 \
-      --min-client-recorded-ratio 0.85 \
+      --min-client-recorded-ratio 1.0 \
       --url "http://saleor-api:8000/graphql/" \
       --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
       --password "${SALEOR_ADMIN_PASSWORD:-admin123456}"

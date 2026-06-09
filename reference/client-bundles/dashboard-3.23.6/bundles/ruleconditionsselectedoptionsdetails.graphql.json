@@ -23,12 +23,6 @@
       "productVariants": {
         "edges": []
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 500,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

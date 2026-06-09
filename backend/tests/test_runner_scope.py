@@ -70,4 +70,4 @@ def test_certification_l3_set_independent_of_extra_target_fields():
     assert len(l3_inflated) > len(l3_golden)
 
     l1 = build_golden_endpoints(corpus_ver, "full", False, None)
-    assert len(l1) + len(l3_golden) == 798
+    assert len(l1) + len(l3_golden) == 805

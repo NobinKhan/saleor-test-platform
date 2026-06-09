@@ -11,5 +11,30 @@
   },
   "auth_context": "staff",
   "priority": "P1",
+  "golden_response": {
+    "data": {
+      "invoiceRequest": {
+        "errors": [
+          {
+            "code": "NO_INVOICE_PLUGIN",
+            "field": "orderId",
+            "message": "No app or plugin is configured to handle invoice requests."
+          }
+        ],
+        "invoice": null,
+        "order": null
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6a2294b6ce49a5af",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "invoicerequest",
+    "expected_null": true
+  },
   "document_hash": "sha256:4c6a44bdbb9325d5"
 }

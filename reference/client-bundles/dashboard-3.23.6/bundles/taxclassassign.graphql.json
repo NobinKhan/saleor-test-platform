@@ -15,17 +15,24 @@
   "golden_response": {
     "data": {
       "taxClasses": {
-        "edges": [],
+        "edges": [
+          {
+            "node": {
+              "id": "VGF4Q2xhc3M6Mg==",
+              "name": "Books"
+            }
+          },
+          {
+            "node": {
+              "id": "VGF4Q2xhc3M6MQ==",
+              "name": "Groceries"
+            }
+          }
+        ],
         "pageInfo": {
           "hasNextPage": false,
-          "endCursor": null
+          "endCursor": "WyJHcm9jZXJpZXMiLCIxIl0="
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },
@@ -33,6 +40,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:d94f1752a954376c",
+  "response_shape_hash": "sha256:e79b0ac84b19afd7",
   "document_hash": "sha256:f27063f330b93db2"
 }

@@ -27,20 +27,183 @@
                 "edges": []
               }
             }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MjU=",
+              "name": "Accessories",
+              "parent": null,
+              "level": 0,
+              "ancestors": {
+                "edges": []
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MjY=",
+              "name": "Audiobooks",
+              "parent": {
+                "id": "Q2F0ZWdvcnk6MjU=",
+                "name": "Accessories"
+              },
+              "level": 1,
+              "ancestors": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "Q2F0ZWdvcnk6MjU=",
+                      "name": "Accessories"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mjc=",
+              "name": "Apparel",
+              "parent": null,
+              "level": 0,
+              "ancestors": {
+                "edges": []
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mjg=",
+              "name": "Sneakers",
+              "parent": {
+                "id": "Q2F0ZWdvcnk6Mjc=",
+                "name": "Apparel"
+              },
+              "level": 1,
+              "ancestors": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "Q2F0ZWdvcnk6Mjc=",
+                      "name": "Apparel"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mjk=",
+              "name": "Sweatshirts",
+              "parent": {
+                "id": "Q2F0ZWdvcnk6Mjc=",
+                "name": "Apparel"
+              },
+              "level": 1,
+              "ancestors": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "Q2F0ZWdvcnk6Mjc=",
+                      "name": "Apparel"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MzM=",
+              "name": "Headware",
+              "parent": {
+                "id": "Q2F0ZWdvcnk6Mjc=",
+                "name": "Apparel"
+              },
+              "level": 1,
+              "ancestors": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "Q2F0ZWdvcnk6Mjc=",
+                      "name": "Apparel"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MzU=",
+              "name": "Beanies",
+              "parent": {
+                "id": "Q2F0ZWdvcnk6MzM=",
+                "name": "Headware"
+              },
+              "level": 2,
+              "ancestors": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "Q2F0ZWdvcnk6Mjc=",
+                      "name": "Apparel"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MzY=",
+              "name": "Scarfs",
+              "parent": {
+                "id": "Q2F0ZWdvcnk6MzM=",
+                "name": "Headware"
+              },
+              "level": 2,
+              "ancestors": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "Q2F0ZWdvcnk6Mjc=",
+                      "name": "Apparel"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mzc=",
+              "name": "Sunglasses",
+              "parent": {
+                "id": "Q2F0ZWdvcnk6MzM=",
+                "name": "Headware"
+              },
+              "level": 2,
+              "ancestors": {
+                "edges": [
+                  {
+                    "node": {
+                      "id": "Q2F0ZWdvcnk6Mjc=",
+                      "name": "Apparel"
+                    }
+                  }
+                ]
+              }
+            }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyIxIl0=",
-          "hasNextPage": false,
+          "endCursor": "WyIzNyJd",
+          "hasNextPage": true,
           "hasPreviousPage": false,
           "startCursor": "WyIxIl0="
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 30,
-        "maximumAvailable": 50000
       }
     }
   },

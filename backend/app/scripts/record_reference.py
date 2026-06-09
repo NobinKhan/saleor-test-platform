@@ -106,6 +106,10 @@ async def main() -> int:
     print(f"Hash: {result['corpus_hash']}")
 
     if args.scope == "full" and not args.no_client_sync:
+        from app.services.reference_seed import seed_reference_data
+
+        print("Seeding reference fixture data for L3 capture…")
+        await seed_reference_data(args.url, token, dashboard_version=dashboard_version)
         sync_result = sync_client_bundles_from_vendor(dashboard_version)
         print(
             f"Synced {sync_result['imported']} L3 bundle(s) for dashboard-{dashboard_version}"

@@ -13,16 +13,14 @@
     "data": {
       "channels": [
         {
+          "id": "Q2hhbm5lbDoy",
+          "name": "Channel-PLN"
+        },
+        {
           "id": "Q2hhbm5lbDox",
-          "name": "Default Channel"
+          "name": "Channel-USD"
         }
       ]
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

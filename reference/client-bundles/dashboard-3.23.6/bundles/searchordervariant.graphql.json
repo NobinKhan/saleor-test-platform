@@ -28,12 +28,6 @@
           "startCursor": null
         }
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 40,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",

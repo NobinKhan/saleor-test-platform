@@ -26,12 +26,6 @@
         ],
         "user": null
       }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "validation_error",

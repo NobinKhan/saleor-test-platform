@@ -3,10 +3,10 @@
   "supported": [
     {
       "version": "3.23.7",
-      "captured_at": "2026-06-06T07:28:06.796735+00:00",
-      "probe_count": 414,
+      "captured_at": "2026-06-09T00:00:00+00:00",
+      "probe_count": 388,
       "saleor_url": "http://saleor-api:8000/graphql/",
-      "corpus_hash": "sha256:c6a77dea7bd64226d19bd7327410152db07806e10d2a2e55d0b7af3037207cf4"
+      "corpus_hash": "sha256:51a4624b03afc8edf67b24b8fd50b45f6c1e6232b0a309faf74bcaccf7c5440e"
     }
   ]
 }

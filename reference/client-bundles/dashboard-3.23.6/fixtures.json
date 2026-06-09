@@ -1,7 +1,13 @@
 {
-  "default_channel": "default-channel",
-  "default_slug": "test-product",
+  "default_channel": "channel-pln",
+  "default_slug": "apple-juice",
   "placeholder_id": "00000000-0000-0000-0000-000000000000",
-  "default_warehouse_id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
-  "default_category_id": "Q2F0ZWdvcnk6MQ=="
+  "default_channel_id": "Q2hhbm5lbDoy",
+  "default_product_id": "UHJvZHVjdDoxNTI=",
+  "default_variant_id": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
+  "default_order_id": "T3JkZXI6YmEyYTliYTctNTRmMy00ZDU4LWJkMmItYTgyNjIyOTY5YWM3",
+  "default_customer_id": "VXNlcjo3",
+  "default_warehouse_id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
+  "default_category_id": "Q2F0ZWdvcnk6MQ==",
+  "default_collection_id": "Q29sbGVjdGlvbjo0"
 }

@@ -16,27 +16,63 @@
   "golden_response": {
     "data": {
       "search": {
-        "totalCount": 1,
+        "totalCount": 8,
         "edges": [
           {
             "node": {
-              "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
+              "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
+              "name": "Africa"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
+              "name": "Americas"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+              "name": "Asia"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
+              "name": "Default"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmNmMzc1ZDVkLWIyYWMtNDQwZi05NjZlLThmNjdjODYzMjA0ZQ==",
+              "name": "Default for click and collect"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmFlYjM4YjM2LWU5MmQtNGE2OC05NjY5LTAzMGE5OGVlZDI1Zg==",
               "name": "Default Warehouse"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
+              "name": "Europe"
+            }
+          },
+          {
+            "node": {
+              "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
+              "name": "Oceania"
             }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyJEZWZhdWx0IFdhcmVob3VzZSIsImRlZmF1bHQtd2FyZWhvdXNlIl0=",
+          "endCursor": "WyJPY2VhbmlhIiwib2NlYW5pYSJd",
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyJEZWZhdWx0IFdhcmVob3VzZSIsImRlZmF1bHQtd2FyZWhvdXNlIl0="
+          "startCursor": "WyJBZnJpY2EiLCJhZnJpY2EiXQ=="
         }
-      }
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 10,
-        "maximumAvailable": 50000
       }
     }
   },

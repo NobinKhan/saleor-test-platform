@@ -13,27 +13,51 @@
     "data": {
       "channels": [
         {
-          "id": "Q2hhbm5lbDox",
+          "id": "Q2hhbm5lbDoy",
           "isActive": true,
-          "name": "Default Channel",
-          "slug": "default-channel",
-          "currencyCode": "USD",
+          "name": "Channel-PLN",
+          "slug": "channel-pln",
+          "currencyCode": "PLN",
           "defaultCountry": {
-            "code": "US",
-            "country": "United States of America"
+            "code": "PL",
+            "country": "Poland"
           },
           "stockSettings": {
-            "allocationStrategy": "PRIORITIZE_HIGH_STOCK"
+            "allocationStrategy": "PRIORITIZE_SORTING_ORDER"
           },
-          "hasOrders": false,
+          "hasOrders": true,
           "warehouses": [
             {
-              "id": "V2FyZWhvdXNlOmJiNTk0YjlkLTNkNDMtNDM1Ny04NWFkLWIyOGE2MzlhZjI3Zg==",
-              "name": "Default Warehouse"
+              "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
+              "name": "Default"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
+              "name": "Europe"
+            },
+            {
+              "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
+              "name": "Oceania"
+            },
+            {
+              "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+              "name": "Asia"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
+              "name": "Americas"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
+              "name": "Africa"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmNmMzc1ZDVkLWIyYWMtNDQwZi05NjZlLThmNjdjODYzMjA0ZQ==",
+              "name": "Default for click and collect"
             }
           ],
           "orderSettings": {
-            "markAsPaidStrategy": "PAYMENT_FLOW",
+            "markAsPaidStrategy": "TRANSACTION_FLOW",
             "deleteExpiredOrdersAfter": 60,
             "allowUnpaidOrders": false
           },
@@ -46,14 +70,67 @@
             "automaticCompletionCutOffDate": null,
             "allowLegacyGiftCardUse": true
           }
+        },
+        {
+          "id": "Q2hhbm5lbDox",
+          "isActive": true,
+          "name": "Channel-USD",
+          "slug": "default-channel",
+          "currencyCode": "USD",
+          "defaultCountry": {
+            "code": "US",
+            "country": "United States of America"
+          },
+          "stockSettings": {
+            "allocationStrategy": "PRIORITIZE_HIGH_STOCK"
+          },
+          "hasOrders": true,
+          "warehouses": [
+            {
+              "id": "V2FyZWhvdXNlOmFlYjM4YjM2LWU5MmQtNGE2OC05NjY5LTAzMGE5OGVlZDI1Zg==",
+              "name": "Default Warehouse"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
+              "name": "Default"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
+              "name": "Europe"
+            },
+            {
+              "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
+              "name": "Oceania"
+            },
+            {
+              "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
+              "name": "Asia"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
+              "name": "Americas"
+            },
+            {
+              "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
+              "name": "Africa"
+            }
+          ],
+          "orderSettings": {
+            "markAsPaidStrategy": "TRANSACTION_FLOW",
+            "deleteExpiredOrdersAfter": 60,
+            "allowUnpaidOrders": false
+          },
+          "paymentSettings": {
+            "defaultTransactionFlowStrategy": "AUTHORIZATION"
+          },
+          "checkoutSettings": {
+            "automaticallyCompleteFullyPaidCheckouts": false,
+            "automaticCompletionDelay": null,
+            "automaticCompletionCutOffDate": null,
+            "allowLegacyGiftCardUse": true
+          }
         }
       ]
-    },
-    "extensions": {
-      "cost": {
-        "requestedQueryCost": 1,
-        "maximumAvailable": 50000
-      }
     }
   },
   "golden_outcome": "success_with_data",
