@@ -9,7 +9,15 @@ from dataclasses import dataclass
 from typing import Any
 
 from app.core.config import settings
-from app.services.client_bundles import CLIENT_BUNDLE_KIND, load_bundle_from_disk, resolve_dashboard_bundle_version
+from app.services.client_bundles import (
+    CLIENT_BUNDLE_KIND,
+    CLIENT_SOURCES,
+    load_bundle_from_disk,
+    resolve_dashboard_bundle_version,
+    resolve_storefront_bundle_version,
+)
+from app.services.scenario_corpus import SCENARIO_KIND
+from app.services.variant_corpus import VARIANT_KIND
 from app.services.field_compare import compare_response_fields
 from app.services.reference_corpus import GoldenProbe, load_probe_from_disk, resolve_corpus_version, response_shape_hash
 from app.services.response_contract import (
@@ -202,6 +210,19 @@ def compare_probe_to_actual(
     )
 
 
+def _load_client_bundle_golden(endpoint_name: str):
+    for source in CLIENT_SOURCES:
+        ver = (
+            resolve_storefront_bundle_version()
+            if source == "storefront"
+            else resolve_dashboard_bundle_version()
+        )
+        bundle = load_bundle_from_disk(source, ver, endpoint_name)
+        if bundle is not None and bundle.has_golden():
+            return bundle, ver
+    return None, None
+
+
 def compare_to_golden(
     saleor_version: str | None,
     endpoint_name: str,
@@ -212,28 +233,62 @@ def compare_to_golden(
     http_status: int = 200,
     baseline_version: str | None = None,
     tier2_required: bool | None = None,
+    endpoint_meta: dict[str, Any] | None = None,
 ) -> ComparisonResult:
     baseline = baseline_version or settings.golden_corpus_version
     corpus_version = resolve_corpus_version(saleor_version, baseline)
+    meta = endpoint_meta or {}
+
+    if endpoint_kind in (VARIANT_KIND, SCENARIO_KIND):
+        golden_response = meta.get("golden_response")
+        if golden_response is None:
+            return ComparisonResult(
+                match_status="missing_golden",
+                expected_response=None,
+                diff_summary=f"No golden reference recorded for this {endpoint_kind}",
+                recommended_status="warn",
+                golden_outcome=None,
+                resolved_corpus_version=corpus_version,
+                compatible=False,
+            )
+        inline = GoldenProbe(
+            endpoint_name=endpoint_name,
+            endpoint_kind=endpoint_kind,
+            category=meta.get("category", "unknown"),
+            input_sent=meta.get("golden_input") or "",
+            golden_response=golden_response,
+            golden_outcome=meta.get("golden_outcome") or "unknown",
+            golden_status=meta.get("golden_status") or "warn",
+            golden_contract=meta.get("golden_contract"),
+            semantic_profile=meta.get("semantic_profile"),
+            probe_stability="stateful" if endpoint_kind == SCENARIO_KIND else "stateless",
+        )
+        return compare_probe_to_actual(
+            inline,
+            actual_response_json,
+            http_status=http_status,
+            resolved_corpus_version=corpus_version,
+            tier2_required=tier2_required,
+            input_sent=inline.input_sent,
+        )
 
     if endpoint_kind == CLIENT_BUNDLE_KIND:
-        dash_ver = resolve_dashboard_bundle_version()
-        bundle = load_bundle_from_disk("dashboard", dash_ver, endpoint_name)
-        if bundle is None or not bundle.has_golden():
+        bundle, ver = _load_client_bundle_golden(endpoint_name)
+        if bundle is None:
             return ComparisonResult(
                 match_status="missing_golden",
                 expected_response=None,
                 diff_summary="No golden reference recorded for this client bundle",
                 recommended_status="warn",
                 golden_outcome=None,
-                resolved_corpus_version=dash_ver,
+                resolved_corpus_version=resolve_dashboard_bundle_version(),
                 compatible=False,
             )
         return compare_probe_to_actual(
             bundle.to_golden_probe(),
             actual_response_json,
             http_status=http_status,
-            resolved_corpus_version=dash_ver,
+            resolved_corpus_version=ver,
             tier2_required=tier2_required,
             input_sent=bundle.document,
         )

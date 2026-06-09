@@ -14,11 +14,11 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6YmEyYTliYTctNTRmMy00ZDU4LWJkMmItYTgyNjIyOTY5YWM3",
+        "id": "T3JkZXI6ZDY5ZTZhZDMtMjAzMS00Yzg3LTljYzItNWM0MzBlYTdhM2Jm",
         "number": "20",
         "total": {
           "gross": {
-            "amount": 185.71,
+            "amount": 507.75,
             "currency": "USD"
           }
         },
@@ -28,18 +28,18 @@
         },
         "shippingPrice": {
           "gross": {
-            "amount": 75.71,
+            "amount": 67.75,
             "currency": "USD"
           }
         },
         "lines": [
           {
-            "id": "T3JkZXJMaW5lOjMyNGZlMzMzLTk1MDgtNDgxYi05NWI4LTI4NjIzMzM2OTY1Nw==",
-            "productName": "Gift card 50",
+            "id": "T3JkZXJMaW5lOmFiODkzMGRjLWQ4NjYtNDEwZS04NGFhLTkyMzM4OWJhYTQzNw==",
+            "productName": "Blue Plimsolls",
             "quantity": 2,
             "unitPrice": {
               "gross": {
-                "amount": 35.0,
+                "amount": 75.0,
                 "currency": "USD"
               }
             },
@@ -47,17 +47,30 @@
             "quantityToFulfill": 2
           },
           {
-            "id": "T3JkZXJMaW5lOmExY2RkMzcyLTkwNzItNDI0MC1iOGVkLTg3YjJmMTQ4MmNkZg==",
-            "productName": "Battle-tested at brands like Lush",
-            "quantity": 4,
+            "id": "T3JkZXJMaW5lOmMxNGVjMTNiLThjZjQtNDg4OC05ZDdmLTExYjRmYjA5ZDNiOA==",
+            "productName": "Monospace Tee",
+            "quantity": 1,
             "unitPrice": {
               "gross": {
-                "amount": 10.0,
+                "amount": 20.0,
                 "currency": "USD"
               }
             },
             "thumbnail": null,
-            "quantityToFulfill": 4
+            "quantityToFulfill": 1
+          },
+          {
+            "id": "T3JkZXJMaW5lOjdmNmRiMzQzLWU2NTUtNDVhYS05ZmNiLTZlNTg2NGUzODE4Mw==",
+            "productName": "Dash Force",
+            "quantity": 3,
+            "unitPrice": {
+              "gross": {
+                "amount": 90.0,
+                "currency": "USD"
+              }
+            },
+            "thumbnail": null,
+            "quantityToFulfill": 3
           }
         ],
         "fulfillments": []

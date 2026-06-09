@@ -8,85 +8,14 @@
   "document": "query _GetProductChoices($first: Int!, $query: String!) {\n  products(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P0",
   "golden_response": {
     "data": {
       "products": {
-        "edges": [
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxNTI=",
-              "name": "Apple Juice",
-              "slug": "apple-juice"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxMzQ=",
-              "name": "Monospace Tee",
-              "slug": "ascii-tee"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxMzA=",
-              "name": "Paul's Balance 420",
-              "slug": "balance-trail-720"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxNTQ=",
-              "name": "Banana Juice",
-              "slug": "banana-juice"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxNDU=",
-              "name": "Battle-tested at brands like Lush",
-              "slug": "battle-tested-at-brands-like-lush"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxNTM=",
-              "name": "Bean Juice",
-              "slug": "bean-juice"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxMzI=",
-              "name": "Blue Hoodie",
-              "slug": "blue-hoodie"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxMjg=",
-              "name": "Blue Plimsolls",
-              "slug": "blue-plimsolls"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxMzc=",
-              "name": "Blue Polygon Shirt",
-              "slug": "blue-polygon-shirt"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxNTU=",
-              "name": "Carrot Juice",
-              "slug": "carrot-juice"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -94,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:aad3317e32187a39",
+  "response_shape_hash": "sha256:02c2fc7bb518479a",
   "document_hash": "sha256:58a6bf562fd4de58"
 }

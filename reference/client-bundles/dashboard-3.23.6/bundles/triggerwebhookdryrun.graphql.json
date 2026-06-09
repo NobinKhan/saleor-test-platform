@@ -8,7 +8,7 @@
   "document": "mutation TriggerWebhookDryRun($objectId: ID!, $query: String!) {\n  webhookDryRun(objectId: $objectId, query: $query) {\n    payload\n    errors {\n      field\n      message\n    }\n  }\n}",
   "variables": {
     "objectId": "{{fixtures.placeholder_id}}",
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
@@ -19,7 +19,7 @@
         "errors": [
           {
             "field": "query",
-            "message": "Syntax Error GraphQL (1:1) Unexpected EOF\n\n"
+            "message": "Syntax Error GraphQL (1:1) Unexpected Name \"apple\"\n\n1: apple-juice\n   ^\n"
           }
         ]
       }

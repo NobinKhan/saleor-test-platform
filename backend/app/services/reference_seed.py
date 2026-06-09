@@ -26,6 +26,12 @@ REQUIRED_FIXTURE_KEYS = (
     "default_collection_id",
 )
 
+STOREFRONT_FIXTURE_KEYS = (
+    "default_checkout_id",
+    "default_checkout_token",
+    "variant_id_for_cart",
+)
+
 
 async def _gql(
     client: httpx.AsyncClient,
@@ -87,6 +93,13 @@ async def _capture_fixtures(
         if variants:
             fixtures["default_variant_id"] = variants[0].get("id")
 
+    pt_data = await _gql(
+        client, url=url, headers=headers, query="query { productTypes(first: 1) { edges { node { id } } } }", allow_errors=True
+    )
+    pt_edges = (pt_data.get("productTypes") or {}).get("edges") or []
+    if pt_edges:
+        fixtures["default_product_type_id"] = pt_edges[0]["node"]["id"]
+
     for query_name, key in (
         ("orders(first: 1)", "default_order_id"),
         ("customers(first: 1)", "default_customer_id"),
@@ -123,17 +136,54 @@ async def _capture_fixtures(
     return fixtures
 
 
+async def _seed_storefront_fixtures(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+) -> dict[str, Any]:
+    channel_slug = fixtures.get("default_channel", "default-channel")
+    variant_id = fixtures.get("default_variant_id")
+    if variant_id and not fixtures.get("default_checkout_id"):
+        checkout_data = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($input: CheckoutCreateInput!) { "
+                "checkoutCreate(input: $input) { checkout { id token } "
+                "errors { field message code } } }"
+            ),
+            variables={
+                "input": {
+                    "channel": channel_slug,
+                    "lines": [{"quantity": 1, "variantId": variant_id}],
+                }
+            },
+            allow_errors=True,
+        )
+        checkout = (checkout_data.get("checkoutCreate") or {}).get("checkout")
+        if checkout:
+            fixtures["default_checkout_id"] = checkout.get("id")
+            fixtures["default_checkout_token"] = checkout.get("token")
+            fixtures["variant_id_for_cart"] = variant_id
+    return fixtures
+
+
 async def seed_reference_data(
     saleor_url: str,
     token: str,
     *,
     timeout: int = 60,
     dashboard_version: str | None = None,
+    storefront_version: str | None = None,
 ) -> dict[str, Any]:
-    """Ensure fixture keys exist; save to dashboard fixtures.json."""
+    """Ensure fixture keys exist; save to dashboard and storefront fixtures.json."""
     from app.core.config import settings
 
     ver = dashboard_version or settings.reference_baseline_version
+    sf_ver = storefront_version or settings.reference_baseline_version
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {token.removeprefix('Bearer ')}",
@@ -218,9 +268,13 @@ async def seed_reference_data(
             )
 
         fixtures = await _capture_fixtures(client, url=saleor_url, headers=headers)
+        fixtures = await _seed_storefront_fixtures(
+            client, url=saleor_url, headers=headers, fixtures=fixtures
+        )
         still_missing = [k for k in REQUIRED_FIXTURE_KEYS if not fixtures.get(k)]
         if still_missing:
             raise RuntimeError(f"Missing fixture keys: {', '.join(still_missing)}")
 
     save_fixtures("dashboard", ver, fixtures)
+    save_fixtures("storefront", sf_ver, fixtures)
     return fixtures

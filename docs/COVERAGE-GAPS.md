@@ -10,9 +10,10 @@ Related: [COMPATIBILITY.md](COMPATIBILITY.md) (certification gates), [REFERENCE-
 |-------|----------|-------|------|
 | **L1** | `reference/corpora/saleor-3.23.7/probes/` | **388** | One synthetic probe per schema query/mutation (introspection-driven) |
 | **L3 Dashboard** | `reference/client-bundles/dashboard-3.23.6/` | **428 recorded**, **417 certified** | Real Dashboard GraphQL documents + golden responses |
-| **Certification total** | `full+client` scope | **805** | 388 L1 + 417 schema-compatible L3 bundles |
+| **L3 Storefront** | `reference/client-bundles/storefront-3.23.6/` | **16 recorded**, **16 certified** | Storefront GraphQL documents + golden responses |
+| **Certification total** | `full+client+storefront` scope | **820** | 388 L1 + 417 dashboard + 16 storefront bundles |
 
-`just baseline` proves **805/805** SGRC match on official Saleor. That is **Dashboard-shaped** client certification plus **operation-level** API probes — not full Storefront client replay.
+`just baseline` proves **820/820** SGRC match on official Saleor. That is **Dashboard + Storefront** client certification plus **operation-level** API probes.
 
 ```text
                     ┌─────────────────────────────────────┐
@@ -22,7 +23,7 @@ Related: [COMPATIBILITY.md](COMPATIBILITY.md) (certification gates), [REFERENCE-
   Dashboard 3.23.6  │  L3: 417 bundles (real documents)  │  ← Dashboard UX shapes
   vendor GraphQL    └─────────────────────────────────────┘
                     ┌─────────────────────────────────────┐
-  Storefront        │  L3: not implemented                 │  ← largest gap
+  Storefront 3.23.6 │  L3: 16 bundles (real documents)     │  ← partial (legacy vendor)
   (saleor-storefront)└─────────────────────────────────────┘
 ```
 
@@ -38,53 +39,31 @@ L1 replays **minimal/synthetic** GraphQL (often validation or permission errors)
 
 Example: `checkoutCreate` L1 sends empty input and golden-records a schema validation error — not a real cart line payload.
 
-## Gap 1 — Storefront L3 (highest priority for Storefront parity)
+## Gap 1 — Storefront L3 breadth (partial)
 
-**Status:** Not implemented.
+**Status:** Implemented for baseline certification; **16** bundles only.
 
-**Missing pieces:**
+| Piece | Status |
+|-------|--------|
+| Vendor source | `reference/vendor/saleor-storefront-3.23.6/` |
+| Client bundles | `reference/client-bundles/storefront-3.23.6/` (`sf-` bundle IDs) |
+| Import pipeline | `just patch-corpus --sync-client` (dashboard + storefront) |
+| Fixtures | Storefront keys in `fixtures.json` (checkout ID/token, variant for cart) |
+| Certification scope | `full+client+storefront` (820 endpoints) |
 
-| Piece | Dashboard (exists) | Storefront (missing) |
-|-------|-------------------|----------------------|
-| Vendor source | `reference/vendor/saleor-dashboard-3.23.6/` | No `reference/vendor/saleor-storefront-*` |
-| Client bundles | `reference/client-bundles/dashboard-3.23.6/` | No `reference/client-bundles/storefront-*` |
-| Import pipeline | `just patch-corpus --sync-client` (dashboard) | No storefront import |
-| Fixtures | `fixtures.json` (product/order/customer IDs) | No storefront-specific fixtures (checkout token, channel slug, cart state) |
-| Certification scope | `full+client` | No `full+client+storefront` (or equivalent) |
+**Remaining:** The pinned storefront vendor tree is from the legacy storefront codebase — not every modern Storefront GraphQL operation. Expand import coverage as the vendor pin grows.
 
-**Suggested follow-up work:**
+## Gap 2 — Customer-session auth replay (partial)
 
-1. Vendor `saleor-storefront` at a pinned tag aligned with the Saleor API pin.
-2. Mirror the dashboard bundle importer for storefront `.graphql` documents.
-3. Extend `seed-reference` for storefront fixture keys (checkout ID, channel slug, line items).
-4. Record golden on official Saleor; add schema gate for storefront root fields.
-5. Extend baseline / `test_runner_scope` counts when storefront bundles land.
+**Status:** Customer JWT replay path exists (`auth_context: customer` on bundles/scenarios; `ensure_customer_token` in test runner).
 
-## Gap 2 — Customer-session auth replay
+**Remaining:** Not all customer-context operations have customer-auth golden recorded. Staff token remains the default for dashboard bundles. Expand customer-tagged golden capture for storefront account/checkout flows.
 
-**Status:** Staff admin JWT is the default for certification runs (`tokenCreate` with admin credentials).
+## Gap 3 — Multi-step scenario chains (partial)
 
-Customer-context mutations are captured with staff token and often golden as **expected auth failures**, not as a logged-in customer session. See `CUSTOMER_CONTEXT_OPS` in `backend/app/services/reference_capture.py`.
+**Status:** L4 scenario framework + first **product lifecycle** scenario at `reference/scenarios/product-lifecycle/`. Scopes: `scenarios`, `full+scenarios`.
 
-**Impact:** Account and checkout flows that require a **customer JWT** (as Storefront uses) are not fully replayed in compatibility mode.
-
-**Suggested follow-up:**
-
-- Capture/replay path that obtains a customer token (`accountRegister` / `tokenCreate` as customer).
-- Separate golden profiles for customer-context ops under customer auth.
-- Storefront L3 bundles tagged with `auth_context: customer` where appropriate.
-
-## Gap 3 — Multi-step scenario chains
-
-**Status:** Roadmap only. Today probes and bundles are overwhelmingly **single-shot**.
-
-**Not covered as chained scenarios:**
-
-- Product lifecycle: create → read → update → delete (with consistent IDs)
-- Order lifecycle: draft → confirm → fulfill → refund
-- Checkout lifecycle: create cart → add lines → shipping → payment → complete
-
-L1 stateless probes and one-off L3 bundles can miss bugs that only appear across dependent mutations.
+**Remaining:** Order and checkout lifecycles; golden recording for scenario steps via `patch-corpus`; certification gate for scenarios (optional hard gate).
 
 ## Gap 4 — Eleven L3 bundles recorded but excluded from certification
 
@@ -104,7 +83,7 @@ L1 stateless probes and one-off L3 bundles can miss bugs that only appear across
 | `welcomepageanalytics` | `ordersTotal` (QUERY) | Dashboard analytics query not on API pin |
 | `welcomepageactivities` | `homepageEvents` (QUERY) | Dashboard home query not on API pin |
 
-These bundles remain on disk for drift tracking; they are **not** in the **805** certification set until the pinned Saleor version regains those fields or the dashboard vendor drops them.
+These bundles remain on disk for drift tracking; they are **not** in the **820** certification set until the pinned Saleor version regains those fields or the dashboard vendor drops them.
 
 **L1 note:** `exportProducts` has no L1 probe on 3.23.7 for the same reason.
 
@@ -147,26 +126,28 @@ Certification replays HTTP GraphQL JSON. It does **not** certify:
 
 | Gap | Severity if Storefront breaks | Severity if Dashboard breaks | Effort (rough) |
 |-----|------------------------------|------------------------------|----------------|
-| Storefront L3 | **High** | Low | Large (new vendor + pipeline + fixtures) |
-| Customer JWT replay | **High** | Medium | Medium |
-| Scenario chains | Medium | Medium | Medium–large |
+| Storefront L3 breadth | Medium | Low | Medium (expand vendor import) |
+| Customer JWT golden coverage | Medium | Medium | Medium |
+| Scenario chains (orders/checkout) | Medium | Medium | Medium–large |
 | 11 excluded dashboard bundles | Low | Low (until Sale API / exports return) | Small on version bump |
 | Stock L3 parity | Low | Medium | Medium |
 | Runtime/webhooks/payments | Medium (different failure class) | Medium | Large (new test types) |
 
 ## What “certified” means today (summary)
 
-A backend that passes `just baseline` / `full+client` with 100% SGRC:
+A backend that passes `just baseline` / `full+client+storefront` with 100% SGRC:
 
 - Implements every **3.23.7** schema operation at L1 synthetic replay level.
 - Matches **417** real **Dashboard** GraphQL documents with seeded fixtures.
+- Matches **16** **Storefront** GraphQL documents with seeded fixtures.
 - Passes SGRC Tier 1 (and Tier 2 when `SGRC_TIER2_GATE=true`).
+- Passes L3 **document schema gate** (nested field/type validation in client documents).
 
 It does **not** yet guarantee:
 
-- Official **Storefront** GraphQL document compatibility.
-- Full **customer-session** checkout/account replay.
-- **Stateful multi-step** commerce scenarios.
+- Full **Storefront** GraphQL coverage (only 16 legacy vendor documents).
+- Full **customer-session** golden replay for all account/checkout ops.
+- **Order/checkout multi-step** scenario certification (product lifecycle exists; not in baseline gate).
 - **Async** worker, webhook, or payment-gateway integration behavior.
 
 When Storefront or Dashboard breaks a certified backend, platform rules require **adding probes/bundles**, not weakening Tier 1 — see workspace rules and [COMPATIBILITY.md](COMPATIBILITY.md).

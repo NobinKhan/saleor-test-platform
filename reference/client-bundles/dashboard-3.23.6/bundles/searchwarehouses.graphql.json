@@ -9,69 +9,20 @@
   "variables": {
     "after": "",
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P0",
   "golden_response": {
     "data": {
       "search": {
-        "totalCount": 8,
-        "edges": [
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
-              "name": "Africa"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
-              "name": "Americas"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
-              "name": "Asia"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
-              "name": "Default"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmNmMzc1ZDVkLWIyYWMtNDQwZi05NjZlLThmNjdjODYzMjA0ZQ==",
-              "name": "Default for click and collect"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmFlYjM4YjM2LWU5MmQtNGE2OC05NjY5LTAzMGE5OGVlZDI1Zg==",
-              "name": "Default Warehouse"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
-              "name": "Europe"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
-              "name": "Oceania"
-            }
-          }
-        ],
+        "totalCount": 0,
+        "edges": [],
         "pageInfo": {
-          "endCursor": "WyJPY2VhbmlhIiwib2NlYW5pYSJd",
+          "endCursor": null,
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyJBZnJpY2EiLCJhZnJpY2EiXQ=="
+          "startCursor": null
         }
       }
     }
@@ -80,6 +31,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:c5b25fd4ce8a9512",
+  "response_shape_hash": "sha256:e63c7a47dfac98f5",
   "document_hash": "sha256:09fe2c06955d6bbb"
 }

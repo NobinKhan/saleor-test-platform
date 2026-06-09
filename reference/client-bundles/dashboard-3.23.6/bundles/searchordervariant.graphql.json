@@ -9,7 +9,7 @@
   "variables": {
     "channel": "{{fixtures.default_channel}}",
     "first": 10,
-    "query": "",
+    "query": "{{fixtures.default_slug}}",
     "after": "",
     "address": null,
     "isPublished": false,

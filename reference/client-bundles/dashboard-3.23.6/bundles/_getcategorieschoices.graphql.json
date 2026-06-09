@@ -8,85 +8,14 @@
   "document": "query _GetCategoriesChoices($first: Int!, $query: String!) {\n  categories(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P0",
   "golden_response": {
     "data": {
       "categories": {
-        "edges": [
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MQ==",
-              "name": "Default Category",
-              "slug": "default-category"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MjU=",
-              "name": "Accessories",
-              "slug": "accessories"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MjY=",
-              "name": "Audiobooks",
-              "slug": "audiobooks"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjc=",
-              "name": "Apparel",
-              "slug": "apparel"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjg=",
-              "name": "Sneakers",
-              "slug": "sneakers"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjk=",
-              "name": "Sweatshirts",
-              "slug": "sweatshirts"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzM=",
-              "name": "Headware",
-              "slug": "headware"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzU=",
-              "name": "Beanies",
-              "slug": "beanies"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzY=",
-              "name": "Scarfs",
-              "slug": "scarfs"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mzc=",
-              "name": "Sunglasses",
-              "slug": "sunglasses"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -94,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:48e9f43928b548e6",
+  "response_shape_hash": "sha256:8b916c6780699bfd",
   "document_hash": "sha256:0ae3c57cf257f43a"
 }

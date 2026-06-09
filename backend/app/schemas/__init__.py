@@ -5,7 +5,7 @@ app/schemas/__init__.py — Pydantic schemas for API request/response validation
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import Any, ClassVar
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
@@ -74,11 +74,27 @@ class TestRunCreate(BaseModel):
     def validate_saleor_email(cls, value: str) -> str:
         return _validate_saleor_email(value)
 
+    ALLOWED_TEST_SCOPES: ClassVar[frozenset[str]] = frozenset({
+        "full",
+        "queries",
+        "mutations",
+        "catalog",
+        "custom",
+        "client-dashboard",
+        "client-storefront",
+        "scenarios",
+        "variants",
+        "full+client",
+        "full+client+storefront",
+        "full+scenarios",
+    })
+
     @field_validator("test_scope")
     @classmethod
     def validate_test_scope(cls, value: str) -> str:
-        if value != "full+client":
-            raise ValueError("Only full+client certification scope is supported")
+        if value not in TestRunCreate.ALLOWED_TEST_SCOPES:
+            allowed = ", ".join(sorted(TestRunCreate.ALLOWED_TEST_SCOPES))
+            raise ValueError(f"Unsupported test_scope. Allowed: {allowed}")
         return value
 
     @model_validator(mode="after")
@@ -87,10 +103,28 @@ class TestRunCreate(BaseModel):
             raise ValueError("saleor_password is required unless clone_from_run_id is set")
         return self
 
-    test_scope: str = Field(default="full+client", description="Certification scope (L1 + L3)")
+    test_scope: str = Field(
+        default="full+client+storefront",
+        description="Certification scope (L1 + L3 dashboard + L3 storefront)",
+    )
     test_mode: str = Field(default="compatibility", description="compatibility|discovery")
     public_only: bool = Field(default=False, description="Only test public endpoints")
-    categories: list[str] | None = Field(default=None, description="Deprecated; ignored for full+client")
+    categories: list[str] | None = Field(
+        default=None,
+        description="Filter by domain when test_scope=custom",
+    )
+    saleor_customer_email: str | None = Field(
+        default=None,
+        description="Customer email for storefront/customer-context replay",
+    )
+    saleor_customer_password: str | None = Field(
+        default=None,
+        description="Customer password for storefront/customer-context replay",
+    )
+    compare_run_id: UUID | None = Field(
+        default=None,
+        description="Optional prior run UUID for side-by-side comparison on report",
+    )
     concurrency: int = Field(default=5, ge=1, le=20)
     timeout_seconds: int = Field(default=30, ge=5, le=120)
 
@@ -203,6 +237,8 @@ class ReportSummary(BaseModel):
     golden_missing: int = 0
     client_parity_gaps: int = 0
     client_bundle_count: int = 0
+    storefront_bundle_count: int = 0
+    document_schema_gate_pass: bool | None = None
     tier2_gate_enabled: bool = False
     upgrade_hint: str | None = None
     probe_outcome_rate: float | None = None
@@ -252,6 +288,21 @@ class ResponseTimeBucket(BaseModel):
     count: int
 
 
+class CompareRunSummary(BaseModel):
+    compare_run_id: UUID
+    saleor_url: str
+    saleor_version: str | None
+    pass_rate: float
+    compatibility_score: float | None = None
+    certified: bool | None = None
+    total: int
+    passed: int
+    failed: int
+    scope: str
+    regressions: int = 0
+    improvements: int = 0
+
+
 class ReportData(BaseModel):
     summary: ReportSummary
     category_breakdown: list[CategoryBreakdown]
@@ -261,6 +312,7 @@ class ReportData(BaseModel):
     results: list[TestResultResponse]
     pass_rate: float
     schema_diff: dict[str, Any] | None = None
+    compare_summary: CompareRunSummary | None = None
 
 
 # ── Live Progress (SSE) ────────────────────────────────────────────────────────

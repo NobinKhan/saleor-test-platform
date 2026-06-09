@@ -1,0 +1,62 @@
+{
+  "bundle_id": "sf-homepageproducts",
+  "source": "saleor-storefront",
+  "source_path": "views/Home/queries.ts",
+  "operation_names": [
+    "HomePageProducts"
+  ],
+  "document": "query HomePageProducts {\n  shop {\n    description\n    name\n  }\n  categories(level: 0, first: 4) {\n    edges {\n      node {\n        id\n        name\n        slug\n        backgroundImage {\n          url\n        }\n      }\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "shop": {
+        "description": "",
+        "name": "Saleor e-commerce"
+      },
+      "categories": {
+        "edges": [
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MQ==",
+              "name": "Default Category",
+              "slug": "default-category",
+              "backgroundImage": null
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6MjU=",
+              "name": "Accessories",
+              "slug": "accessories",
+              "backgroundImage": null
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mjc=",
+              "name": "Apparel",
+              "slug": "apparel",
+              "backgroundImage": null
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6NDI=",
+              "name": "Groceries",
+              "slug": "groceries",
+              "backgroundImage": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:2576b684cbb74d3a",
+  "document_hash": "sha256:7451d6cc1aa8bcdf"
+}

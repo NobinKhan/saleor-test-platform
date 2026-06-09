@@ -8,114 +8,14 @@
   "document": "query _GetDynamicLeftOperands($first: Int!, $query: String!) {\n  attributes(\n    first: $first\n    search: $query\n    where: {type: {eq: PRODUCT_TYPE}, inputType: {oneOf: [DROPDOWN, MULTISELECT, BOOLEAN, NUMERIC, DATE, DATE_TIME, SWATCH, REFERENCE, SINGLE_REFERENCE]}}\n  ) {\n    edges {\n      node {\n        id\n        name\n        slug\n        inputType\n        entityType\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
   "golden_response": {
     "data": {
       "attributes": {
-        "edges": [
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQ0",
-              "name": "Brand",
-              "slug": "brand",
-              "inputType": "SINGLE_REFERENCE",
-              "entityType": "PAGE",
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQx",
-              "name": "EBook Format",
-              "slug": "ebook-format",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQw",
-              "name": "Flavor",
-              "slug": "flavor",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM2",
-              "name": "Material",
-              "slug": "material",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQy",
-              "name": "Medium",
-              "slug": "medium",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQz",
-              "name": "Publisher",
-              "slug": "publisher",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM3",
-              "name": "Shoe size",
-              "slug": "shoe-size",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM4",
-              "name": "Size",
-              "slug": "size",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM5",
-              "name": "Volume",
-              "slug": "volume",
-              "inputType": "DROPDOWN",
-              "entityType": null,
-              "__typename": "Attribute"
-            },
-            "__typename": "AttributeCountableEdge"
-          }
-        ],
+        "edges": [],
         "__typename": "AttributeCountableConnection"
       }
     }
@@ -124,6 +24,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:b89b86000c8c98db",
+  "response_shape_hash": "sha256:e07658083a30aaa8",
   "document_hash": "sha256:fb108a464363cff6"
 }

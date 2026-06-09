@@ -51,6 +51,7 @@ declare module '$env/static/private' {
 	export const QT_IM_MODULES: string;
 	export const NODE: string;
 	export const VSCODE_PROCESS_TITLE: string;
+	export const GNOME_SHELL_SESSION_MODE: string;
 	export const SSH_AUTH_SOCK: string;
 	export const MEMORY_PRESSURE_WRITE: string;
 	export const FNM_NODE_DIST_MIRROR: string;
@@ -64,6 +65,7 @@ declare module '$env/static/private' {
 	export const LOGNAME: string;
 	export const XDG_SESSION_TYPE: string;
 	export const VSCODE_ESM_ENTRYPOINT: string;
+	export const PNPM_HOME: string;
 	export const GPG_AGENT_INFO: string;
 	export const SYSTEMD_EXEC_PID: string;
 	export const VSCODE_CODE_CACHE_PATH: string;
@@ -106,7 +108,6 @@ declare module '$env/static/private' {
 	export const QT_IM_MODULE: string;
 	export const VSCODE_CWD: string;
 	export const FNM_VERSION_FILE_STRATEGY: string;
-	export const MANAGERPIDFDID: string;
 	export const npm_config_user_agent: string;
 	export const NO_COLOR: string;
 	export const npm_execpath: string;
@@ -116,13 +117,11 @@ declare module '$env/static/private' {
 	export const FNM_RESOLVE_ENGINES: string;
 	export const npm_package_json: string;
 	export const BUN_INSTALL: string;
-	export const P9K_SSH: string;
 	export const JOURNAL_STREAM: string;
 	export const XDG_DATA_DIRS: string;
 	export const GDK_BACKEND: string;
 	export const PATH: string;
 	export const GDMSESSION: string;
-	export const XDG_SESSION_EXTRA_DEVICE_ACCESS: string;
 	export const DBUS_SESSION_BUS_ADDRESS: string;
 	export const VSCODE_NLS_CONFIG: string;
 	export const FNM_DIR: string;
@@ -133,6 +132,7 @@ declare module '$env/static/private' {
 	export const VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
 	export const FNM_LOGLEVEL: string;
 	export const OLDPWD: string;
+	export const NODE_ENV: string;
 }
 
 /**
@@ -232,6 +232,7 @@ declare module '$env/dynamic/private' {
 		QT_IM_MODULES: string;
 		NODE: string;
 		VSCODE_PROCESS_TITLE: string;
+		GNOME_SHELL_SESSION_MODE: string;
 		SSH_AUTH_SOCK: string;
 		MEMORY_PRESSURE_WRITE: string;
 		FNM_NODE_DIST_MIRROR: string;
@@ -245,6 +246,7 @@ declare module '$env/dynamic/private' {
 		LOGNAME: string;
 		XDG_SESSION_TYPE: string;
 		VSCODE_ESM_ENTRYPOINT: string;
+		PNPM_HOME: string;
 		GPG_AGENT_INFO: string;
 		SYSTEMD_EXEC_PID: string;
 		VSCODE_CODE_CACHE_PATH: string;
@@ -287,7 +289,6 @@ declare module '$env/dynamic/private' {
 		QT_IM_MODULE: string;
 		VSCODE_CWD: string;
 		FNM_VERSION_FILE_STRATEGY: string;
-		MANAGERPIDFDID: string;
 		npm_config_user_agent: string;
 		NO_COLOR: string;
 		npm_execpath: string;
@@ -297,13 +298,11 @@ declare module '$env/dynamic/private' {
 		FNM_RESOLVE_ENGINES: string;
 		npm_package_json: string;
 		BUN_INSTALL: string;
-		P9K_SSH: string;
 		JOURNAL_STREAM: string;
 		XDG_DATA_DIRS: string;
 		GDK_BACKEND: string;
 		PATH: string;
 		GDMSESSION: string;
-		XDG_SESSION_EXTRA_DEVICE_ACCESS: string;
 		DBUS_SESSION_BUS_ADDRESS: string;
 		VSCODE_NLS_CONFIG: string;
 		FNM_DIR: string;
@@ -314,6 +313,7 @@ declare module '$env/dynamic/private' {
 		VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
 		FNM_LOGLEVEL: string;
 		OLDPWD: string;
+		NODE_ENV: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}

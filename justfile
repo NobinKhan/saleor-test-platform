@@ -131,6 +131,6 @@ baseline *extra:
     echo "=== Golden baseline: replay vs official Saleor ==="
     {{compose}} exec harness-backend \
       python -m app.scripts.self_check \
-      --scope full+client --require-tier2 --min-compat 100 {{ extra }}
+      --scope full+client+storefront --require-tier2 --min-compat 100 {{ extra }}
     echo ""
     echo "BASELINE PASS"

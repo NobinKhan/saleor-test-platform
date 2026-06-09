@@ -7,209 +7,32 @@
   ],
   "document": "query NavigatorSearch($query: String!) {\n  orders(first: 2, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        number\n        status\n        updatedAt\n        paymentStatus\n        chargeStatus\n        total {\n          gross {\n            amount\n            currency\n          }\n        }\n      }\n    }\n  }\n  categories(first: 2, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        updatedAt\n        backgroundImage(size: 64) {\n          url\n          alt\n        }\n        products(first: 1) {\n          totalCount\n        }\n        parent {\n          id\n          name\n        }\n        level\n        ancestors(first: 1) {\n          edges {\n            node {\n              id\n              name\n            }\n          }\n        }\n      }\n    }\n  }\n  collections(first: 2, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        products(first: 1) {\n          totalCount\n        }\n        backgroundImage(size: 64) {\n          url\n          alt\n        }\n      }\n    }\n  }\n  products(first: 2, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        category {\n          name\n        }\n        name\n        updatedAt\n        thumbnail(size: 64) {\n          alt\n          url\n        }\n      }\n    }\n  }\n  productVariants(first: 2, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        sku\n        updatedAt\n        media {\n          alt\n          url(size: 64)\n        }\n        product {\n          id\n          name\n          category {\n            name\n          }\n        }\n      }\n    }\n  }\n  models: pages(first: 2, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        title\n        publishedAt\n        pageType {\n          name\n        }\n      }\n    }\n  }\n  modelTypes: pageTypes(first: 2, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}",
   "variables": {
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P0",
   "golden_response": {
     "data": {
       "orders": {
-        "edges": [
-          {
-            "node": {
-              "id": "T3JkZXI6YmEyYTliYTctNTRmMy00ZDU4LWJkMmItYTgyNjIyOTY5YWM3",
-              "number": "20",
-              "status": "UNFULFILLED",
-              "updatedAt": "2026-06-09T01:03:26.594542+00:00",
-              "paymentStatus": "NOT_CHARGED",
-              "chargeStatus": "NONE",
-              "total": {
-                "gross": {
-                  "amount": 185.71,
-                  "currency": "USD"
-                }
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "T3JkZXI6N2FhNmI4MjgtMTRiZi00OTQyLThhNTYtNzBjZjNhMGFjNzJl",
-              "number": "19",
-              "status": "UNFULFILLED",
-              "updatedAt": "2026-06-09T01:03:26.513025+00:00",
-              "paymentStatus": "NOT_CHARGED",
-              "chargeStatus": "NONE",
-              "total": {
-                "gross": {
-                  "amount": 131.38,
-                  "currency": "USD"
-                }
-              }
-            }
-          }
-        ]
+        "edges": []
       },
       "categories": {
-        "edges": [
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MQ==",
-              "name": "Default Category",
-              "updatedAt": "2026-06-09T01:02:07.715420+00:00",
-              "backgroundImage": null,
-              "products": {
-                "totalCount": 0
-              },
-              "parent": null,
-              "level": 0,
-              "ancestors": {
-                "edges": []
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MjU=",
-              "name": "Accessories",
-              "updatedAt": "2026-06-09T01:03:12.292763+00:00",
-              "backgroundImage": null,
-              "products": {
-                "totalCount": 10
-              },
-              "parent": null,
-              "level": 0,
-              "ancestors": {
-                "edges": []
-              }
-            }
-          }
-        ]
+        "edges": []
       },
       "collections": {
-        "edges": [
-          {
-            "node": {
-              "id": "Q29sbGVjdGlvbjo0",
-              "name": "Featured Products",
-              "products": {
-                "totalCount": 5
-              },
-              "backgroundImage": null
-            }
-          },
-          {
-            "node": {
-              "id": "Q29sbGVjdGlvbjo1",
-              "name": "Summer Picks",
-              "products": {
-                "totalCount": 4
-              },
-              "backgroundImage": null
-            }
-          }
-        ]
+        "edges": []
       },
       "products": {
-        "edges": [
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxNTI=",
-              "category": {
-                "name": "Juices"
-              },
-              "name": "Apple Juice",
-              "updatedAt": "2026-06-09T01:03:14.928019+00:00",
-              "thumbnail": null
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdDoxMzQ=",
-              "category": {
-                "name": "T-shirts"
-              },
-              "name": "Monospace Tee",
-              "updatedAt": "2026-06-09T01:03:13.776957+00:00",
-              "thumbnail": null
-            }
-          }
-        ]
+        "edges": []
       },
       "productVariants": {
-        "edges": [
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzU4",
-              "name": "S",
-              "sku": "111223580",
-              "updatedAt": "2026-06-09T01:03:26.807212+00:00",
-              "media": [],
-              "product": {
-                "id": "UHJvZHVjdDoxMzY=",
-                "name": "Darko Polo",
-                "category": {
-                  "name": "Polo shirts"
-                }
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzY0",
-              "name": "S",
-              "sku": "112223580",
-              "updatedAt": "2026-06-09T01:03:26.817486+00:00",
-              "media": [],
-              "product": {
-                "id": "UHJvZHVjdDoxMzg=",
-                "name": "Dark Polygon Tee",
-                "category": {
-                  "name": "T-shirts"
-                }
-              }
-            }
-          }
-        ]
+        "edges": []
       },
       "models": {
-        "edges": [
-          {
-            "node": {
-              "id": "UGFnZToz",
-              "title": "About",
-              "publishedAt": "2022-05-13T00:00:00+00:00",
-              "pageType": {
-                "name": "Simple"
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo2",
-              "title": "CozyNest",
-              "publishedAt": "2025-10-14T06:38:16+00:00",
-              "pageType": {
-                "name": "Brand"
-              }
-            }
-          }
-        ]
+        "edges": []
       },
       "modelTypes": {
-        "edges": [
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6NQ==",
-              "name": "Brand"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6NA==",
-              "name": "Simple"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -217,6 +40,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:b20c2ea1ff49e2aa",
+  "response_shape_hash": "sha256:d5282acdfa63b8dd",
   "document_hash": "sha256:258d4b3e216afa5e"
 }

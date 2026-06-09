@@ -1,0 +1,14 @@
+{
+  "step_id": "02_list_products",
+  "name": "List products and find created slug",
+  "auth_context": "staff",
+  "input_sent": "query ProductLifecycleList($ch: String!, $search: String!) { products(first: 10, channel: $ch, filter: { search: $search }) { edges { node { id slug name } } } } }",
+  "variables": {
+    "ch": "{{fixtures.default_channel}}",
+    "search": "harness-scenario-product"
+  },
+  "assertions": [
+    {"kind": "contains", "path": "$.data.products.edges[0].node.slug", "expected": "harness-scenario-product"},
+    {"kind": "context_equals", "path": "$.data.products.edges[0].node.id", "context_key": "created_product_id"}
+  ]
+}

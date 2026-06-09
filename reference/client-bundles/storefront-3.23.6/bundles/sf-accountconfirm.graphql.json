@@ -1,0 +1,38 @@
+{
+  "bundle_id": "sf-accountconfirm",
+  "source": "saleor-storefront",
+  "source_path": "views/Account/mutations.ts",
+  "operation_names": [
+    "AccountConfirm"
+  ],
+  "document": "mutation AccountConfirm($email: String!, $token: String!) {\n  confirmAccount(email: $email, token: $token) {\n    errors {\n      field\n      message\n    }\n  }\n}",
+  "variables": {
+    "email": "",
+    "token": ""
+  },
+  "auth_context": "customer",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "confirmAccount": {
+        "errors": [
+          {
+            "field": "token",
+            "message": "Invalid or expired token."
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:6161b4a8de61b448",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "sf-accountconfirm",
+    "expected_null": true
+  },
+  "document_hash": "sha256:054730876ab10b21"
+}

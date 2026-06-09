@@ -1,0 +1,26 @@
+{
+  "operation_name": "productCreate",
+  "variants": [
+    {
+      "variant_id": "missing_productType",
+      "operation_kind": "MUTATION",
+      "category": "products",
+      "input_sent": "mutation { productCreate(input: { name: \"Variant Missing Type\" }) { product { id } errors { field message code } } }",
+      "tags": ["invalid", "required_field"]
+    },
+    {
+      "variant_id": "empty_input",
+      "operation_kind": "MUTATION",
+      "category": "products",
+      "input_sent": "mutation { productCreate(input: {}) { product { id } errors { field message code } } }",
+      "tags": ["invalid", "graphql_error"]
+    },
+    {
+      "variant_id": "blank_name",
+      "operation_kind": "MUTATION",
+      "category": "products",
+      "input_sent": "mutation($input: ProductCreateInput!) { productCreate(input: $input) { product { id } errors { field message code } } }",
+      "tags": ["invalid", "business_error"]
+    }
+  ]
+}

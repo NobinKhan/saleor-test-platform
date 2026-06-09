@@ -9,74 +9,19 @@
   "variables": {
     "after": "",
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
   "golden_response": {
     "data": {
       "search": {
-        "edges": [
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQ0",
-              "name": "Brand"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQx",
-              "name": "EBook Format"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQw",
-              "name": "Flavor"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM2",
-              "name": "Material"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQy",
-              "name": "Medium"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjQz",
-              "name": "Publisher"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM3",
-              "name": "Shoe size"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM4",
-              "name": "Size"
-            }
-          },
-          {
-            "node": {
-              "id": "QXR0cmlidXRlOjM5",
-              "name": "Volume"
-            }
-          }
-        ],
+        "edges": [],
         "pageInfo": {
-          "endCursor": "WyIwIiwidm9sdW1lIl0=",
+          "endCursor": null,
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyIwIiwiYnJhbmQiXQ=="
+          "startCursor": null
         }
       }
     }
@@ -85,6 +30,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:9be3102f81b99076",
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
   "document_hash": "sha256:ae75763eb4bbd818"
 }

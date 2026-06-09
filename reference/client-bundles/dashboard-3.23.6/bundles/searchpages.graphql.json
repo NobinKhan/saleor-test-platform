@@ -9,7 +9,7 @@
   "variables": {
     "after": "",
     "first": 10,
-    "query": "",
+    "query": "{{fixtures.default_slug}}",
     "where": null
   },
   "auth_context": "staff",
@@ -17,61 +17,12 @@
   "golden_response": {
     "data": {
       "search": {
-        "edges": [
-          {
-            "node": {
-              "id": "UGFnZToz",
-              "title": "About"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo2",
-              "title": "CozyNest"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo3",
-              "title": "Damaged Item"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo0",
-              "title": "Frutello"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo5",
-              "title": "Incorrect Address"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo4",
-              "title": "Package Lost"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZToxMA==",
-              "title": "Package Not Picked Up by Customer"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo1",
-              "title": "Saleor Loom"
-            }
-          }
-        ],
+        "edges": [],
         "pageInfo": {
-          "endCursor": "WyJzYWxlb3ItbG9vbSJd",
+          "endCursor": null,
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyJhYm91dCJd"
+          "startCursor": null
         }
       }
     }
@@ -80,6 +31,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:d9c9a786cf0907ac",
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
   "document_hash": "sha256:8ca9fbca1927e826"
 }

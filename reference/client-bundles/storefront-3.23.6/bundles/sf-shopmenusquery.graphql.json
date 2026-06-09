@@ -1,0 +1,28 @@
+{
+  "bundle_id": "sf-shopmenusquery",
+  "source": "saleor-storefront",
+  "source_path": "@next/graphql/queries.ts",
+  "operation_names": [
+    "ShopMenusQuery"
+  ],
+  "document": "query ShopMenusQuery($channel: String!, $footerSlug: String!, $mainMenuSlug: String!) {\n  footer: menu(channel: $channel, slug: $footerSlug) {\n    id\n    items {\n      ...MenuItem\n      children {\n        ...MenuItem\n      }\n    }\n  }\n  mainMenu: menu(channel: $channel, slug: $mainMenuSlug) {\n    items {\n      ...MenuItem\n      children {\n        ...MenuItem\n        children {\n          ...MenuItem\n        }\n      }\n    }\n  }\n}\n\nfragment MenuItem on MenuItem {\n  id\n  name\n  category {\n    id\n    name\n    slug\n  }\n  url\n  collection {\n    id\n    name\n    slug\n  }\n  page {\n    slug\n  }\n  parent {\n    id\n  }\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "footerSlug": "{{fixtures.default_slug}}",
+    "mainMenuSlug": "{{fixtures.default_slug}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "footer": null,
+      "mainMenu": null
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:8d6226349ec0138d",
+  "document_hash": "sha256:5ab26fb9eb410583"
+}

@@ -13,8 +13,8 @@
     "data": {
       "shop": {
         "channelCurrencies": [
-          "USD",
-          "PLN"
+          "PLN",
+          "USD"
         ]
       }
     }

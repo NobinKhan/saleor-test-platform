@@ -1,0 +1,155 @@
+{
+  "source": "storefront",
+  "dashboard_version": "3.23.6",
+  "dashboard_git_tag": "3.23.6",
+  "bundle_count": 16,
+  "recorded_count": 16,
+  "bundles_hash": "sha256:8bc9d54225099847ddc37fc88aa12ecd3fa03b0985e1b17e5bd9512ddeee5750",
+  "updated_at": "2026-06-09T05:56:10.802915+00:00",
+  "bundles_index": {
+    "sf-accountconfirm": {
+      "document_hash": "sha256:054730876ab10b21",
+      "operation_names": [
+        "AccountConfirm"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "sf-article": {
+      "document_hash": "sha256:e6637babac15eddc",
+      "operation_names": [
+        "Article"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "sf-featuredproductsquery": {
+      "document_hash": "sha256:cb6fd5e3761fc338",
+      "operation_names": [
+        "FeaturedProductsQuery"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "sf-getcategories": {
+      "document_hash": "sha256:aa00e97893022ec9",
+      "operation_names": [
+        "GetCategories"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "sf-getcollections": {
+      "document_hash": "sha256:6114578442e1a2b3",
+      "operation_names": [
+        "GetCollections"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "sf-getproducts": {
+      "document_hash": "sha256:9f99098c49645a8c",
+      "operation_names": [
+        "GetProducts"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "sf-homepageproducts": {
+      "document_hash": "sha256:7451d6cc1aa8bcdf",
+      "operation_names": [
+        "HomePageProducts"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "sf-pages": {
+      "document_hash": "sha256:9a6a5b53a55900d0",
+      "operation_names": [
+        "Pages"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "sf-productdetails": {
+      "document_hash": "sha256:866afe2cfcbb2b58",
+      "operation_names": [
+        "ProductDetails"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "not_found"
+    },
+    "sf-registeraccount": {
+      "document_hash": "sha256:b6950f8cced37624",
+      "operation_names": [
+        "RegisterAccount"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "sf-resetpasswordrequest": {
+      "document_hash": "sha256:168b2db5dc3f2066",
+      "operation_names": [
+        "ResetPasswordRequest"
+      ],
+      "priority": "P1",
+      "recorded": true,
+      "golden_contract": "business_error"
+    },
+    "sf-searchproducts": {
+      "document_hash": "sha256:cd3b29a21b4479b1",
+      "operation_names": [
+        "SearchProducts"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "graphql_error"
+    },
+    "sf-searchresults": {
+      "document_hash": "sha256:b65d3e32eb7e305b",
+      "operation_names": [
+        "SearchResults"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "sf-shopattributesquery": {
+      "document_hash": "sha256:fe95e6d16176eaf7",
+      "operation_names": [
+        "ShopAttributesQuery"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "sf-shopmenusquery": {
+      "document_hash": "sha256:5ab26fb9eb410583",
+      "operation_names": [
+        "ShopMenusQuery"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    },
+    "sf-variantlist": {
+      "document_hash": "sha256:6a725e9dac7619ae",
+      "operation_names": [
+        "VariantList"
+      ],
+      "priority": "P0",
+      "recorded": true,
+      "golden_contract": "success"
+    }
+  }
+}

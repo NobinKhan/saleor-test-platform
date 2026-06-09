@@ -8,43 +8,14 @@
   "document": "query _GetPageTypesChoices($first: Int!, $query: String!) {\n  pageTypes(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
   "golden_response": {
     "data": {
       "pageTypes": {
-        "edges": [
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6NQ==",
-              "name": "Brand",
-              "slug": "brand"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6NA==",
-              "name": "Simple",
-              "slug": "default-page"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6MQ==",
-              "name": "Default Type",
-              "slug": "default-type"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6Ng==",
-              "name": "Refund Reason",
-              "slug": "refund-reason"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -52,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:20876572ff6a1901",
+  "response_shape_hash": "sha256:0f6570bad37b8315",
   "document_hash": "sha256:cf19928514848e04"
 }

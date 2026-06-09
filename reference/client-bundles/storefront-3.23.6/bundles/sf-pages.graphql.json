@@ -1,0 +1,74 @@
+{
+  "bundle_id": "sf-pages",
+  "source": "saleor-storefront",
+  "source_path": "views/Article/query.ts",
+  "operation_names": [
+    "Pages"
+  ],
+  "document": "query Pages {\n  pages(first: 50) {\n    edges {\n      node {\n        id\n        slug\n      }\n    }\n  }\n}",
+  "variables": {},
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "pages": {
+        "edges": [
+          {
+            "node": {
+              "id": "UGFnZToz",
+              "slug": "about"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo2",
+              "slug": "cozynest"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo3",
+              "slug": "damaged-item"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo0",
+              "slug": "frutello"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo5",
+              "slug": "incorrect-address"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo4",
+              "slug": "package-lost"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZToxMA==",
+              "slug": "package-not-picked-up-by-customer"
+            }
+          },
+          {
+            "node": {
+              "id": "UGFnZTo1",
+              "slug": "saleor-loom"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:1965ab3f0ef2988d",
+  "document_hash": "sha256:9a6a5b53a55900d0"
+}

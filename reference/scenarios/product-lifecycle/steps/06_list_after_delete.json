@@ -1,0 +1,13 @@
+{
+  "step_id": "06_list_after_delete",
+  "name": "Confirm product absent from list",
+  "auth_context": "staff",
+  "input_sent": "query ProductLifecycleListDeleted($ch: String!, $search: String!) { products(first: 10, channel: $ch, filter: { search: $search }) { edges { node { id slug } } } } }",
+  "variables": {
+    "ch": "{{fixtures.default_channel}}",
+    "search": "harness-scenario-product"
+  },
+  "assertions": [
+    {"kind": "not_in_list", "list_path": "$.data.products.edges", "field": "slug", "expected": "harness-scenario-product"}
+  ]
+}

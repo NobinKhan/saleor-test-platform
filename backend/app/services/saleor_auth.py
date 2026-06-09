@@ -21,6 +21,18 @@ mutation TokenCreate($email: String!, $password: String!) {
 
 ME_QUERY = "query { me { email } }"
 
+ACCOUNT_REGISTER_MUTATION = """
+mutation AccountRegister($input: AccountRegisterInput!) {
+  accountRegister(input: $input) {
+    user { id email }
+    errors { field message code }
+  }
+}
+"""
+
+CUSTOMER_DEFAULT_EMAIL = "harness-storefront-customer@example.com"
+CUSTOMER_DEFAULT_PASSWORD = "HarnessCustomer123!"
+
 
 async def validate_saleor_token(
     saleor_url: str,
@@ -137,3 +149,79 @@ async def fetch_saleor_token(
         return None, f"HTTP error: {e}"
     except Exception as e:
         return None, f"Unexpected error: {str(e)}"
+
+
+async def register_customer_account(
+    saleor_url: str,
+    email: str,
+    password: str,
+    *,
+    timeout: int = 15,
+    channel: str = "default-channel",
+) -> tuple[bool, str | None]:
+    """Register a customer account (idempotent — ignores duplicate email errors)."""
+    graphql_url = resolve_saleor_url_for_runner(saleor_url)
+    payload = {
+        "query": ACCOUNT_REGISTER_MUTATION,
+        "variables": {
+            "input": {
+                "email": email,
+                "password": password,
+                "channel": channel,
+                "redirectUrl": "http://localhost:3000/account/confirm",
+            }
+        },
+    }
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.post(graphql_url, json=payload)
+        if resp.status_code != 200:
+            return False, f"HTTP {resp.status_code}"
+        data = resp.json()
+        result = (data.get("data") or {}).get("accountRegister") or {}
+        errors = result.get("errors") or []
+        if errors:
+            code = (errors[0].get("code") or "").upper()
+            if code in ("UNIQUE", "ALREADY_EXISTS", "UNIQUE_VIOLATION"):
+                return True, None
+            return False, errors[0].get("message", "Registration failed")
+        return True, None
+    except Exception as exc:
+        return False, str(exc)
+
+
+async def fetch_customer_token(
+    saleor_url: str,
+    email: str,
+    password: str,
+    timeout: int = 15,
+) -> tuple[Optional[str], Optional[str]]:
+    """Obtain a customer JWT via tokenCreate."""
+    return await fetch_saleor_token(saleor_url, email, password, timeout)
+
+
+async def ensure_customer_token(
+    *,
+    saleor_url: str,
+    token: str | None,
+    email: str | None,
+    password: str | None,
+    timeout: int = 30,
+    client: httpx.AsyncClient | None = None,
+    force_refresh: bool = False,
+    channel: str = "default-channel",
+) -> str | None:
+    """Ensure a valid customer JWT, registering the account if needed."""
+    if not force_refresh and token and await validate_saleor_token(
+        saleor_url, token, timeout, client
+    ):
+        return token
+    cust_email = email or CUSTOMER_DEFAULT_EMAIL
+    cust_password = password or CUSTOMER_DEFAULT_PASSWORD
+    await register_customer_account(
+        saleor_url, cust_email, cust_password, timeout=timeout, channel=channel
+    )
+    new_token, _err = await fetch_customer_token(
+        saleor_url, cust_email, cust_password, timeout
+    )
+    return new_token or token

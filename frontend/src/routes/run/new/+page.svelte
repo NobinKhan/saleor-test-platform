@@ -9,7 +9,23 @@
   let saleor_password = "";
   let concurrency = 5;
   let timeout_seconds = 30;
+  let test_scope = "full+client+storefront";
+  let categories = "";
+  let compare_run_id = "";
+  let saleor_customer_email = "";
+  let saleor_customer_password = "";
   let cloneFromRunId: string | null = null;
+
+  const scopeOptions = [
+    { value: "full+client+storefront", label: "Full + Dashboard + Storefront (certification)" },
+    { value: "full+client", label: "Full + Dashboard L3" },
+    { value: "client-storefront", label: "Storefront L3 only" },
+    { value: "client-dashboard", label: "Dashboard L3 only" },
+    { value: "full", label: "L1 probes only" },
+    { value: "scenarios", label: "L4 scenarios" },
+    { value: "variants", label: "Input variants" },
+    { value: "custom", label: "Custom categories" },
+  ];
   let prefillMessage = "";
   let loading = false;
   let prefillLoading = false;
@@ -75,11 +91,23 @@
       const payload: Record<string, unknown> = {
         saleor_url,
         saleor_email: saleor_email.trim(),
-        test_scope: "full+client",
+        test_scope,
         public_only: false,
         concurrency,
         timeout_seconds,
       };
+      if (test_scope === "custom" && categories.trim()) {
+        payload.categories = categories.split(",").map((c) => c.trim()).filter(Boolean);
+      }
+      if (compare_run_id.trim()) {
+        payload.compare_run_id = compare_run_id.trim();
+      }
+      if (saleor_customer_email.trim()) {
+        payload.saleor_customer_email = saleor_customer_email.trim();
+      }
+      if (saleor_customer_password) {
+        payload.saleor_customer_password = saleor_customer_password;
+      }
       if (saleor_password) {
         payload.saleor_password = saleor_password;
       }
@@ -109,7 +137,7 @@
 <div class="new-run-page" class:dimmed={loading}>
   <div class="page-header">
     <h1>New Test Run</h1>
-    <p class="subtitle">Full certification run — L1 reference probes + L3 Dashboard bundles (798 endpoints)</p>
+    <p class="subtitle">Saleor compatibility certification — L1 probes, L3 Dashboard + Storefront bundles, scenarios, variants</p>
   </div>
 
   <div class="form-card card">
@@ -147,6 +175,40 @@
             placeholder={cloneFromRunId ? "Leave blank to reuse stored password" : "••••••••"}
             required={!cloneFromRunId}
           />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="test_scope">Test scope</label>
+        <select id="test_scope" bind:value={test_scope}>
+          {#each scopeOptions as opt}
+            <option value={opt.value}>{opt.label}</option>
+          {/each}
+        </select>
+      </div>
+
+      {#if test_scope === "custom"}
+        <div class="field">
+          <label for="categories">Categories (comma-separated)</label>
+          <input id="categories" type="text" bind:value={categories} placeholder="products, orders, checkout" />
+        </div>
+      {/if}
+
+      <div class="field">
+        <label for="compare_run_id">Compare with prior run (optional UUID)</label>
+        <input id="compare_run_id" type="text" bind:value={compare_run_id} placeholder="Previous run ID for side-by-side report" />
+      </div>
+
+      <div class="section-label">Storefront customer credentials (optional)</div>
+      <p class="section-hint">Used for storefront L3 bundles tagged with customer auth. Defaults to harness seed customer if omitted.</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="customer_email">Customer Email</label>
+          <input id="customer_email" type="text" bind:value={saleor_customer_email} placeholder="customer@example.com" />
+        </div>
+        <div class="field">
+          <label for="customer_password">Customer Password</label>
+          <input id="customer_password" type="password" bind:value={saleor_customer_password} />
         </div>
       </div>
 

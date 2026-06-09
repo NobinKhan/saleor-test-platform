@@ -22,6 +22,7 @@ from app.services.dashboard_bundle_import import (
     ClientBundleDiff,
     compute_client_bundle_diff,
 )
+from app.services.storefront_bundle_import import compute_storefront_bundle_diff
 from app.services.introspection import introspect_saleor
 from app.services.reference_corpus import (
     corpus_dir_for_version,
@@ -39,6 +40,7 @@ class CorpusDiff:
     changed: list[str] = field(default_factory=list)
     unchanged: list[str] = field(default_factory=list)
     client_bundles: ClientBundleDiff = field(default_factory=ClientBundleDiff)
+    storefront_bundles: ClientBundleDiff = field(default_factory=ClientBundleDiff)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -47,6 +49,7 @@ class CorpusDiff:
             "changed": self.changed,
             "unchanged": self.unchanged,
             "client_bundles": self.client_bundles.to_dict(),
+            "storefront_bundles": self.storefront_bundles.to_dict(),
         }
 
 
@@ -60,6 +63,7 @@ async def compute_corpus_diff(
     saleor_token: str | None,
     version: str,
     dashboard_version: str | None = None,
+    storefront_version: str | None = None,
     timeout: int = 30,
     replay_changed: bool = False,
 ) -> CorpusDiff:
@@ -100,9 +104,15 @@ async def compute_corpus_diff(
             diff.unchanged.append(key)
 
     dash_ver = dashboard_version or settings.reference_baseline_version
+    sf_ver = storefront_version or settings.reference_baseline_version
     vendor = dashboard_vendor_path(dash_ver)
     if vendor.is_dir():
         diff.client_bundles = compute_client_bundle_diff(version=dash_ver)
+    from app.services.storefront_bundle_import import storefront_vendor_path
+
+    sf_vendor = storefront_vendor_path(sf_ver)
+    if sf_vendor.is_dir():
+        diff.storefront_bundles = compute_storefront_bundle_diff(version=sf_ver)
 
     return diff
 
@@ -111,6 +121,7 @@ def save_diff_report(
     version: str,
     diff: CorpusDiff,
     dashboard_version: str | None = None,
+    storefront_version: str | None = None,
 ) -> Path:
     path = corpus_dir_for_version(version) / "last_corpus_diff.json"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -118,9 +129,14 @@ def save_diff_report(
     from app.services.client_bundles import bundle_dir_for_version
 
     dash_ver = dashboard_version or settings.reference_baseline_version
-    mirror = bundle_dir_for_version("dashboard", dash_ver) / "last_corpus_diff.json"
-    mirror.parent.mkdir(parents=True, exist_ok=True)
-    mirror.write_text(json.dumps(diff.client_bundles.to_dict(), indent=2), encoding="utf-8")
+    sf_ver = storefront_version or settings.reference_baseline_version
+    for source, bundle_diff, ver in (
+        ("dashboard", diff.client_bundles, dash_ver),
+        ("storefront", diff.storefront_bundles, sf_ver),
+    ):
+        mirror = bundle_dir_for_version(source, ver) / "last_corpus_diff.json"
+        mirror.parent.mkdir(parents=True, exist_ok=True)
+        mirror.write_text(json.dumps(bundle_diff.to_dict(), indent=2), encoding="utf-8")
     return path
 
 
@@ -130,7 +146,8 @@ def load_diff_report(version: str) -> CorpusDiff | None:
         return None
     data = json.loads(path.read_text(encoding="utf-8"))
     client = ClientBundleDiff.from_dict(data.pop("client_bundles", None))
-    return CorpusDiff(client_bundles=client, **data)
+    storefront = ClientBundleDiff.from_dict(data.pop("storefront_bundles", None))
+    return CorpusDiff(client_bundles=client, storefront_bundles=storefront, **data)
 
 
 async def main() -> int:
@@ -140,6 +157,7 @@ async def main() -> int:
     parser.add_argument("--password", required=True)
     parser.add_argument("--version", default=None)
     parser.add_argument("--dashboard-version", default=None)
+    parser.add_argument("--storefront-version", default=None)
     args = parser.parse_args()
 
     token, err = await authenticate_saleor(args.url, args.email, args.password)
@@ -156,17 +174,27 @@ async def main() -> int:
         saleor_token=token,
         version=version,
         dashboard_version=args.dashboard_version,
+        storefront_version=args.storefront_version,
     )
-    report_path = save_diff_report(version, diff)
+    report_path = save_diff_report(
+        version,
+        diff,
+        dashboard_version=args.dashboard_version,
+        storefront_version=args.storefront_version,
+    )
     cb = diff.client_bundles
+    sb = diff.storefront_bundles
     print(f"Corpus diff for saleor-{version}:")
     print(f"  L1 added:     {len(diff.added)}")
     print(f"  L1 removed:   {len(diff.removed)}")
     print(f"  L1 changed:   {len(diff.changed)}")
     print(f"  L1 unchanged: {len(diff.unchanged)}")
-    print(f"  L3 added:     {len(cb.added)}")
-    print(f"  L3 removed:   {len(cb.removed)}")
-    print(f"  L3 changed:   {len(cb.changed)}")
+    print(f"  L3 dashboard added:   {len(cb.added)}")
+    print(f"  L3 dashboard removed: {len(cb.removed)}")
+    print(f"  L3 dashboard changed: {len(cb.changed)}")
+    print(f"  L3 storefront added:   {len(sb.added)}")
+    print(f"  L3 storefront removed: {len(sb.removed)}")
+    print(f"  L3 storefront changed: {len(sb.changed)}")
     print(f"Report: {report_path}")
     return 0
 

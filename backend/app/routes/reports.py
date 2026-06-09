@@ -18,6 +18,7 @@ from app.core.database import get_db
 from app.core.security import get_current_user, get_current_user_sse
 from app.models import User, TestRun, TestResult
 from app.schemas import (
+    CompareRunSummary,
     ReportData,
     ReportSummary,
     CategoryBreakdown,
@@ -27,7 +28,7 @@ from app.schemas import (
     TestResultResponse,
 )
 from app.core.config import settings
-from app.services.client_bundles import client_bundle_count
+from app.services.client_bundles import client_bundle_count, total_client_bundle_count
 from app.services.reference_compare import tier2_gate_enabled
 from app.services.reference_corpus import load_manifest, resolve_corpus_version
 from app.services.reference_registry import get_upgrade_hint
@@ -97,8 +98,46 @@ def _latency_stats(times: list[int]) -> LatencySummary:
     )
 
 
+def _build_compare_summary(
+    current_results: list[TestResultResponse],
+    compare_run: TestRun,
+    compare_results: list[TestResultResponse],
+) -> CompareRunSummary:
+    current_map = {(r.endpoint_name, r.endpoint_kind): r.status for r in current_results}
+    compare_map = {(r.endpoint_name, r.endpoint_kind): r.status for r in compare_results}
+    regressions = improvements = 0
+    for key, prev_status in compare_map.items():
+        cur_status = current_map.get(key)
+        if not cur_status:
+            continue
+        if prev_status == "pass" and cur_status != "pass":
+            regressions += 1
+        elif prev_status != "pass" and cur_status == "pass":
+            improvements += 1
+    total = compare_run.total_tests or 0
+    pass_rate = (compare_run.passed / total * 100) if total > 0 else 0.0
+    return CompareRunSummary(
+        compare_run_id=compare_run.id,
+        saleor_url=compare_run.saleor_url,
+        saleor_version=compare_run.saleor_version,
+        pass_rate=round(pass_rate, 1),
+        certified=None,
+        total=total,
+        passed=compare_run.passed or 0,
+        failed=compare_run.failed or 0,
+        scope=compare_run.test_scope,
+        regressions=regressions,
+        improvements=improvements,
+    )
+
+
 @router.get("/{run_id}", response_model=ReportData)
-async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+async def get_report(
+    run_id: uuid.UUID,
+    compare_run_id: uuid.UUID | None = Query(default=None),
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
     run_result = await db.execute(select(TestRun).where(TestRun.id == run_id, TestRun.user_id == user.id))
     run = run_result.scalar_one_or_none()
     if not run:
@@ -167,7 +206,9 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         1 for r in results if r.match_status in ("parity_gap", "tier2_fail") or r.client_parity_note
     )
     tier2_pass = client_parity_gaps == 0
-    l3_bundle_count = client_bundle_count()
+    l3_bundle_count = total_client_bundle_count()
+    storefront_bundle_count = client_bundle_count(source="storefront")
+    document_gate_pass = (run.schema_diff or {}).get("document_schema_gate_pass")
     golden_with_status = golden_matched + golden_mismatched
     golden_match_rate = (
         round(golden_matched / golden_with_status * 100, 1) if golden_with_status > 0 else None
@@ -249,6 +290,8 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         golden_missing=golden_missing,
         client_parity_gaps=client_parity_gaps,
         client_bundle_count=l3_bundle_count,
+        storefront_bundle_count=storefront_bundle_count,
+        document_schema_gate_pass=document_gate_pass,
         tier2_gate_enabled=gate_on,
         upgrade_hint=upgrade_hint,
         probe_outcome_rate=probe_outcome_rate,
@@ -260,6 +303,23 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         test_mode=test_mode,
         **dep,
     )
+    compare_summary = None
+    stored_compare = (run.schema_diff or {}).get("_compare_run_id")
+    effective_compare_id = compare_run_id or (uuid.UUID(stored_compare) if stored_compare else None)
+    if effective_compare_id:
+        compare_result = await db.execute(
+            select(TestRun).where(TestRun.id == effective_compare_id, TestRun.user_id == user.id)
+        )
+        compare_run = compare_result.scalar_one_or_none()
+        if compare_run:
+            compare_rows = await db.execute(
+                select(TestResult).where(TestResult.test_run_id == compare_run.id)
+            )
+            compare_results = [
+                TestResultResponse.model_validate(r) for r in compare_rows.scalars().all()
+            ]
+            compare_summary = _build_compare_summary(results, compare_run, compare_results)
+
     return ReportData(
         summary=summary,
         category_breakdown=category_breakdown,
@@ -269,6 +329,7 @@ async def get_report(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
         results=results,
         pass_rate=pass_rate,
         schema_diff=run.schema_diff,
+        compare_summary=compare_summary,
     )
 
 

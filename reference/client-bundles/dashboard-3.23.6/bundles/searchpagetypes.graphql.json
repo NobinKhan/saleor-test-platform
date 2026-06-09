@@ -9,44 +9,19 @@
   "variables": {
     "after": "",
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
   "golden_response": {
     "data": {
       "search": {
-        "edges": [
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6NQ==",
-              "name": "Brand"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6NA==",
-              "name": "Simple"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6MQ==",
-              "name": "Default Type"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZVR5cGU6Ng==",
-              "name": "Refund Reason"
-            }
-          }
-        ],
+        "edges": [],
         "pageInfo": {
-          "endCursor": "WyJyZWZ1bmQtcmVhc29uIl0=",
+          "endCursor": null,
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyJicmFuZCJd"
+          "startCursor": null
         }
       }
     }
@@ -55,6 +30,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:9be3102f81b99076",
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
   "document_hash": "sha256:02dee8284a31d2be"
 }

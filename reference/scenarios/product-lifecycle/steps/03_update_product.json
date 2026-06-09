@@ -1,0 +1,15 @@
+{
+  "step_id": "03_update_product",
+  "name": "Update product name",
+  "auth_context": "staff",
+  "input_sent": "mutation ProductLifecycleUpdate($id: ID!, $input: ProductInput!) { productUpdate(id: $id, input: $input) { product { id name slug } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.created_product_id}}",
+    "input": {
+      "name": "Harness Scenario Product Updated"
+    }
+  },
+  "assertions": [
+    {"kind": "equals", "path": "$.data.productUpdate.product.name", "expected": "Harness Scenario Product Updated"}
+  ]
+}

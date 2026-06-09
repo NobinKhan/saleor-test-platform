@@ -282,7 +282,9 @@ def _default_variables(document: str) -> dict[str, Any]:
             else:
                 variables[name] = False
         elif gtype == "ID":
-            if "channel" in lname:
+            if "checkout" in lname and "line" not in lname:
+                variables[name] = "{{fixtures.default_checkout_id}}"
+            elif "channel" in lname:
                 variables[name] = "{{fixtures.default_channel_id}}"
             elif "product" in lname and "variant" not in lname:
                 variables[name] = "{{fixtures.default_product_id}}"
@@ -301,12 +303,18 @@ def _default_variables(document: str) -> dict[str, Any]:
             else:
                 variables[name] = "{{fixtures.placeholder_id}}"
         elif gtype == "String":
-            if "channel" in lname:
+            if lname == "query":
+                variables[name] = "{{fixtures.default_slug}}"
+            elif "token" in lname and "checkout" in lname:
+                variables[name] = "{{fixtures.default_checkout_token}}"
+            elif "channel" in lname:
                 variables[name] = "{{fixtures.default_channel}}"
             elif "slug" in lname:
                 variables[name] = "{{fixtures.default_slug}}"
             else:
                 variables[name] = ""
+        elif gtype.startswith("[") or gtype.endswith("]"):
+            variables[name] = []
         else:
             variables[name] = None
     return variables

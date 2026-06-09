@@ -1,0 +1,37 @@
+{
+  "bundle_id": "sf-searchproducts",
+  "source": "saleor-storefront",
+  "source_path": "views/Search/queries.ts",
+  "operation_names": [
+    "SearchProducts"
+  ],
+  "document": "query SearchProducts($query: String!, $channel: String!, $attributes: [AttributeInput], $pageSize: Int, $sortBy: ProductOrder, $after: String) {\n  products(\n    channel: $channel\n    filter: {search: $query, attributes: $attributes}\n    first: $pageSize\n    sortBy: $sortBy\n    after: $after\n  ) {\n    totalCount\n    edges {\n      node {\n        ...ProductPricingField\n        id\n        name\n        slug\n        thumbnail {\n          url\n          alt\n        }\n        thumbnail2x: thumbnail(size: 510) {\n          url\n        }\n        category {\n          id\n          name\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  attributes(filter: {filterableInStorefront: true}, first: 100) {\n    edges {\n      node {\n        ...Attribute\n      }\n    }\n  }\n}\n\nfragment ProductPricingField on Product {\n  pricing {\n    onSale\n    priceRangeUndiscounted {\n      start {\n        ...TaxedPrice\n      }\n      stop {\n        ...TaxedPrice\n      }\n    }\n    priceRange {\n      start {\n        ...TaxedPrice\n      }\n      stop {\n        ...TaxedPrice\n      }\n    }\n  }\n}\n\nfragment TaxedPrice on TaxedMoney {\n  gross {\n    ...Price\n  }\n  net {\n    ...Price\n  }\n}\n\nfragment Price on Money {\n  amount\n  currency\n}\n\nfragment Attribute on Attribute {\n  id\n  name\n  slug\n  choices(first: 100) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "query": "{{fixtures.default_slug}}",
+    "channel": "{{fixtures.default_channel}}",
+    "pageSize": 0,
+    "sortBy": null,
+    "after": ""
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"attributes\" of type \"[AttributeInput]\" used in position expecting type \"[AttributeInput!]\"."
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "sf-searchproducts",
+    "expected_null": true,
+    "message_pattern": "Variable \"attributes\" of type \"[AttributeInput]\" used in position expecting type"
+  },
+  "document_hash": "sha256:cd3b29a21b4479b1"
+}

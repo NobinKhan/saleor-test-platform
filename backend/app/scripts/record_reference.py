@@ -120,7 +120,8 @@ async def main() -> int:
             version=dashboard_version,
             bundle_ids=None,
         )
-        _save_record_failures(dashboard_version, record_result.get("errors") or [])
+        from app.services.client_bundle_record import save_record_failures
+        save_record_failures("dashboard", dashboard_version, record_result.get("errors") or [])
         print(
             f"Recorded {record_result['recorded']} L3 bundle(s) "
             f"({len(record_result.get('errors') or [])} skipped)"

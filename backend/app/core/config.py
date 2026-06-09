@@ -50,6 +50,10 @@ class Settings(BaseSettings):
         default="",
         validation_alias="CLIENT_BUNDLES_DASHBOARD_VERSION",
     )
+    client_bundles_storefront_version: str = Field(
+        default="",
+        validation_alias="CLIENT_BUNDLES_STOREFRONT_VERSION",
+    )
 
     @property
     def is_production(self) -> bool:

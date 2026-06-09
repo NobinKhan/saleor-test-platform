@@ -7,7 +7,7 @@
   ],
   "document": "query SearchGiftCardTags($query: String!, $first: Int!, $after: String, $last: Int, $before: String) {\n  search: giftCardTags(\n    filter: {search: $query}\n    first: $first\n    after: $after\n    last: $last\n    before: $before\n  ) {\n    totalCount\n    edges {\n      node {\n        id\n        name\n      }\n    }\n    pageInfo {\n      ...PageInfo\n    }\n  }\n}\n\nfragment PageInfo on PageInfo {\n  endCursor\n  hasNextPage\n  hasPreviousPage\n  startCursor\n}",
   "variables": {
-    "query": "",
+    "query": "{{fixtures.default_slug}}",
     "first": 10,
     "after": "",
     "last": 10,

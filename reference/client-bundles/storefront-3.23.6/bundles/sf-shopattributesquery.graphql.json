@@ -1,0 +1,29 @@
+{
+  "bundle_id": "sf-shopattributesquery",
+  "source": "saleor-storefront",
+  "source_path": "@next/graphql/queries.ts",
+  "operation_names": [
+    "ShopAttributesQuery"
+  ],
+  "document": "query ShopAttributesQuery($channel: String!, $collectionId: ID, $categoryId: ID) {\n  attributes(\n    channel: $channel\n    filter: {inCollection: $collectionId, inCategory: $categoryId, filterableInStorefront: true}\n    first: 100\n  ) {\n    edges {\n      node {\n        ...Attribute\n      }\n    }\n  }\n}\n\nfragment Attribute on Attribute {\n  id\n  name\n  slug\n  choices(first: 100) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "collectionId": "{{fixtures.default_collection_id}}",
+    "categoryId": "{{fixtures.default_category_id}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "attributes": {
+        "edges": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:e07658083a30aaa8",
+  "document_hash": "sha256:fe95e6d16176eaf7"
+}

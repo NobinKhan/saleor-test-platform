@@ -1,0 +1,41 @@
+{
+  "bundle_id": "sf-getproducts",
+  "source": "saleor-storefront",
+  "source_path": "sitemap/queries.ts",
+  "operation_names": [
+    "GetProducts"
+  ],
+  "document": "query GetProducts($cursor: String, $perPage: Int, $channel: String) {\n  products(after: $cursor, first: $perPage, channel: $channel) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
+  "variables": {
+    "cursor": "",
+    "perPage": 0,
+    "channel": "{{fixtures.default_channel}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "You must provide a `first` or `last` value to properly paginate the `products` connection."
+      }
+    ],
+    "data": {
+      "products": null
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9731be5cc44d8e7c",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "sf-getproducts",
+    "expected_null": true,
+    "message_pattern": "You must provide a `first` or `last` value to properly paginate the `products` c",
+    "optional_path": [
+      "products"
+    ]
+  },
+  "document_hash": "sha256:9f99098c49645a8c"
+}

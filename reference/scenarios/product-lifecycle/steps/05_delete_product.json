@@ -1,0 +1,13 @@
+{
+  "step_id": "05_delete_product",
+  "name": "Delete created product",
+  "auth_context": "staff",
+  "input_sent": "mutation ProductLifecycleDelete($id: ID!) { productDelete(id: $id) { product { id } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.created_product_id}}"
+  },
+  "assertions": [
+    {"kind": "path_exists", "path": "$.data.productDelete.product.id"}
+  ],
+  "cleanup": true
+}

@@ -8,29 +8,14 @@
   "document": "query _GetCollectionsChoices($first: Int!, $query: String!) {\n  collections(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P0",
   "golden_response": {
     "data": {
       "collections": {
-        "edges": [
-          {
-            "node": {
-              "id": "Q29sbGVjdGlvbjo0",
-              "name": "Featured Products",
-              "slug": "featured-products"
-            }
-          },
-          {
-            "node": {
-              "id": "Q29sbGVjdGlvbjo1",
-              "name": "Summer Picks",
-              "slug": "summer-picks"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -38,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:aa7815e3a6a32601",
+  "response_shape_hash": "sha256:4e32f82c8ab5becc",
   "document_hash": "sha256:44bf42f74f5c0072"
 }

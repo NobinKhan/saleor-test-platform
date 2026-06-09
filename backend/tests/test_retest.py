@@ -32,13 +32,13 @@ def test_build_test_run_row_roundtrips_local_email():
     assert row["concurrency"] == 3
 
 
-def test_create_run_rejects_non_certification_scope():
-    with pytest.raises(ValueError, match="full\\+client"):
+def test_create_run_rejects_invalid_scope():
+    with pytest.raises(ValueError, match="Unsupported test_scope"):
         TestRunCreate(
             saleor_url="http://saleor.local/graphql/",
             saleor_email="admin@example.com",
             saleor_password="secret",
-            test_scope="full",
+            test_scope="not-a-real-scope",
         )
 
 
@@ -106,7 +106,7 @@ async def test_create_run_clones_password_from_source_run():
     mock_start.assert_called_once()
     assert len(new_run_holder) == 1
     assert new_run_holder[0].saleor_url == source.saleor_url
-    assert new_run_holder[0].test_scope == "full+client"
+    assert new_run_holder[0].test_scope == "full+client+storefront"
     assert new_run_holder[0].concurrency == 7
     assert summary.saleor_url == source.saleor_url
     assert summary.id == new_run_holder[0].id

@@ -134,14 +134,15 @@ async def capture_dashboard_fixtures(
     return fixtures
 
 
-def save_record_failures(version: str, errors: list[str]) -> None:
-    path = bundle_dir_for_version("dashboard", version) / "record_failures.json"
+def save_record_failures(source: str, version: str, errors: list[str]) -> None:
+    path = bundle_dir_for_version(source, version) / "record_failures.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"errors": errors}, indent=2), encoding="utf-8")
 
 
-async def record_dashboard_bundles(
+async def record_client_bundles(
     *,
+    source: str,
     saleor_url: str,
     saleor_token: str,
     version: str | None = None,
@@ -149,7 +150,10 @@ async def record_dashboard_bundles(
     priority: str | None = None,
     timeout: int = 30,
     capture_fixtures: bool = True,
+    customer_token: str | None = None,
 ) -> dict[str, Any]:
+    from app.services.saleor_auth import ensure_customer_token
+
     ver = version or settings.reference_baseline_version
     if capture_fixtures:
         from app.services.reference_seed import seed_reference_data
@@ -160,21 +164,22 @@ async def record_dashboard_bundles(
                 saleor_token,
                 timeout=timeout,
                 dashboard_version=ver,
+                storefront_version=ver,
             )
         except Exception:
             fixtures = await capture_dashboard_fixtures(saleor_url, saleor_token, timeout=timeout)
-            save_fixtures("dashboard", ver, fixtures)
+            save_fixtures(source, ver, fixtures)
     else:
-        fixtures = load_fixtures("dashboard", ver)
+        fixtures = load_fixtures(source, ver) or load_fixtures("dashboard", ver)
 
-    bundles = load_all_bundles_from_disk("dashboard", ver, priority=priority)
+    bundles = load_all_bundles_from_disk(source, ver, priority=priority)
     if bundle_ids:
         wanted = set(bundle_ids)
         bundles = [b for b in bundles if b.bundle_id in wanted]
     if not bundles:
-        raise ValueError(f"No bundles to record for dashboard-{ver}")
+        raise ValueError(f"No bundles to record for {source}-{ver}")
 
-    headers = {
+    staff_headers = {
         "Content-Type": "application/json",
         "Authorization": f"Bearer {saleor_token.removeprefix('Bearer ')}",
     }
@@ -182,12 +187,28 @@ async def record_dashboard_bundles(
     errors: list[str] = []
 
     async with httpx.AsyncClient(timeout=timeout) as client:
+        cust_token = customer_token
         for bundle in bundles:
             try:
                 variables = substitute_fixtures(bundle.variables, fixtures)
             except KeyError as exc:
                 errors.append(f"{bundle.bundle_id}: missing fixture {exc}")
                 continue
+            auth_context = bundle.auth_context or "staff"
+            if auth_context == "customer" and not cust_token:
+                cust_token = await ensure_customer_token(
+                    saleor_url=saleor_url,
+                    token=None,
+                    email=None,
+                    password=None,
+                    timeout=timeout,
+                    client=client,
+                )
+            headers = dict(staff_headers)
+            if auth_context == "customer" and cust_token:
+                headers["Authorization"] = f"Bearer {cust_token}"
+            elif auth_context == "anonymous":
+                headers.pop("Authorization", None)
             try:
                 resp = await client.post(
                     saleor_url,
@@ -215,13 +236,58 @@ async def record_dashboard_bundles(
             bundle.http_status = resp.status_code
             bundle.response_shape_hash = _normalized_hash(sanitized)
             bundle.semantic_profile = profile
-            write_bundle("dashboard", ver, bundle)
+            write_bundle(source, ver, bundle)
             recorded += 1
 
-    update_bundle_manifest("dashboard", ver)
-    save_record_failures(ver, errors)
+    update_bundle_manifest(source, ver)
+    save_record_failures(source, ver, errors)
     return {
         "version": ver,
         "recorded": recorded,
         "errors": errors,
+        "source": source,
     }
+
+
+async def record_dashboard_bundles(
+    *,
+    saleor_url: str,
+    saleor_token: str,
+    version: str | None = None,
+    bundle_ids: list[str] | None = None,
+    priority: str | None = None,
+    timeout: int = 30,
+    capture_fixtures: bool = True,
+) -> dict[str, Any]:
+    return await record_client_bundles(
+        source="dashboard",
+        saleor_url=saleor_url,
+        saleor_token=saleor_token,
+        version=version,
+        bundle_ids=bundle_ids,
+        priority=priority,
+        timeout=timeout,
+        capture_fixtures=capture_fixtures,
+    )
+
+
+async def record_storefront_bundles(
+    *,
+    saleor_url: str,
+    saleor_token: str,
+    version: str | None = None,
+    bundle_ids: list[str] | None = None,
+    priority: str | None = None,
+    timeout: int = 30,
+    capture_fixtures: bool = True,
+) -> dict[str, Any]:
+    return await record_client_bundles(
+        source="storefront",
+        saleor_url=saleor_url,
+        saleor_token=saleor_token,
+        version=version,
+        bundle_ids=bundle_ids,
+        priority=priority,
+        timeout=timeout,
+        capture_fixtures=capture_fixtures,
+    )

@@ -1,0 +1,15 @@
+{
+  "scenario_id": "product-lifecycle",
+  "name": "Product lifecycle",
+  "category": "products",
+  "auth_context": "staff",
+  "description": "Create product, list by slug, update name, delete, confirm absent from list",
+  "steps": [
+    "01_create_product.json",
+    "02_list_products.json",
+    "03_update_product.json",
+    "04_list_after_update.json",
+    "05_delete_product.json",
+    "06_list_after_delete.json"
+  ]
+}

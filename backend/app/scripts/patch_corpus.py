@@ -7,6 +7,7 @@ Usage:
   python -m app.scripts.patch_corpus --url ... --apply-diff
   python -m app.scripts.patch_corpus --url ... --sync-client
   python -m app.scripts.patch_corpus --url ... --client-bundles all
+  python -m app.scripts.patch_corpus --url ... --client-bundles storefront:all
 """
 
 from __future__ import annotations
@@ -19,8 +20,14 @@ from app.core.config import settings
 from app.core.database import get_async_sessionmaker
 from app.scripts.corpus_diff import compute_corpus_diff, load_diff_report, save_diff_report
 from app.services.client_bundles import remove_client_bundles
-from app.services.client_bundle_record import record_dashboard_bundles, save_record_failures
+from app.services.client_bundle_record import (
+    record_client_bundles,
+    record_dashboard_bundles,
+    record_storefront_bundles,
+    save_record_failures,
+)
 from app.services.dashboard_bundle_import import sync_client_bundles_from_vendor
+from app.services.storefront_bundle_import import sync_storefront_bundles_from_vendor
 from app.services.catalog_sync import sync_catalog_from_diff
 from app.services.reference_capture import capture_subset_probes, remove_corpus_ops
 from app.services.run_helpers import authenticate_saleor
@@ -42,14 +49,25 @@ def _parse_ops(raw: str) -> list[tuple[str, str]]:
     return result
 
 
-def _parse_bundle_ids(raw: str) -> list[str] | None:
-    if raw.strip().lower() == "all":
-        return None
-    return [p.strip() for p in raw.split(",") if p.strip()]
-
-
-def _save_record_failures(version: str, errors: list[str]) -> None:
-    save_record_failures(version, errors)
+def _parse_client_bundle_targets(raw: str) -> list[tuple[str, list[str] | None]]:
+    """Parse --client-bundles: all | dashboard:all | storefront:bundle-id."""
+    raw = raw.strip()
+    if raw.lower() == "all":
+        return [("dashboard", None), ("storefront", None)]
+    targets: list[tuple[str, list[str] | None]] = []
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if ":" in part:
+            source, bundle_part = part.split(":", 1)
+            source = source.strip().lower()
+            bundle_part = bundle_part.strip()
+            bundle_ids = None if bundle_part.lower() == "all" else [bundle_part]
+            targets.append((source, bundle_ids))
+        else:
+            targets.append(("dashboard", [part]))
+    return targets
 
 
 async def _apply_client_diff(
@@ -57,25 +75,34 @@ async def _apply_client_diff(
     saleor_url: str,
     token: str,
     dashboard_version: str,
+    storefront_version: str,
     diff,
     email: str,
     password: str,
 ) -> None:
-    if diff.client_bundles.removed:
-        removed = remove_client_bundles("dashboard", dashboard_version, diff.client_bundles.removed)
-        print(f"Removed {removed} client bundle(s)")
-    if diff.client_bundles.added or diff.client_bundles.changed:
-        sync_client_bundles_from_vendor(dashboard_version)
-    to_record = diff.client_bundles.added + diff.client_bundles.changed
-    if to_record:
-        result = await record_dashboard_bundles(
-            saleor_url=saleor_url,
-            saleor_token=token,
-            version=dashboard_version,
-            bundle_ids=to_record,
-        )
-        _save_record_failures(dashboard_version, result.get("errors") or [])
-        print(f"Recorded {result['recorded']} client bundle(s)")
+    for source, bundle_diff in (
+        ("dashboard", diff.client_bundles),
+        ("storefront", diff.storefront_bundles),
+    ):
+        if bundle_diff.removed:
+            removed = remove_client_bundles(source, dashboard_version if source == "dashboard" else storefront_version, bundle_diff.removed)
+            print(f"Removed {removed} {source} bundle(s)")
+        if bundle_diff.added or bundle_diff.changed:
+            if source == "dashboard":
+                sync_client_bundles_from_vendor(dashboard_version)
+            else:
+                sync_storefront_bundles_from_vendor(storefront_version)
+            to_record = bundle_diff.added + bundle_diff.changed
+            if to_record:
+                record_fn = record_dashboard_bundles if source == "dashboard" else record_storefront_bundles
+                result = await record_fn(
+                    saleor_url=saleor_url,
+                    saleor_token=token,
+                    version=dashboard_version if source == "dashboard" else storefront_version,
+                    bundle_ids=to_record,
+                )
+                save_record_failures(source, dashboard_version if source == "dashboard" else storefront_version, result.get("errors") or [])
+                print(f"Recorded {result['recorded']} {source} bundle(s)")
 
 
 async def main() -> int:
@@ -85,24 +112,26 @@ async def main() -> int:
     parser.add_argument("--password", required=True)
     parser.add_argument("--version", default=None, help="L1 corpus Saleor version")
     parser.add_argument("--dashboard-version", default=None, help="L3 dashboard bundle version")
+    parser.add_argument("--storefront-version", default=None, help="L3 storefront bundle version")
     parser.add_argument("--ops", default=None, help="Comma-separated op names or name__KIND")
     parser.add_argument("--remove", default=None, help="Comma-separated L1 ops or L3 bundle IDs")
     parser.add_argument("--apply-diff", action="store_true", help="Apply last corpus-diff report")
     parser.add_argument("--replace", action="store_true", help="Overwrite named probes only")
-    parser.add_argument("--sync-client", action="store_true", help="Import L3 bundles from vendor tree")
+    parser.add_argument("--sync-client", action="store_true", help="Import L3 bundles from vendor trees")
     parser.add_argument(
         "--client-bundles",
         default=None,
-        help="Record L3 golden for bundle IDs or 'all'",
+        help="Record L3 golden: all | dashboard:all | storefront:all | bundle-id",
     )
     parser.add_argument(
         "--strip-debug-golden",
         action="store_true",
-        help="Strip Python debug fields from L1 golden_response on disk",
+        help="Strip Python debug fields from L1 golden on disk",
     )
     args = parser.parse_args()
 
     dashboard_version = args.dashboard_version or settings.reference_baseline_version
+    storefront_version = args.storefront_version or settings.reference_baseline_version
 
     if args.strip_debug_golden:
         from app.services.reference_corpus import strip_debug_golden_corpus
@@ -120,10 +149,11 @@ async def main() -> int:
         and not args.ops
         and not args.remove
     ):
-        result = sync_client_bundles_from_vendor(dashboard_version)
+        dash = sync_client_bundles_from_vendor(dashboard_version)
+        sf = sync_storefront_bundles_from_vendor(storefront_version)
         print(
-            f"Synced {result['imported']} client bundle(s) for dashboard-{dashboard_version} "
-            f"(P0: {result['p0_count']})"
+            f"Synced {dash['imported']} dashboard + {sf['imported']} storefront bundle(s) "
+            f"(P0: {dash['p0_count']}+{sf['p0_count']})"
         )
         return 0
 
@@ -135,29 +165,30 @@ async def main() -> int:
     version = args.version or await detect_saleor_version(args.url, token, 30)
     if not version:
         version = settings.golden_corpus_version
-    dashboard_version = args.dashboard_version or settings.reference_baseline_version
 
     if args.sync_client:
-        result = sync_client_bundles_from_vendor(dashboard_version)
+        dash = sync_client_bundles_from_vendor(dashboard_version)
+        sf = sync_storefront_bundles_from_vendor(storefront_version)
         print(
-            f"Synced {result['imported']} client bundle(s) for dashboard-{dashboard_version} "
-            f"(P0: {result['p0_count']})"
+            f"Synced {dash['imported']} dashboard + {sf['imported']} storefront bundle(s)"
         )
         if not args.client_bundles and not args.apply_diff and not args.ops and not args.remove:
             return 0
 
     if args.client_bundles:
-        bundle_ids = _parse_bundle_ids(args.client_bundles)
-        result = await record_dashboard_bundles(
-            saleor_url=args.url,
-            saleor_token=token,
-            version=dashboard_version,
-            bundle_ids=bundle_ids,
-        )
-        _save_record_failures(dashboard_version, result.get("errors") or [])
-        print(f"Recorded {result['recorded']} client bundle(s) for dashboard-{dashboard_version}")
-        if result.get("errors"):
-            print(f"  {len(result['errors'])} bundle(s) skipped — see record_failures.json")
+        for source, bundle_ids in _parse_client_bundle_targets(args.client_bundles):
+            ver = dashboard_version if source == "dashboard" else storefront_version
+            record_fn = record_dashboard_bundles if source == "dashboard" else record_storefront_bundles
+            result = await record_fn(
+                saleor_url=args.url,
+                saleor_token=token,
+                version=ver,
+                bundle_ids=bundle_ids,
+            )
+            save_record_failures(source, ver, result.get("errors") or [])
+            print(f"Recorded {result['recorded']} {source} bundle(s) for {source}-{ver}")
+            if result.get("errors"):
+                print(f"  {len(result['errors'])} bundle(s) skipped — see record_failures.json")
         if not args.apply_diff and not args.ops and not args.remove:
             return 0
 
@@ -168,8 +199,9 @@ async def main() -> int:
             print(f"Removed {removed} probe(s) from saleor-{version}")
         else:
             ids = [p.strip() for p in args.remove.split(",") if p.strip()]
-            removed = remove_client_bundles("dashboard", dashboard_version, ids)
-            print(f"Removed {removed} client bundle(s) from dashboard-{dashboard_version}")
+            removed_d = remove_client_bundles("dashboard", dashboard_version, ids)
+            removed_s = remove_client_bundles("storefront", storefront_version, ids)
+            print(f"Removed {removed_d + removed_s} client bundle(s)")
         return 0
 
     ops_to_record: list[tuple[str, str]] = []
@@ -195,6 +227,7 @@ async def main() -> int:
             saleor_url=args.url,
             token=token,
             dashboard_version=dashboard_version,
+            storefront_version=storefront_version,
             diff=diff,
             email=args.email,
             password=args.password,
@@ -207,8 +240,9 @@ async def main() -> int:
             saleor_token=token,
             version=version,
             dashboard_version=dashboard_version,
+            storefront_version=storefront_version,
         )
-        save_diff_report(version, diff)
+        save_diff_report(version, diff, dashboard_version=dashboard_version, storefront_version=storefront_version)
         return 0
     else:
         print(
@@ -239,8 +273,9 @@ async def main() -> int:
         saleor_token=token,
         version=version,
         dashboard_version=dashboard_version,
+        storefront_version=storefront_version,
     )
-    save_diff_report(version, diff)
+    save_diff_report(version, diff, dashboard_version=dashboard_version, storefront_version=storefront_version)
     return 0
 
 

@@ -1,0 +1,34 @@
+{
+  "bundle_id": "sf-searchresults",
+  "source": "saleor-storefront",
+  "source_path": "components/OverlayManager/Search/queries.ts",
+  "operation_names": [
+    "SearchResults"
+  ],
+  "document": "query SearchResults($query: String!, $channel: String) {\n  products(filter: {search: $query}, channel: $channel, first: 20) {\n    edges {\n      node {\n        id\n        name\n        slug\n        thumbnail {\n          url\n          alt\n        }\n        thumbnail2x: thumbnail(size: 510) {\n          url\n        }\n        category {\n          id\n          name\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n      hasPreviousPage\n      startCursor\n    }\n  }\n}",
+  "variables": {
+    "query": "{{fixtures.default_slug}}",
+    "channel": "{{fixtures.default_channel}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "products": {
+        "edges": [],
+        "pageInfo": {
+          "endCursor": null,
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": null
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:873f31f9d09ae599",
+  "document_hash": "sha256:b65d3e32eb7e305b"
+}

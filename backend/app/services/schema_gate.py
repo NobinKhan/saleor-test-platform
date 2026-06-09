@@ -21,7 +21,9 @@ def compute_schema_gate(schema_diff: dict[str, Any] | None) -> dict[str, Any]:
     missing_q = schema_diff.get("missing_queries") or []
     missing_m = schema_diff.get("missing_mutations") or []
     missing_l3 = schema_diff.get("missing_l3_fields") or []
+    missing_doc = schema_diff.get("missing_document_fields") or []
     client_l3_pass = schema_diff.get("client_schema_gate_pass", True)
+    document_gate_pass = schema_diff.get("document_schema_gate_pass", True)
     version_warn = schema_diff.get("version_warning") or ""
     intro_err = schema_diff.get("introspection_error")
     gate_source = schema_diff.get("schema_gate_source") or "dashboard catalog"
@@ -36,6 +38,8 @@ def compute_schema_gate(schema_diff: dict[str, Any] | None) -> dict[str, Any]:
         issues.append(f"{len(missing_m)} {source_label} mutations missing on target")
     if missing_l3:
         issues.append(f"{len(missing_l3)} L3 bundle root field(s) missing on target")
+    if missing_doc:
+        issues.append(f"{len(missing_doc)} L3 document validation issue(s) on target")
     if version_warn and "major" in version_warn.lower():
         issues.append(version_warn)
 
@@ -44,6 +48,7 @@ def compute_schema_gate(schema_diff: dict[str, Any] | None) -> dict[str, Any]:
         and not missing_q
         and not missing_m
         and client_l3_pass
+        and document_gate_pass
         and not (version_warn and "major" in version_warn.lower())
     )
 

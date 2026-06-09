@@ -40,6 +40,14 @@ def dashboard_vendor_path(version: str) -> Path:
     return VENDOR_ROOT / f"saleor-dashboard-{safe}"
 
 
+def storefront_vendor_path(version: str) -> Path:
+    safe = re.sub(r"[^\w.\-]", "-", version.strip())
+    return VENDOR_ROOT / f"saleor-storefront-{safe}"
+
+
+CLIENT_SOURCES = ("dashboard", "storefront")
+
+
 BUNDLES_ROOT = Path(os.environ.get("CLIENT_BUNDLES_ROOT", str(_default_bundles_root())))
 
 CLIENT_BUNDLE_KIND = "CLIENT_BUNDLE"
@@ -124,13 +132,18 @@ class ClientBundle:
             document_hash=data.get("document_hash"),
         )
 
+    def client_category(self) -> str:
+        if self.source == "saleor-storefront" or "storefront" in (self.source or ""):
+            return "client-storefront"
+        return "client-dashboard"
+
     def to_golden_probe(self) -> GoldenProbe:
         """Adapt bundle for existing comparison pipeline."""
         root = self.operation_names[0] if self.operation_names else self.bundle_id
         return GoldenProbe(
             endpoint_name=self.bundle_id,
             endpoint_kind=CLIENT_BUNDLE_KIND,
-            category="client-dashboard",
+            category=self.client_category(),
             input_sent=self.document,
             golden_response=self.golden_response or {},
             golden_outcome=self.golden_outcome or "unknown",
@@ -271,7 +284,26 @@ def register_bundle_version(source: str, version: str, *, bundle_count: int) -> 
     registry["supported"] = supported
     if source == "dashboard":
         registry["default_dashboard_version"] = version
+    if source == "storefront":
+        registry["default_storefront_version"] = version
     (BUNDLES_ROOT / "registry.json").write_text(json.dumps(registry, indent=2), encoding="utf-8")
+
+
+def resolve_storefront_bundle_version(detected: str | None = None) -> str:
+    from app.core.config import settings
+
+    if settings.client_bundles_storefront_version:
+        return settings.client_bundles_storefront_version
+    baseline = settings.reference_baseline_version
+    registry = load_registry()
+    default = registry.get("default_storefront_version", baseline)
+    if load_all_bundles_from_disk("storefront", baseline, recorded_only=True):
+        return baseline
+    if load_all_bundles_from_disk("storefront", default, recorded_only=True):
+        return default
+    if load_all_bundles_from_disk("storefront", baseline):
+        return baseline
+    return detected or default
 
 
 def resolve_dashboard_bundle_version(detected: str | None = None) -> str:
@@ -307,33 +339,57 @@ def bundles_compatible_with_schema(
 def build_client_bundle_endpoints(
     version: str | None = None,
     *,
+    source: str = "dashboard",
     priority: str | None = None,
     recorded_only: bool = True,
     schema_intro: dict[str, list[str]] | None = None,
 ) -> list[dict]:
-    ver = version or resolve_dashboard_bundle_version()
+    if source == "storefront":
+        ver = version or resolve_storefront_bundle_version()
+    else:
+        ver = version or resolve_dashboard_bundle_version()
     bundles = load_all_bundles_from_disk(
-        "dashboard",
+        source,
         ver,
         priority=priority,
         recorded_only=recorded_only,
     )
     if schema_intro is not None:
         bundles, _ = bundles_compatible_with_schema(bundles, schema_intro)
-    fixtures = load_fixtures("dashboard", ver)
+    fixtures = load_fixtures(source, ver)
     endpoints: list[dict] = []
     for bundle in bundles:
         endpoints.append({
             "name": bundle.bundle_id,
             "kind": CLIENT_BUNDLE_KIND,
-            "category": "client-dashboard",
-            "is_public": False,
+            "category": bundle.client_category(),
+            "is_public": bundle.auth_context == "anonymous",
+            "auth_context": bundle.auth_context,
             "golden_input": bundle.document,
             "bundle_document": bundle.document,
             "bundle_variables": bundle.variables,
             "bundle_fixtures": fixtures,
             "source": bundle.source,
+            "client_source": source,
         })
+    return endpoints
+
+
+def build_all_client_bundle_endpoints(
+    *,
+    recorded_only: bool = True,
+    schema_intro: dict[str, list[str]] | None = None,
+    sources: tuple[str, ...] = CLIENT_SOURCES,
+) -> list[dict]:
+    endpoints: list[dict] = []
+    for source in sources:
+        endpoints.extend(
+            build_client_bundle_endpoints(
+                source=source,
+                recorded_only=recorded_only,
+                schema_intro=schema_intro,
+            )
+        )
     return endpoints
 
 
@@ -355,7 +411,26 @@ def is_stub_bundle(bundle: ClientBundle) -> bool:
     return dh.startswith("sha256:seed") or bundle.source_path.startswith("seed/")
 
 
-def client_bundle_count(version: str | None = None) -> int:
-    ver = version or resolve_dashboard_bundle_version()
-    return len(load_all_bundles_from_disk("dashboard", ver, recorded_only=True))
+def client_bundle_count(
+    version: str | None = None,
+    *,
+    source: str = "dashboard",
+) -> int:
+    if source == "storefront":
+        ver = version or resolve_storefront_bundle_version()
+    else:
+        ver = version or resolve_dashboard_bundle_version()
+    return len(load_all_bundles_from_disk(source, ver, recorded_only=True))
+
+
+def total_client_bundle_count(
+    *,
+    schema_intro: dict[str, list[str]] | None = None,
+) -> int:
+    return len(
+        build_all_client_bundle_endpoints(
+            recorded_only=True,
+            schema_intro=schema_intro,
+        )
+    )
 

@@ -64,7 +64,7 @@ just patch-corpus --client-bundles all
 just baseline
 ```
 
-Test scopes: `client-dashboard` (L3 only), `full+client` (L1 + L3). L3 schema gate verifies bundle root fields exist on target schema without executing documents. L3 replays require fixture IDs from [REFERENCE-SEED.md](REFERENCE-SEED.md).
+Test scopes: `client-dashboard` (L3 dashboard only), `full+client` (L1 + L3 dashboard), `full+client+storefront` (official certification), `scenarios`, `variants`. L3 schema gate verifies bundle root fields exist on target schema; document schema gate validates nested selections. L3 replays require fixture IDs from [REFERENCE-SEED.md](REFERENCE-SEED.md).
 
 ## Coverage layers
 

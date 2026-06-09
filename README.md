@@ -73,14 +73,14 @@ just up
 just baseline
 ```
 
-This runs `verify-corpus` (388 L1 probes + 428 L3 bundles recorded, schema gate) then `self-check --scope full+client --require-tier2` (**805** certification endpoints, 100% SGRC).
+This runs `verify-corpus` (388 L1 probes + 428 L3 dashboard + 16 L3 storefront bundles recorded, schema gate) then `self-check --scope full+client+storefront --require-tier2` (**820** certification endpoints, 100% SGRC).
 
 ## UI certification smoke (manual)
 
 CLI baseline proves the engine; confirm the report UI separately:
 
 1. `just up` and `just register`
-2. Open http://localhost:5999 — start a run with **compatibility** mode, scope **`full+client`**
+2. Open http://localhost:5999 — start a run with **compatibility** mode, scope **`full+client+storefront`**
 3. Saleor URL: `http://localhost:8000/graphql/`, admin email/password from `just fresh`
 4. Report page: **Certified YES**, compatibility 100%, L3 bundle count shown
 
@@ -93,7 +93,7 @@ just up-harness
 just register
 ```
 
-Point the UI at your Go/Node/Rust backend URL. Use scope **`full+client`** for full certification. Run `just baseline` on official Saleor first — external runs compare against the same golden, not against each other.
+Point the UI at your Go/Node/Rust backend URL. Use scope **`full+client+storefront`** for full certification. Run `just baseline` on official Saleor first — external runs compare against the same golden, not against each other.
 
 **Saleor URL in the UI** (harness backend runs inside Docker):
 
@@ -111,7 +111,7 @@ Test runs use **Saleor admin email and password** (via `tokenCreate`). Credentia
 
 Certification requires **schema gate pass** (L1 + L3) AND **100% SGRC** (Tier 1 + Tier 2 when gate enabled). See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
-Official certification scope: **805 endpoints** (388 L1 probes + 417 L3 dashboard bundles on schema-compatible Saleor with seeded fixture data). **Storefront client GraphQL is not in scope yet** — see [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md).
+Official certification scope: **820 endpoints** (388 L1 + 417 L3 dashboard + 16 L3 storefront bundles on schema-compatible Saleor with seeded fixture data). See [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md) for remaining gaps.
 
 ## Local verification (no CI)
 
@@ -119,14 +119,15 @@ Official certification scope: **805 endpoints** (388 L1 probes + 417 L3 dashboar
 |-------|---------|
 | Golden baseline (do this first) | `just baseline` |
 | Corpus integrity only | `just verify-corpus` |
-| Replay only | `just self-check --scope full+client --require-tier2 --min-compat 100` |
+| Replay only | `just self-check --scope full+client+storefront --require-tier2 --min-compat 100` |
 | Backend unit tests | `docker compose exec harness-backend pytest tests/ -q` |
 | Frontend types | `cd frontend && bun run check` |
 
 ## Related
 
 - [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md) — 100% compatibility standard
-- [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md) — what certification covers vs planned gaps (Storefront, customer JWT, scenarios)
+- [docs/CORPUS-MAINTENANCE.md](docs/CORPUS-MAINTENANCE.md) — incremental corpus workflow (no new just recipes)
+- [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md) — remaining gaps (runtime integrations, richer scenarios)
 - [docs/SPEC.md](docs/SPEC.md) — product spec (some sections superseded)
 - [docs/saleor-reference-schema.md](docs/saleor-reference-schema.md) — catalog reference
 - [docs/REFERENCE-SEED.md](docs/REFERENCE-SEED.md) — fixture seeding for L3 certification

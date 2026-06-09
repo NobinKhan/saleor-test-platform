@@ -8,71 +8,14 @@
   "document": "query _GetWarehouseChoices($first: Int!, $query: String!) {\n  warehouses(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P0",
   "golden_response": {
     "data": {
       "warehouses": {
-        "edges": [
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjVlM2EwYWNkLTA0OWYtNGIxYi04MTgxLTMyNGEwOWRhMDM2Mg==",
-              "name": "Oceania",
-              "slug": "oceania"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmJkOTIzOTkxLTAzYTUtNDI1My1hNDdlLTRmOGI2NmJlNzhhMg==",
-              "name": "Europe",
-              "slug": "europe"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmFlYjM4YjM2LWU5MmQtNGE2OC05NjY5LTAzMGE5OGVlZDI1Zg==",
-              "name": "Default Warehouse",
-              "slug": "default-warehouse"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmNmMzc1ZDVkLWIyYWMtNDQwZi05NjZlLThmNjdjODYzMjA0ZQ==",
-              "name": "Default for click and collect",
-              "slug": "default-for-click-and-collect"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmU0ZTdkNjJhLWFkNmYtNDM3OC1hODk5LTNkNjI4YzUyNTAzMQ==",
-              "name": "Default",
-              "slug": "default"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjZiZGNjZWM0LTNhNzYtNDJlMy1iNzFhLWIxNmVjNmUwZjMyZA==",
-              "name": "Asia",
-              "slug": "asia"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmQ3ZjUzYTdkLTNkNGYtNDQ1Zi1iOGY1LTdhYjljYjE4MGFlZA==",
-              "name": "Americas",
-              "slug": "americas"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmQ2OWE0OTk3LTBkZTktNDAzOS05NDMwLWJjMjdkZjMxMWQxNQ==",
-              "name": "Africa",
-              "slug": "africa"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -80,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:5652a7fb5ef32a8a",
+  "response_shape_hash": "sha256:fbdede1f57fa8a2e",
   "document_hash": "sha256:3c727e59ffd36372"
 }

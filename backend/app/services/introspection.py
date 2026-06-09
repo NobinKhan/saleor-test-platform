@@ -17,6 +17,100 @@ query IntrospectionQuery {
 }
 """
 
+FULL_INTROSPECTION_QUERY = """
+query IntrospectionQuery {
+  __schema {
+    queryType { name }
+    mutationType { name }
+    subscriptionType { name }
+    types {
+      ...FullType
+    }
+    directives {
+      name
+      description
+      locations
+      args {
+        ...InputValue
+      }
+    }
+  }
+}
+
+fragment FullType on __Type {
+  kind
+  name
+  description
+  fields(includeDeprecated: true) {
+    name
+    description
+    args {
+      ...InputValue
+    }
+    type {
+      ...TypeRef
+    }
+    isDeprecated
+    deprecationReason
+  }
+  inputFields {
+    ...InputValue
+  }
+  interfaces {
+    ...TypeRef
+  }
+  enumValues(includeDeprecated: true) {
+    name
+    description
+    isDeprecated
+    deprecationReason
+  }
+  possibleTypes {
+    ...TypeRef
+  }
+}
+
+fragment InputValue on __InputValue {
+  name
+  description
+  type { ...TypeRef }
+  defaultValue
+}
+
+fragment TypeRef on __Type {
+  kind
+  name
+  ofType {
+    kind
+    name
+    ofType {
+      kind
+      name
+      ofType {
+        kind
+        name
+        ofType {
+          kind
+          name
+          ofType {
+            kind
+            name
+            ofType {
+              kind
+              name
+              ofType {
+                kind
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"""
+
 
 def normalize_graphql_url(url: str) -> str:
     url = url.rstrip("/")
@@ -64,6 +158,33 @@ async def introspect_saleor(
         for f in (schema.get("mutationType") or {}).get("fields") or []
     ]
     return {"queries": queries, "mutations": mutations}
+
+
+async def introspect_full_schema(
+    url: str,
+    token: str | None,
+    timeout: int = 30,
+) -> dict[str, Any]:
+    """Return full GraphQL introspection result for document validation."""
+    headers = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+
+    graphql_url = normalize_graphql_url(url)
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.post(
+            graphql_url,
+            json={"query": FULL_INTROSPECTION_QUERY},
+            headers=headers,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+    errors = data.get("errors")
+    if errors:
+        raise RuntimeError(errors[0].get("message", "Full introspection failed"))
+
+    return data
 
 
 def compare_schema(

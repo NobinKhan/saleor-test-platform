@@ -8,78 +8,14 @@
   "document": "query _GetProductTypesChoices($first: Int!, $query: String!) {\n  productTypes(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n        slug\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
   "golden_response": {
     "data": {
       "productTypes": {
-        "edges": [
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MTc=",
-              "name": "Audiobook",
-              "slug": "audiobook"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjE=",
-              "name": "Beanies & Scarfs",
-              "slug": "beanie"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MQ==",
-              "name": "Default Type",
-              "slug": "default-type"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjQ=",
-              "name": "Simple Gift Card",
-              "slug": "gift-card"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjM=",
-              "name": "Juice",
-              "slug": "juice"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjA=",
-              "name": "Top",
-              "slug": "shirt"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MTg=",
-              "name": "Shoe",
-              "slug": "shoe"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjI=",
-              "name": "Simple",
-              "slug": "simple"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MTk=",
-              "name": "Sweatshirt",
-              "slug": "sweatshirt"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -87,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:1d49af02249ba43f",
+  "response_shape_hash": "sha256:b7541a23e09dcbf3",
   "document_hash": "sha256:84f472d25630a71a"
 }

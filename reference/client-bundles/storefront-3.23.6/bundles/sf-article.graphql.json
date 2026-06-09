@@ -1,0 +1,25 @@
+{
+  "bundle_id": "sf-article",
+  "source": "saleor-storefront",
+  "source_path": "views/Article/query.ts",
+  "operation_names": [
+    "Article"
+  ],
+  "document": "query Article($slug: String!) {\n  page(slug: $slug) {\n    content\n    id\n    seoDescription\n    seoTitle\n    slug\n    title\n  }\n}",
+  "variables": {
+    "slug": "{{fixtures.default_slug}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "page": null
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:5a5d9dd1e9d8b10b",
+  "document_hash": "sha256:e6637babac15eddc"
+}

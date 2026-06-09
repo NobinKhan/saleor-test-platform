@@ -10,7 +10,7 @@
     "id": "{{fixtures.placeholder_id}}",
     "after": "",
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",

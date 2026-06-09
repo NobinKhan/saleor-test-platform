@@ -8,21 +8,14 @@
   "document": "query _GetGiftCardTagsChoices($first: Int!, $query: String!) {\n  giftCardTags(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
   "golden_response": {
     "data": {
       "giftCardTags": {
-        "edges": [
-          {
-            "node": {
-              "id": "R2lmdENhcmRUYWc6MQ==",
-              "name": "issued-gift-cards"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -30,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:becedf9b3cdc31ae",
+  "response_shape_hash": "sha256:7220b3447ee1952a",
   "document_hash": "sha256:d794983bdf1150b6"
 }

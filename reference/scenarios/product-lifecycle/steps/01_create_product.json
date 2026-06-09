@@ -1,0 +1,22 @@
+{
+  "step_id": "01_create_product",
+  "name": "Create harness scenario product",
+  "auth_context": "staff",
+  "input_sent": "mutation ProductLifecycleCreate($input: ProductCreateInput!) { productCreate(input: $input) { product { id name slug } errors { field message code } } }",
+  "variables": {
+    "input": {
+      "name": "Harness Scenario Product",
+      "slug": "harness-scenario-product",
+      "productType": "{{fixtures.default_product_type_id}}",
+      "channelListings": [{"channelId": "{{fixtures.default_channel_id}}", "isPublished": true}]
+    }
+  },
+  "extract": {
+    "created_product_id": "$.data.productCreate.product.id",
+    "created_product_slug": "$.data.productCreate.product.slug"
+  },
+  "assertions": [
+    {"kind": "path_exists", "path": "$.data.productCreate.product.id"},
+    {"kind": "equals", "path": "$.data.productCreate.product.slug", "expected": "harness-scenario-product"}
+  ]
+}

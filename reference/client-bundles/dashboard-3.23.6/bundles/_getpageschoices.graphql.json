@@ -8,79 +8,14 @@
   "document": "query _GetPagesChoices($first: Int!, $query: String!) {\n  pages(first: $first, filter: {search: $query}) {\n    edges {\n      node {\n        id\n        name: title\n        slug\n        originalSlug: slug\n      }\n    }\n  }\n}",
   "variables": {
     "first": 10,
-    "query": ""
+    "query": "{{fixtures.default_slug}}"
   },
   "auth_context": "staff",
   "priority": "P1",
   "golden_response": {
     "data": {
       "pages": {
-        "edges": [
-          {
-            "node": {
-              "id": "UGFnZToz",
-              "name": "About",
-              "slug": "about",
-              "originalSlug": "about"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo2",
-              "name": "CozyNest",
-              "slug": "cozynest",
-              "originalSlug": "cozynest"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo3",
-              "name": "Damaged Item",
-              "slug": "damaged-item",
-              "originalSlug": "damaged-item"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo0",
-              "name": "Frutello",
-              "slug": "frutello",
-              "originalSlug": "frutello"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo5",
-              "name": "Incorrect Address",
-              "slug": "incorrect-address",
-              "originalSlug": "incorrect-address"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo4",
-              "name": "Package Lost",
-              "slug": "package-lost",
-              "originalSlug": "package-lost"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZToxMA==",
-              "name": "Package Not Picked Up by Customer",
-              "slug": "package-not-picked-up-by-customer",
-              "originalSlug": "package-not-picked-up-by-customer"
-            }
-          },
-          {
-            "node": {
-              "id": "UGFnZTo1",
-              "name": "Saleor Loom",
-              "slug": "saleor-loom",
-              "originalSlug": "saleor-loom"
-            }
-          }
-        ]
+        "edges": []
       }
     }
   },
@@ -88,6 +23,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:33ea15fc6a91274f",
+  "response_shape_hash": "sha256:a6d0487113e86168",
   "document_hash": "sha256:e2fd4751a921ee16"
 }

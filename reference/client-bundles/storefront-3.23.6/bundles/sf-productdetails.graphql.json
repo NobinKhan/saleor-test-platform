@@ -1,0 +1,41 @@
+{
+  "bundle_id": "sf-productdetails",
+  "source": "saleor-storefront",
+  "source_path": "views/Product/queries.ts",
+  "operation_names": [
+    "ProductDetails"
+  ],
+  "document": "query ProductDetails($id: ID!, $channel: String, $countryCode: CountryCode) {\n  product(id: $id, channel: $channel) {\n    ...BasicProductFields\n    ...ProductPricingField\n    description\n    category {\n      id\n      name\n      products(first: 3, channel: $channel) {\n        edges {\n          node {\n            ...BasicProductFields\n            ...ProductPricingField\n          }\n        }\n      }\n    }\n    images {\n      id\n      alt\n      url\n    }\n    attributes {\n      ...SelectedAttributeFields\n    }\n    variants {\n      ...ProductVariantFields\n    }\n    seoDescription\n    seoTitle\n    isAvailable\n    isAvailableForPurchase\n    availableForPurchase\n  }\n}\n\nfragment BasicProductFields on Product {\n  id\n  slug\n  name\n  thumbnail {\n    url\n    alt\n  }\n  thumbnail2x: thumbnail(size: 510) {\n    url\n  }\n}\n\nfragment ProductPricingField on Product {\n  pricing {\n    onSale\n    priceRangeUndiscounted {\n      start {\n        ...TaxedPrice\n      }\n      stop {\n        ...TaxedPrice\n      }\n    }\n    priceRange {\n      start {\n        ...TaxedPrice\n      }\n      stop {\n        ...TaxedPrice\n      }\n    }\n  }\n}\n\nfragment TaxedPrice on TaxedMoney {\n  gross {\n    ...Price\n  }\n  net {\n    ...Price\n  }\n}\n\nfragment Price on Money {\n  amount\n  currency\n}\n\nfragment SelectedAttributeFields on SelectedAttribute {\n  attribute {\n    id\n    name\n  }\n  values {\n    id\n    name\n  }\n}\n\nfragment ProductVariantFields on ProductVariant {\n  id\n  sku\n  name\n  quantityAvailable(countryCode: $countryCode)\n  images {\n    id\n    url\n    alt\n  }\n  pricing {\n    onSale\n    priceUndiscounted {\n      ...TaxedPrice\n    }\n    price {\n      ...TaxedPrice\n    }\n  }\n  attributes(variantSelection: VARIANT_SELECTION) {\n    attribute {\n      id\n      name\n      slug\n    }\n    values {\n      id\n      name\n      value: name\n    }\n  }\n}",
+  "variables": {
+    "id": "{{fixtures.placeholder_id}}",
+    "channel": "{{fixtures.default_channel}}",
+    "countryCode": null
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Product."
+      }
+    ],
+    "data": {
+      "product": null
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:177f00490cbb202e",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "sf-productdetails",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "product"
+    ]
+  },
+  "document_hash": "sha256:866afe2cfcbb2b58"
+}

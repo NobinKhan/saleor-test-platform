@@ -9,7 +9,7 @@
   "variables": {
     "after": "",
     "first": 10,
-    "query": "",
+    "query": "{{fixtures.default_slug}}",
     "channel": "{{fixtures.default_channel}}"
   },
   "auth_context": "staff",
@@ -17,73 +17,12 @@
   "golden_response": {
     "data": {
       "search": {
-        "edges": [
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzU4",
-              "name": "S"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzY0",
-              "name": "S"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc1",
-              "name": "Vinyl"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzQw",
-              "name": "39"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc5",
-              "name": "iTunes"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzUz",
-              "name": "S"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzYx",
-              "name": "M"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ4",
-              "name": "S"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk0",
-              "name": "S"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzM1",
-              "name": "39"
-            }
-          }
-        ],
+        "edges": [],
         "pageInfo": {
-          "endCursor": "WyIwIiwiNjE4MjIzNTgxIl0=",
-          "hasNextPage": true,
+          "endCursor": null,
+          "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyIwIiwiMTExMjIzNTgwIl0="
+          "startCursor": null
         }
       }
     }
@@ -92,6 +31,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:9be3102f81b99076",
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
   "document_hash": "sha256:491d613bd94e349f"
 }

@@ -22,20 +22,41 @@ from app.services.reference_corpus import (
     resolve_corpus_version,
 )
 from app.services.introspection import compare_schema, introspect_saleor, schema_gate_diff
-from app.services.saleor_auth import ensure_valid_token, refresh_saleor_token
+from app.services.saleor_auth import (
+    CUSTOMER_DEFAULT_EMAIL,
+    CUSTOMER_DEFAULT_PASSWORD,
+    ensure_customer_token,
+    ensure_valid_token,
+    refresh_saleor_token,
+)
 from app.services.outcome import classify_graphql_response, classify_transport_error
 from app.services.query_builder import build_query_with_schema, introspect_field_args
 from app.services.client_bundle_fixtures import substitute_fixtures
 from app.services.client_bundles import (
+    build_all_client_bundle_endpoints,
     build_client_bundle_endpoints,
     CLIENT_BUNDLE_KIND,
+    CLIENT_SOURCES,
     load_all_bundles_from_disk,
     resolve_dashboard_bundle_version,
+    resolve_storefront_bundle_version,
 )
 from app.services.client_bundle_schema_gate import (
     compute_client_bundle_schema_gate,
     merge_client_schema_into_diff,
 )
+from app.services.document_schema_gate import (
+    compute_document_schema_gate,
+    merge_document_schema_into_diff,
+)
+from app.services.introspection import introspect_full_schema
+from app.services.scenario_corpus import (
+    SCENARIO_KIND,
+    build_scenario_endpoints,
+    run_assertions,
+    substitute_scenario_variables,
+)
+from app.services.variant_corpus import VARIANT_KIND, build_variant_endpoints
 from app.services.reference_compare import compare_to_golden, tier2_gate_enabled
 from app.services.response_contract import CONTRACT_AUTH_ERROR, CONTRACT_SUCCESS, classify_response_contract
 
@@ -433,6 +454,8 @@ class TestRunner:
         test_mode: str = "compatibility",
         saleor_email: str | None = None,
         saleor_password: str | None = None,
+        saleor_customer_email: str | None = None,
+        saleor_customer_password: str | None = None,
         tier2_required: bool | None = None,
     ):
         self.run_id = run_id
@@ -440,7 +463,11 @@ class TestRunner:
         self.saleor_token = saleor_token
         self.saleor_email = saleor_email
         self.saleor_password = saleor_password
+        self.saleor_customer_email = saleor_customer_email or CUSTOMER_DEFAULT_EMAIL
+        self.saleor_customer_password = saleor_customer_password or CUSTOMER_DEFAULT_PASSWORD
         self.test_scope = test_scope
+        self._scenario_context: dict[str, Any] = {}
+        self._customer_token: str | None = None
         self.public_only = public_only
         self.concurrency = concurrency
         self.timeout = timeout
@@ -456,11 +483,49 @@ class TestRunner:
     def stop(self):
         self._stopped = True
 
-    def _auth_headers(self) -> dict[str, str]:
+    def _auth_headers(self, auth_context: str = "staff") -> dict[str, str]:
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
-        if self.saleor_token:
-            headers["Authorization"] = f"Bearer {self.saleor_token}"
+        token = self.saleor_token
+        if auth_context == "customer":
+            token = self._customer_token or self.saleor_token
+        elif auth_context == "anonymous":
+            token = None
+        if token:
+            headers["Authorization"] = f"Bearer {token}"
         return headers
+
+    async def _ensure_auth_for_context(
+        self,
+        http_client: httpx.AsyncClient | None = None,
+        *,
+        auth_context: str = "staff",
+        force_refresh: bool = False,
+    ) -> str | None:
+        if auth_context == "anonymous":
+            return None
+        if auth_context == "customer":
+            self._customer_token = await ensure_customer_token(
+                saleor_url=self.saleor_url,
+                token=self._customer_token,
+                email=self.saleor_customer_email,
+                password=self.saleor_customer_password,
+                timeout=self.timeout,
+                client=http_client,
+                force_refresh=force_refresh,
+            )
+            return self._customer_token
+        refreshed = await ensure_valid_token(
+            saleor_url=self.saleor_url,
+            token=self.saleor_token,
+            email=self.saleor_email,
+            password=self.saleor_password,
+            timeout=self.timeout,
+            client=http_client,
+            force_refresh=force_refresh,
+        )
+        if refreshed:
+            self.saleor_token = refreshed
+        return self.saleor_token
 
     async def _ensure_valid_token(
         self,
@@ -512,17 +577,41 @@ class TestRunner:
             certification_schema = load_reference_schema(corpus_ver)
             if self.test_scope == "client-dashboard":
                 endpoints = build_client_bundle_endpoints(
-                    recorded_only=True, schema_intro=certification_schema
+                    source="dashboard",
+                    recorded_only=True,
+                    schema_intro=certification_schema,
                 )
-            elif self.test_scope == "full+client":
+            elif self.test_scope == "client-storefront":
+                endpoints = build_client_bundle_endpoints(
+                    source="storefront",
+                    recorded_only=True,
+                    schema_intro=certification_schema,
+                )
+            elif self.test_scope == "scenarios":
+                endpoints = build_scenario_endpoints(recorded_only=False)
+            elif self.test_scope == "variants":
+                endpoints = build_variant_endpoints(recorded_only=True)
+            elif self.test_scope in ("full+client", "full+client+storefront"):
                 endpoints = build_golden_endpoints(
                     corpus_ver, "full", self.public_only, self.categories
                 )
+                sources = ("dashboard", "storefront") if self.test_scope == "full+client+storefront" else ("dashboard",)
                 endpoints.extend(
-                    build_client_bundle_endpoints(
-                        recorded_only=True, schema_intro=certification_schema
+                    build_all_client_bundle_endpoints(
+                        recorded_only=True,
+                        schema_intro=certification_schema,
+                        sources=sources,
                     )
                 )
+            elif self.test_scope == "full+scenarios":
+                endpoints = build_golden_endpoints(
+                    corpus_ver, "full", self.public_only, self.categories
+                )
+                endpoints.extend(build_all_client_bundle_endpoints(
+                    recorded_only=True, schema_intro=certification_schema
+                ))
+                endpoints.extend(build_scenario_endpoints(recorded_only=True))
+                endpoints.extend(build_variant_endpoints(recorded_only=True))
             else:
                 endpoints = build_golden_endpoints(
                     corpus_ver, self.test_scope, self.public_only, self.categories
@@ -699,15 +788,45 @@ class TestRunner:
                 )
                 ref_schema = load_reference_schema(corpus_ver)
                 diff = schema_gate_diff(intro, ref_schema, source="golden")
-                if self.test_scope in ("client-dashboard", "full+client"):
-                    dash_ver = resolve_dashboard_bundle_version()
-                    bundles = load_all_bundles_from_disk(
-                        "dashboard", dash_ver, recorded_only=True
-                    )
+                client_scopes = (
+                    "client-dashboard",
+                    "client-storefront",
+                    "full+client",
+                    "full+client+storefront",
+                    "full+scenarios",
+                )
+                if self.test_scope in client_scopes:
+                    all_bundles = []
+                    sources = CLIENT_SOURCES
+                    if self.test_scope == "client-dashboard":
+                        sources = ("dashboard",)
+                    elif self.test_scope == "client-storefront":
+                        sources = ("storefront",)
+                    elif self.test_scope == "full+client":
+                        sources = ("dashboard",)
+                    for source in sources:
+                        ver = (
+                            resolve_storefront_bundle_version()
+                            if source == "storefront"
+                            else resolve_dashboard_bundle_version()
+                        )
+                        all_bundles.extend(
+                            load_all_bundles_from_disk(source, ver, recorded_only=True)
+                        )
                     client_gate = compute_client_bundle_schema_gate(
-                        bundles, intro, recorded_only=True
+                        all_bundles, intro, recorded_only=True
                     )
                     diff = merge_client_schema_into_diff(diff, client_gate)
+                    try:
+                        full_intro = await introspect_full_schema(
+                            self.saleor_url, self.saleor_token, self.timeout
+                        )
+                        doc_gate = compute_document_schema_gate(
+                            all_bundles, full_intro, recorded_only=True
+                        )
+                        diff = merge_document_schema_into_diff(diff, doc_gate)
+                    except Exception:
+                        pass
                 yield {"type": "schema_diff", "diff": diff}
             except Exception as exc:
                 yield {"type": "schema_diff", "diff": {"introspection_error": str(exc)}}
@@ -741,6 +860,10 @@ class TestRunner:
         category = endpoint["category"]
         is_public = endpoint["is_public"]
 
+        auth_context = endpoint.get("auth_context", "staff")
+        if kind == SCENARIO_KIND:
+            auth_context = endpoint.get("auth_context", "staff")
+
         if self.test_mode == "compatibility" and endpoint.get("golden_input"):
             query = endpoint["golden_input"]
         else:
@@ -754,6 +877,13 @@ class TestRunner:
                 payload["variables"] = substitute_fixtures(variables, fixtures)
             except KeyError:
                 payload["variables"] = variables
+        elif kind == SCENARIO_KIND:
+            payload["query"] = endpoint["golden_input"]
+            raw_vars = endpoint.get("step_variables") or {}
+            fixtures = endpoint.get("step_fixtures") or {}
+            payload["variables"] = substitute_scenario_variables(
+                raw_vars, self._scenario_context, fixtures
+            )
         start = time.time()
 
         try:
@@ -764,10 +894,13 @@ class TestRunner:
                 resp_status = 500
                 for attempt in range(3):
                     if self.test_mode == "compatibility" and (
-                        not endpoint.get("is_public") or kind == CLIENT_BUNDLE_KIND
+                        auth_context != "anonymous"
+                        or kind in (CLIENT_BUNDLE_KIND, SCENARIO_KIND, VARIANT_KIND)
                     ):
-                        await self._ensure_valid_token(client)
-                    headers = self._auth_headers()
+                        await self._ensure_auth_for_context(
+                            client, auth_context=auth_context
+                        )
+                    headers = self._auth_headers(auth_context)
                     resp = await client.post(
                         self.saleor_url,
                         json=payload,
@@ -779,9 +912,27 @@ class TestRunner:
                     if contract != CONTRACT_AUTH_ERROR:
                         break
                     if attempt < 2:
-                        await self._force_refresh_token()
+                        if auth_context == "customer":
+                            await self._ensure_auth_for_context(
+                                client, auth_context="customer", force_refresh=True
+                            )
+                        else:
+                            await self._force_refresh_token()
                         await asyncio.sleep(0.25 * (attempt + 1))
                 elapsed_ms = int((time.time() - start) * 1000)
+
+                assertion_failures: list[str] = []
+                if kind == SCENARIO_KIND:
+                    for extract_key, json_path in (endpoint.get("step_extract") or {}).items():
+                        from app.services.scenario_corpus import _extract_json_path
+                        value = _extract_json_path(resp_json, json_path)
+                        if value is not None:
+                            self._scenario_context[extract_key] = value
+                    assertion_failures = run_assertions(
+                        resp_json,
+                        endpoint.get("step_assertions") or [],
+                        self._scenario_context,
+                    )
 
                 meta = classify_graphql_response(
                     resp_json,
@@ -796,7 +947,22 @@ class TestRunner:
                     meta,
                     http_status=resp_status,
                     tier2_required=tier2_gate_enabled(self.tier2_required),
+                    endpoint_meta=endpoint,
                 )
+                if assertion_failures:
+                    comparison = type(comparison)(
+                        match_status="assertion_fail",
+                        expected_response=comparison.expected_response,
+                        diff_summary="; ".join(assertion_failures),
+                        recommended_status="fail",
+                        golden_outcome=comparison.golden_outcome,
+                        golden_contract=comparison.golden_contract,
+                        actual_contract=comparison.actual_contract,
+                        field_items=comparison.field_items,
+                        resolved_corpus_version=comparison.resolved_corpus_version,
+                        compatible=False,
+                        client_parity_note=comparison.client_parity_note,
+                    )
                 if self.test_mode == "compatibility":
                     status = "pass" if comparison.compatible else (
                         "warn" if comparison.match_status == "missing_golden" else "fail"
@@ -829,7 +995,9 @@ class TestRunner:
                     "is_public": is_public,
                     "response_time_ms": elapsed_ms,
                     "error_message": meta.get("error_message"),
-                    "input_sent": json.dumps(payload) if endpoint.get("bundle_document") else query,
+                    "input_sent": json.dumps(payload) if (
+                        endpoint.get("bundle_document") or kind == SCENARIO_KIND
+                    ) else query,
                     "actual_response": json.dumps(resp_json),
                 }
             finally:

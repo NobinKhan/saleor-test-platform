@@ -66,10 +66,14 @@ class SSERunnerManager:
         test_mode: str = "compatibility",
         saleor_email: str | None = None,
         saleor_password: str | None = None,
+        saleor_customer_email: str | None = None,
+        saleor_customer_password: str | None = None,
     ):
         token = decrypt_token(saleor_token) if saleor_token else None
         email = decrypt_token(saleor_email) if saleor_email else None
         password = decrypt_token(saleor_password) if saleor_password else None
+        cust_email = decrypt_token(saleor_customer_email) if saleor_customer_email else None
+        cust_password = decrypt_token(saleor_customer_password) if saleor_customer_password else None
 
         runner = TestRunner(
             run_id=run_id,
@@ -83,6 +87,8 @@ class SSERunnerManager:
             test_mode=test_mode,
             saleor_email=email,
             saleor_password=password,
+            saleor_customer_email=cust_email,
+            saleor_customer_password=cust_password,
         )
         rid = str(run_id)
         self._runners[rid] = runner

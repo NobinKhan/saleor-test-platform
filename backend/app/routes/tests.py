@@ -56,6 +56,8 @@ def _start_runner(
     *,
     saleor_email: str | None = None,
     saleor_password: str | None = None,
+    saleor_customer_email: str | None = None,
+    saleor_customer_password: str | None = None,
 ) -> None:
     runner_manager.start_run(
         run_id=run.id,
@@ -69,6 +71,8 @@ def _start_runner(
         test_mode=test_mode,
         saleor_email=saleor_email or run.saleor_email,
         saleor_password=saleor_password or run.saleor_password,
+        saleor_customer_email=saleor_customer_email,
+        saleor_customer_password=saleor_customer_password,
     )
 
 
@@ -136,6 +140,8 @@ async def create_run(
         timeout_seconds=data.timeout_seconds,
     )
     run = TestRun(**row)
+    if data.compare_run_id:
+        run.schema_diff = {"_compare_run_id": str(data.compare_run_id)}
     db.add(run)
     await db.commit()
     await db.refresh(run)
@@ -147,6 +153,8 @@ async def create_run(
         data.test_mode,
         saleor_email=row["saleor_email"],
         saleor_password=row["saleor_password"],
+        saleor_customer_email=data.saleor_customer_email,
+        saleor_customer_password=data.saleor_customer_password,
     )
     return _summary_from_run(run)
 

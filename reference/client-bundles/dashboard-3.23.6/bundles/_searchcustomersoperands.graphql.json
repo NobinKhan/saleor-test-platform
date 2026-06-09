@@ -81,18 +81,18 @@
           },
           {
             "node": {
-              "id": "VXNlcjoxOQ==",
-              "email": "jade.guerrero@example.com",
-              "firstName": "Jade",
-              "lastName": "Guerrero"
+              "id": "VXNlcjo0NQ==",
+              "email": "harness-storefront-customer@example.com",
+              "firstName": "",
+              "lastName": ""
             }
           },
           {
             "node": {
-              "id": "VXNlcjoxOA==",
-              "email": "james.phillips@example.com",
-              "firstName": "James",
-              "lastName": "Phillips"
+              "id": "VXNlcjoxOQ==",
+              "email": "jade.guerrero@example.com",
+              "firstName": "Jade",
+              "lastName": "Guerrero"
             }
           }
         ]

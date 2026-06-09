@@ -14,83 +14,56 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6YmEyYTliYTctNTRmMy00ZDU4LWJkMmItYTgyNjIyOTY5YWM3",
+        "id": "T3JkZXI6ZDY5ZTZhZDMtMjAzMS00Yzg3LTljYzItNWM0MzBlYTdhM2Jm",
         "transactions": [
           {
-            "id": "VHJhbnNhY3Rpb25JdGVtOjYyYzE0NDI3LTI5ZWYtNGNkZi04ZmU4LThiNTU1MWIzZjY1NA==",
+            "id": "VHJhbnNhY3Rpb25JdGVtOjEzYzU0YzQyLTAzZDItNDJjMS05MDA3LTIyYjE0YzhlMWNjNA==",
             "name": "",
             "actions": [
-              "REFUND"
+              "CHARGE",
+              "CANCEL"
             ],
             "events": [
               {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2NA==",
-                "pspReference": "a1a645fa-1850-4e5f-98db-7f8d008f1a2e",
+                "id": "VHJhbnNhY3Rpb25FdmVudDo2OA==",
+                "pspReference": "7a24e7af-d0d4-4005-82de-9286dad375d2",
                 "amount": {
-                  "amount": 185.71,
-                  "currency": "USD"
-                },
-                "externalUrl": "",
-                "type": "CHARGE_SUCCESS",
-                "message": "Charge success",
-                "createdAt": "2026-06-09T01:03:26.584250+00:00",
-                "reasonReference": null,
-                "createdBy": null
-              },
-              {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2Mw==",
-                "pspReference": "a1a645fa-1850-4e5f-98db-7f8d008f1a2e",
-                "amount": {
-                  "amount": 185.71,
-                  "currency": "USD"
-                },
-                "externalUrl": "",
-                "type": "CHARGE_REQUEST",
-                "message": "",
-                "createdAt": "2026-06-09T01:03:26.584219+00:00",
-                "reasonReference": null,
-                "createdBy": null
-              },
-              {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2Mg==",
-                "pspReference": "36bf24a7-18e4-4f49-acb3-c3d71ef52ef5",
-                "amount": {
-                  "amount": 185.71,
+                  "amount": 507.75,
                   "currency": "USD"
                 },
                 "externalUrl": "",
                 "type": "AUTHORIZATION_SUCCESS",
                 "message": "Authorization success",
-                "createdAt": "2026-06-09T01:03:26.584179+00:00",
+                "createdAt": "2026-06-09T05:40:33.107931+00:00",
                 "reasonReference": null,
                 "createdBy": null
               },
               {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2MQ==",
-                "pspReference": "36bf24a7-18e4-4f49-acb3-c3d71ef52ef5",
+                "id": "VHJhbnNhY3Rpb25FdmVudDo2Nw==",
+                "pspReference": "7a24e7af-d0d4-4005-82de-9286dad375d2",
                 "amount": {
-                  "amount": 185.71,
+                  "amount": 507.75,
                   "currency": "USD"
                 },
                 "externalUrl": "",
                 "type": "AUTHORIZATION_REQUEST",
                 "message": "",
-                "createdAt": "2026-06-09T01:03:26.584085+00:00",
+                "createdAt": "2026-06-09T05:40:33.107901+00:00",
                 "reasonReference": null,
                 "createdBy": null
               }
             ],
-            "pspReference": "36bf24a7-18e4-4f49-acb3-c3d71ef52ef5",
+            "pspReference": "7a24e7af-d0d4-4005-82de-9286dad375d2",
             "externalUrl": "",
-            "createdAt": "2026-06-09T01:03:26.581957+00:00",
+            "createdAt": "2026-06-09T05:40:33.106302+00:00",
             "createdBy": null,
             "paymentMethodDetails": null,
             "authorizedAmount": {
-              "amount": 0.0,
+              "amount": 507.75,
               "currency": "USD"
             },
             "chargedAmount": {
-              "amount": 185.71,
+              "amount": 0.0,
               "currency": "USD"
             },
             "refundedAmount": {
@@ -121,7 +94,7 @@
         ],
         "total": {
           "gross": {
-            "amount": 185.71,
+            "amount": 507.75,
             "currency": "USD"
           }
         }

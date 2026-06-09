@@ -101,6 +101,8 @@
       golden_missing: number;
       client_parity_gaps: number;
       client_bundle_count: number;
+      storefront_bundle_count: number;
+      document_schema_gate_pass: boolean | null;
       tier2_gate_enabled: boolean;
       upgrade_hint: string | null;
       probe_outcome_rate: number | null;
@@ -131,6 +133,18 @@
     results: TestResultRow[];
     pass_rate: number;
     schema_diff?: Record<string, unknown> | null;
+    compare_summary?: {
+      compare_run_id: string;
+      saleor_url: string;
+      saleor_version: string | null;
+      pass_rate: number;
+      scope: string;
+      regressions: number;
+      improvements: number;
+      total: number;
+      passed: number;
+      failed: number;
+    } | null;
   }
 
   let report: ReportData | null = null;
@@ -392,10 +406,25 @@
           </tr>
           <tr>
             <th>Certification scope</th>
-            <td>Full + L3 Dashboard (798 endpoints)</td>
+            <td>{report.summary.test_scope} — L3 bundles: {report.summary.client_bundle_count} (storefront: {report.summary.storefront_bundle_count ?? 0})</td>
           </tr>
         </tbody>
       </table>
+      {#if report.compare_summary}
+        <div class="card compare-card">
+          <h2>Side-by-side comparison</h2>
+          <p>
+            Compared with run <code>{report.compare_summary.compare_run_id}</code>
+            ({report.compare_summary.saleor_version ?? "unknown"} @ {report.compare_summary.saleor_url})
+          </p>
+          <p>
+            Baseline pass rate: <strong>{report.compare_summary.pass_rate}%</strong>
+            ({report.compare_summary.passed}/{report.compare_summary.total}) —
+            regressions: <strong>{report.compare_summary.regressions}</strong>,
+            improvements: <strong>{report.compare_summary.improvements}</strong>
+          </p>
+        </div>
+      {/if}
       {#if report.summary.upgrade_hint}
         <p class="upgrade-hint">{report.summary.upgrade_hint}</p>
       {/if}
