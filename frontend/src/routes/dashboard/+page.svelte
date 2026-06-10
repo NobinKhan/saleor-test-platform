@@ -20,6 +20,7 @@
   let runs: TestRun[] = [];
   let loading = true;
   let error = "";
+  let copiedId = "";
 
   onMount(async () => {
     try {
@@ -40,6 +41,22 @@
 
   function formatDate(iso: string) {
     return new Date(iso).toLocaleString();
+  }
+
+  function shortId(id: string) {
+    return id.slice(0, 8);
+  }
+
+  async function copyId(id: string) {
+    try {
+      await navigator.clipboard.writeText(id);
+      copiedId = id;
+      setTimeout(() => {
+        if (copiedId === id) copiedId = "";
+      }, 2000);
+    } catch {
+      window.prompt("Copy run ID:", id);
+    }
   }
 </script>
 
@@ -68,6 +85,7 @@
       <table class="runs-table">
         <thead>
           <tr>
+            <th>Run ID</th>
             <th>Server</th>
             <th>Saleor Version</th>
             <th>Status</th>
@@ -80,7 +98,16 @@
         <tbody>
           {#each runs as run}
             <tr>
-              <td class="url-cell">{run.saleor_url}</td>
+              <td class="id-cell">
+                <div class="id-cell-inner">
+                  <code title={run.id}>{shortId(run.id)}</code>
+                  <button type="button" class="btn-secondary btn-sm" on:click={() => copyId(run.id)}>Copy ID</button>
+                  {#if copiedId === run.id}
+                    <span class="copy-feedback">Copied!</span>
+                  {/if}
+                </div>
+              </td>
+              <td class="url-cell" title={run.saleor_url}>{run.saleor_url}</td>
               <td>{run.saleor_version || "—"}</td>
               <td><span class="badge {statusBadge(run.status)}">{run.status}</span></td>
               <td class="progress-cell">
@@ -111,6 +138,7 @@
                     <a href="/run/{run.id}/stream" class="btn-secondary btn-sm">Live</a>
                   {:else}
                     <a href="/run/{run.id}/report" class="btn-secondary btn-sm">Report</a>
+                    <a href="/run/new?compare={run.id}" class="btn-secondary btn-sm">Compare</a>
                   {/if}
                 </div>
               </td>
@@ -123,7 +151,7 @@
 </div>
 
 <style>
-  .dashboard { max-width: 1100px; }
+  .dashboard { max-width: 1400px; }
 
   .page-header {
     display: flex;
@@ -174,6 +202,22 @@
 
   .runs-table tr:hover td { background: var(--bg-card); }
 
+  .id-cell-inner {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    white-space: nowrap;
+  }
+
+  .id-cell code { font-size: 0.8rem; }
+
+  .copy-feedback {
+    font-size: 0.75rem;
+    color: var(--success);
+    font-weight: 600;
+  }
+
   .url-cell { max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; font-size: 0.8rem; }
 
   .progress-bar-wrap { display: flex; flex-direction: column; gap: 0.25rem; min-width: 120px; }
@@ -200,5 +244,8 @@
   .text-secondary { color: var(--text-secondary); font-size: 0.8rem; }
   .text-muted { color: var(--text-muted); }
 
-  .action-btns { display: flex; gap: 0.5rem; }
+  .runs-table th:last-child,
+  .runs-table td:last-child { white-space: nowrap; }
+
+  .action-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 </style>

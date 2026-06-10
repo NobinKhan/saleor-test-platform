@@ -6,9 +6,8 @@
   "variables": {
     "input": {
       "name": "Harness Scenario Product",
-      "slug": "harness-scenario-product",
-      "productType": "{{fixtures.default_product_type_id}}",
-      "channelListings": [{"channelId": "{{fixtures.default_channel_id}}", "isPublished": true}]
+      "slug": "{{context.run_slug}}",
+      "productType": "{{fixtures.default_product_type_id}}"
     }
   },
   "extract": {
@@ -17,6 +16,6 @@
   },
   "assertions": [
     {"kind": "path_exists", "path": "$.data.productCreate.product.id"},
-    {"kind": "equals", "path": "$.data.productCreate.product.slug", "expected": "harness-scenario-product"}
+    {"kind": "context_equals", "path": "$.data.productCreate.product.slug", "context_key": "run_slug"}
   ]
 }

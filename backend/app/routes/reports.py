@@ -28,7 +28,7 @@ from app.schemas import (
     TestResultResponse,
 )
 from app.core.config import settings
-from app.services.client_bundles import client_bundle_count, total_client_bundle_count
+from app.services.client_bundles import client_bundle_count
 from app.services.reference_compare import tier2_gate_enabled
 from app.services.reference_corpus import load_manifest, resolve_corpus_version
 from app.services.reference_registry import get_upgrade_hint
@@ -51,22 +51,35 @@ def _deprecation_fields(schema_diff: dict[str, Any] | None) -> dict[str, Any]:
     missing_m = list(diff.get("missing_mutations") or [])
     extra_q = list(diff.get("extra_queries") or [])
     extra_m = list(diff.get("extra_mutations") or [])
+    excluded = list(diff.get("excluded_l3_bundles") or [])
     total_missing = len(missing_q) + len(missing_m)
-    note = None
+    note_parts: list[str] = []
     if total_missing:
-        note = (
-            f"{total_missing} golden operation(s) are not on this target schema. "
-            "They may be deprecated in Saleor or absent from your custom backend. "
-            "After verifying against official Saleor, run `just corpus-diff` and "
-            "`just patch-corpus --apply-diff` to remove them from the reference corpus."
+        note_parts.append(
+            f"{total_missing} golden L1 operation(s) are not on this target schema "
+            "(deprecated in Saleor or absent from your backend). "
+            "These are excluded from compatibility % and certification."
         )
+    if excluded:
+        note_parts.append(
+            f"{len(excluded)} deprecated or schema-incompatible L3 bundle(s) are "
+            "excluded from compatibility % and certification."
+        )
+    not_counted = diff.get("not_counted_note")
+    if not_counted:
+        note_parts.append(str(not_counted))
     return {
         "deprecated_queries": missing_q,
         "deprecated_mutations": missing_m,
         "extra_queries": extra_q,
         "extra_mutations": extra_m,
-        "deprecation_note": note,
+        "deprecation_note": " ".join(note_parts) if note_parts else None,
         "sgrc_note": SGRC_REPORT_NOTE,
+        "certification_endpoint_count": int(diff.get("certification_endpoint_count") or 0),
+        "l3_dashboard_certified": int(diff.get("l3_dashboard_certified") or 0),
+        "l3_dashboard_recorded": int(diff.get("l3_dashboard_recorded") or 0),
+        "excluded_l3_bundles": excluded,
+        "not_counted_note": not_counted,
     }
 
 try:
@@ -206,7 +219,7 @@ async def get_report(
         1 for r in results if r.match_status in ("parity_gap", "tier2_fail") or r.client_parity_note
     )
     tier2_pass = client_parity_gaps == 0
-    l3_bundle_count = total_client_bundle_count()
+    l3_bundle_count = client_bundle_count(source="dashboard")
     storefront_bundle_count = client_bundle_count(source="storefront")
     document_gate_pass = (run.schema_diff or {}).get("document_schema_gate_pass")
     golden_with_status = golden_matched + golden_mismatched

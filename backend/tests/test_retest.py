@@ -11,6 +11,7 @@ from app.models import TestRun, User
 from app.routes.tests import create_run
 from app.schemas import TestRunCreate
 from app.services.run_helpers import build_test_run_row
+from app.services.run_scope import FULL_SYSTEM_SCOPE
 
 
 def test_build_test_run_row_roundtrips_local_email():
@@ -21,25 +22,15 @@ def test_build_test_run_row_roundtrips_local_email():
         saleor_email="merchant@demo.basmalahub.local",
         saleor_password="changeme",
         saleor_token="jwt-token",
-        test_scope="full+client",
+        test_scope=FULL_SYSTEM_SCOPE,
         public_only=False,
         concurrency=3,
         timeout_seconds=15,
     )
     assert decrypt_token(row["saleor_email"]) == "merchant@demo.basmalahub.local"
     assert decrypt_token(row["saleor_password"]) == "changeme"
-    assert row["test_scope"] == "full+client"
+    assert row["test_scope"] == FULL_SYSTEM_SCOPE
     assert row["concurrency"] == 3
-
-
-def test_create_run_rejects_invalid_scope():
-    with pytest.raises(ValueError, match="Unsupported test_scope"):
-        TestRunCreate(
-            saleor_url="http://saleor.local/graphql/",
-            saleor_email="admin@example.com",
-            saleor_password="secret",
-            test_scope="not-a-real-scope",
-        )
 
 
 @pytest.mark.asyncio
@@ -55,7 +46,7 @@ async def test_create_run_clones_password_from_source_run():
         saleor_token=encrypt_token("old-jwt"),
         saleor_email=encrypt_token("merchant@demo.basmalahub.local"),
         saleor_password=encrypt_token("changeme"),
-        test_scope="full+client",
+        test_scope=FULL_SYSTEM_SCOPE,
         public_only=False,
         concurrency=7,
         timeout_seconds=45,
@@ -106,7 +97,7 @@ async def test_create_run_clones_password_from_source_run():
     mock_start.assert_called_once()
     assert len(new_run_holder) == 1
     assert new_run_holder[0].saleor_url == source.saleor_url
-    assert new_run_holder[0].test_scope == "full+client+storefront"
+    assert new_run_holder[0].test_scope == FULL_SYSTEM_SCOPE
     assert new_run_holder[0].concurrency == 7
     assert summary.saleor_url == source.saleor_url
     assert summary.id == new_run_holder[0].id

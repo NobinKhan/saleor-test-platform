@@ -5,10 +5,12 @@ app/schemas/__init__.py — Pydantic schemas for API request/response validation
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, ClassVar
+from typing import Any
 from uuid import UUID
 
 from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
+
+from app.services.run_scope import FULL_SYSTEM_SCOPE
 
 
 def _validate_saleor_email(value: str) -> str:
@@ -74,53 +76,12 @@ class TestRunCreate(BaseModel):
     def validate_saleor_email(cls, value: str) -> str:
         return _validate_saleor_email(value)
 
-    ALLOWED_TEST_SCOPES: ClassVar[frozenset[str]] = frozenset({
-        "full",
-        "queries",
-        "mutations",
-        "catalog",
-        "custom",
-        "client-dashboard",
-        "client-storefront",
-        "scenarios",
-        "variants",
-        "full+client",
-        "full+client+storefront",
-        "full+scenarios",
-    })
-
-    @field_validator("test_scope")
-    @classmethod
-    def validate_test_scope(cls, value: str) -> str:
-        if value not in TestRunCreate.ALLOWED_TEST_SCOPES:
-            allowed = ", ".join(sorted(TestRunCreate.ALLOWED_TEST_SCOPES))
-            raise ValueError(f"Unsupported test_scope. Allowed: {allowed}")
-        return value
-
     @model_validator(mode="after")
     def password_or_clone(self) -> TestRunCreate:
         if not self.saleor_password and not self.clone_from_run_id:
             raise ValueError("saleor_password is required unless clone_from_run_id is set")
         return self
 
-    test_scope: str = Field(
-        default="full+client+storefront",
-        description="Certification scope (L1 + L3 dashboard + L3 storefront)",
-    )
-    test_mode: str = Field(default="compatibility", description="compatibility|discovery")
-    public_only: bool = Field(default=False, description="Only test public endpoints")
-    categories: list[str] | None = Field(
-        default=None,
-        description="Filter by domain when test_scope=custom",
-    )
-    saleor_customer_email: str | None = Field(
-        default=None,
-        description="Customer email for storefront/customer-context replay",
-    )
-    saleor_customer_password: str | None = Field(
-        default=None,
-        description="Customer password for storefront/customer-context replay",
-    )
     compare_run_id: UUID | None = Field(
         default=None,
         description="Optional prior run UUID for side-by-side comparison on report",
@@ -219,7 +180,7 @@ class ReportSummary(BaseModel):
     completed_at: datetime | None
     saleor_email: str | None = None
     saleor_password_masked: str = "••••••••"
-    test_scope: str = "full"
+    test_scope: str = FULL_SYSTEM_SCOPE
     public_only: bool = False
     concurrency: int = 5
     timeout_seconds: int = 30
@@ -254,6 +215,11 @@ class ReportSummary(BaseModel):
     extra_mutations: list[str] = []
     deprecation_note: str | None = None
     sgrc_note: str | None = None
+    certification_endpoint_count: int = 0
+    l3_dashboard_certified: int = 0
+    l3_dashboard_recorded: int = 0
+    excluded_l3_bundles: list[dict[str, str]] = []
+    not_counted_note: str | None = None
 
 
 class LatencySummary(BaseModel):

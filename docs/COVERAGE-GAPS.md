@@ -9,11 +9,13 @@ Related: [COMPATIBILITY.md](COMPATIBILITY.md) (certification gates), [REFERENCE-
 | Layer | Location | Count | Role |
 |-------|----------|-------|------|
 | **L1** | `reference/corpora/saleor-3.23.7/probes/` | **388** | One synthetic probe per schema query/mutation (introspection-driven) |
-| **L3 Dashboard** | `reference/client-bundles/dashboard-3.23.6/` | **428 recorded**, **417 certified** | Real Dashboard GraphQL documents + golden responses |
+| **L3 Dashboard** | `reference/client-bundles/dashboard-3.23.6/` | **417 recorded**, **417 certified** | Real Dashboard GraphQL documents + golden responses |
 | **L3 Storefront** | `reference/client-bundles/storefront-3.23.6/` | **16 recorded**, **16 certified** | Storefront GraphQL documents + golden responses |
-| **Certification total** | `full+client+storefront` scope | **820** | 388 L1 + 417 dashboard + 16 storefront bundles |
+| **L4 Scenarios** | `reference/scenarios/` | **6 steps** (product lifecycle) | Multi-step flows with assertion checks |
+| **Variants** | `reference/variants/` | **3** (`productCreate`) | Valid/invalid input matrices |
+| **Certification total** | `full+scenarios` scope | **829+** | L1 + L3 + scenarios + variants |
 
-`just baseline` proves **820/820** SGRC match on official Saleor. That is **Dashboard + Storefront** client certification plus **operation-level** API probes.
+`just baseline` proves **100%** SGRC match on official Saleor under `full+scenarios`. Deprecated L3 bundles are removed from the corpus — not counted in reports.
 
 ```text
                     ┌─────────────────────────────────────┐
@@ -65,27 +67,11 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 
 **Remaining:** Order and checkout lifecycles; golden recording for scenario steps via `patch-corpus`; certification gate for scenarios (optional hard gate).
 
-## Gap 4 — Eleven L3 bundles recorded but excluded from certification
+## Gap 4 — Deprecated L3 bundles (removed)
 
-**428** dashboard bundles are recorded; the **L3 schema gate** drops **11** whose **root** query/mutation fields are not on Saleor **3.23.7** introspection (Dashboard 3.23.6 vendor still references removed or Apollo-local APIs).
+**11** schema-dead dashboard bundles were **removed** from the corpus (`just patch-corpus --remove …`). They are not executed, not scored, and reports surface `excluded_l3_bundles` / `not_counted_note` for AI agents when any legacy exclusion metadata remains.
 
-| Bundle ID | Missing root field(s) | Notes |
-|-----------|----------------------|-------|
-| `salelist` | `sales` (QUERY) | Deprecated Sale API |
-| `saledetails` | `sale` (QUERY) | Deprecated Sale API |
-| `updatesaletranslations` | `saleTranslate` (MUTATION) | Deprecated Sale API |
-| `ordersettings` | `orderSettings` (QUERY) | Replaced by channel-scoped settings |
-| `ordersettingsupdate` | `orderSettingsUpdate` (MUTATION) | Replaced by channel-scoped settings |
-| `productexport` | `exportProducts` (MUTATION) | Not on 3.23.7 schema |
-| `exportgiftcards` | `exportGiftCards` (MUTATION) | Not on 3.23.7 schema |
-| `user` | `authenticated`, `authenticating` (QUERY) | Apollo `@client` fields — not server schema |
-| `userwithoutdetails` | `authenticated`, `authenticating` (QUERY) | Apollo `@client` fields |
-| `welcomepageanalytics` | `ordersTotal` (QUERY) | Dashboard analytics query not on API pin |
-| `welcomepageactivities` | `homepageEvents` (QUERY) | Dashboard home query not on API pin |
-
-These bundles remain on disk for drift tracking; they are **not** in the **820** certification set until the pinned Saleor version regains those fields or the dashboard vendor drops them.
-
-**L1 note:** `exportProducts` has no L1 probe on 3.23.7 for the same reason.
+Removed IDs: `salelist`, `saledetails`, `updatesaletranslations`, `ordersettings`, `ordersettingsupdate`, `productexport`, `exportgiftcards`, `user`, `userwithoutdetails`, `welcomepageanalytics`, `welcomepageactivities`.
 
 ## Gap 5 — L3 depth vs L1 breadth (Dashboard)
 
@@ -135,11 +121,12 @@ Certification replays HTTP GraphQL JSON. It does **not** certify:
 
 ## What “certified” means today (summary)
 
-A backend that passes `just baseline` / `full+client+storefront` with 100% SGRC:
+A backend that passes `just baseline` / `full+scenarios` with 100% SGRC:
 
 - Implements every **3.23.7** schema operation at L1 synthetic replay level.
 - Matches **417** real **Dashboard** GraphQL documents with seeded fixtures.
 - Matches **16** **Storefront** GraphQL documents with seeded fixtures.
+- Passes **product lifecycle** scenario steps and **productCreate** variant probes.
 - Passes SGRC Tier 1 (and Tier 2 when `SGRC_TIER2_GATE=true`).
 - Passes L3 **document schema gate** (nested field/type validation in client documents).
 

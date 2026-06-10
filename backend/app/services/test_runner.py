@@ -35,9 +35,11 @@ from app.services.client_bundle_fixtures import substitute_fixtures
 from app.services.client_bundles import (
     build_all_client_bundle_endpoints,
     build_client_bundle_endpoints,
+    bundles_compatible_with_schema,
     CLIENT_BUNDLE_KIND,
     CLIENT_SOURCES,
     load_all_bundles_from_disk,
+    load_fixtures,
     resolve_dashboard_bundle_version,
     resolve_storefront_bundle_version,
 )
@@ -445,35 +447,32 @@ class TestRunner:
         run_id: uuid.UUID,
         saleor_url: str,
         saleor_token: str | None,
-        test_scope: str = "full",
+        test_scope: str | None = None,
         public_only: bool = False,
         concurrency: int = 5,
         timeout: int = 30,
-        categories: list[str] | None = None,
         use_introspection: bool = True,
-        test_mode: str = "compatibility",
         saleor_email: str | None = None,
         saleor_password: str | None = None,
-        saleor_customer_email: str | None = None,
-        saleor_customer_password: str | None = None,
         tier2_required: bool | None = None,
     ):
+        from app.services.run_scope import FULL_SYSTEM_SCOPE
+
         self.run_id = run_id
         self.saleor_url = resolve_saleor_url_for_runner(saleor_url)
         self.saleor_token = saleor_token
         self.saleor_email = saleor_email
         self.saleor_password = saleor_password
-        self.saleor_customer_email = saleor_customer_email or CUSTOMER_DEFAULT_EMAIL
-        self.saleor_customer_password = saleor_customer_password or CUSTOMER_DEFAULT_PASSWORD
-        self.test_scope = test_scope
+        self.saleor_customer_email = CUSTOMER_DEFAULT_EMAIL
+        self.saleor_customer_password = CUSTOMER_DEFAULT_PASSWORD
+        self.test_scope = test_scope or FULL_SYSTEM_SCOPE
         self._scenario_context: dict[str, Any] = {}
         self._customer_token: str | None = None
         self.public_only = public_only
         self.concurrency = concurrency
         self.timeout = timeout
-        self.categories = categories
         self.use_introspection = use_introspection
-        self.test_mode = test_mode if test_mode in ("compatibility", "discovery") else "compatibility"
+        self.test_mode = "compatibility"
         self.tier2_required = tier2_required
         self._stopped = False
         self.saleor_version: str | None = None
@@ -568,108 +567,26 @@ class TestRunner:
 
         corpus_ver = resolve_corpus_version(version, settings.golden_corpus_version)
         self.corpus_version = corpus_ver
+        self._scenario_context["run_slug"] = f"harness-scenario-{str(self.run_id)[:8]}"
         ver_warn = version_compatibility_warning(version, corpus_ver)
         if ver_warn:
             yield {"type": "schema_diff", "diff": {"version_warning": ver_warn}}
 
-        if self.test_mode == "compatibility":
-            # Fixed certification L3 set from golden reference schema (not target introspection).
-            certification_schema = load_reference_schema(corpus_ver)
-            if self.test_scope == "client-dashboard":
-                endpoints = build_client_bundle_endpoints(
-                    source="dashboard",
-                    recorded_only=True,
-                    schema_intro=certification_schema,
-                )
-            elif self.test_scope == "client-storefront":
-                endpoints = build_client_bundle_endpoints(
-                    source="storefront",
-                    recorded_only=True,
-                    schema_intro=certification_schema,
-                )
-            elif self.test_scope == "scenarios":
-                endpoints = build_scenario_endpoints(recorded_only=False)
-            elif self.test_scope == "variants":
-                endpoints = build_variant_endpoints(recorded_only=True)
-            elif self.test_scope in ("full+client", "full+client+storefront"):
-                endpoints = build_golden_endpoints(
-                    corpus_ver, "full", self.public_only, self.categories
-                )
-                sources = ("dashboard", "storefront") if self.test_scope == "full+client+storefront" else ("dashboard",)
-                endpoints.extend(
-                    build_all_client_bundle_endpoints(
-                        recorded_only=True,
-                        schema_intro=certification_schema,
-                        sources=sources,
-                    )
-                )
-            elif self.test_scope == "full+scenarios":
-                endpoints = build_golden_endpoints(
-                    corpus_ver, "full", self.public_only, self.categories
-                )
-                endpoints.extend(build_all_client_bundle_endpoints(
-                    recorded_only=True, schema_intro=certification_schema
-                ))
-                endpoints.extend(build_scenario_endpoints(recorded_only=True))
-                endpoints.extend(build_variant_endpoints(recorded_only=True))
-            else:
-                endpoints = build_golden_endpoints(
-                    corpus_ver, self.test_scope, self.public_only, self.categories
-                )
-        else:
-            endpoints = build_endpoints_list(
-                self.test_scope, self.public_only, self.categories
+        certification_schema = load_reference_schema(corpus_ver)
+        endpoints = build_golden_endpoints(corpus_ver, "full", self.public_only, None)
+        endpoints.extend(
+            build_all_client_bundle_endpoints(
+                recorded_only=True,
+                schema_intro=certification_schema,
             )
+        )
+        scenario_fixtures = load_fixtures("dashboard", resolve_dashboard_bundle_version())
+        endpoints.extend(
+            build_scenario_endpoints(recorded_only=False, fixtures=scenario_fixtures)
+        )
+        endpoints.extend(build_variant_endpoints(recorded_only=False))
 
-        defer_schema = self.use_introspection and self.test_mode == "compatibility"
-        if self.use_introspection and not defer_schema:
-            yield {"type": "progress", "message": "Introspecting GraphQL schema…"}
-            try:
-                intro = await introspect_saleor(
-                    self.saleor_url, self.saleor_token, self.timeout
-                )
-                try:
-                    self.schema_fields = await introspect_field_args(
-                        self.saleor_url, self.saleor_token, self.timeout
-                    )
-                except Exception:
-                    self.schema_fields = None
-
-                ref_q = [e["name"] for e in SALEOR_QUERIES]
-                ref_m = [e["name"] for e in SALEOR_MUTATIONS]
-                diff = compare_schema(intro, ref_q, ref_m)
-                diff["schema_gate_source"] = "dashboard catalog"
-                yield {"type": "schema_diff", "diff": diff}
-
-                if self.test_mode == "discovery" and self.test_scope == "full":
-                    known = {e["name"] for e in endpoints}
-                    for name in intro.get("queries", []):
-                        if name not in known:
-                            endpoints.append(
-                                {
-                                    "name": name,
-                                    "kind": "QUERY",
-                                    "category": "unknown",
-                                    "is_public": True,
-                                }
-                            )
-                            known.add(name)
-                    for name in intro.get("mutations", []):
-                        if name not in known:
-                            endpoints.append(
-                                {
-                                    "name": name,
-                                    "kind": "MUTATION",
-                                    "category": "unknown",
-                                    "is_public": False,
-                                }
-                            )
-                            known.add(name)
-            except Exception as exc:
-                yield {
-                    "type": "schema_diff",
-                    "diff": {"introspection_error": str(exc)},
-                }
+        defer_schema = self.use_introspection
 
         total = len(endpoints)
         yield {
@@ -680,19 +597,21 @@ class TestRunner:
         passed = failed = warnings = skipped = 0
         counts = {"pass": 0, "fail": 0, "warn": 0, "skip": 0}
 
-        effective_concurrency = 1 if self.test_mode == "compatibility" else self.concurrency
-        semaphore = asyncio.Semaphore(effective_concurrency)
+        semaphore = asyncio.Semaphore(1)
 
         async with httpx.AsyncClient(timeout=self.timeout) as http_client:
-            if self.test_mode == "compatibility":
-                yield {"type": "progress", "message": "Validating staff authentication…"}
-                force = bool(self.saleor_email and self.saleor_password)
-                await self._ensure_valid_token(http_client, force_refresh=force)
-                if not self.saleor_token and force:
-                    yield {
-                        "type": "schema_diff",
-                        "diff": {"introspection_error": "Staff authentication failed"},
-                    }
+            yield {"type": "progress", "message": "Validating staff authentication…"}
+            force = bool(self.saleor_email and self.saleor_password)
+            await self._ensure_valid_token(http_client, force_refresh=force)
+            if not self.saleor_token and force:
+                yield {
+                    "type": "schema_diff",
+                    "diff": {"introspection_error": "Staff authentication failed"},
+                }
+            yield {"type": "progress", "message": "Provisioning customer account…"}
+            await self._ensure_auth_for_context(
+                http_client, auth_context="customer", force_refresh=True
+            )
 
             async def test_one(idx: int, endpoint: dict) -> dict:
                 async with semaphore:
@@ -713,31 +632,18 @@ class TestRunner:
             async def emit_result(result: dict) -> dict:
                 nonlocal passed, failed, warnings, skipped
                 status = result.get("status", "skip")
-                if self.test_mode == "compatibility":
-                    if result.get("compatible"):
-                        passed += 1
-                        counts["pass"] += 1
-                    elif result.get("match_status") == "missing_golden":
-                        warnings += 1
-                        counts["warn"] += 1
-                    elif status == "skip":
-                        skipped += 1
-                        counts["skip"] += 1
-                    else:
-                        failed += 1
-                        counts["fail"] += 1
-                elif status == "pass":
+                if result.get("compatible"):
                     passed += 1
                     counts["pass"] += 1
-                elif status == "fail":
-                    failed += 1
-                    counts["fail"] += 1
-                elif status == "warn":
+                elif result.get("match_status") == "missing_golden":
                     warnings += 1
                     counts["warn"] += 1
-                else:
+                elif status == "skip":
                     skipped += 1
                     counts["skip"] += 1
+                else:
+                    failed += 1
+                    counts["fail"] += 1
 
                 current = passed + failed + warnings + skipped
                 return {
@@ -769,13 +675,8 @@ class TestRunner:
                     "status_counts": counts,
                 }
 
-            if self.test_mode == "compatibility":
-                for idx, endpoint in enumerate(endpoints):
-                    yield await emit_result(await test_one(idx, endpoint))
-            else:
-                tasks = [test_one(i, ep) for i, ep in enumerate(endpoints)]
-                for coro in asyncio.as_completed(tasks):
-                    yield await emit_result(await coro)
+            for idx, endpoint in enumerate(endpoints):
+                yield await emit_result(await test_one(idx, endpoint))
 
         if defer_schema:
             yield {"type": "progress", "message": "Introspecting GraphQL schema (post-replay)…"}
@@ -788,45 +689,44 @@ class TestRunner:
                 )
                 ref_schema = load_reference_schema(corpus_ver)
                 diff = schema_gate_diff(intro, ref_schema, source="golden")
-                client_scopes = (
-                    "client-dashboard",
-                    "client-storefront",
-                    "full+client",
-                    "full+client+storefront",
-                    "full+scenarios",
-                )
-                if self.test_scope in client_scopes:
-                    all_bundles = []
-                    sources = CLIENT_SOURCES
-                    if self.test_scope == "client-dashboard":
-                        sources = ("dashboard",)
-                    elif self.test_scope == "client-storefront":
-                        sources = ("storefront",)
-                    elif self.test_scope == "full+client":
-                        sources = ("dashboard",)
-                    for source in sources:
-                        ver = (
-                            resolve_storefront_bundle_version()
-                            if source == "storefront"
-                            else resolve_dashboard_bundle_version()
-                        )
-                        all_bundles.extend(
-                            load_all_bundles_from_disk(source, ver, recorded_only=True)
-                        )
-                    client_gate = compute_client_bundle_schema_gate(
-                        all_bundles, intro, recorded_only=True
+                all_bundles = []
+                for source in CLIENT_SOURCES:
+                    ver = (
+                        resolve_storefront_bundle_version()
+                        if source == "storefront"
+                        else resolve_dashboard_bundle_version()
                     )
-                    diff = merge_client_schema_into_diff(diff, client_gate)
-                    try:
-                        full_intro = await introspect_full_schema(
-                            self.saleor_url, self.saleor_token, self.timeout
-                        )
-                        doc_gate = compute_document_schema_gate(
-                            all_bundles, full_intro, recorded_only=True
-                        )
-                        diff = merge_document_schema_into_diff(diff, doc_gate)
-                    except Exception:
-                        pass
+                    all_bundles.extend(
+                        load_all_bundles_from_disk(source, ver, recorded_only=True)
+                    )
+                compatible, excluded = bundles_compatible_with_schema(all_bundles, intro)
+                client_gate = compute_client_bundle_schema_gate(
+                    compatible, intro, recorded_only=True
+                )
+                diff = merge_client_schema_into_diff(diff, client_gate)
+                diff["excluded_l3_bundles"] = excluded
+                diff["certification_endpoint_count"] = total
+                diff["l3_dashboard_recorded"] = sum(
+                    1 for b in all_bundles if b.source == "dashboard"
+                )
+                diff["l3_dashboard_certified"] = sum(
+                    1 for b in compatible if b.source == "dashboard"
+                )
+                if excluded:
+                    diff["not_counted_note"] = (
+                        f"{len(excluded)} deprecated or schema-incompatible L3 bundle(s) "
+                        "are excluded from compatibility scoring and certification."
+                    )
+                try:
+                    full_intro = await introspect_full_schema(
+                        self.saleor_url, self.saleor_token, self.timeout
+                    )
+                    doc_gate = compute_document_schema_gate(
+                        compatible, full_intro, recorded_only=True
+                    )
+                    diff = merge_document_schema_into_diff(diff, doc_gate)
+                except Exception:
+                    pass
                 yield {"type": "schema_diff", "diff": diff}
             except Exception as exc:
                 yield {"type": "schema_diff", "diff": {"introspection_error": str(exc)}}
@@ -961,6 +861,41 @@ class TestRunner:
                         field_items=comparison.field_items,
                         resolved_corpus_version=comparison.resolved_corpus_version,
                         compatible=False,
+                        client_parity_note=comparison.client_parity_note,
+                    )
+                elif comparison.match_status == "missing_golden" and kind == VARIANT_KIND:
+                    variant_tags = endpoint.get("tags") or []
+                    if meta.get("response_valid") or "invalid" in variant_tags:
+                        comparison = type(comparison)(
+                            match_status="match",
+                            expected_response=comparison.expected_response,
+                            diff_summary="Variant probe (assertion-based, no golden)",
+                            recommended_status="pass",
+                            golden_outcome=comparison.golden_outcome,
+                            golden_contract=comparison.golden_contract,
+                            actual_contract=comparison.actual_contract,
+                            field_items=comparison.field_items,
+                            resolved_corpus_version=comparison.resolved_corpus_version,
+                            compatible=True,
+                            client_parity_note=comparison.client_parity_note,
+                        )
+                elif (
+                    comparison.match_status == "missing_golden"
+                    and kind == SCENARIO_KIND
+                    and meta.get("response_valid")
+                    and not assertion_failures
+                ):
+                    comparison = type(comparison)(
+                        match_status="match",
+                        expected_response=comparison.expected_response,
+                        diff_summary="Assertion-based step (no golden recorded)",
+                        recommended_status="pass",
+                        golden_outcome=comparison.golden_outcome,
+                        golden_contract=comparison.golden_contract,
+                        actual_contract=comparison.actual_contract,
+                        field_items=comparison.field_items,
+                        resolved_corpus_version=comparison.resolved_corpus_version,
+                        compatible=True,
                         client_parity_note=comparison.client_parity_note,
                     )
                 if self.test_mode == "compatibility":

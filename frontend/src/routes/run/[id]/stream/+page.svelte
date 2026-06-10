@@ -58,6 +58,9 @@
   let runFinishedOffline = false;
   let pollTimer: ReturnType<typeof setInterval> | null = null;
   let latencySamples: number[] = [];
+  let runningMaxLatency = 0;
+  let latencyTotalMs = 0;
+  let latencyCount = 0;
   let latencyCanvas: HTMLCanvasElement;
   let latencyChart: Chart | null = null;
   let lastResultCurrent = 0;
@@ -88,10 +91,8 @@
 
   $: testedCount =
     statusCounts.pass + statusCounts.fail + statusCounts.warn + statusCounts.skip;
-  $: avgLatency = latencySamples.length
-    ? Math.round(latencySamples.reduce((a, b) => a + b, 0) / latencySamples.length)
-    : 0;
-  $: maxLatency = latencySamples.length ? Math.max(...latencySamples) : 0;
+  $: avgLatency = latencyCount ? Math.round(latencyTotalMs / latencyCount) : 0;
+  $: maxLatency = runningMaxLatency;
   $: progressPercent = !total
     ? completed
       ? 100
@@ -133,7 +134,11 @@
         if (data.current) lastResultCurrent = data.current;
         if (data.status_counts) statusCounts = normalizeStatusCounts(data);
         if (data.response_time_ms != null) {
-          latencySamples = [...latencySamples, data.response_time_ms].slice(-20);
+          const ms = data.response_time_ms;
+          runningMaxLatency = Math.max(runningMaxLatency, ms);
+          latencyTotalMs += ms;
+          latencyCount += 1;
+          latencySamples = [...latencySamples, ms].slice(-20);
           updateLatencyChart();
         }
         phaseMessage = data.current_endpoint
@@ -281,6 +286,9 @@
       activity = [];
       statusCounts = { pass: 0, fail: 0, warn: 0, skip: 0 };
       latencySamples = [];
+      runningMaxLatency = 0;
+      latencyTotalMs = 0;
+      latencyCount = 0;
       destroyLatencyChart();
       total = 0;
       version = "";
@@ -293,6 +301,9 @@
         events = [];
         activity = [];
         latencySamples = [];
+        runningMaxLatency = 0;
+        latencyTotalMs = 0;
+        latencyCount = 0;
         destroyLatencyChart();
         lastResultCurrent = 0;
       }
@@ -442,7 +453,7 @@
     {/if}
     {#if latencySamples.length > 0}
       <div class="latency-chart-wrap">
-        <span class="latency-chart-label">Recent response times (last {latencySamples.length})</span>
+        <span class="latency-chart-label">Recent response times (last 20 probes)</span>
         <canvas bind:this={latencyCanvas}></canvas>
       </div>
     {/if}

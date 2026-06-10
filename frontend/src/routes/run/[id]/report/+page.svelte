@@ -3,7 +3,7 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { onDestroy } from "svelte";
-  import { api, auth, exportUrl } from "$lib/api";
+  import { api, downloadExport, fetchExportText } from "$lib/api";
   import {
     Chart,
     BarController,
@@ -118,6 +118,11 @@
       extra_mutations: string[];
       deprecation_note: string | null;
       sgrc_note: string | null;
+      certification_endpoint_count: number;
+      l3_dashboard_certified: number;
+      l3_dashboard_recorded: number;
+      excluded_l3_bundles: { bundle_id: string; field?: string; reason?: string }[];
+      not_counted_note: string | null;
     };
     category_breakdown: CategoryBreakdown[];
     response_time_distribution: ResponseTimeBucket[];
@@ -257,23 +262,27 @@
     loadReport(runId);
   }
 
-  function downloadUrl(format: string) {
-    return exportUrl(runId, format);
+  async function handleDownload(format: string) {
+    copyAiMessage = "";
+    try {
+      await downloadExport(runId, format);
+    } catch (e: unknown) {
+      copyAiMessage = e instanceof Error ? e.message : "Download failed";
+    }
   }
 
   async function copyForAi() {
     copyAiMessage = "";
     try {
-      const token = auth.getAccessToken();
-      const url = exportUrl(runId, "ai");
-      const res = await fetch(url, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      if (!res.ok) throw new Error("Export failed");
-      const text = await res.text();
-      await navigator.clipboard.writeText(text);
-      copyAiMessage = "Copied to clipboard";
-      setTimeout(() => (copyAiMessage = ""), 3000);
+      const text = await fetchExportText(runId, "ai");
+      try {
+        await navigator.clipboard.writeText(text);
+        copyAiMessage = "Copied to clipboard";
+      } catch {
+        window.prompt("Copy report markdown (clipboard blocked on this origin):", text);
+        copyAiMessage = "Markdown shown — copy from dialog";
+      }
+      setTimeout(() => (copyAiMessage = ""), 4000);
     } catch (e: unknown) {
       copyAiMessage = e instanceof Error ? e.message : "Copy failed";
     }
@@ -324,6 +333,15 @@
     goto(`/run/new?from=${runId}`);
   }
 
+  function retestAndCompare() {
+    if (!runId) return;
+    goto(`/run/new?from=${runId}&compare=${runId}`);
+  }
+
+  function shortId(id: string): string {
+    return id.slice(0, 8);
+  }
+
   onDestroy(() => {
     destroyCharts();
   });
@@ -342,17 +360,19 @@
         <h1>Test Report</h1>
         <p class="subtitle">{report.summary.saleor_url}</p>
         <p class="meta">
-          {#if report.summary.saleor_version}Saleor {report.summary.saleor_version} · {/if}
+          Run ID: <code title={report.summary.test_run_id}>{shortId(report.summary.test_run_id)}</code>
+          · {#if report.summary.saleor_version}Saleor {report.summary.saleor_version} · {/if}
           {new Date(report.summary.started_at).toLocaleString()}
         </p>
       </div>
       <div class="header-actions">
         <button class="btn-primary btn-sm" on:click={retest}>Retest</button>
-        <a href={downloadUrl("csv")} class="btn-secondary btn-sm" download>CSV</a>
-        <a href={downloadUrl("json")} class="btn-secondary btn-sm" download>JSON</a>
-        <a href={downloadUrl("pdf")} class="btn-secondary btn-sm" download>PDF</a>
+        <button class="btn-secondary btn-sm" on:click={retestAndCompare}>Retest &amp; compare</button>
+        <button type="button" class="btn-secondary btn-sm" on:click={() => handleDownload("csv")}>CSV</button>
+        <button type="button" class="btn-secondary btn-sm" on:click={() => handleDownload("json")}>JSON</button>
+        <button type="button" class="btn-secondary btn-sm" on:click={() => handleDownload("pdf")}>PDF</button>
         <button type="button" class="btn-secondary btn-sm" on:click={copyForAi}>Copy for AI</button>
-        <a href={downloadUrl("ai")} class="btn-secondary btn-sm" download>Download .md</a>
+        <button type="button" class="btn-secondary btn-sm" on:click={() => handleDownload("ai")}>Download .md</button>
         {#if copyAiMessage}
           <span class="copy-toast">{copyAiMessage}</span>
         {/if}
@@ -368,12 +388,8 @@
             <td><strong>{report.summary.saleor_version}</strong> @ {report.summary.saleor_url}</td>
           </tr>
           <tr>
-            <th>Catalog (names only)</th>
-            <td>
-              {report.summary.reference_baseline_source ?? "saleor-dashboard"}
-              {report.summary.reference_baseline_version ?? "3.23.6"}
-              — {report.summary.reference_catalog_queries} queries, {report.summary.reference_catalog_mutations} mutations
-            </td>
+            <th>L1 golden probes</th>
+            <td>{report.summary.golden_probe_count ?? report.summary.reference_catalog_queries} synthetic introspection probes</td>
           </tr>
           <tr>
             <th>Golden reference</th>
@@ -406,7 +422,13 @@
           </tr>
           <tr>
             <th>Certification scope</th>
-            <td>{report.summary.test_scope} — L3 bundles: {report.summary.client_bundle_count} (storefront: {report.summary.storefront_bundle_count ?? 0})</td>
+            <td>
+              {report.summary.test_scope} — L3 dashboard: {report.summary.client_bundle_count},
+              storefront: {report.summary.storefront_bundle_count ?? 0}
+              {#if report.summary.certification_endpoint_count}
+                · {report.summary.certification_endpoint_count} endpoints scored
+              {/if}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -423,6 +445,20 @@
             regressions: <strong>{report.compare_summary.regressions}</strong>,
             improvements: <strong>{report.compare_summary.improvements}</strong>
           </p>
+        </div>
+      {/if}
+      {#if report.summary.deprecation_note || report.summary.not_counted_note || (report.summary.excluded_l3_bundles?.length ?? 0) > 0}
+        <div class="warning-banner">
+          <strong>Excluded from compatibility scoring</strong>
+          {#if report.summary.deprecation_note}
+            <p>{report.summary.deprecation_note}</p>
+          {/if}
+          {#if report.summary.not_counted_note}
+            <p>{report.summary.not_counted_note}</p>
+          {/if}
+          {#if report.summary.excluded_l3_bundles?.length}
+            <p>Excluded L3 bundles: {report.summary.excluded_l3_bundles.map((b) => b.bundle_id).join(", ")}</p>
+          {/if}
         </div>
       {/if}
       {#if report.summary.upgrade_hint}
@@ -848,6 +884,17 @@
     width: 1%;
   }
   .glossary-table td { padding: 0.35rem 0; color: var(--text-primary); }
+  .warning-banner {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--warn, #b8860b);
+    background: rgba(184, 134, 11, 0.12);
+    font-size: 0.875rem;
+  }
+
+  .warning-banner p { margin: 0.35rem 0 0; color: var(--text-secondary); }
+
   .upgrade-hint {
     margin-top: 0.75rem;
     padding: 0.5rem 0.75rem;

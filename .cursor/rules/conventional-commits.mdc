@@ -1,0 +1,44 @@
+---
+description: Conventional Commits required when creating git commits
+alwaysApply: true
+---
+
+# Conventional Commits
+
+When drafting or running `git commit`, use [Conventional Commits](https://www.conventionalcommits.org/).
+
+## Format
+
+```
+type(scope): subject
+```
+
+- **type** — required: `feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `build`, `perf`, `ci`
+- **scope** — optional but preferred: `harness`, `frontend`, `corpus`, `sgrc`, `docker`, `docs`
+- **subject** — imperative mood, lowercase, no trailing period, max ~72 chars
+
+## Breaking changes
+
+- `feat!:` or `fix!:` in the subject, or
+- `BREAKING CHANGE:` in the commit body
+
+## Examples
+
+```
+fix(harness): repair AI report export syntax
+feat(frontend): add authenticated export download helpers
+chore(docker): serialize harness image builds
+test(harness): add ai_report markdown smoke tests
+docs: document resource-safe just recipes
+```
+
+## Reject
+
+Do **not** use prose-style subjects:
+
+```
+Expand certification to storefront L3, scenarios, variants
+Improve SGRC matching: strip Python debug from golden
+```
+
+Convert to conventional form before committing.

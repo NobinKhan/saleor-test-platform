@@ -4,33 +4,34 @@
   import { page } from "$app/stores";
   import { api } from "$lib/api";
 
+  interface PriorRun {
+    id: string;
+    saleor_url: string;
+    saleor_version: string | null;
+    status: string;
+    started_at: string;
+    pass_rate: number;
+  }
+
   let saleor_url = "http://localhost:8000/graphql/";
   let saleor_email = "";
   let saleor_password = "";
+  let showPassword = false;
   let concurrency = 5;
   let timeout_seconds = 30;
-  let test_scope = "full+client+storefront";
-  let categories = "";
   let compare_run_id = "";
-  let saleor_customer_email = "";
-  let saleor_customer_password = "";
+  let priorRuns: PriorRun[] = [];
   let cloneFromRunId: string | null = null;
 
-  const scopeOptions = [
-    { value: "full+client+storefront", label: "Full + Dashboard + Storefront (certification)" },
-    { value: "full+client", label: "Full + Dashboard L3" },
-    { value: "client-storefront", label: "Storefront L3 only" },
-    { value: "client-dashboard", label: "Dashboard L3 only" },
-    { value: "full", label: "L1 probes only" },
-    { value: "scenarios", label: "L4 scenarios" },
-    { value: "variants", label: "Input variants" },
-    { value: "custom", label: "Custom categories" },
-  ];
   let prefillMessage = "";
   let loading = false;
   let prefillLoading = false;
   let startMessage = "";
   let error = "";
+
+  function shortId(id: string): string {
+    return id.slice(0, 8);
+  }
 
   function isValidSaleorEmail(email: string): boolean {
     const trimmed = email.trim();
@@ -40,6 +41,16 @@
 
   onMount(async () => {
     const from = $page.url.searchParams.get("from");
+    const compare = $page.url.searchParams.get("compare");
+    if (compare) compare_run_id = compare;
+
+    try {
+      priorRuns = await api.get("/api/runs?limit=50");
+      priorRuns = priorRuns.filter((r) => r.status === "completed");
+    } catch {
+      priorRuns = [];
+    }
+
     if (!from) return;
 
     cloneFromRunId = from;
@@ -91,22 +102,11 @@
       const payload: Record<string, unknown> = {
         saleor_url,
         saleor_email: saleor_email.trim(),
-        test_scope,
-        public_only: false,
         concurrency,
         timeout_seconds,
       };
-      if (test_scope === "custom" && categories.trim()) {
-        payload.categories = categories.split(",").map((c) => c.trim()).filter(Boolean);
-      }
       if (compare_run_id.trim()) {
         payload.compare_run_id = compare_run_id.trim();
-      }
-      if (saleor_customer_email.trim()) {
-        payload.saleor_customer_email = saleor_customer_email.trim();
-      }
-      if (saleor_customer_password) {
-        payload.saleor_customer_password = saleor_customer_password;
       }
       if (saleor_password) {
         payload.saleor_password = saleor_password;
@@ -137,7 +137,7 @@
 <div class="new-run-page" class:dimmed={loading}>
   <div class="page-header">
     <h1>New Test Run</h1>
-    <p class="subtitle">Saleor compatibility certification — L1 probes, L3 Dashboard + Storefront bundles, scenarios, variants</p>
+    <p class="subtitle">Full-system compatibility — L1 probes, L3 Dashboard + Storefront, scenarios, and variants</p>
   </div>
 
   <div class="form-card card">
@@ -159,57 +159,58 @@
       </div>
 
       <div class="section-label">Saleor admin credentials *</div>
-      <p class="section-hint">Dashboard staff login used for tokenCreate during the run. Internal domains (.local, .internal) are supported.</p>
+      <p class="section-hint">Dashboard staff login used for tokenCreate during the run. Customer account is auto-provisioned.</p>
 
       <div class="field-row">
         <div class="field">
           <label for="email">Admin Email</label>
           <input id="email" type="text" autocomplete="username" bind:value={saleor_email} required placeholder="merchant@demo.basmalahub.local" />
         </div>
-        <div class="field">
+        <div class="field password-field">
           <label for="saleor_password">Admin Password</label>
-          <input
-            id="saleor_password"
-            type="password"
-            bind:value={saleor_password}
-            placeholder={cloneFromRunId ? "Leave blank to reuse stored password" : "••••••••"}
-            required={!cloneFromRunId}
-          />
+          <div class="password-wrap">
+            {#if showPassword}
+              <input
+                id="saleor_password"
+                type="text"
+                bind:value={saleor_password}
+                placeholder={cloneFromRunId ? "Leave blank to reuse stored password" : "••••••••"}
+                required={!cloneFromRunId}
+              />
+            {:else}
+              <input
+                id="saleor_password"
+                type="password"
+                bind:value={saleor_password}
+                placeholder={cloneFromRunId ? "Leave blank to reuse stored password" : "••••••••"}
+                required={!cloneFromRunId}
+              />
+            {/if}
+            <button
+              type="button"
+              class="btn-secondary btn-sm toggle-pw"
+              on:click={() => (showPassword = !showPassword)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="field">
-        <label for="test_scope">Test scope</label>
-        <select id="test_scope" bind:value={test_scope}>
-          {#each scopeOptions as opt}
-            <option value={opt.value}>{opt.label}</option>
-          {/each}
-        </select>
-      </div>
-
-      {#if test_scope === "custom"}
-        <div class="field">
-          <label for="categories">Categories (comma-separated)</label>
-          <input id="categories" type="text" bind:value={categories} placeholder="products, orders, checkout" />
-        </div>
-      {/if}
-
-      <div class="field">
-        <label for="compare_run_id">Compare with prior run (optional UUID)</label>
-        <input id="compare_run_id" type="text" bind:value={compare_run_id} placeholder="Previous run ID for side-by-side report" />
-      </div>
-
-      <div class="section-label">Storefront customer credentials (optional)</div>
-      <p class="section-hint">Used for storefront L3 bundles tagged with customer auth. Defaults to harness seed customer if omitted.</p>
-      <div class="field-row">
-        <div class="field">
-          <label for="customer_email">Customer Email</label>
-          <input id="customer_email" type="text" bind:value={saleor_customer_email} placeholder="customer@example.com" />
-        </div>
-        <div class="field">
-          <label for="customer_password">Customer Password</label>
-          <input id="customer_password" type="password" bind:value={saleor_customer_password} />
-        </div>
+        <label for="compare_run_id">Compare with prior run (optional)</label>
+        {#if priorRuns.length > 0}
+          <select id="compare_run_id" bind:value={compare_run_id}>
+            <option value="">— None —</option>
+            {#each priorRuns as run}
+              <option value={run.id}>
+                {shortId(run.id)} · {new Date(run.started_at).toLocaleString()} · {run.pass_rate}% · {run.saleor_url}
+              </option>
+            {/each}
+          </select>
+        {:else}
+          <input id="compare_run_id" type="text" bind:value={compare_run_id} placeholder="Run UUID for side-by-side report" />
+        {/if}
       </div>
 
       <div class="field-row">
@@ -296,5 +297,8 @@
   .hint { font-size: 0.8rem; color: var(--text-muted); }
   .field-row { display: flex; gap: 0.75rem; align-items: flex-end; }
   .field-row .field { flex: 1; }
+  .password-wrap { display: flex; gap: 0.5rem; align-items: stretch; }
+  .password-wrap input { flex: 1; }
+  .toggle-pw { flex-shrink: 0; align-self: stretch; }
   .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
 </style>

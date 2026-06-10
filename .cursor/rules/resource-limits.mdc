@@ -1,0 +1,35 @@
+---
+description: RAM-safe test, build, check, and stack commands
+alwaysApply: true
+---
+
+# Resource Limits
+
+Do not exhaust host RAM when testing, building, checking, or running the stack.
+
+## Prefer just recipes
+
+| Task | Command |
+|------|---------|
+| Backend unit tests | `just test` |
+| Frontend type check | `just check` |
+| Rebuild harness images | `just build-harness` |
+| Start harness (no rebuild) | `just up-harness-fast` |
+| Start harness (rebuild) | `just up-harness` |
+
+## Rules
+
+- **Never** run two RAM-heavy tasks concurrently (e.g. `just baseline` + `docker compose build` + `bun run check`).
+- Build harness images **one service at a time** — backend, then frontend (`just build-harness`).
+- Use `just up-harness-fast` when images are already current (avoids Docker Hub pulls).
+- Run pytest **inside** the harness container (`just test`), not host `python -m pytest` without a venv.
+- Do **not** add `pytest-xdist` or multi-worker pytest — keep single-process.
+- Do **not** weaken or skip compatibility checks to save RAM — serialize work instead.
+
+## Overrides
+
+Tune via env vars (see `scripts/lib/resources.sh`):
+
+- `COMPOSE_PARALLEL_LIMIT` (default `1`)
+- `NODE_MAX_OLD_SPACE_SIZE` (default `2048`)
+- `BUILDKIT_STEP_MAX_CONCURRENCY` (default `1`)

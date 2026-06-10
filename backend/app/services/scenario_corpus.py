@@ -217,6 +217,9 @@ def run_assertions(
         elif kind == "not_in_list":
             list_path = assertion.get("list_path", "")
             field_name = assertion.get("field", "slug")
+            expected_val = expected
+            if assertion.get("context_key"):
+                expected_val = context.get(assertion["context_key"])
             items = _extract_json_path(response, list_path) or []
             values = []
             if isinstance(items, list):
@@ -225,8 +228,8 @@ def run_assertions(
                         node = item.get("node") or item
                         if isinstance(node, dict):
                             values.append(node.get(field_name))
-            if expected in values:
-                failures.append(f"Expected {expected!r} absent from {list_path}")
+            if expected_val in values:
+                failures.append(f"Expected {expected_val!r} absent from {list_path}")
     return failures
 
 

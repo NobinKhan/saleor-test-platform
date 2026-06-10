@@ -7,15 +7,19 @@ from typing import TYPE_CHECKING
 
 from app.core.config import get_settings
 from app.core.crypto import decrypt_token, encrypt_token
+from app.services.reference_corpus import load_manifest
 from app.services.saleor_auth import fetch_saleor_token
-from app.services.test_runner import SALEOR_MUTATIONS, SALEOR_QUERIES
 
 if TYPE_CHECKING:
     from app.models import TestRun
 
 
 def catalog_counts() -> tuple[int, int]:
-    return len(SALEOR_QUERIES), len(SALEOR_MUTATIONS)
+    """L1 golden corpus query/mutation counts (not legacy L2 static catalog)."""
+    settings = get_settings()
+    manifest = load_manifest(settings.golden_corpus_version) or {}
+    probes = manifest.get("probe_count", 0)
+    return probes, 0
 
 
 def decrypt_saleor_email(run: TestRun) -> str | None:

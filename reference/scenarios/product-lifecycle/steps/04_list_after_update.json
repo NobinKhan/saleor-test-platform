@@ -1,13 +1,12 @@
 {
   "step_id": "04_list_after_update",
-  "name": "Verify updated name in list",
+  "name": "Verify updated name by ID",
   "auth_context": "staff",
-  "input_sent": "query ProductLifecycleListUpdated($ch: String!, $search: String!) { products(first: 10, channel: $ch, filter: { search: $search }) { edges { node { id name slug } } } } }",
+  "input_sent": "query ProductLifecycleGetUpdated($id: ID!) { product(id: $id) { id name slug } }",
   "variables": {
-    "ch": "{{fixtures.default_channel}}",
-    "search": "harness-scenario-product"
+    "id": "{{context.created_product_id}}"
   },
   "assertions": [
-    {"kind": "equals", "path": "$.data.products.edges[0].node.name", "expected": "Harness Scenario Product Updated"}
+    {"kind": "equals", "path": "$.data.product.name", "expected": "Harness Scenario Product Updated"}
   ]
 }

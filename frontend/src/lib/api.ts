@@ -131,3 +131,56 @@ export function exportUrl(runId: string, format: string): string {
   if (!token) return base;
   return `${base}?access_token=${encodeURIComponent(token)}`;
 }
+
+function exportPath(runId: string, format: string): string {
+  return `/api/reports/${runId}/export/${format}`;
+}
+
+async function fetchExportResponse(
+  runId: string,
+  format: string,
+  retried = false,
+): Promise<Response> {
+  const res = await fetch(`${API_BASE}${exportPath(runId, format)}`, {
+    headers: apiHeaders(),
+  });
+  if (res.status === 401 && !retried) {
+    const refreshed = await refreshTokens();
+    if (refreshed) return fetchExportResponse(runId, format, true);
+    auth.logout();
+    if (typeof window !== 'undefined') window.location.href = '/login';
+    throw new Error('Unauthorized');
+  }
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ detail: res.statusText }));
+    throw new Error(formatApiError(err.detail, res.statusText || 'Export failed'));
+  }
+  return res;
+}
+
+function filenameFromDisposition(header: string | null, fallback: string): string {
+  if (!header) return fallback;
+  const match = /filename="?([^";\n]+)"?/.exec(header);
+  return match?.[1] ?? fallback;
+}
+
+export async function fetchExportText(runId: string, format: string): Promise<string> {
+  const res = await fetchExportResponse(runId, format);
+  return res.text();
+}
+
+export async function downloadExport(runId: string, format: string): Promise<void> {
+  const res = await fetchExportResponse(runId, format);
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filenameFromDisposition(
+    res.headers.get('Content-Disposition'),
+    `saleor-test-${runId}.${format === 'ai' ? 'md' : format}`,
+  );
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}

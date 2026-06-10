@@ -23,6 +23,7 @@ from app.services.run_helpers import (
     decrypt_saleor_email,
     run_detail_fields,
 )
+from app.services.run_scope import FULL_SYSTEM_SCOPE
 from app.services.sse_manager import runner_manager
 
 router = APIRouter(prefix="/api/runs", tags=["test-runs"])
@@ -51,28 +52,20 @@ def _summary_from_run(run: TestRun) -> TestRunSummary:
 def _start_runner(
     run: TestRun,
     saleor_token: str,
-    categories: list[str] | None = None,
-    test_mode: str = "compatibility",
     *,
     saleor_email: str | None = None,
     saleor_password: str | None = None,
-    saleor_customer_email: str | None = None,
-    saleor_customer_password: str | None = None,
 ) -> None:
     runner_manager.start_run(
         run_id=run.id,
         saleor_url=run.saleor_url,
         saleor_token=saleor_token,
-        test_scope=run.test_scope,
+        test_scope=FULL_SYSTEM_SCOPE,
         public_only=run.public_only,
         concurrency=run.concurrency or 5,
         timeout_seconds=run.timeout_seconds or 30,
-        categories=categories,
-        test_mode=test_mode,
         saleor_email=saleor_email or run.saleor_email,
         saleor_password=saleor_password or run.saleor_password,
-        saleor_customer_email=saleor_customer_email,
-        saleor_customer_password=saleor_customer_password,
     )
 
 
@@ -134,8 +127,8 @@ async def create_run(
         saleor_email=saleor_email,
         saleor_password=saleor_password,
         saleor_token=token,
-        test_scope=data.test_scope,
-        public_only=data.public_only,
+        test_scope=FULL_SYSTEM_SCOPE,
+        public_only=False,
         concurrency=data.concurrency,
         timeout_seconds=data.timeout_seconds,
     )
@@ -149,12 +142,8 @@ async def create_run(
     _start_runner(
         run,
         token,
-        data.categories,
-        data.test_mode,
         saleor_email=row["saleor_email"],
         saleor_password=row["saleor_password"],
-        saleor_customer_email=data.saleor_customer_email,
-        saleor_customer_password=data.saleor_customer_password,
     )
     return _summary_from_run(run)
 

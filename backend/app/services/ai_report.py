@@ -11,8 +11,8 @@ from app.core.config import settings
 from app.models import TestRun, TestResult
 from app.services.reference_corpus import load_manifest, resolve_corpus_version
 from app.services.reference_registry import get_upgrade_hint
-from app.services.run_helpers import catalog_counts
 from app.services.client_bundles import client_bundle_count
+from app.services.run_scope import FULL_SYSTEM_SCOPE
 from app.services.reference_compare import tier2_gate_enabled
 from app.services.schema_gate import compute_certified, compute_schema_gate
 from app.services.response_contract import CONTRACT_SUCCESS
@@ -32,18 +32,19 @@ def _golden_context(run: TestRun) -> dict[str, Any]:
     target = run.saleor_version or "unknown"
     resolved = resolve_corpus_version(target, settings.golden_corpus_version)
     manifest = load_manifest(resolved) or {}
-    q_count, m_count = catalog_counts()
+    diff = run.schema_diff or {}
     return {
         "target_version": target,
         "target_url": run.saleor_url,
-        "catalog_source": run.reference_baseline_source or settings.reference_baseline_source,
-        "catalog_version": run.reference_baseline_version or settings.reference_baseline_version,
-        "catalog_queries": q_count,
-        "catalog_mutations": m_count,
+        "test_scope": run.test_scope or FULL_SYSTEM_SCOPE,
         "golden_corpus_version": resolved,
         "golden_saleor_url": manifest.get("saleor_url", settings.reference_saleor_url),
         "golden_probe_count": manifest.get("probe_count", 0),
-        "client_bundle_count": client_bundle_count(),
+        "l3_dashboard_certified": client_bundle_count(source="dashboard"),
+        "l3_storefront_certified": client_bundle_count(source="storefront"),
+        "certification_endpoint_count": diff.get("certification_endpoint_count") or run.total_tests,
+        "excluded_l3_bundles": diff.get("excluded_l3_bundles") or [],
+        "not_counted_note": diff.get("not_counted_note"),
         "upgrade_hint": get_upgrade_hint(target if target != "unknown" else None, resolved),
     }
 
@@ -106,8 +107,23 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         "| Label | Value | Meaning |",
         "|-------|-------|---------|",
         f"| Target API | {ctx['target_version']} @ {ctx['target_url']} | Version from `shop {{ version }}` on server under test |",
-        f"| Catalog baseline | {ctx['catalog_source']} {ctx['catalog_version']} | Static list of operation names we probe |",
-        f"| Golden corpus | {ctx['golden_corpus_version']} ({ctx['golden_probe_count']} probes) | Recorded request/response from official Saleor |",
+        f"| Test scope | {ctx['test_scope']} | Full system: L1 + L3 dashboard + L3 storefront + scenarios + variants |",
+        f"| Golden corpus | {ctx['golden_corpus_version']} ({ctx['golden_probe_count']} L1 probes) | Recorded request/response from official Saleor |",
+        f"| L3 dashboard bundles | {ctx['l3_dashboard_certified']} | Schema-certified dashboard GraphQL documents |",
+        f"| L3 storefront bundles | {ctx['l3_storefront_certified']} | Schema-certified storefront GraphQL documents |",
+        "",
+        "## Certification denominator",
+        f"- **Endpoints executed:** {ctx['certification_endpoint_count']} (compatibility % uses this count only)",
+        f"- **Excluded from scoring:** deprecated L1 ops and schema-incompatible L3 bundles are never counted.",
+    ]
+    if ctx.get("not_counted_note"):
+        lines.append(f"- **Note:** {ctx['not_counted_note']}")
+    excluded = ctx.get("excluded_l3_bundles") or []
+    if excluded:
+        lines.append(f"- **Excluded L3 bundles ({len(excluded)}):** " + ", ".join(
+            e.get("bundle_id", "?") for e in excluded[:15]
+        ) + ("…" if len(excluded) > 15 else ""))
+    lines.extend([
         "",
         "## Executive summary",
         f"- **Compatibility score** (primary): **{compat_rate}%**"
@@ -121,7 +137,7 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         f"- Incompatible: {run.failed}, Warnings: {run.warnings}, Compatible: {run.passed}",
         f"- Golden: {stats['golden_matched']} matched, {stats['golden_mismatched']} mismatched, {stats['golden_missing']} missing",
         f"- Client parity gaps (Tier 2, informational): {stats.get('client_parity_gaps', 0)}",
-    ]
+    ])
     if ctx["upgrade_hint"]:
         lines.extend(["", f"**Upgrade recommendation:** {ctx['upgrade_hint']}"])
 
@@ -230,6 +246,8 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
     certified = compute_certified(
         schema_gate_pass=schema_gate["schema_gate_pass"],
         compatibility_score=stats["compatibility_score"],
+        tier2_pass=stats["client_parity_gaps"] == 0,
+        parity_gaps=stats["client_parity_gaps"] if stats.get("tier2_gate_enabled") else 0,
     )
 
     def row(r: TestResult, *, full: bool) -> dict[str, Any]:

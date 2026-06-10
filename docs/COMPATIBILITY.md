@@ -33,7 +33,7 @@ just up
 just baseline
 ```
 
-This chains corpus integrity (388 L1 + 428 L3 dashboard + 16 L3 storefront recorded, schema gate) and full replay (`full+client+storefront`, Tier 2, 100% on **820** certification endpoints).
+This chains corpus integrity (388 L1 + 417 L3 dashboard + 16 L3 storefront recorded, schema gate) and full replay (`full+scenarios`, Tier 2, 100% on the full-system endpoint set).
 
 L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFERENCE-SEED.md). `just fresh` runs `populatedb` and `just seed-reference` automatically.
 
@@ -44,9 +44,9 @@ L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFER
 3. **Compatibility mode** — replays golden inputs; compares SGRC Tier 1 (+ Tier 2 when gate on).
 4. **Schema gate** — introspects target; verifies corpus operations exist.
 
-**820 endpoints** = 388 L1 + **417** L3 dashboard bundles + **16** L3 storefront bundles that pass the L3 schema gate on the pinned Saleor version. **428** dashboard bundles are recorded; **11** are excluded because Dashboard vendor root fields are not on Saleor 3.23.7 (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
+**Full-system scope** (`full+scenarios`) = 388 L1 + **417** L3 dashboard + **16** L3 storefront + scenario steps + input variants. **11** deprecated dashboard bundles were removed from the corpus (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
 
-Certification is **Dashboard + Storefront L3 + operation-level L1**. Storefront coverage is the **16** GraphQL documents imported from the pinned storefront vendor tree (legacy storefront codebase — not every Storefront operation).
+Reports include `not_counted_note` and `excluded_l3_bundles` so AI agents know deprecated items are never counted toward compatibility %.
 
 ## Recording and patching
 
@@ -75,10 +75,10 @@ L3 **schema gate**: every recorded bundle's root query/mutation field must exist
 ```bash
 just up-harness
 just register
-# UI: compatibility mode, scope full+client+storefront
+# UI: start a run (full-system scope is automatic)
 ```
 
-Point the UI at your backend with scope **`full+client+storefront`**. Seed fixture data on the target DB when testing L3 (see [REFERENCE-SEED.md](REFERENCE-SEED.md)).
+Point the UI at your backend — every run uses **`full+scenarios`**. Seed fixture data on the target DB when testing L3 (see [REFERENCE-SEED.md](REFERENCE-SEED.md)).
 
 ## Local verification (no CI)
 
@@ -87,7 +87,7 @@ Point the UI at your backend with scope **`full+client+storefront`**. Seed fixtu
 | Golden baseline | `just baseline` |
 | Build + start harness | `just up-harness` |
 | Corpus integrity | `just verify-corpus` |
-| Backend unit tests | `docker compose exec harness-backend pytest tests/ -q` |
+| Backend unit tests | `just test` |
 
 ## Coverage gaps (out of scope today)
 

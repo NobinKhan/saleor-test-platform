@@ -61,6 +61,16 @@ services:
     environment:
       DASHBOARD_URL: http://localhost:9000/
       ALLOWED_HOSTS: localhost,127.0.0.1,saleor-api,host.docker.internal
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python3 -c \"import urllib.request,json; r=urllib.request.Request('http://127.0.0.1:8000/graphql/',data=b'{\\\"query\\\":\\\"{ shop { version } }\\\"}',headers={'Content-Type':'application/json'},method='POST'); d=json.loads(urllib.request.urlopen(r,timeout=5).read()); exit(0 if (d.get('data') or {}).get('shop') else 1)\"",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 40s
 
   saleor-worker:
     profiles: [saleor]

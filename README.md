@@ -44,8 +44,12 @@ just baseline   # re-verify golden baseline
 | Command | Description |
 |---------|-------------|
 | `just up` | Saleor + harness (full local stack) |
-| `just up-harness` | Harness only — point tests at an external API |
+| `just up-harness` | Harness only — rebuild images, then start |
+| `just up-harness-fast` | Harness only — start without rebuild (preferred when images are current) |
 | `just down` | Stop all services |
+| `just test` | Backend unit tests (in harness container, RAM-safe) |
+| `just check` | Frontend type check (capped Node heap) |
+| `just build-harness` | Rebuild harness-backend then harness-frontend (serial) |
 | `just fresh` | Reset DB volumes + Saleor migrate + populatedb + reference seed |
 | `just seed-reference` | Seed L3 fixture IDs (products, orders, customers, …) on official Saleor |
 | `just register` | Create harness user `test@example.com` |
@@ -73,14 +77,16 @@ just up
 just baseline
 ```
 
-This runs `verify-corpus` (388 L1 probes + 428 L3 dashboard + 16 L3 storefront bundles recorded, schema gate) then `self-check --scope full+client+storefront --require-tier2` (**820** certification endpoints, 100% SGRC).
+`just up` auto-runs Saleor DB migrations and ensures the admin user exists. Use `just fresh` only when wiping volumes.
+
+This runs `verify-corpus` (388 L1 + 417 L3 dashboard + 16 L3 storefront recorded, schema gate) then `self-check --scope full+scenarios --require-tier2` (full system: L1 + L3 + scenarios + variants, 100% SGRC).
 
 ## UI certification smoke (manual)
 
 CLI baseline proves the engine; confirm the report UI separately:
 
 1. `just up` and `just register`
-2. Open http://localhost:5999 — start a run with **compatibility** mode, scope **`full+client+storefront`**
+2. Open http://localhost:5999 — start a run (always full-system scope)
 3. Saleor URL: `http://localhost:8000/graphql/`, admin email/password from `just fresh`
 4. Report page: **Certified YES**, compatibility 100%, L3 bundle count shown
 
@@ -89,11 +95,11 @@ Automated API certification test (POST run → assert report) is a recommended f
 ## Harness-only (external API)
 
 ```bash
-just up-harness
+just up-harness-fast   # or just up-harness to rebuild images first
 just register
 ```
 
-Point the UI at your Go/Node/Rust backend URL. Use scope **`full+client+storefront`** for full certification. Run `just baseline` on official Saleor first — external runs compare against the same golden, not against each other.
+Point the UI at your Go/Node/Rust backend URL. Every run uses the full-system scope automatically. Run `just baseline` on official Saleor first — external runs compare against the same golden, not against each other.
 
 **Saleor URL in the UI** (harness backend runs inside Docker):
 
@@ -111,7 +117,7 @@ Test runs use **Saleor admin email and password** (via `tokenCreate`). Credentia
 
 Certification requires **schema gate pass** (L1 + L3) AND **100% SGRC** (Tier 1 + Tier 2 when gate enabled). See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
-Official certification scope: **820 endpoints** (388 L1 + 417 L3 dashboard + 16 L3 storefront bundles on schema-compatible Saleor with seeded fixture data). See [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md) for remaining gaps.
+Official certification scope: **full+scenarios** — L1 (388) + L3 dashboard (417) + L3 storefront (16) + scenario steps + input variants. Deprecated schema-incompatible bundles are excluded from scoring. See [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md).
 
 ## Local verification (no CI)
 
@@ -119,9 +125,9 @@ Official certification scope: **820 endpoints** (388 L1 + 417 L3 dashboard + 16 
 |-------|---------|
 | Golden baseline (do this first) | `just baseline` |
 | Corpus integrity only | `just verify-corpus` |
-| Replay only | `just self-check --scope full+client+storefront --require-tier2 --min-compat 100` |
-| Backend unit tests | `docker compose exec harness-backend pytest tests/ -q` |
-| Frontend types | `cd frontend && bun run check` |
+| Replay only | `just self-check --scope full+scenarios --require-tier2 --min-compat 100` |
+| Backend unit tests | `just test` |
+| Frontend types | `just check` |
 
 ## Related
 

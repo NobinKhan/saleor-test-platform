@@ -1,7 +1,10 @@
 # Saleor Test Platform — one compose file, minimal commands
 #
 # Stack:
-#   just up | up-harness | down | fresh | register | logs | status
+#   just up | up-harness | up-harness-fast | down | fresh | register | logs | status
+#
+# Verification (RAM-safe):
+#   just test | check | build-harness
 #
 # Reference corpus (local Saleor defaults; pass script flags via *extra):
 #   just corpus-diff | patch-corpus | record-reference | verify-corpus | self-check
@@ -23,6 +26,28 @@ up:
 
 up-harness:
     @just _run up-harness
+
+up-harness-fast:
+    @just _run up-harness-fast
+
+test *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    source "{{ root }}/scripts/lib/resources.sh"
+    {{compose}} exec harness-backend pytest tests/ -q {{ extra }}
+
+check:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    source "{{ root }}/scripts/lib/resources.sh"
+    cd "{{ root }}/frontend" && bun run check
+
+build-harness:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    source "{{ root }}/scripts/lib/resources.sh"
+    {{compose}} --profile harness build harness-backend
+    {{compose}} --profile harness build harness-frontend
 
 down:
     @just _run down
@@ -62,8 +87,8 @@ export-reference:
 import-reference:
     #!/usr/bin/env bash
     set -euo pipefail
-    {{compose}} build harness-backend
-    echo "Rebuilt harness-backend image with ./reference/ from git (baked at build time)."
+    just build-harness
+    echo "Rebuilt harness images with ./reference/ from git (baked at build time)."
     echo "To reset the runtime volume: just down && docker volume rm saleor-test-platform_harness_reference 2>/dev/null || true"
 
 seed-reference *extra:
@@ -122,7 +147,7 @@ baseline *extra:
     {{compose}} exec harness-backend \
       python -m app.scripts.verify_corpus \
       --min-probes 380 \
-      --min-client-bundles 400 \
+      --min-client-bundles 410 \
       --min-client-recorded-ratio 1.0 \
       --url "http://saleor-api:8000/graphql/" \
       --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
@@ -131,6 +156,6 @@ baseline *extra:
     echo "=== Golden baseline: replay vs official Saleor ==="
     {{compose}} exec harness-backend \
       python -m app.scripts.self_check \
-      --scope full+client+storefront --require-tier2 --min-compat 100 {{ extra }}
+      --scope full+scenarios --require-tier2 --min-compat 100 {{ extra }}
     echo ""
     echo "BASELINE PASS"

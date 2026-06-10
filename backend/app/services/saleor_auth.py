@@ -34,6 +34,15 @@ CUSTOMER_DEFAULT_EMAIL = "harness-storefront-customer@example.com"
 CUSTOMER_DEFAULT_PASSWORD = "HarnessCustomer123!"
 
 
+def _format_saleor_auth_error(message: str) -> str:
+    if 'relation "' in message and '" does not exist' in message:
+        return (
+            "Saleor database not migrated — run `just fresh` or wait for "
+            "stack migrations to complete after `just up`."
+        )
+    return message
+
+
 async def validate_saleor_token(
     saleor_url: str,
     token: str | None,
@@ -129,13 +138,15 @@ async def fetch_saleor_token(
         data = resp.json()
         top_errors = data.get("errors") or []
         if top_errors:
-            return None, top_errors[0].get("message", "Saleor GraphQL error")
+            msg = top_errors[0].get("message", "Saleor GraphQL error")
+            return None, _format_saleor_auth_error(msg)
 
         result = (data.get("data") or {}).get("tokenCreate") or {}
         errors = result.get("errors") or []
 
         if errors:
-            return None, errors[0].get("message", "Authentication failed")
+            msg = errors[0].get("message", "Authentication failed")
+            return None, _format_saleor_auth_error(msg)
 
         token = result.get("token")
         if not token:

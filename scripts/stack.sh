@@ -7,6 +7,7 @@ export ROOT
 COMPOSE_FILE="${ROOT}/docker-compose.yml"
 COMPOSE=(docker compose -f "${COMPOSE_FILE}")
 
+source "${ROOT}/scripts/lib/resources.sh"
 source "${ROOT}/scripts/lib/cleanup.sh"
 source "${ROOT}/scripts/lib/health.sh"
 
@@ -19,19 +20,64 @@ profile_args() {
   esac
 }
 
+wait_for_saleor_container() {
+  local max_attempts="${1:-60}"
+  local attempt=1
+  while [ "${attempt}" -le "${max_attempts}" ]; do
+    if docker ps --filter name=saleor-api --filter status=running -q | grep -q .; then
+      return 0
+    fi
+    attempt=$((attempt + 1))
+    sleep 2
+  done
+  echo "saleor-api container did not start" >&2
+  return 1
+}
+
+ensure_saleor_migrated() {
+  if ! docker ps --filter name=saleor-api --filter status=running -q | grep -q .; then
+    return 0
+  fi
+  echo ""
+  echo "=== Saleor database migrations ==="
+  docker exec saleor-api python3 manage.py migrate --noinput
+  echo "=== Saleor admin user (if missing) ==="
+  docker cp "${ROOT}/scripts/create_saleor_admin.py" saleor-api:/tmp/create_saleor_admin.py
+  docker exec -e PYTHONPATH=/app saleor-api python3 /tmp/create_saleor_admin.py \
+    || echo "Warning: admin seed skipped (may already exist)"
+}
+
+build_harness_images() {
+  echo "=== Building harness-backend (serial) ==="
+  "${COMPOSE[@]}" --profile harness build harness-backend
+  echo "=== Building harness-frontend (serial) ==="
+  "${COMPOSE[@]}" --profile harness build harness-frontend
+}
+
 cmd_up() {
   local profile="${1:-all}"
+  local skip_build="${2:-false}"
   # shellcheck disable=SC2206
   local profiles=($(profile_args "${profile}"))
 
   cleanup_named_containers
 
   echo "=== Starting stack (profile: ${profile}) ==="
-  "${COMPOSE[@]}" "${profiles[@]}" up -d --build --force-recreate --remove-orphans
+  if [ "${skip_build}" != "true" ]; then
+    case "${profile}" in
+      harness|all) build_harness_images ;;
+    esac
+  fi
+  "${COMPOSE[@]}" "${profiles[@]}" up -d --no-build --force-recreate --remove-orphans
 
   echo ""
   echo "=== Waiting for services ==="
   sleep 5
+
+  if [ "${profile}" != "harness" ]; then
+    wait_for_saleor_container 60 || true
+    ensure_saleor_migrated
+  fi
 
   echo ""
   echo "=== Health checks ==="
@@ -63,12 +109,8 @@ cmd_fresh() {
   cmd_down --volumes
   cmd_up all
   echo ""
-  echo "=== Saleor migrations ==="
   sleep 5
-  docker exec saleor-api python3 manage.py migrate --noinput
-  echo "=== Saleor admin user ==="
-  docker cp "${ROOT}/scripts/create_saleor_admin.py" saleor-api:/tmp/create_saleor_admin.py
-  docker exec -e PYTHONPATH=/app saleor-api python3 /tmp/create_saleor_admin.py
+  ensure_saleor_migrated
   echo "=== Saleor demo data (orders, products, channel access) ==="
   docker exec saleor-api python3 manage.py populatedb \
     --createsuperuser \
@@ -90,13 +132,14 @@ cmd_fresh() {
 }
 
 case "${1:-}" in
-  up)           cmd_up "${2:-all}" ;;
-  up-harness)   cmd_up harness ;;
-  down)         cmd_down ;;
-  down-volumes) cmd_down --volumes ;;
-  fresh)        cmd_fresh ;;
+  up)                cmd_up "${2:-all}" ;;
+  up-harness)        cmd_up harness ;;
+  up-harness-fast)   cmd_up harness true ;;
+  down)              cmd_down ;;
+  down-volumes)      cmd_down --volumes ;;
+  fresh)             cmd_fresh ;;
   *)
-    echo "Usage: stack.sh {up|up-harness|down|down-volumes|fresh} [all|harness|saleor]" >&2
+    echo "Usage: stack.sh {up|up-harness|up-harness-fast|down|down-volumes|fresh} [all|harness|saleor]" >&2
     exit 1
     ;;
 esac

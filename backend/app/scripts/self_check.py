@@ -14,6 +14,7 @@ import uuid
 
 from app.core.config import settings
 from app.services.saleor_auth import fetch_saleor_token
+from app.services.run_scope import FULL_SYSTEM_SCOPE
 from app.services.test_runner import TestRunner
 
 
@@ -24,7 +25,7 @@ async def run_self_check(
     password: str,
     min_compat: float,
     version: str,
-    test_scope: str = "full",
+    test_scope: str = FULL_SYSTEM_SCOPE,
     require_tier2: bool = False,
 ) -> int:
     token, err = await fetch_saleor_token(url, email, password)
@@ -38,7 +39,6 @@ async def run_self_check(
             saleor_url=url,
             saleor_token=token,
             test_scope=test_scope,
-            test_mode="compatibility",
             use_introspection=True,
             concurrency=1,
             saleor_email=email,
@@ -51,7 +51,6 @@ async def run_self_check(
             saleor_url=url,
             saleor_token=token,
             test_scope=test_scope,
-            test_mode="compatibility",
             use_introspection=True,
             concurrency=1,
             saleor_email=email,
@@ -77,6 +76,8 @@ async def run_self_check(
                 mismatch_reasons[event.get("diff_summary", "unknown")[:80]] += 1
 
     compared = matched + mismatched
+    if compared < total:
+        compared = total
     rate = matched / compared * 100 if compared else 0
     tier_label = "Tier1+Tier2" if require_tier2 else "Tier1"
     print(f"Self-check ({tier_label}, scope={test_scope}) vs {version}: {rate:.1f}% ({matched}/{compared})")
@@ -100,7 +101,7 @@ def main() -> int:
     parser.add_argument("--password", default="admin123456")
     parser.add_argument("--min-compat", type=float, default=100.0)
     parser.add_argument("--version", default=None)
-    parser.add_argument("--scope", default="full", help="full, full+client, or client-dashboard")
+    parser.add_argument("--scope", default=FULL_SYSTEM_SCOPE, help="Test scope (default: full system)")
     parser.add_argument("--require-tier2", action="store_true", help="Enforce SGRC Tier 2 hard gate")
     args = parser.parse_args()
     return asyncio.run(

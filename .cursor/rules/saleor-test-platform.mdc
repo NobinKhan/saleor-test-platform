@@ -73,5 +73,5 @@ alwaysApply: true
 | Corpus integrity | `just verify-corpus` |
 | Corpus diff (L1 + L3) | `just corpus-diff` |
 | Patch reference | `just patch-corpus` |
-| Backend unit tests | `docker compose exec harness-backend pytest tests/ -q` |
-| Frontend types | `cd frontend && bun run check` |
+| Backend unit tests | `just test` |
+| Frontend types | `just check` |
