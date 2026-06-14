@@ -32,7 +32,6 @@
 	},
 	"include": [
 		"ambient.d.ts",
-		"env.d.ts",
 		"non-ambient.d.ts",
 		"./types/**/$types.d.ts",
 		"../vite.config.js",

@@ -65,7 +65,6 @@ declare module '$env/static/private' {
 	export const LOGNAME: string;
 	export const XDG_SESSION_DESKTOP: string;
 	export const XDG_SESSION_TYPE: string;
-	export const PNPM_HOME: string;
 	export const VSCODE_ESM_ENTRYPOINT: string;
 	export const GPG_AGENT_INFO: string;
 	export const SYSTEMD_EXEC_PID: string;
@@ -120,6 +119,7 @@ declare module '$env/static/private' {
 	export const FNM_RESOLVE_ENGINES: string;
 	export const npm_package_json: string;
 	export const BUN_INSTALL: string;
+	export const P9K_SSH: string;
 	export const JOURNAL_STREAM: string;
 	export const XDG_DATA_DIRS: string;
 	export const GDK_BACKEND: string;
@@ -137,7 +137,6 @@ declare module '$env/static/private' {
 	export const VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
 	export const FNM_LOGLEVEL: string;
 	export const OLDPWD: string;
-	export const NODE_ENV: string;
 }
 
 /**
@@ -251,7 +250,6 @@ declare module '$env/dynamic/private' {
 		LOGNAME: string;
 		XDG_SESSION_DESKTOP: string;
 		XDG_SESSION_TYPE: string;
-		PNPM_HOME: string;
 		VSCODE_ESM_ENTRYPOINT: string;
 		GPG_AGENT_INFO: string;
 		SYSTEMD_EXEC_PID: string;
@@ -306,6 +304,7 @@ declare module '$env/dynamic/private' {
 		FNM_RESOLVE_ENGINES: string;
 		npm_package_json: string;
 		BUN_INSTALL: string;
+		P9K_SSH: string;
 		JOURNAL_STREAM: string;
 		XDG_DATA_DIRS: string;
 		GDK_BACKEND: string;
@@ -323,7 +322,6 @@ declare module '$env/dynamic/private' {
 		VSCODE_HANDLES_UNCAUGHT_ERRORS: string;
 		FNM_LOGLEVEL: string;
 		OLDPWD: string;
-		NODE_ENV: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}
