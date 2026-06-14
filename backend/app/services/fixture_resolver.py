@@ -2,25 +2,60 @@
 Runtime fixture resolver — resolves entity IDs at test-run start.
 
 Queries the target Saleor instance to verify that required fixture entities
-(Product, Variant, etc.) exist, and optionally seeds missing ones. Replaces
-static fixtures.json IDs with live-resolved IDs per run.
-
-The keys align with the on-disk fixtures.json schema and reference_seed.py
-REQUIRED_FIXTURE_KEYS (default_product_id, default_variant_id, etc.) so
-that substitute_fixtures() resolves {{fixtures.default_product_id}} correctly.
+(Product, Variant, etc.) exist, and optionally seeds missing ones via admin
+mutations when RUNTIME_SEED=true (default). Replaces static fixtures.json IDs
+with live-resolved IDs per run.
 """
 
 from __future__ import annotations
 
 import logging
-import re
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, Literal
 
-import httpx
-
+from app.core.config import settings
+from app.core.url_utils import resolve_harness_saleor_url, resolve_saleor_url_for_runner
 from app.services.client_bundles import load_fixtures, resolve_dashboard_bundle_version
+from app.services.reference_seed import (
+    capture_live_fixtures,
+    ensure_runtime_fixture_entities,
+)
 
 logger = logging.getLogger(__name__)
+
+PREFLIGHT_REQUIRED_FIXTURE_KEYS = (
+    "default_product_id",
+    "default_variant_id",
+    "default_channel_id",
+    "default_product_type_id",
+)
+
+IssueSeverity = Literal["blocking", "warning"]
+
+
+@dataclass(frozen=True)
+class PreflightIssue:
+    message: str
+    severity: IssueSeverity
+
+
+@dataclass(frozen=True)
+class FixtureResolution:
+    fixtures: dict[str, Any]
+    live_keys: frozenset[str] = field(default_factory=frozenset)
+    seeded_keys: frozenset[str] = field(default_factory=frozenset)
+    seed_errors: tuple[str, ...] = ()
+
+
+def _apply_captured(
+    resolved: dict[str, Any],
+    live_keys: set[str],
+    captured: dict[str, Any],
+) -> None:
+    for key, value in captured.items():
+        if value and key != "placeholder_id":
+            resolved[key] = value
+            live_keys.add(key)
 
 
 async def _query_saleor(
@@ -30,6 +65,9 @@ async def _query_saleor(
     timeout: int = 30,
 ) -> dict[str, Any] | None:
     """Execute a GraphQL query against the target and return data or None."""
+    import httpx
+
+    saleor_url = resolve_saleor_url_for_runner(saleor_url)
     headers: dict[str, str] = {"Content-Type": "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token}"
@@ -42,8 +80,11 @@ async def _query_saleor(
             )
             if resp.status_code in (200, 400):
                 body = resp.json()
+                data = body.get("data")
+                if isinstance(data, dict):
+                    return data
                 if not body.get("errors"):
-                    return body.get("data")
+                    return data
     except Exception as exc:
         logger.debug("Query failed: %s", exc)
     return None
@@ -54,107 +95,42 @@ async def resolve_fixtures(
     token: str | None,
     timeout: int = 30,
     source: str = "dashboard",
-) -> dict[str, Any]:
-    """Query target Saleor to resolve fixture entity IDs at runtime.
-
-    Returns a dict using the standard fixture.json key names (default_product_id,
-    default_variant_id, default_channel_id, etc.) so that substitute_fixtures()
-    correctly resolves {{fixtures.default_product_id}} placeholders.
-
-    Falls back to static fixtures.json values for any unresolvable keys.
-    """
+) -> FixtureResolution:
+    """Resolve fixture IDs from target Saleor; optionally create missing entities."""
+    saleor_url = resolve_saleor_url_for_runner(saleor_url)
     static_fixtures = load_fixtures(source, resolve_dashboard_bundle_version())
     resolved: dict[str, Any] = dict(static_fixtures)
+    live_keys: set[str] = set()
+    seeded_keys: set[str] = set()
+    seed_errors: list[str] = []
 
-    product_data = await _query_saleor(
-        saleor_url,
-        '{ products(first: 1) { edges { node { id slug name productType { id } } } } }',
-        token,
-        timeout,
-    )
-    if product_data:
-        products = (product_data.get("products") or {}).get("edges") or []
-        if products:
-            node = products[0]["node"]
-            resolved["default_product_id"] = node["id"]
-            resolved["default_slug"] = node.get("slug", "test-product")
-            product_type = node.get("productType") or {}
-            if product_type.get("id"):
-                resolved["default_product_type_id"] = product_type["id"]
-            product_id = node["id"]
-            variants_data = await _query_saleor(
-                saleor_url,
-                f'{{ product(id: "{product_id}") {{ variants {{ id }} }} }}',
-                token,
-                timeout,
-            )
-            if variants_data:
-                variants = (variants_data.get("product") or {}).get("variants") or []
-                if variants:
-                    resolved["default_variant_id"] = variants[0]["id"]
-                    resolved["variant_id_for_cart"] = variants[0]["id"]
-                else:
-                    fallback = await _query_saleor(
-                        saleor_url,
-                        f'{{ productVariants(first: 1, filter: {{ product: "{product_id}" }}) '
-                        f'{{ edges {{ node {{ id }} }} }} }}',
-                        token,
-                        timeout,
-                    )
-                    if fallback:
-                        edges = (fallback.get("productVariants") or {}).get("edges") or []
-                        if edges:
-                            resolved["default_variant_id"] = edges[0]["node"]["id"]
-                            resolved["variant_id_for_cart"] = edges[0]["node"]["id"]
+    if not token:
+        return FixtureResolution(fixtures=resolved, live_keys=frozenset())
 
-    channel_data = await _query_saleor(
-        saleor_url,
-        '{ channels(first: 1) { edges { node { id slug name currencyCode } } } }',
-        token,
-        timeout,
-    )
-    if channel_data:
-        channels = (channel_data.get("channels") or {}).get("edges") or []
-        if channels:
-            cnode = channels[0]["node"]
-            resolved["default_channel_id"] = cnode["id"]
-            resolved["default_channel"] = cnode.get("slug", "default")
+    captured = await capture_live_fixtures(saleor_url, token, timeout=timeout)
+    _apply_captured(resolved, live_keys, captured)
 
-    if "default_product_type_id" not in resolved:
-        pt_data = await _query_saleor(
-            saleor_url,
-            '{ productTypes(first: 1) { edges { node { id } } } }',
-            token,
-            timeout,
+    missing_required = [
+        k for k in PREFLIGHT_REQUIRED_FIXTURE_KEYS if k not in live_keys
+    ]
+    if missing_required and settings.runtime_seed:
+        logger.info(
+            "Runtime seed: creating missing fixture entities on target: %s",
+            ", ".join(missing_required),
         )
-        if pt_data:
-            pts = (pt_data.get("productTypes") or {}).get("edges") or []
-            if pts:
-                resolved["default_product_type_id"] = pts[0]["node"]["id"]
+        seed_result = await ensure_runtime_fixture_entities(
+            saleor_url, token, timeout=timeout
+        )
+        _apply_captured(resolved, live_keys, seed_result.fixtures)
+        seeded_keys.update(seed_result.seeded_keys)
+        seed_errors.extend(seed_result.errors)
 
-    order_data = await _query_saleor(
-        saleor_url,
-        '{ orders(first: 1) { edges { node { id } } } }',
-        token,
-        timeout,
+    return FixtureResolution(
+        fixtures=resolved,
+        live_keys=frozenset(live_keys),
+        seeded_keys=frozenset(seeded_keys),
+        seed_errors=tuple(seed_errors),
     )
-    if order_data:
-        orders = (order_data.get("orders") or {}).get("edges") or []
-        if orders:
-            resolved["default_order_id"] = orders[0]["node"]["id"]
-
-    customer_data = await _query_saleor(
-        saleor_url,
-        '{ users(first: 1, filter: { search: \"harness\" }) { edges { node { id email } } } }',
-        token,
-        timeout,
-    )
-    if customer_data:
-        users = (customer_data.get("users") or {}).get("edges") or []
-        if users:
-            resolved["default_customer_id"] = users[0]["node"]["id"]
-
-    return resolved
 
 
 async def resolve_dynamic_probe_support(
@@ -163,6 +139,7 @@ async def resolve_dynamic_probe_support(
     timeout: int = 30,
 ) -> dict[str, Any]:
     """Resolve support data needed for dynamic probes (product type ID)."""
+    saleor_url = resolve_saleor_url_for_runner(saleor_url)
     support: dict[str, Any] = {}
     pt_data = await _query_saleor(
         saleor_url,
@@ -177,6 +154,17 @@ async def resolve_dynamic_probe_support(
     return support
 
 
+def _classify_preflight_issues(issues: list[PreflightIssue]) -> dict[str, Any]:
+    blocking = [i.message for i in issues if i.severity == "blocking"]
+    warnings = [i.message for i in issues if i.severity == "warning"]
+    return {
+        "issues": [i.message for i in issues],
+        "blocking_issues": blocking,
+        "warning_issues": warnings,
+        "issue_details": [{"message": i.message, "severity": i.severity} for i in issues],
+    }
+
+
 async def validate_preflight(
     saleor_url: str,
     token: str | None,
@@ -185,15 +173,14 @@ async def validate_preflight(
     *,
     allow_patch_drift: bool = False,
 ) -> dict[str, Any]:
-    """Pre-flight validation: check API reachability, version, fixtures.
-
-    Returns a structured result suitable for the validate endpoint.
-    Includes the hard version gate check (fails on major/minor mismatch).
-    """
+    """Pre-flight validation: check API reachability, version match, fixtures."""
     from app.services.version_routing import (
         version_compatibility_warning,
         version_hard_gate_check,
     )
+
+    requested_url, resolved_url = resolve_harness_saleor_url(saleor_url)
+    issues: list[PreflightIssue] = []
 
     result: dict[str, Any] = {
         "api_reachable": False,
@@ -204,17 +191,29 @@ async def validate_preflight(
         "version_gate_pass": None,
         "version_gate_reason": None,
         "fixture_status": {},
+        "runtime_seed_enabled": settings.runtime_seed,
+        "requested_saleor_url": requested_url,
+        "resolved_saleor_url": resolved_url,
         "issues": [],
+        "blocking_issues": [],
+        "warning_issues": [],
+        "issue_details": [],
     }
 
     shop_data = await _query_saleor(
-        saleor_url,
+        resolved_url,
         "{ shop { version } }",
         token,
         timeout,
     )
     if shop_data is None:
-        result["issues"].append("API unreachable or authentication failed")
+        issues.append(
+            PreflightIssue(
+                message="API unreachable or authentication failed",
+                severity="blocking",
+            )
+        )
+        result.update(_classify_preflight_issues(issues))
         return result
 
     result["api_reachable"] = True
@@ -227,7 +226,7 @@ async def validate_preflight(
         result["version_warning"] = warn
         result["version_match"] = version == corpus_version
         if warn and "major" in warn.lower():
-            result["issues"].append(warn)
+            issues.append(PreflightIssue(message=warn, severity="blocking"))
 
         gate = version_hard_gate_check(
             version, corpus_version, allow_patch_drift=allow_patch_drift
@@ -235,28 +234,31 @@ async def validate_preflight(
         result["version_gate_pass"] = gate["gate_pass"]
         result["version_gate_reason"] = gate["reason"]
         if not gate["gate_pass"] and gate["reason"]:
-            result["issues"].append(f"Version gate: {gate['reason']}")
-
-    fixture_keys_to_check = {
-        "default_product_id": '{ products(first: 1) { edges { node { id } } } }',
-        "default_variant_id": '{ productVariants(first: 1) { edges { node { id } } } }',
-        "default_channel_id": '{ channels(first: 1) { edges { node { id } } } }',
-        "default_product_type_id": '{ productTypes(first: 1) { edges { node { id } } } }',
-    }
-    for key, query in fixture_keys_to_check.items():
-        data = await _query_saleor(saleor_url, query, token, timeout)
-        exists = bool(
-            data
-            and any(
-                (data.get(root) or {}).get("edges")
-                for root in data
-            )
-        )
-        result["fixture_status"][key] = "present" if exists else "missing"
-        if not exists:
-            result["issues"].append(
-                f"Fixture entity {key} not found in target database — "
-                "seed reference data or set RUNTIME_SEED=true"
+            issues.append(
+                PreflightIssue(
+                    message=f"Version gate: {gate['reason']}",
+                    severity="blocking",
+                )
             )
 
+    resolution = await resolve_fixtures(resolved_url, token, timeout=timeout)
+    for key in PREFLIGHT_REQUIRED_FIXTURE_KEYS:
+        present = key in resolution.live_keys
+        result["fixture_status"][key] = "present" if present else "missing"
+        if not present:
+            detail = f"Could not resolve or create {key} on target"
+            if resolution.seed_errors:
+                detail += f" — {'; '.join(resolution.seed_errors[:3])}"
+            elif settings.runtime_seed:
+                detail += " — check admin permissions for channel/product mutations"
+            else:
+                detail += " — set RUNTIME_SEED=true to auto-create harness fixture entities"
+            issues.append(PreflightIssue(message=detail, severity="warning"))
+
+    if resolution.seeded_keys:
+        result["seeded_fixture_keys"] = sorted(resolution.seeded_keys)
+    if resolution.seed_errors:
+        result["seed_errors"] = list(resolution.seed_errors)
+
+    result.update(_classify_preflight_issues(issues))
     return result

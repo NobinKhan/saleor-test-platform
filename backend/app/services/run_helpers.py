@@ -37,6 +37,40 @@ async def authenticate_saleor(
     return await fetch_saleor_token(saleor_url, saleor_email, saleor_password)
 
 
+async def resolve_saleor_password(
+    *,
+    db,
+    user_id: uuid.UUID,
+    saleor_password: str | None,
+    clone_from_run_id: uuid.UUID | None,
+) -> str:
+    """Resolve plaintext Saleor password from request or a prior run."""
+    if saleor_password:
+        return saleor_password
+
+    if not clone_from_run_id:
+        raise ValueError("Saleor admin password is required")
+
+    from sqlalchemy import select
+
+    from app.models import TestRun
+
+    result = await db.execute(
+        select(TestRun).where(
+            TestRun.id == clone_from_run_id,
+            TestRun.user_id == user_id,
+        )
+    )
+    source = result.scalar_one_or_none()
+    if not source:
+        raise LookupError("Source test run not found")
+    if not source.saleor_password:
+        raise ValueError(
+            "Source run has no stored password; enter a password to continue."
+        )
+    return decrypt_token(source.saleor_password)
+
+
 def build_test_run_row(
     *,
     user_id: uuid.UUID,

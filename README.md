@@ -82,7 +82,7 @@ just baseline
 
 This runs `verify-corpus` (387 L1 + 415 L3 dashboard certified + 16 L3 storefront + 5 dynamic probes, schema gate) then `self-check --scope full+scenarios --require-tier2` (full system: L1 + L3 + scenarios + variants + dynamic, 100% SGRC).
 
-**Pre-flight:** Before starting a run in the UI, the harness calls `POST /api/tests/validate` (API reachability, version gate, fixture entities). Reports show **compatibility %** and **effective score** (excludes deprecated + data-prerequisite failures). See [docs/DYNAMIC-PROBES.md](docs/DYNAMIC-PROBES.md).
+**Pre-flight:** Before starting a run in the UI, the harness calls `POST /api/runs/validate` (API reachability, version gate, fixture entities). Reports show **compatibility %** and **effective score** (excludes deprecated + data-prerequisite failures). See [docs/DYNAMIC-PROBES.md](docs/DYNAMIC-PROBES.md).
 
 ## UI certification smoke (manual)
 

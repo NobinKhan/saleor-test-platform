@@ -47,6 +47,11 @@ class Settings(BaseSettings):
     allow_insecure_jwt_secret: bool = Field(default=True, validation_alias="ALLOW_INSECURE_JWT_SECRET")
     sgrc_tier2_gate: bool = Field(default=False, validation_alias="SGRC_TIER2_GATE")
     sgrc_allow_assertion_only: bool = Field(default=False, validation_alias="SGRC_ALLOW_ASSERTION_ONLY")
+    runtime_seed: bool = Field(
+        default=True,
+        validation_alias="RUNTIME_SEED",
+        description="Create missing L3 fixture entities on target via admin mutations at run start",
+    )
     client_bundles_dashboard_version: str = Field(
         default="",
         validation_alias="CLIENT_BUNDLES_DASHBOARD_VERSION",

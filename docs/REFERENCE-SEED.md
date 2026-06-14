@@ -76,15 +76,23 @@ L1 probes do **not** require seeded data; L3 bundles **do**.
 
 At **test-run start** (after staff auth), the harness queries the **target** Saleor and resolves live entity IDs into the same keys as `fixtures.json` (`default_product_id`, `default_variant_id`, `default_channel_id`, …). Static IDs from capture-time `fixtures.json` are used only as fallback when the target has no matching entities.
 
+When **`RUNTIME_SEED=true`** (default in the harness), missing entities are **created via admin mutations** before probes run — channel, product type (if needed), reference product + variant, customer, collection, and checkout. This exercises create mutations on the target and avoids requiring a pre-seeded catalog identical to official Saleor.
+
+Harness reference slugs (idempotent re-runs): `harness-channel`, `harness-reference-type`, `harness-reference-product`, `harness-reference-collection`, `harness-reference-customer@example.com`.
+
 ```text
-just seed-reference     → capture-time (record L3 golden on official Saleor)
-TestRunner.run()        → runtime resolve_fixtures() per certification run
-POST /api/tests/validate → pre-flight: version gate + fixture entity checks
+just seed-reference     → capture-time (record L3 golden on official Saleor; writes fixtures.json)
+TestRunner.run()        → runtime resolve_fixtures() + optional ensure_runtime_fixture_entities()
+POST /api/runs/validate → pre-flight: version gate + same fixture resolution/seed preview
 ```
 
-If L3 fails with **missing data** on an external backend, run validate first or seed equivalent entities. Set `RUNTIME_SEED=true` only when explicitly allowing the harness to seed the target (default off).
+Set `RUNTIME_SEED=false` for read-only audits against production-like targets where mutations are not allowed.
 
-See [docs/DYNAMIC-PROBES.md](DYNAMIC-PROBES.md) for anti-static dynamic probes (unique slugs/UUIDs per run).
+### Docker URL rewrite (UI localhost)
+
+When the harness runs inside Docker (`DATABASE_URL` contains `@harness-db:`), the UI may show `http://localhost:8000/graphql/` while Saleor listens on the host. All harness paths — auth, pre-flight (`POST /api/runs/validate`), fixture capture/seed, and `TestRunner` — rewrite localhost to `SALEOR_GRAPHQL_URL` (typically `http://host.docker.internal:8000/graphql/`). The validate response includes `requested_saleor_url` and `resolved_saleor_url` when they differ.
+
+If L3 still fails with **missing data**, check admin permissions for channel/product/customer mutations. See [docs/DYNAMIC-PROBES.md](DYNAMIC-PROBES.md) for anti-static dynamic probes (unique slugs/UUIDs per run).
 
 Short list — full gap analysis (Storefront L3, customer JWT, excluded bundles, runtime limits): **[COVERAGE-GAPS.md](COVERAGE-GAPS.md)**.
 

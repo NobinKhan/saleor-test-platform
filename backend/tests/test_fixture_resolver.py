@@ -6,11 +6,13 @@ import httpx
 import pytest
 
 from app.services.fixture_resolver import (
+    FixtureResolution,
     _query_saleor,
     resolve_fixtures,
     resolve_dynamic_probe_support,
     validate_preflight,
 )
+from app.services.reference_seed import SeedResult
 
 
 def _setup_client_mock(mock_cls: MagicMock, post_return=None, post_side_effect=None):
@@ -63,37 +65,108 @@ async def test_query_saleor_exception():
 
 
 @pytest.mark.asyncio
-async def test_resolve_fixtures_queries_saleor():
-    call_count = 0
-    responses = [
-        {"data": {"products": {"edges": [{"node": {"id": "UHJvZHVjdDox", "slug": "test-product", "productType": {"id": "UHJvZHVjdFR5cGU6MQ=="}}}]}}},
-        {"data": {"product": {"variants": [{"id": "VmFyaWFudDox"}]}}},
-        {"data": {"channels": {"edges": [{"node": {"id": "Q2hhbm5lbDox", "slug": "default", "name": "Default", "currencyCode": "USD"}}]}}},
-        {"data": {"orders": {"edges": [{"node": {"id": "T3JkZXI6MQ=="}}]}}},
-        {"data": {"users": {"edges": [{"node": {"id": "VXNlcjox", "email": "harness@test.com"}}]}}},
-    ]
+async def test_resolve_fixtures_uses_capture():
+    captured = {
+        "default_product_id": "UHJvZHVjdDox",
+        "default_variant_id": "VmFyaWFudDox",
+        "default_channel_id": "Q2hhbm5lbDox",
+        "default_product_type_id": "UHJvZHVjdFR5cGU6MQ==",
+        "default_slug": "test-product",
+    }
+    with patch(
+        "app.services.fixture_resolver.capture_live_fixtures",
+        new_callable=AsyncMock,
+        return_value=captured,
+    ):
+        with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
+            with patch("app.services.fixture_resolver.settings") as mock_settings:
+                mock_settings.runtime_seed = False
+                result = await resolve_fixtures("http://example.com/graphql/", "token")
 
-    async def mock_post(url, **kw):
-        nonlocal call_count
-        resp = MagicMock(status_code=200)
-        resp.json = MagicMock(return_value=responses[call_count] if call_count < len(responses) else {"data": {}})
-        call_count += 1
-        return resp
+    assert result.fixtures["default_product_id"] == "UHJvZHVjdDox"
+    assert "default_variant_id" in result.live_keys
+    assert "default_channel_id" in result.live_keys
+    assert not result.seeded_keys
 
-    with patch.object(httpx, "AsyncClient") as mock_cls:
-        _setup_client_mock(mock_cls, post_side_effect=mock_post)
-        with patch("app.services.fixture_resolver.load_fixtures", return_value={
-            "default_product_id": "UHJvZHVjdDox",
-            "default_variant_id": "VmFyaWFudDox",
-            "default_channel_id": "Q2hhbm5lbDox",
-        }):
-            result = await resolve_fixtures("http://example.com/graphql/", "token")
 
-    assert result["default_product_id"] == "UHJvZHVjdDox"
-    assert result["default_variant_id"] == "VmFyaWFudDox"
-    assert result["default_channel_id"] == "Q2hhbm5lbDox"
-    assert result.get("default_slug") == "test-product"
-    assert result.get("default_product_type_id") == "UHJvZHVjdFR5cGU6MQ=="
+@pytest.mark.asyncio
+async def test_resolve_fixtures_runtime_seed_when_missing():
+    with patch(
+        "app.services.fixture_resolver.capture_live_fixtures",
+        new_callable=AsyncMock,
+        return_value={"default_channel_id": "Q2hhbm5lbDox", "default_channel": "default"},
+    ):
+        with patch(
+            "app.services.fixture_resolver.ensure_runtime_fixture_entities",
+            new_callable=AsyncMock,
+            return_value=SeedResult(
+                fixtures={
+                    "default_channel_id": "Q2hhbm5lbDox",
+                    "default_product_id": "UHJvZHVjdDox",
+                    "default_variant_id": "VmFyaWFudDox",
+                    "default_product_type_id": "UHJvZHVjdFR5cGU6MQ==",
+                },
+                live_keys=frozenset(
+                    {
+                        "default_channel_id",
+                        "default_product_id",
+                        "default_variant_id",
+                        "default_product_type_id",
+                    }
+                ),
+                seeded_keys=frozenset({"default_product_id", "default_variant_id"}),
+            ),
+        ) as mock_ensure:
+            with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
+                with patch("app.services.fixture_resolver.settings") as mock_settings:
+                    mock_settings.runtime_seed = True
+                    result = await resolve_fixtures("http://example.com/graphql/", "token")
+
+    mock_ensure.assert_awaited_once()
+    assert result.fixtures["default_product_id"] == "UHJvZHVjdDox"
+    assert "default_product_id" in result.seeded_keys
+
+
+@pytest.mark.asyncio
+async def test_validate_preflight_rewrites_localhost_url():
+    with patch(
+        "app.services.fixture_resolver.resolve_harness_saleor_url",
+        return_value=(
+            "http://localhost:8000/graphql/",
+            "http://host.docker.internal:8000/graphql/",
+        ),
+    ):
+        with patch(
+            "app.services.fixture_resolver._query_saleor",
+            new_callable=AsyncMock,
+            return_value={"shop": {"version": "3.23.7"}},
+        ) as mock_query:
+            with patch(
+                "app.services.fixture_resolver.resolve_fixtures",
+                new_callable=AsyncMock,
+                return_value=FixtureResolution(
+                    fixtures={},
+                    live_keys=frozenset(
+                        {
+                            "default_product_id",
+                            "default_variant_id",
+                            "default_channel_id",
+                            "default_product_type_id",
+                        }
+                    ),
+                ),
+            ):
+                result = await validate_preflight(
+                    "http://localhost:8000/graphql/",
+                    "token",
+                    corpus_version="3.23.7",
+                )
+
+    mock_query.assert_awaited_once()
+    assert mock_query.await_args.args[0] == "http://host.docker.internal:8000/graphql/"
+    assert result["requested_saleor_url"] == "http://localhost:8000/graphql/"
+    assert result["resolved_saleor_url"] == "http://host.docker.internal:8000/graphql/"
+    assert result["blocking_issues"] == []
 
 
 @pytest.mark.asyncio
@@ -125,22 +198,23 @@ async def test_validate_preflight_api_unreachable():
 
 @pytest.mark.asyncio
 async def test_validate_preflight_checks_version():
-    call_count = 0
-
-    async def mock_post(url, **kw):
-        nonlocal call_count
-        resp = MagicMock(status_code=200)
-        if call_count == 0:
-            resp.json = MagicMock(return_value={"data": {"shop": {"version": "3.23.7"}}})
-        else:
-            resp.json = MagicMock(return_value={"data": {"products": {"edges": []}}})
-        call_count += 1
-        return resp
-
     with patch.object(httpx, "AsyncClient") as mock_cls:
-        _setup_client_mock(mock_cls, post_side_effect=mock_post)
-        with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
-            result = await validate_preflight("http://example.com/graphql/", "token", corpus_version="3.23.7")
+        _setup_client_mock(
+            mock_cls,
+            post_return=_mock_response({"data": {"shop": {"version": "3.23.7"}}}),
+        )
+        with patch(
+            "app.services.fixture_resolver.resolve_fixtures",
+            new_callable=AsyncMock,
+            return_value=FixtureResolution(
+                fixtures={},
+                live_keys=frozenset(),
+                seeded_keys=frozenset(),
+            ),
+        ):
+            result = await validate_preflight(
+                "http://example.com/graphql/", "token", corpus_version="3.23.7"
+            )
 
     assert result["api_reachable"]
     assert result["shop_version"] == "3.23.7"
@@ -148,16 +222,26 @@ async def test_validate_preflight_checks_version():
 
 @pytest.mark.asyncio
 async def test_validate_preflight_fixture_missing():
-    async def mock_post(url, **kw):
-        resp = MagicMock(status_code=200)
-        resp.json = MagicMock(return_value={"data": {"shop": {"version": "3.23.7"}}})
-        return resp
-
     with patch.object(httpx, "AsyncClient") as mock_cls:
-        _setup_client_mock(mock_cls, post_side_effect=mock_post)
-        with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
-            result = await validate_preflight("http://example.com/graphql/", "token")
+        _setup_client_mock(
+            mock_cls,
+            post_return=_mock_response({"data": {"shop": {"version": "3.23.7"}}}),
+        )
+        with patch(
+            "app.services.fixture_resolver.resolve_fixtures",
+            new_callable=AsyncMock,
+            return_value=FixtureResolution(
+                fixtures={},
+                live_keys=frozenset(),
+                seeded_keys=frozenset(),
+            ),
+        ):
+            with patch("app.services.fixture_resolver.settings") as mock_settings:
+                mock_settings.runtime_seed = True
+                result = await validate_preflight("http://example.com/graphql/", "token")
 
     assert "fixture_status" in result
     for key, status in result["fixture_status"].items():
         assert status == "missing", f"Expected {key} to be missing"
+    assert len(result["warning_issues"]) >= 1
+    assert result["blocking_issues"] == []

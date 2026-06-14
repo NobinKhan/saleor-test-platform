@@ -660,11 +660,22 @@ class TestRunner:
                     resolve_fixtures,
                     resolve_dynamic_probe_support,
                 )
-                self._resolved_fixtures = await resolve_fixtures(
+                resolution = await resolve_fixtures(
                     self.saleor_url,
                     self.saleor_token,
                     timeout=self.timeout,
                 )
+                self._resolved_fixtures = resolution.fixtures
+                if resolution.seeded_keys:
+                    yield {
+                        "type": "progress",
+                        "message": (
+                            "Created harness fixture data on target ("
+                            + ", ".join(sorted(resolution.seeded_keys)[:4])
+                            + ("…" if len(resolution.seeded_keys) > 4 else "")
+                            + ")"
+                        ),
+                    }
                 self._dynamic_support = await resolve_dynamic_probe_support(
                     self.saleor_url,
                     self.saleor_token,

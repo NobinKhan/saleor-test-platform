@@ -28,6 +28,7 @@
   let prefillLoading = false;
   let startMessage = "";
   let error = "";
+  let resolvedSaleorUrl: string | null = null;
 
   function shortId(id: string): string {
     return id.slice(0, 8);
@@ -108,24 +109,33 @@
       if (compare_run_id.trim()) {
         payload.compare_run_id = compare_run_id.trim();
       }
-      if (saleor_password) {
-        payload.saleor_password = saleor_password;
+      const trimmedPassword = saleor_password.trim();
+      if (trimmedPassword) {
+        payload.saleor_password = trimmedPassword;
       }
       if (cloneFromRunId) {
         payload.clone_from_run_id = cloneFromRunId;
       }
 
-      const validation = await api.post("/api/tests/validate", payload);
-      const issues: string[] = validation.issues ?? [];
-      if (issues.length > 0) {
-        const confirmMsg = issues.length === 1
-          ? `Pre-flight issue:\n  ${issues[0]}\n\nStart anyway?`
-          : `Pre-flight issues:\n  ${issues.map((i: string) => `  • ${i}`).join("\n")}\n\nStart anyway?`;
+      const validation = await api.post("/api/runs/validate", payload);
+      const requestedUrl = (validation.requested_saleor_url as string | undefined) ?? saleor_url;
+      const resolvedUrl = validation.resolved_saleor_url as string | undefined;
+      resolvedSaleorUrl =
+        resolvedUrl && resolvedUrl !== requestedUrl ? resolvedUrl : null;
+
+      const blockingIssues: string[] = validation.blocking_issues ?? [];
+      const warningIssues: string[] = validation.warning_issues ?? [];
+      if (blockingIssues.length > 0) {
+        const confirmMsg = blockingIssues.length === 1
+          ? `Pre-flight issue:\n  ${blockingIssues[0]}\n\nStart anyway?`
+          : `Pre-flight issues:\n  ${blockingIssues.map((i: string) => `  • ${i}`).join("\n")}\n\nStart anyway?`;
         if (!confirm(confirmMsg)) {
           loading = false;
           startMessage = "";
           return;
         }
+      } else if (warningIssues.length > 0) {
+        console.warn("Pre-flight warnings (non-blocking):", warningIssues);
       }
 
       startMessage = "Creating test run…";
@@ -171,6 +181,9 @@
         <label for="url">Saleor Server URL *</label>
         <input id="url" type="url" bind:value={saleor_url} required placeholder="https://your-store.saleor.cloud/graphql/" />
         <span class="hint">LAN URLs are used as-is. localhost is rewritten inside Docker to reach Saleor on the host.</span>
+        {#if resolvedSaleorUrl}
+          <span class="hint resolved-url">Harness will connect to {resolvedSaleorUrl}</span>
+        {/if}
       </div>
 
       <div class="section-label">Saleor admin credentials *</div>
@@ -310,6 +323,7 @@
   .field { display: flex; flex-direction: column; gap: 0.375rem; }
   .field label { font-size: 0.875rem; font-weight: 500; color: var(--text-secondary); }
   .hint { font-size: 0.8rem; color: var(--text-muted); }
+  .hint.resolved-url { display: block; margin-top: 0.25rem; color: var(--accent, #6366f1); }
   .field-row { display: flex; gap: 0.75rem; align-items: flex-end; }
   .field-row .field { flex: 1; }
   .password-wrap { display: flex; gap: 0.5rem; align-items: stretch; }

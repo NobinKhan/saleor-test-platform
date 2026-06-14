@@ -141,6 +141,7 @@ services:
       REFERENCE_BASELINE_SOURCE: saleor-dashboard
       GOLDEN_CORPUS_VERSION: "3.23.7"
       SGRC_TIER2_GATE: "true"
+      RUNTIME_SEED: "true"
       CLIENT_BUNDLES_DASHBOARD_VERSION: "3.23.6"
       REFERENCE_CORPUS_ROOT: /app/reference/corpora
       REFERENCE_SALEOR_URL: http://saleor-api:8000/graphql/

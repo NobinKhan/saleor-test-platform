@@ -21,6 +21,7 @@ from app.services.run_helpers import (
     authenticate_saleor,
     build_test_run_row,
     decrypt_saleor_email,
+    resolve_saleor_password,
     run_detail_fields,
 )
 from app.services.run_scope import FULL_SYSTEM_SCOPE
@@ -94,28 +95,18 @@ async def create_run(
 ):
     saleor_url = data.saleor_url
     saleor_email = str(data.saleor_email)
-    saleor_password = data.saleor_password
 
-    if data.clone_from_run_id:
-        result = await db.execute(
-            select(TestRun).where(
-                TestRun.id == data.clone_from_run_id,
-                TestRun.user_id == user.id,
-            )
+    try:
+        saleor_password = await resolve_saleor_password(
+            db=db,
+            user_id=user.id,
+            saleor_password=data.saleor_password,
+            clone_from_run_id=data.clone_from_run_id,
         )
-        source = result.scalar_one_or_none()
-        if not source:
-            raise HTTPException(404, "Source test run not found")
-        if not saleor_password:
-            if not source.saleor_password:
-                raise HTTPException(
-                    400,
-                    "Source run has no stored password; enter a password to continue.",
-                )
-            saleor_password = decrypt_token(source.saleor_password)
-
-    if not saleor_password:
-        raise HTTPException(400, "Saleor admin password is required")
+    except LookupError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
 
     token, error = await authenticate_saleor(saleor_url, saleor_email, saleor_password)
     if error or not token:
@@ -184,10 +175,18 @@ async def validate_target(
 
     saleor_url = data.saleor_url
     saleor_email = str(data.saleor_email)
-    saleor_password = data.saleor_password
 
-    if not saleor_password:
-        raise HTTPException(400, "Saleor admin password is required")
+    try:
+        saleor_password = await resolve_saleor_password(
+            db=db,
+            user_id=user.id,
+            saleor_password=data.saleor_password,
+            clone_from_run_id=data.clone_from_run_id,
+        )
+    except LookupError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
 
     token, error = await authenticate_saleor(saleor_url, saleor_email, saleor_password)
     if error or not token:
@@ -201,6 +200,7 @@ async def validate_target(
     )
     result["authenticated"] = True
     result["issues_count"] = len(result.get("issues") or [])
+    result["blocking_issues_count"] = len(result.get("blocking_issues") or [])
     return result
 
 

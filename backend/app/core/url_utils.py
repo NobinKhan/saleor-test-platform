@@ -20,3 +20,10 @@ def resolve_saleor_url_for_runner(saleor_url: str) -> str:
             if default:
                 return normalize_graphql_url(default)
     return normalized
+
+
+def resolve_harness_saleor_url(saleor_url: str) -> tuple[str, str]:
+    """Return (requested_url, resolved_url) for harness Saleor HTTP calls."""
+    requested = normalize_graphql_url(saleor_url)
+    resolved = resolve_saleor_url_for_runner(saleor_url)
+    return requested, resolved
