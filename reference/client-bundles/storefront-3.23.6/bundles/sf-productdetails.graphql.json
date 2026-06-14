@@ -13,29 +13,5 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
-  "golden_response": {
-    "errors": [
-      {
-        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000. Expected: Product."
-      }
-    ],
-    "data": {
-      "product": null
-    }
-  },
-  "golden_outcome": "not_found_probe",
-  "golden_status": "warn",
-  "golden_contract": "not_found",
-  "http_status": 200,
-  "response_shape_hash": "sha256:177f00490cbb202e",
-  "semantic_profile": {
-    "contract": "not_found",
-    "data_path": "sf-productdetails",
-    "expected_null": true,
-    "message_pattern": "<invalid_id>",
-    "optional_path": [
-      "product"
-    ]
-  },
   "document_hash": "sha256:866afe2cfcbb2b58"
 }

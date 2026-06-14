@@ -1,0 +1,21 @@
+{
+  "bundle_id": "sf-checkoutlinesadd",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutLinesAdd"
+  ],
+  "document": "mutation CheckoutLinesAdd($id: ID!, $lines: [CheckoutLineInput!]!) { checkoutLinesAdd(id: $id, lines: $lines) { checkout { id lines { id quantity } } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}",
+    "lines": [
+      {
+        "quantity": 1,
+        "variantId": "{{fixtures.variant_id_for_cart}}"
+      }
+    ]
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:c0672e030cc8cb35"
+}

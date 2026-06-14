@@ -464,8 +464,10 @@ class TestRunner:
         saleor_email: str | None = None,
         saleor_password: str | None = None,
         tier2_required: bool | None = None,
+        demo_seed_profile: str | None = None,
     ):
         from app.services.run_scope import FULL_SYSTEM_SCOPE
+        from app.core.config import settings as _settings
 
         self.run_id = run_id
         self.saleor_url = resolve_saleor_url_for_runner(saleor_url)
@@ -489,6 +491,7 @@ class TestRunner:
         self.corpus_version: str | None = None
         self._resolved_fixtures: dict[str, Any] | None = None
         self._dynamic_support: dict[str, Any] | None = None
+        self.demo_seed_profile: str = demo_seed_profile or _settings.demo_seed_profile
 
     def stop(self):
         self._stopped = True
@@ -497,7 +500,7 @@ class TestRunner:
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
         token = self.saleor_token
         if auth_context == "customer":
-            token = self._customer_token or self.saleor_token
+            token = self._customer_token
         elif auth_context == "anonymous":
             token = None
         if token:
@@ -522,6 +525,7 @@ class TestRunner:
                 timeout=self.timeout,
                 client=http_client,
                 force_refresh=force_refresh,
+                staff_token=self.saleor_token,
             )
             return self._customer_token
         refreshed = await ensure_valid_token(
@@ -664,8 +668,10 @@ class TestRunner:
                     self.saleor_url,
                     self.saleor_token,
                     timeout=self.timeout,
+                    seed_profile=self.demo_seed_profile,
                 )
                 self._resolved_fixtures = resolution.fixtures
+                self.demo_seed_profile = resolution.seed_profile
                 if resolution.seeded_keys:
                     yield {
                         "type": "progress",
@@ -1182,6 +1188,7 @@ class TestRunner:
                     meta=meta,
                     assertion_failures=assertion_failures,
                     endpoint=endpoint,
+                    demo_seed_profile=self.demo_seed_profile,
                 )
                 return {
                     "status": status,
@@ -1268,17 +1275,19 @@ def _classify_failure_category(
     meta: dict[str, Any],
     assertion_failures: list[str],
     endpoint: dict[str, Any] | None = None,
+    demo_seed_profile: str = "harness",
 ) -> str:
     """Classify the failure category for structured reporting.
 
     Scans the actual GraphQL document (not the bundle_id string) for
-    deprecated types. Does NOT label all scenario/variant failures as
-    data_prerequisite — only those whose match_status indicates missing data.
+    deprecated types. Seed-tagged L3 bundles that shape_drift against
+    populatedb golden are seed_prerequisite, not real_bug.
     """
     from app.services.deprecated_scanner import (
         scan_document_for_deprecated_types,
         scan_l1_probe_for_deprecated,
     )
+    from app.services.seed_tags import resolve_seed_tags
 
     if comparison.compatible:
         return "compatible"
@@ -1321,6 +1330,13 @@ def _classify_failure_category(
             )
             if is_data_prereq:
                 return "data_prerequisite"
+        if kind == "CLIENT_BUNDLE":
+            seed_tags = resolve_seed_tags(endpoint_name, endpoint)
+            if seed_tags:
+                if match_status == "shape_drift":
+                    return "seed_prerequisite"
+                if demo_seed_profile != "saleor_demo":
+                    return "seed_prerequisite"
         return "real_bug"
 
     return "real_bug"

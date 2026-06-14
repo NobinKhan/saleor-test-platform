@@ -19,6 +19,7 @@
   let showPassword = false;
   let concurrency = 5;
   let timeout_seconds = 30;
+  let demo_seed_profile = "harness";
   let compare_run_id = "";
   let priorRuns: PriorRun[] = [];
   let cloneFromRunId: string | null = null;
@@ -105,6 +106,7 @@
         saleor_email: saleor_email.trim(),
         concurrency,
         timeout_seconds,
+        demo_seed_profile,
       };
       if (compare_run_id.trim()) {
         payload.compare_run_id = compare_run_id.trim();
@@ -250,6 +252,15 @@
           <label for="timeout">Timeout (seconds)</label>
           <input id="timeout" type="number" min="5" max="120" bind:value={timeout_seconds} />
         </div>
+      </div>
+
+      <div class="field">
+        <label for="demo_seed">Fixture seed profile</label>
+        <select id="demo_seed" bind:value={demo_seed_profile}>
+          <option value="harness">Harness (minimal — channel, product, customer)</option>
+          <option value="saleor_demo">Saleor demo (multi-channel, warehouses, orders)</option>
+        </select>
+        <span class="hint">Demo profile seeds topology for seed-dependent L3 probes on external backends.</span>
       </div>
 
       <div class="form-actions">

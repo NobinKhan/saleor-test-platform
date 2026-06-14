@@ -1,0 +1,37 @@
+{
+  "step_id": "03_order_query",
+  "scenario_id": "order-lifecycle",
+  "order": 3,
+  "name": "Query order after line add",
+  "auth_context": "staff",
+  "input_sent": "query OrderLifecycleQuery($id: ID!) { order(id: $id) { id number status lines { id quantity } } }",
+  "variables": {
+    "id": "{{context.draft_order_id}}"
+  },
+  "extract": {},
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.order.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "order": {
+        "id": "T3JkZXI6ZTI4Njc5ZDgtOWM1OS00ZTk2LThhZGEtNTFmNWZkZWFiNDE3",
+        "number": "73",
+        "status": "DRAFT",
+        "lines": [
+          {
+            "id": "T3JkZXJMaW5lOjc5YjZmYTBkLWJhYjctNGRiNC1iNjk0LTVjNDg2OTAxNTM3Zg==",
+            "quantity": 1
+          }
+        ]
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-14T10:09:38.222380+00:00"
+}

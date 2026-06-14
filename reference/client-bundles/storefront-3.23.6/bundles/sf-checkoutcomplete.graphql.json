@@ -1,0 +1,15 @@
+{
+  "bundle_id": "sf-checkoutcomplete",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutComplete"
+  ],
+  "document": "mutation CheckoutComplete($id: ID!) { checkoutComplete(id: $id) { order { id number status } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:46518a4c64e62fd4"
+}

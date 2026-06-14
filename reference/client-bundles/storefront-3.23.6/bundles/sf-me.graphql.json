@@ -1,0 +1,13 @@
+{
+  "bundle_id": "sf-me",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "Me"
+  ],
+  "document": "query Me { me { id email firstName lastName defaultShippingAddress { id city } } }",
+  "variables": {},
+  "auth_context": "customer",
+  "priority": "P0",
+  "document_hash": "sha256:4bd3dea5b433e436"
+}

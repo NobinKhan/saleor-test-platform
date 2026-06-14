@@ -1,0 +1,12 @@
+{
+  "scenario_id": "order-lifecycle",
+  "name": "Order lifecycle",
+  "category": "orders",
+  "auth_context": "staff",
+  "description": "Create draft order, add line, query order status",
+  "steps": [
+    "01_draft_order_create.json",
+    "02_order_line_create.json",
+    "03_order_query.json"
+  ]
+}

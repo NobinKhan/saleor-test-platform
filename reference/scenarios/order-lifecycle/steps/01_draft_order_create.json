@@ -1,0 +1,39 @@
+{
+  "step_id": "01_draft_order_create",
+  "scenario_id": "order-lifecycle",
+  "order": 1,
+  "name": "Create draft order",
+  "auth_context": "staff",
+  "input_sent": "mutation DraftOrderCreate($input: DraftOrderCreateInput!) { draftOrderCreate(input: $input) { order { id number status } errors { field message code } } }",
+  "variables": {
+    "input": {
+      "channelId": "{{fixtures.default_channel_id}}",
+      "user": "{{fixtures.default_customer_id}}"
+    }
+  },
+  "extract": {
+    "draft_order_id": "$.data.draftOrderCreate.order.id"
+  },
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.draftOrderCreate.order.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "draftOrderCreate": {
+        "order": {
+          "id": "T3JkZXI6ZTI4Njc5ZDgtOWM1OS00ZTk2LThhZGEtNTFmNWZkZWFiNDE3",
+          "number": "73",
+          "status": "DRAFT"
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-14T10:09:38.083024+00:00"
+}

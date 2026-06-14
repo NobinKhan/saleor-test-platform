@@ -1,0 +1,15 @@
+{
+  "bundle_id": "sf-checkoutshippingmethods",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutShippingMethods"
+  ],
+  "document": "query CheckoutShippingMethods($id: ID!) { checkout(id: $id) { availableShippingMethods { id name price { amount currency } } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:4b7e9a1b8b89740e"
+}

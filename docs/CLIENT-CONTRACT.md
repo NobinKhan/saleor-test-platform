@@ -70,7 +70,7 @@ Test scopes: `client-dashboard` (L3 dashboard only), `full+client` (L1 + L3 dash
 
 | Layer | Description |
 |-------|-------------|
-| L1 | Introspection corpus (**388** probes for 3.23.7 after deprecated-op prune) |
+| L1 | Introspection corpus (**387** probes for 3.23.7 after deprecated-op prune) |
 | L2 | Dashboard catalog (static op lists in `test_runner.py`) |
 | L3 | Dashboard query bundles (real documents from vendor + fixtures + golden) |
 | L4 | SGRC Tier 2 parity (hard gate when enabled) |

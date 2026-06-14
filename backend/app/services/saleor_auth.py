@@ -211,6 +211,76 @@ async def fetch_customer_token(
     return await fetch_saleor_token(saleor_url, email, password, timeout)
 
 
+async def confirm_customer_via_staff(
+    saleor_url: str,
+    staff_token: str,
+    email: str,
+    timeout: int = 15,
+) -> bool:
+    """Confirm an unconfirmed customer account using staff credentials."""
+    graphql_url = resolve_saleor_url_for_runner(saleor_url)
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {staff_token}",
+    }
+    lookup_query = """
+query CustomerByEmail($email: String!) {
+  customers(first: 1, filter: { search: $email }) {
+    edges { node { id } }
+  }
+}
+"""
+    update_mutation = """
+mutation ConfirmCustomer($id: ID!, $input: CustomerInput!) {
+  customerUpdate(id: $id, input: $input) {
+    user { id isConfirmed }
+    errors { field message code }
+  }
+}
+"""
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            lookup = await client.post(
+                graphql_url,
+                json={"query": lookup_query, "variables": {"email": email}},
+                headers=headers,
+            )
+            if lookup.status_code != 200:
+                return False
+            edges = (
+                ((lookup.json().get("data") or {}).get("customers") or {}).get("edges")
+                or []
+            )
+            if not edges:
+                return False
+            user_id = (edges[0].get("node") or {}).get("id")
+            if not user_id:
+                return False
+            update = await client.post(
+                graphql_url,
+                json={
+                    "query": update_mutation,
+                    "variables": {"id": user_id, "input": {"isConfirmed": True}},
+                },
+                headers=headers,
+            )
+            if update.status_code != 200:
+                return False
+            payload = (update.json().get("data") or {}).get("customerUpdate") or {}
+            if payload.get("errors"):
+                return False
+            return bool((payload.get("user") or {}).get("isConfirmed"))
+    except Exception:
+        return False
+
+
+def _needs_email_confirmation(error: str | None) -> bool:
+    if not error:
+        return False
+    lowered = error.lower()
+    return "confirm" in lowered or "confirmed" in lowered
+
+
 async def ensure_customer_token(
     *,
     saleor_url: str,
@@ -221,6 +291,7 @@ async def ensure_customer_token(
     client: httpx.AsyncClient | None = None,
     force_refresh: bool = False,
     channel: str = "default-channel",
+    staff_token: str | None = None,
 ) -> str | None:
     """Ensure a valid customer JWT, registering the account if needed."""
     if not force_refresh and token and await validate_saleor_token(
@@ -232,7 +303,18 @@ async def ensure_customer_token(
     await register_customer_account(
         saleor_url, cust_email, cust_password, timeout=timeout, channel=channel
     )
-    new_token, _err = await fetch_customer_token(
+    new_token, err = await fetch_customer_token(
         saleor_url, cust_email, cust_password, timeout
     )
-    return new_token or token
+    if new_token:
+        return new_token
+    if staff_token and _needs_email_confirmation(err):
+        if await confirm_customer_via_staff(
+            saleor_url, staff_token, cust_email, timeout=timeout
+        ):
+            new_token, _err = await fetch_customer_token(
+                saleor_url, cust_email, cust_password, timeout
+            )
+            if new_token:
+                return new_token
+    return token

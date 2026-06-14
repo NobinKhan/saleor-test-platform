@@ -1,0 +1,18 @@
+{
+  "bundle_id": "sf-draftordercreate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "DraftOrderCreate"
+  ],
+  "document": "mutation DraftOrderCreate($input: DraftOrderCreateInput!) { draftOrderCreate(input: $input) { order { id number status } errors { field message code } } }",
+  "variables": {
+    "input": {
+      "channelId": "{{fixtures.default_channel_id}}",
+      "user": "{{fixtures.default_customer_id}}"
+    }
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "document_hash": "sha256:cc626ac199b4aadd"
+}

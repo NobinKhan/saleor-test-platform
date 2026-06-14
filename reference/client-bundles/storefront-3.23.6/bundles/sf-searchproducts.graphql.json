@@ -15,23 +15,5 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
-  "golden_response": {
-    "errors": [
-      {
-        "message": "Variable \"attributes\" of type \"[AttributeInput]\" used in position expecting type \"[AttributeInput!]\"."
-      }
-    ]
-  },
-  "golden_outcome": "schema_error",
-  "golden_status": "warn",
-  "golden_contract": "graphql_error",
-  "http_status": 400,
-  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
-  "semantic_profile": {
-    "contract": "graphql_error",
-    "data_path": "sf-searchproducts",
-    "expected_null": true,
-    "message_pattern": "Variable \"attributes\" of type \"[AttributeInput]\" used in position expecting type"
-  },
   "document_hash": "sha256:cd3b29a21b4479b1"
 }

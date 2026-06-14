@@ -12,7 +12,7 @@ A backend is **certified Saleor-compatible** only when **all** of the following 
 |------|-------------|
 | Schema gate | Every operation in the reference corpus exists on the target schema |
 | Compatibility score | **100%** — every probe/bundle in scope passes SGRC match |
-| Effective score | **100%** — excludes deprecated + data-prerequisite probes from denominator |
+| Effective score | **100%** — excludes deprecated + data-prerequisite + seed-prerequisite probes from denominator |
 | Tier 1 | Message + data semantics (errors); normalized shape (success) |
 | Tier 2 | When `SGRC_TIER2_GATE=true`: zero `parity_gap` / `tier2_fail` — path + codes where golden have them |
 | Input parity | L1 replays exact `input_sent`; L3 replays exact dashboard documents + fixtures |
@@ -36,7 +36,7 @@ just up
 just baseline
 ```
 
-This chains corpus integrity (388 L1 + 417 L3 dashboard + 16 L3 storefront recorded, schema gate) and full replay (`full+scenarios`, Tier 2, 100% on the full-system endpoint set).
+This chains corpus integrity (387 L1 + 415 L3 dashboard + 16 L3 storefront recorded, schema gate) and full replay (`full+scenarios`, Tier 2, 100% on the full-system endpoint set).
 
 L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFERENCE-SEED.md). `just fresh` runs `populatedb` and `just seed-reference` automatically.
 
@@ -50,9 +50,9 @@ L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFER
 6. **Schema gate** — introspects target; verifies corpus operations exist.
 7. **Deprecated auto-exclusion** — bundles/ops referencing deprecated Saleor types are excluded from scoring.
 
-**Full-system scope** (`full+scenarios`) = 388 L1 + **417** L3 dashboard + **16** L3 storefront + scenario steps + input variants + dynamic probes. **11** deprecated dashboard bundles were removed from the corpus (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
+**Full-system scope** (`full+scenarios`) = 387 L1 + **415** L3 dashboard + **16** L3 storefront + scenario steps + input variants + dynamic probes. **11** deprecated dashboard bundles were removed from the corpus (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
 
-Reports include `failure_category`, `effective_score`, `not_counted_note`, and `excluded_l3_bundles` so AI agents know deprecated items are never counted toward compatibility %.
+Reports include `failure_category`, `effective_score`, `not_counted_note`, and `excluded_l3_bundles` so AI agents know deprecated and seed-dependent items are never counted toward compatibility %. See [COMPAT-TEST-IMPROVEMENT-REPORT.md](COMPAT-TEST-IMPROVEMENT-REPORT.md) for external backend seed guidance.
 
 ## Recording and patching
 

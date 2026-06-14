@@ -30,6 +30,7 @@ from app.services.client_bundles import (
 from app.services.dashboard_bundle_import import root_fields_in_document
 from app.services.introspection import introspect_saleor
 from app.services.reference_corpus import corpus_hash, load_all_probes_from_disk, load_manifest
+from app.services.reference_registry import load_registry
 from app.services.run_helpers import authenticate_saleor
 
 
@@ -39,6 +40,18 @@ async def check_corpus(min_probes: int, version: str) -> tuple[bool, str]:
     count = len(probes)
     if count < min_probes:
         return False, f"Reference corpus has {count} probes (need >= {min_probes})"
+    if manifest and manifest.get("probe_count") and manifest["probe_count"] != count:
+        return False, (
+            f"Manifest probe_count {manifest['probe_count']} != {count} on disk — "
+            "run update_manifest_after_patch or record-reference"
+        )
+    registry = load_registry()
+    for entry in registry.get("supported", []):
+        if entry.get("version") == version and entry.get("probe_count") != count:
+            return False, (
+                f"Registry probe_count {entry.get('probe_count')} != {count} on disk — "
+                "run register_corpus_version"
+            )
     chash = corpus_hash(version)
     if manifest and manifest.get("corpus_hash") and manifest["corpus_hash"] != chash:
         return False, "Corpus hash mismatch — re-run record-reference"

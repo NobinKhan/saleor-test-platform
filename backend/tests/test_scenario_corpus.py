@@ -11,6 +11,20 @@ def test_product_lifecycle_manifest_loaded():
     manifests = load_all_scenarios()
     ids = {m.scenario_id for m in manifests}
     assert "product-lifecycle" in ids
+    assert "checkout-lifecycle" in ids
+    assert "order-lifecycle" in ids
+
+
+def test_build_checkout_lifecycle_endpoints():
+    endpoints = build_scenario_endpoints(scenario_ids=["checkout-lifecycle"])
+    assert len(endpoints) == 4
+    assert endpoints[-1]["auth_context"] == "customer"
+
+
+def test_build_order_lifecycle_endpoints():
+    endpoints = build_scenario_endpoints(scenario_ids=["order-lifecycle"])
+    assert len(endpoints) == 3
+    assert all(ep["auth_context"] == "staff" for ep in endpoints)
 
 
 def test_build_scenario_endpoints():

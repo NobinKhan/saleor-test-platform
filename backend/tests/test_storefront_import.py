@@ -1,6 +1,10 @@
 """Tests for storefront bundle import."""
 
-from app.services.storefront_bundle_import import scan_storefront_bundles, storefront_vendor_path
+from app.services.storefront_bundle_import import (
+    scan_sdk_storefront_bundles,
+    scan_storefront_bundles,
+    storefront_vendor_path,
+)
 
 
 def test_storefront_vendor_exists():
@@ -22,3 +26,12 @@ def test_storefront_bundles_have_auth_context():
     bundles = scan_storefront_bundles(vendor / "src")
     contexts = {b.auth_context for b in bundles}
     assert "anonymous" in contexts
+
+
+def test_sdk_storefront_bundles_include_checkout():
+    bundles = scan_sdk_storefront_bundles()
+    assert len(bundles) >= 15
+    ids = {b.bundle_id for b in bundles}
+    assert "sf-checkoutcreate" in ids
+    customer = [b for b in bundles if b.auth_context == "customer"]
+    assert len(customer) >= 3

@@ -12,29 +12,5 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
-  "golden_response": {
-    "errors": [
-      {
-        "message": "You must provide a `first` or `last` value to properly paginate the `categories` connection."
-      }
-    ],
-    "data": {
-      "categories": null
-    }
-  },
-  "golden_outcome": "schema_error",
-  "golden_status": "warn",
-  "golden_contract": "graphql_error",
-  "http_status": 200,
-  "response_shape_hash": "sha256:af2986059767cc64",
-  "semantic_profile": {
-    "contract": "graphql_error",
-    "data_path": "sf-getcategories",
-    "expected_null": true,
-    "message_pattern": "You must provide a `first` or `last` value to properly paginate the `categories`",
-    "optional_path": [
-      "categories"
-    ]
-  },
   "document_hash": "sha256:aa00e97893022ec9"
 }

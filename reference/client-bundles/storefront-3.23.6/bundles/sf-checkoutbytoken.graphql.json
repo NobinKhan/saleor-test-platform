@@ -1,0 +1,15 @@
+{
+  "bundle_id": "sf-checkoutbytoken",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutByToken"
+  ],
+  "document": "query CheckoutByToken($token: UUID!) { checkout(token: $token) { id token lines { id quantity } } }",
+  "variables": {
+    "token": "{{fixtures.default_checkout_token}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:1fa29e8602eb5d2e"
+}

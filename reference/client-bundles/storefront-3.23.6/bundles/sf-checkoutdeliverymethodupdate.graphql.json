@@ -1,0 +1,16 @@
+{
+  "bundle_id": "sf-checkoutdeliverymethodupdate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutDeliveryMethodUpdate"
+  ],
+  "document": "mutation CheckoutDeliveryMethodUpdate($id: ID!, $deliveryMethodId: ID!) { checkoutDeliveryMethodUpdate(id: $id, deliveryMethodId: $deliveryMethodId) { checkout { id deliveryMethod { ... on ShippingMethod { id name } } } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}",
+    "deliveryMethodId": "{{fixtures.placeholder_id}}"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:edd33deb708cae86"
+}

@@ -80,7 +80,7 @@ just baseline
 
 `just up` auto-runs Saleor DB migrations and ensures the admin user exists. Use `just fresh` only when wiping volumes.
 
-This runs `verify-corpus` (387 L1 + 415 L3 dashboard certified + 16 L3 storefront + 5 dynamic probes, schema gate) then `self-check --scope full+scenarios --require-tier2` (full system: L1 + L3 + scenarios + variants + dynamic, 100% SGRC).
+This runs `verify-corpus` (387 L1 + 415 L3 dashboard certified + 31 L3 storefront + 5 dynamic probes, schema gate) then `self-check --scope full+scenarios --require-tier2` (full system: L1 + L3 + scenarios + variants + dynamic, 100% SGRC).
 
 **Pre-flight:** Before starting a run in the UI, the harness calls `POST /api/runs/validate` (API reachability, version gate, fixture entities). Reports show **compatibility %** and **effective score** (excludes deprecated + data-prerequisite failures). See [docs/DYNAMIC-PROBES.md](docs/DYNAMIC-PROBES.md).
 
@@ -120,7 +120,7 @@ Test runs use **Saleor admin email and password** (via `tokenCreate`). Credentia
 
 Certification requires **schema gate pass** (L1 + L3) AND **100% SGRC** (Tier 1 + Tier 2 when gate enabled). See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
-Official certification scope: **full+scenarios** — L1 (387) + L3 dashboard (415 certified, 415 on disk after deprecated prune) + L3 storefront (16) + 5 dynamic probes + scenario steps + input variants. Deprecated schema-incompatible bundles are excluded from scoring. See [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md).
+Official certification scope: **full+scenarios** — L1 (387) + L3 dashboard (415 certified, 415 on disk after deprecated prune) + L3 storefront (31) + 5 dynamic probes + scenario steps + input variants. Deprecated schema-incompatible bundles are excluded from scoring. See [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md).
 
 ## Local verification (no CI)
 
@@ -130,6 +130,7 @@ Official certification scope: **full+scenarios** — L1 (387) + L3 dashboard (41
 | Corpus integrity only | `just verify-corpus` |
 | Replay only | `just self-check --scope full+scenarios --require-tier2 --min-compat 100` |
 | Backend unit tests | `just test` |
+| E2E API certification (stack required) | `just test-e2e` |
 | Frontend types | `just check` |
 
 ## Related

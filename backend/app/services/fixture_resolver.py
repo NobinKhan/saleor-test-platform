@@ -45,6 +45,7 @@ class FixtureResolution:
     live_keys: frozenset[str] = field(default_factory=frozenset)
     seeded_keys: frozenset[str] = field(default_factory=frozenset)
     seed_errors: tuple[str, ...] = ()
+    seed_profile: str = "harness"
 
 
 def _apply_captured(
@@ -90,14 +91,47 @@ async def _query_saleor(
     return None
 
 
+async def _resolve_storefront_customer_id(
+    saleor_url: str,
+    staff_token: str,
+    timeout: int = 30,
+) -> str | None:
+    """Resolve the harness storefront JWT customer ID (distinct from reference customer)."""
+    from app.services.saleor_auth import ensure_customer_token
+
+    customer_token = await ensure_customer_token(
+        saleor_url=saleor_url,
+        token=None,
+        email=None,
+        password=None,
+        timeout=timeout,
+        staff_token=staff_token,
+    )
+    if not customer_token:
+        return None
+    me_data = await _query_saleor(
+        saleor_url,
+        "query { me { id } }",
+        customer_token,
+        timeout,
+    )
+    me = (me_data or {}).get("me") if isinstance(me_data, dict) else None
+    if isinstance(me, dict):
+        return me.get("id")
+    return None
+
+
 async def resolve_fixtures(
     saleor_url: str,
     token: str | None,
     timeout: int = 30,
     source: str = "dashboard",
+    *,
+    seed_profile: str | None = None,
 ) -> FixtureResolution:
     """Resolve fixture IDs from target Saleor; optionally create missing entities."""
     saleor_url = resolve_saleor_url_for_runner(saleor_url)
+    profile = seed_profile or settings.demo_seed_profile
     static_fixtures = load_fixtures(source, resolve_dashboard_bundle_version())
     resolved: dict[str, Any] = dict(static_fixtures)
     live_keys: set[str] = set()
@@ -105,7 +139,7 @@ async def resolve_fixtures(
     seed_errors: list[str] = []
 
     if not token:
-        return FixtureResolution(fixtures=resolved, live_keys=frozenset())
+        return FixtureResolution(fixtures=resolved, live_keys=frozenset(), seed_profile=profile)
 
     captured = await capture_live_fixtures(saleor_url, token, timeout=timeout)
     _apply_captured(resolved, live_keys, captured)
@@ -113,23 +147,42 @@ async def resolve_fixtures(
     missing_required = [
         k for k in PREFLIGHT_REQUIRED_FIXTURE_KEYS if k not in live_keys
     ]
-    if missing_required and settings.runtime_seed:
-        logger.info(
-            "Runtime seed: creating missing fixture entities on target: %s",
-            ", ".join(missing_required),
-        )
-        seed_result = await ensure_runtime_fixture_entities(
-            saleor_url, token, timeout=timeout
-        )
-        _apply_captured(resolved, live_keys, seed_result.fixtures)
-        seeded_keys.update(seed_result.seeded_keys)
-        seed_errors.extend(seed_result.errors)
+    if settings.runtime_seed or profile == "saleor_demo":
+        if profile == "saleor_demo":
+            logger.info("Runtime seed: saleor_demo topology on target")
+            from app.services.demo_seed import ensure_saleor_demo_topology
+
+            seed_result = await ensure_saleor_demo_topology(
+                saleor_url, token, timeout=max(timeout, 120)
+            )
+        elif missing_required:
+            logger.info(
+                "Runtime seed: creating missing fixture entities on target: %s",
+                ", ".join(missing_required),
+            )
+            seed_result = await ensure_runtime_fixture_entities(
+                saleor_url, token, timeout=timeout
+            )
+        else:
+            seed_result = None
+        if seed_result:
+            _apply_captured(resolved, live_keys, seed_result.fixtures)
+            seeded_keys.update(seed_result.seeded_keys)
+            seed_errors.extend(seed_result.errors)
+
+    storefront_customer_id = await _resolve_storefront_customer_id(
+        saleor_url, token, timeout=timeout
+    )
+    if storefront_customer_id:
+        resolved["storefront_customer_id"] = storefront_customer_id
+        live_keys.add("storefront_customer_id")
 
     return FixtureResolution(
         fixtures=resolved,
         live_keys=frozenset(live_keys),
         seeded_keys=frozenset(seeded_keys),
         seed_errors=tuple(seed_errors),
+        seed_profile=profile,
     )
 
 
@@ -172,6 +225,7 @@ async def validate_preflight(
     corpus_version: str | None = None,
     *,
     allow_patch_drift: bool = False,
+    seed_profile: str | None = None,
 ) -> dict[str, Any]:
     """Pre-flight validation: check API reachability, version match, fixtures."""
     from app.services.version_routing import (
@@ -192,6 +246,7 @@ async def validate_preflight(
         "version_gate_reason": None,
         "fixture_status": {},
         "runtime_seed_enabled": settings.runtime_seed,
+        "demo_seed_profile": settings.demo_seed_profile,
         "requested_saleor_url": requested_url,
         "resolved_saleor_url": resolved_url,
         "issues": [],
@@ -241,7 +296,10 @@ async def validate_preflight(
                 )
             )
 
-    resolution = await resolve_fixtures(resolved_url, token, timeout=timeout)
+    resolution = await resolve_fixtures(
+        resolved_url, token, timeout=timeout, seed_profile=seed_profile
+    )
+    result["demo_seed_profile"] = resolution.seed_profile
     for key in PREFLIGHT_REQUIRED_FIXTURE_KEYS:
         present = key in resolution.live_keys
         result["fixture_status"][key] = "present" if present else "missing"

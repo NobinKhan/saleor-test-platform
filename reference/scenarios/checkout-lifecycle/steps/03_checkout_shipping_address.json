@@ -1,0 +1,47 @@
+{
+  "step_id": "03_checkout_shipping_address",
+  "scenario_id": "checkout-lifecycle",
+  "order": 3,
+  "name": "Set checkout shipping address",
+  "auth_context": "anonymous",
+  "input_sent": "mutation CheckoutShippingAddressUpdate($id: ID!, $shippingAddress: AddressInput!) { checkoutShippingAddressUpdate(id: $id, shippingAddress: $shippingAddress) { checkout { id shippingAddress { city country { code } } } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.checkout_id}}",
+    "shippingAddress": {
+      "firstName": "Harness",
+      "lastName": "Checkout",
+      "streetAddress1": "1 Checkout St",
+      "city": "San Francisco",
+      "countryArea": "CA",
+      "postalCode": "94102",
+      "country": "US"
+    }
+  },
+  "extract": {},
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.checkoutShippingAddressUpdate.checkout.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "checkoutShippingAddressUpdate": {
+        "checkout": {
+          "id": "Q2hlY2tvdXQ6ZjgwOTUyN2QtMWY0My00NTFhLWE2ZTEtOWIwMmNlNDM3NTUw",
+          "shippingAddress": {
+            "city": "SAN FRANCISCO",
+            "country": {
+              "code": "US"
+            }
+          }
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-14T10:09:37.642037+00:00"
+}

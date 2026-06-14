@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from app.services.reference_corpus import GoldenProbe, response_shape_hash
+from app.services.seed_tags import merge_seed_tags_into_bundle, resolve_seed_tags
 
 
 def _default_bundles_root() -> Path:
@@ -81,6 +82,7 @@ class ClientBundle:
     response_shape_hash: str | None = None
     semantic_profile: dict[str, Any] | None = None
     document_hash: str | None = None
+    seed_tags: list[str] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         d: dict[str, Any] = {
@@ -109,6 +111,9 @@ class ClientBundle:
             d["semantic_profile"] = self.semantic_profile
         if self.document_hash:
             d["document_hash"] = self.document_hash
+        tags = merge_seed_tags_into_bundle(self.bundle_id, self.seed_tags)
+        if tags:
+            d["seed_tags"] = tags
         return d
 
     @classmethod
@@ -130,6 +135,7 @@ class ClientBundle:
             response_shape_hash=data.get("response_shape_hash"),
             semantic_profile=data.get("semantic_profile"),
             document_hash=data.get("document_hash"),
+            seed_tags=data.get("seed_tags"),
         )
 
     def client_category(self) -> str:
@@ -249,6 +255,7 @@ def update_bundle_manifest(source: str, version: str, *, dashboard_git_tag: str 
             "priority": b.priority,
             "recorded": b.has_golden(),
             "golden_contract": b.golden_contract,
+            "seed_tags": merge_seed_tags_into_bundle(b.bundle_id, b.seed_tags),
         }
     manifest = load_bundle_manifest(source, version) or {}
     manifest.update({
@@ -376,6 +383,12 @@ def build_client_bundle_endpoints(
             "bundle_fixtures": fixtures,
             "source": bundle.source,
             "client_source": source,
+            "seed_tags": list(
+                resolve_seed_tags(
+                    bundle.bundle_id,
+                    {"seed_tags": merge_seed_tags_into_bundle(bundle.bundle_id, bundle.seed_tags)},
+                )
+            ),
         })
     return endpoints
 

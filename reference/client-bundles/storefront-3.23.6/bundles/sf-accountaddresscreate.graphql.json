@@ -1,0 +1,22 @@
+{
+  "bundle_id": "sf-accountaddresscreate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "AccountAddressCreate"
+  ],
+  "document": "mutation AccountAddressCreate($input: AddressInput!) { accountAddressCreate(input: $input) { address { id city country { code } } errors { field message code } } }",
+  "variables": {
+    "input": {
+      "firstName": "Harness",
+      "lastName": "Storefront",
+      "streetAddress1": "2 Account St",
+      "city": "Account City",
+      "postalCode": "54321",
+      "country": "US"
+    }
+  },
+  "auth_context": "customer",
+  "priority": "P0",
+  "document_hash": "sha256:b42dcfb566a50a9a"
+}

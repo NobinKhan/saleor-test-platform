@@ -36,6 +36,12 @@ test *extra:
     source "{{ root }}/scripts/lib/resources.sh"
     {{compose}} exec harness-backend pytest tests/ -q {{ extra }}
 
+test-e2e:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    source "{{ root }}/scripts/lib/resources.sh"
+    {{compose}} exec -e SALEOR_E2E=1 harness-backend pytest tests/test_certification_e2e.py -q
+
 check:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -81,8 +87,12 @@ export-reference:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p "{{ root }}/reference"
-    docker cp harness-backend:/app/reference/. "{{ root }}/reference/"
-    echo "Exported reference corpus from harness_reference volume to ./reference/"
+    if docker exec harness-backend python -c "import os; raise SystemExit(0 if os.path.isdir('/app/reference-baked') else 1)" 2>/dev/null; then
+      docker cp harness-backend:/app/reference-baked/. "{{ root }}/reference/"
+    else
+      docker cp harness-backend:/app/reference/. "{{ root }}/reference/"
+    fi
+    echo "Exported reference corpus from harness container to ./reference/"
 
 import-reference:
     #!/usr/bin/env bash

@@ -1,0 +1,16 @@
+{
+  "bundle_id": "sf-checkoutcustomerattach",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutCustomerAttach"
+  ],
+  "document": "mutation CheckoutCustomerAttach($id: ID!, $customerId: ID!) { checkoutCustomerAttach(id: $id, customerId: $customerId) { checkout { id user { id } } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}",
+    "customerId": "{{fixtures.default_customer_id}}"
+  },
+  "auth_context": "customer",
+  "priority": "P0",
+  "document_hash": "sha256:f3285ebaeb637fa0"
+}

@@ -16,7 +16,7 @@ from typing import Any
 import httpx
 
 from app.services.client_bundle_fixtures import substitute_fixtures
-from app.services.scenario_corpus import substitute_scenario_variables
+from app.services.scenario_corpus import scenario_dir, substitute_scenario_variables
 from app.services.response_contract import classify_response_contract
 from app.services.semantic_compare import build_semantic_profile
 from app.services.response_normalize import sanitize_for_sgrc
@@ -44,6 +44,30 @@ async def _gql_query(
         return resp.json()
 
 
+async def _token_for_auth_context(
+    *,
+    saleor_url: str,
+    auth_context: str,
+    staff_token: str | None,
+    timeout: int = 30,
+) -> str | None:
+    if auth_context == "anonymous":
+        return None
+    if auth_context == "customer":
+        from app.services.saleor_auth import ensure_customer_token
+
+        return await ensure_customer_token(
+            saleor_url=saleor_url,
+            token=None,
+            email=None,
+            password=None,
+            timeout=timeout,
+            force_refresh=True,
+            staff_token=staff_token,
+        )
+    return staff_token
+
+
 async def record_scenario_step(
     *,
     saleor_url: str,
@@ -63,9 +87,16 @@ async def record_scenario_step(
     substituted = substitute_scenario_variables(
         step.variables, context, fixtures
     )
+    auth_context = getattr(step, "auth_context", "staff") or "staff"
+    token = await _token_for_auth_context(
+        saleor_url=saleor_url,
+        auth_context=auth_context,
+        staff_token=saleor_token,
+        timeout=timeout,
+    )
     try:
         resp_json = await _gql_query(
-            saleor_url, step.input_sent, substituted, saleor_token, timeout
+            saleor_url, step.input_sent, substituted, token, timeout
         )
     except Exception as exc:
         logger.error("Scenario step %s/%s failed: %s", scenario_id, step.step_id, exc)
@@ -90,23 +121,7 @@ async def record_scenario_step(
         __import__("datetime").timezone.utc
     ).isoformat()
 
-    step_path = (
-        Path(__file__).resolve().parents[3]
-        / "reference"
-        / "scenarios"
-        / scenario_id
-        / "steps"
-        / f"{step.step_id}.json"
-    )
-    if not step_path.is_file():
-        step_path = (
-            Path(__file__).resolve().parents[2]
-            / "reference"
-            / "scenarios"
-            / scenario_id
-            / "steps"
-            / f"{step.step_id}.json"
-        )
+    step_path = scenario_dir(scenario_id) / "steps" / f"{step.step_id}.json"
     if step_path.is_file():
         step_path.write_text(json.dumps(updated, indent=2), encoding="utf-8")
         logger.info("Recorded scenario step %s/%s", scenario_id, step.step_id)

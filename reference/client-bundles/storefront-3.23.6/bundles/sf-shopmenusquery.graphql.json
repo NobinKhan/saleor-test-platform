@@ -13,16 +13,5 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
-  "golden_response": {
-    "data": {
-      "footer": null,
-      "mainMenu": null
-    }
-  },
-  "golden_outcome": "success_with_data",
-  "golden_status": "pass",
-  "golden_contract": "success",
-  "http_status": 200,
-  "response_shape_hash": "sha256:8d6226349ec0138d",
   "document_hash": "sha256:5ab26fb9eb410583"
 }

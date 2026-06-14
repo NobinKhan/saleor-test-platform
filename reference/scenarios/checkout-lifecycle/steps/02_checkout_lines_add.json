@@ -1,0 +1,44 @@
+{
+  "step_id": "02_checkout_lines_add",
+  "scenario_id": "checkout-lifecycle",
+  "order": 2,
+  "name": "Add checkout line",
+  "auth_context": "anonymous",
+  "input_sent": "mutation CheckoutLinesAdd($id: ID!, $lines: [CheckoutLineInput!]!) { checkoutLinesAdd(id: $id, lines: $lines) { checkout { id lines { id quantity } } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.checkout_id}}",
+    "lines": [
+      {
+        "quantity": 1,
+        "variantId": "{{fixtures.variant_id_for_cart}}"
+      }
+    ]
+  },
+  "extract": {},
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.checkoutLinesAdd.checkout.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "checkoutLinesAdd": {
+        "checkout": {
+          "id": "Q2hlY2tvdXQ6ZjgwOTUyN2QtMWY0My00NTFhLWE2ZTEtOWIwMmNlNDM3NTUw",
+          "lines": [
+            {
+              "id": "Q2hlY2tvdXRMaW5lOjk5Y2E3N2IzLTFjYWYtNGYxZS04OTI2LTA2ODI5ZDU1ZTJkOQ==",
+              "quantity": 2
+            }
+          ]
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-14T10:09:37.540142+00:00"
+}

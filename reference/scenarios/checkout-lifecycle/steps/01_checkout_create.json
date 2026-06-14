@@ -1,0 +1,53 @@
+{
+  "step_id": "01_checkout_create",
+  "scenario_id": "checkout-lifecycle",
+  "order": 1,
+  "name": "Create checkout with cart line",
+  "auth_context": "anonymous",
+  "input_sent": "mutation CheckoutCreate($input: CheckoutCreateInput!) { checkoutCreate(input: $input) { checkout { id token lines { id quantity variant { id } } } errors { field message code } } }",
+  "variables": {
+    "input": {
+      "channel": "{{fixtures.default_channel}}",
+      "lines": [
+        {
+          "quantity": 1,
+          "variantId": "{{fixtures.variant_id_for_cart}}"
+        }
+      ]
+    }
+  },
+  "extract": {
+    "checkout_id": "$.data.checkoutCreate.checkout.id",
+    "checkout_token": "$.data.checkoutCreate.checkout.token"
+  },
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.checkoutCreate.checkout.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "checkoutCreate": {
+        "checkout": {
+          "id": "Q2hlY2tvdXQ6ZjgwOTUyN2QtMWY0My00NTFhLWE2ZTEtOWIwMmNlNDM3NTUw",
+          "token": "f809527d-1f43-451a-a6e1-9b02ce437550",
+          "lines": [
+            {
+              "id": "Q2hlY2tvdXRMaW5lOjk5Y2E3N2IzLTFjYWYtNGYxZS04OTI2LTA2ODI5ZDU1ZTJkOQ==",
+              "quantity": 1,
+              "variant": {
+                "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
+              }
+            }
+          ]
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-14T10:09:37.420410+00:00"
+}

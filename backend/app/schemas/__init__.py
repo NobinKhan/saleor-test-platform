@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 
 from app.services.run_scope import FULL_SYSTEM_SCOPE
 
@@ -48,13 +48,12 @@ class RefreshRequest(BaseModel):
 
 
 class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     email: str
     name: str
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 # ── Test Run ───────────────────────────────────────────────────────────────────
@@ -88,9 +87,15 @@ class TestRunCreate(BaseModel):
     )
     concurrency: int = Field(default=5, ge=1, le=20)
     timeout_seconds: int = Field(default=30, ge=5, le=120)
+    demo_seed_profile: str = Field(
+        default="harness",
+        description="Fixture seed profile: harness (minimal) or saleor_demo (full topology)",
+    )
 
 
 class TestRunSummary(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     saleor_url: str
     saleor_version: str | None
@@ -103,9 +108,6 @@ class TestRunSummary(BaseModel):
     warnings: int
     skipped: int
     pass_rate: float = 0.0
-
-    class Config:
-        from_attributes = True
 
 
 class TestRunDetail(TestRunSummary):
@@ -125,6 +127,8 @@ class TestRunDetail(TestRunSummary):
 # ── Test Result ────────────────────────────────────────────────────────────────
 
 class TestResultResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     category: str
     endpoint_name: str
@@ -149,11 +153,10 @@ class TestResultResponse(BaseModel):
     created_at: datetime
     items: list["TestItemResponse"] = []
 
-    class Config:
-        from_attributes = True
-
 
 class TestItemResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     item_key: str
     item_status: str
@@ -161,9 +164,6 @@ class TestItemResponse(BaseModel):
     actual_type: str | None
     expected_value: str | None = None
     actual_value: str | None = None
-
-    class Config:
-        from_attributes = True
 
 
 # ── Report ─────────────────────────────────────────────────────────────────────
@@ -228,6 +228,7 @@ class ReportSummary(BaseModel):
     effective_incompatible: int = 0
     deprecated_excluded: int = 0
     data_prerequisite: int = 0
+    seed_prerequisite: int = 0
     real_bugs: int = 0
 
 

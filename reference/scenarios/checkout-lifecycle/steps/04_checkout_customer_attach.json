@@ -1,0 +1,36 @@
+{
+  "step_id": "04_checkout_customer_attach",
+  "scenario_id": "checkout-lifecycle",
+  "order": 4,
+  "name": "Attach customer to checkout",
+  "auth_context": "customer",
+  "input_sent": "mutation CheckoutCustomerAttach($id: ID!, $customerId: ID!) { checkoutCustomerAttach(id: $id, customerId: $customerId) { checkout { id user { id } } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.checkout_id}}",
+    "customerId": "{{fixtures.storefront_customer_id}}"
+  },
+  "extract": {},
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.checkoutCustomerAttach.checkout.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "checkoutCustomerAttach": {
+        "checkout": {
+          "id": "Q2hlY2tvdXQ6ZjgwOTUyN2QtMWY0My00NTFhLWE2ZTEtOWIwMmNlNDM3NTUw",
+          "user": {
+            "id": "VXNlcjo0NQ=="
+          }
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-14T10:09:37.988047+00:00"
+}

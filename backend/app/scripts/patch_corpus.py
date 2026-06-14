@@ -180,8 +180,10 @@ async def main() -> int:
 
     if args.scenarios:
         from app.services.scenario_variant_record import record_scenario
-        from app.services.client_bundles import load_fixtures, resolve_dashboard_bundle_version
-        fixtures = load_fixtures("dashboard", resolve_dashboard_bundle_version())
+        from app.services.fixture_resolver import resolve_fixtures
+
+        resolution = await resolve_fixtures(args.url, token, timeout=30)
+        fixtures = resolution.fixtures
         for scenario_id in [s.strip() for s in args.scenarios.split(",") if s.strip()]:
             result = await record_scenario(
                 saleor_url=args.url,

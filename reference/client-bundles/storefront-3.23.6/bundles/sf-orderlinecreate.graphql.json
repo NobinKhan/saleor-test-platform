@@ -1,0 +1,19 @@
+{
+  "bundle_id": "sf-orderlinecreate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "OrderLineCreate"
+  ],
+  "document": "mutation OrderLineCreate($id: ID!, $input: OrderLineCreateInput!) { orderLineCreate(id: $id, input: $input) { order { id lines { id quantity } } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_order_id}}",
+    "input": {
+      "variantId": "{{fixtures.default_variant_id}}",
+      "quantity": 1
+    }
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "document_hash": "sha256:eb22ec9e13c07abb"
+}

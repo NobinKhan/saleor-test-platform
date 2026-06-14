@@ -143,7 +143,9 @@ services:
       SGRC_TIER2_GATE: "true"
       RUNTIME_SEED: "true"
       CLIENT_BUNDLES_DASHBOARD_VERSION: "3.23.6"
-      REFERENCE_CORPUS_ROOT: /app/reference/corpora
+      REFERENCE_CORPUS_ROOT: /app/reference-baked/corpora
+      CLIENT_BUNDLES_ROOT: /app/reference-baked/client-bundles
+      SCENARIOS_ROOT: /app/reference-baked/scenarios
       REFERENCE_SALEOR_URL: http://saleor-api:8000/graphql/
     depends_on:
       harness-db:

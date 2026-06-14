@@ -8,9 +8,9 @@ Related: [COMPATIBILITY.md](COMPATIBILITY.md) (certification gates), [REFERENCE-
 
 | Layer | Location | Count | Role |
 |-------|----------|-------|------|
-| **L1** | `reference/corpora/saleor-3.23.7/probes/` | **388** | One synthetic probe per schema query/mutation (introspection-driven) |
-| **L3 Dashboard** | `reference/client-bundles/dashboard-3.23.6/` | **417 recorded**, **417 certified** | Real Dashboard GraphQL documents + golden responses |
-| **L3 Storefront** | `reference/client-bundles/storefront-3.23.6/` | **16 recorded**, **16 certified** | Storefront GraphQL documents + golden responses |
+| **L1** | `reference/corpora/saleor-3.23.7/probes/` | **387** | One synthetic probe per schema query/mutation (introspection-driven) |
+| **L3 Dashboard** | `reference/client-bundles/dashboard-3.23.6/` | **415 recorded**, **415 certified** | Real Dashboard GraphQL documents + golden responses |
+| **L3 Storefront** | `reference/client-bundles/storefront-3.23.6/` | **31 recorded** | Storefront + SDK checkout/account GraphQL documents |
 | **L4 Scenarios** | `reference/scenarios/` | **6 steps** (product lifecycle) | Multi-step flows with assertion checks |
 | **Variants** | `reference/variants/` | **3** (`productCreate`) | Valid/invalid input matrices |
 | **Certification total** | `full+scenarios` scope | **829+** | L1 + L3 + scenarios + variants |
@@ -19,10 +19,10 @@ Related: [COMPATIBILITY.md](COMPATIBILITY.md) (certification gates), [REFERENCE-
 
 ```text
                     ┌─────────────────────────────────────┐
-  Saleor 3.23.7     │  L1: 388 ops (synthetic inputs)    │  ← schema completeness
+  Saleor 3.23.7     │  L1: 387 ops (synthetic inputs)    │  ← schema completeness
   introspection     └─────────────────────────────────────┘
                     ┌─────────────────────────────────────┐
-  Dashboard 3.23.6  │  L3: 417 bundles (real documents)  │  ← Dashboard UX shapes
+  Dashboard 3.23.6  │  L3: 415 bundles (real documents)  │  ← Dashboard UX shapes
   vendor GraphQL    └─────────────────────────────────────┘
                     ┌─────────────────────────────────────┐
   Storefront 3.23.6 │  L3: 16 bundles (real documents)     │  ← partial (legacy vendor)
@@ -41,19 +41,19 @@ L1 replays **minimal/synthetic** GraphQL (often validation or permission errors)
 
 Example: `checkoutCreate` L1 sends empty input and golden-records a schema validation error — not a real cart line payload.
 
-## Gap 1 — Storefront L3 breadth (partial)
+## Gap 1 — Storefront L3 breadth (expanded)
 
-**Status:** Implemented for baseline certification; **16** bundles only.
+**Status:** **31** bundles (16 vendor + 15 SDK checkout/account documents).
 
 | Piece | Status |
 |-------|--------|
 | Vendor source | `reference/vendor/saleor-storefront-3.23.6/` |
+| SDK documents | `backend/app/services/storefront_sdk_documents.py` |
 | Client bundles | `reference/client-bundles/storefront-3.23.6/` (`sf-` bundle IDs) |
-| Import pipeline | `just patch-corpus --sync-client` (dashboard + storefront) |
-| Fixtures | Storefront keys in `fixtures.json` (checkout ID/token, variant for cart) |
-| Certification scope | `full+client+storefront` (820 endpoints) |
+| Import pipeline | `scan_sdk_storefront_bundles()` + `just patch-corpus --sync-client` |
+| Certification scope | `full+scenarios` includes all recorded storefront bundles |
 
-**Remaining:** The pinned storefront vendor tree is from the legacy storefront codebase — not every modern Storefront GraphQL operation. Expand import coverage as the vendor pin grows.
+**Remaining:** Record golden on official Saleor for new SDK bundles; expand as Storefront vendor pin grows.
 
 ## Gap 2 — Customer-session auth replay (partial)
 
@@ -63,9 +63,17 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 
 ## Gap 3 — Multi-step scenario chains (partial)
 
-**Status:** L4 scenario framework + first **product lifecycle** scenario at `reference/scenarios/product-lifecycle/`. Scopes: `scenarios`, `full+scenarios`.
+**Status:** L4 scenario framework + **product lifecycle**, **checkout lifecycle**, and **order lifecycle** scenarios.
 
-**Remaining:** Order and checkout lifecycles; golden recording for scenario steps via `patch-corpus`; certification gate for scenarios (optional hard gate).
+| Scenario | Steps | Auth |
+|----------|-------|------|
+| `product-lifecycle` | 6 | staff |
+| `checkout-lifecycle` | 4 | anonymous → customer |
+| `order-lifecycle` | 3 | staff |
+
+Record goldens: `just patch-corpus --scenarios checkout-lifecycle,order-lifecycle` on official Saleor.
+
+**Remaining:** Optional hard gate for scenario-only pass rate; payment/checkoutComplete step when gateway fixtures exist.
 
 ## Gap 4 — Deprecated L3 bundles (removed)
 
@@ -104,7 +112,7 @@ Certification replays HTTP GraphQL JSON. It does **not** certify:
 
 | Item | Status |
 |------|--------|
-| Automated API certification test (POST run → assert certified) | Recommended follow-up; not implemented |
+| Automated API certification test (POST run → assert certified) | `just test-e2e` (requires `SALEOR_E2E=1` + full stack) |
 | GitHub CI | Intentionally absent — local `just baseline` + pytest |
 | L2 static catalog in `test_runner.py` (~108 ops) | Legacy / discovery; not the certification path |
 
@@ -124,7 +132,7 @@ Certification replays HTTP GraphQL JSON. It does **not** certify:
 A backend that passes `just baseline` / `full+scenarios` with 100% SGRC:
 
 - Implements every **3.23.7** schema operation at L1 synthetic replay level.
-- Matches **417** real **Dashboard** GraphQL documents with seeded fixtures.
+- Matches **415** real **Dashboard** GraphQL documents with seeded fixtures.
 - Matches **16** **Storefront** GraphQL documents with seeded fixtures.
 - Passes **product lifecycle** scenario steps and **productCreate** variant probes.
 - Passes SGRC Tier 1 (and Tier 2 when `SGRC_TIER2_GATE=true`).
@@ -146,7 +154,7 @@ The testing system hardening plan has been implemented with the following change
 ### Phase 1A — Stop false failures
 - **Deprecated type auto-exclusion**: L3 bundles referencing `Sale`, `SaleTranslatableContent`, `SaleTranslation`, etc. are automatically excluded from scoring.
 - **Runtime fixture resolver**: `POST /api/runs/validate` pre-flight endpoint checks API reachability, version match, and fixture entity presence.
-- **Structured exclusion reporting**: `failure_category` field on all results (compatible, real_bug, deprecated_excluded, data_prerequisite, missing_golden). Effective score excludes deprecated + data-prerequisite from denominator.
+- **Structured exclusion reporting**: `failure_category` field on all results (compatible, real_bug, deprecated_excluded, data_prerequisite, seed_prerequisite, missing_golden). Effective score excludes deprecated + data-prerequisite + seed-prerequisite from denominator.
 
 ### Phase 1B — Close bypass holes
 - **Missing-golden auto-pass removed**: Scenario and variant probes no longer auto-pass without golden reference (gated by `SGRC_ALLOW_ASSERTION_ONLY=false`).

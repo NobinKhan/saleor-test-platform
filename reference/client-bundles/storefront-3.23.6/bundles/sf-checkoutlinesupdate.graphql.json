@@ -1,0 +1,16 @@
+{
+  "bundle_id": "sf-checkoutlinesupdate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutLinesUpdate"
+  ],
+  "document": "mutation CheckoutLinesUpdate($id: ID!, $lines: [CheckoutLineUpdateInput!]!) { checkoutLinesUpdate(id: $id, lines: $lines) { checkout { id lines { id quantity } } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}",
+    "lines": []
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:b3d0d729b239336c"
+}

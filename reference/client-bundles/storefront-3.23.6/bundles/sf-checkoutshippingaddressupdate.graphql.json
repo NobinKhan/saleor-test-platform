@@ -1,0 +1,23 @@
+{
+  "bundle_id": "sf-checkoutshippingaddressupdate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutShippingAddressUpdate"
+  ],
+  "document": "mutation CheckoutShippingAddressUpdate($id: ID!, $shippingAddress: AddressInput!) { checkoutShippingAddressUpdate(id: $id, shippingAddress: $shippingAddress) { checkout { id shippingAddress { city country { code } } } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}",
+    "shippingAddress": {
+      "firstName": "Harness",
+      "lastName": "Customer",
+      "streetAddress1": "1 Test St",
+      "city": "Test City",
+      "postalCode": "12345",
+      "country": "US"
+    }
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:27207be98567a314"
+}

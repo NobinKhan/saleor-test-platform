@@ -1,0 +1,16 @@
+{
+  "bundle_id": "sf-checkoutemailupdate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "CheckoutEmailUpdate"
+  ],
+  "document": "mutation CheckoutEmailUpdate($id: ID!, $email: String!) { checkoutEmailUpdate(id: $id, email: $email) { checkout { id email } errors { field message code } } }",
+  "variables": {
+    "id": "{{fixtures.default_checkout_id}}",
+    "email": "harness-storefront-customer@example.com"
+  },
+  "auth_context": "anonymous",
+  "priority": "P0",
+  "document_hash": "sha256:09bf39deeb85bcff"
+}

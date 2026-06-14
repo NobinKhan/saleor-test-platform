@@ -1,0 +1,44 @@
+{
+  "step_id": "02_order_line_create",
+  "scenario_id": "order-lifecycle",
+  "order": 2,
+  "name": "Add order line",
+  "auth_context": "staff",
+  "input_sent": "mutation OrderLinesCreate($id: ID!, $input: [OrderLineCreateInput!]!) { orderLinesCreate(id: $id, input: $input) { order { id lines { id quantity } } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.draft_order_id}}",
+    "input": [
+      {
+        "variantId": "{{fixtures.default_variant_id}}",
+        "quantity": 1
+      }
+    ]
+  },
+  "extract": {},
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.orderLinesCreate.order.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "orderLinesCreate": {
+        "order": {
+          "id": "T3JkZXI6ZTI4Njc5ZDgtOWM1OS00ZTk2LThhZGEtNTFmNWZkZWFiNDE3",
+          "lines": [
+            {
+              "id": "T3JkZXJMaW5lOjc5YjZmYTBkLWJhYjctNGRiNC1iNjk0LTVjNDg2OTAxNTM3Zg==",
+              "quantity": 1
+            }
+          ]
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-14T10:09:38.184332+00:00"
+}

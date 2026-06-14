@@ -1,0 +1,13 @@
+{
+  "scenario_id": "checkout-lifecycle",
+  "name": "Checkout lifecycle",
+  "category": "checkout",
+  "auth_context": "customer",
+  "description": "Create checkout, add line, set shipping address, attach customer",
+  "steps": [
+    "01_checkout_create.json",
+    "02_checkout_lines_add.json",
+    "03_checkout_shipping_address.json",
+    "04_checkout_customer_attach.json"
+  ]
+}

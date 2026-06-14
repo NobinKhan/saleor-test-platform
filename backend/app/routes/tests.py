@@ -56,6 +56,7 @@ def _start_runner(
     *,
     saleor_email: str | None = None,
     saleor_password: str | None = None,
+    demo_seed_profile: str = "harness",
 ) -> None:
     runner_manager.start_run(
         run_id=run.id,
@@ -67,6 +68,7 @@ def _start_runner(
         timeout_seconds=run.timeout_seconds or 30,
         saleor_email=saleor_email or run.saleor_email,
         saleor_password=saleor_password or run.saleor_password,
+        demo_seed_profile=demo_seed_profile,
     )
 
 
@@ -124,8 +126,14 @@ async def create_run(
         timeout_seconds=data.timeout_seconds,
     )
     run = TestRun(**row)
+    meta: dict = {}
     if data.compare_run_id:
-        run.schema_diff = {"_compare_run_id": str(data.compare_run_id)}
+        meta["_compare_run_id"] = str(data.compare_run_id)
+    meta["_run_meta"] = {
+        **(meta.get("_run_meta") or {}),
+        "demo_seed_profile": data.demo_seed_profile,
+    }
+    run.schema_diff = meta
     db.add(run)
     await db.commit()
     await db.refresh(run)
@@ -135,6 +143,7 @@ async def create_run(
         token,
         saleor_email=row["saleor_email"],
         saleor_password=row["saleor_password"],
+        demo_seed_profile=data.demo_seed_profile,
     )
     return _summary_from_run(run)
 
@@ -197,6 +206,7 @@ async def validate_target(
         token,
         timeout=data.timeout_seconds or 30,
         corpus_version=settings.golden_corpus_version,
+        seed_profile=data.demo_seed_profile,
     )
     result["authenticated"] = True
     result["issues_count"] = len(result.get("issues") or [])

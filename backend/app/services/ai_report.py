@@ -74,11 +74,12 @@ def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
 
     deprecated_count = category_counts.get("deprecated_excluded", 0)
     data_prereq_count = category_counts.get("data_prerequisite", 0)
+    seed_prereq_count = category_counts.get("seed_prerequisite", 0)
     real_bug_count = category_counts.get("real_bug", 0)
     compatible_count = category_counts.get("compatible", 0)
     missing_golden_count = category_counts.get("missing_golden", 0)
 
-    effective_denominator = with_status - deprecated_count - data_prereq_count
+    effective_denominator = with_status - deprecated_count - data_prereq_count - seed_prereq_count
     effective_score = (
         round(matched / effective_denominator * 100, 1)
         if effective_denominator > 0
@@ -95,6 +96,7 @@ def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
         "effective_score": effective_score,
         "deprecated_excluded": deprecated_count,
         "data_prerequisite": data_prereq_count,
+        "seed_prerequisite": seed_prereq_count,
         "real_bugs": real_bug_count,
         "effective_compatible": compatible_count,
         "effective_incompatible": real_bug_count,
@@ -168,13 +170,15 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
     ])
     dep_count = stats.get("deprecated_excluded", 0)
     prereq_count = stats.get("data_prerequisite", 0)
+    seed_prereq_count = stats.get("seed_prerequisite", 0)
     real_bugs = stats.get("real_bugs", 0)
-    if dep_count or prereq_count or real_bugs:
+    if dep_count or prereq_count or seed_prereq_count or real_bugs:
         lines.extend([
             "",
             "### Failure category breakdown",
             f"- Deprecated (excluded): {dep_count}",
-            f"- Data-dependent (needs seed): {prereq_count}",
+            f"- Data-dependent (missing fixture): {prereq_count}",
+            f"- Seed-dependent (demo topology): {seed_prereq_count}",
             f"- Real bugs: {real_bugs}",
         ])
     if ctx["upgrade_hint"]:

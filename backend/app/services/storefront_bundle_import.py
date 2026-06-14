@@ -53,6 +53,18 @@ STOREFRONT_P0_ROOT_FIELDS = frozenset({
     "page",
     "pages",
     "me",
+    "checkoutCreate",
+    "checkoutLinesAdd",
+    "checkoutLinesUpdate",
+    "checkoutShippingAddressUpdate",
+    "checkoutDeliveryMethodUpdate",
+    "checkoutEmailUpdate",
+    "checkoutComplete",
+    "checkoutCustomerAttach",
+    "accountAddressCreate",
+    "accountUpdate",
+    "draftOrderCreate",
+    "orderLineCreate",
 })
 
 STOREFRONT_P0_OPERATION_NAMES = frozenset({
@@ -73,6 +85,7 @@ CUSTOMER_AUTH_OPS = frozenset({
     "accountAddressCreate",
     "accountAddressUpdate",
     "accountAddressDelete",
+    "checkoutCustomerAttach",
 })
 
 _GQL_BLOCK = re.compile(r"gql`\s*(.*?)\s*`", re.DOTALL)
@@ -199,6 +212,32 @@ def scan_storefront_bundles(
     return all_bundles
 
 
+def scan_sdk_storefront_bundles() -> list[ClientBundle]:
+    """Build bundles from vendored SDK checkout/account documents."""
+    from app.services.storefront_sdk_documents import SDK_STOREFRONT_DOCUMENTS
+
+    bundles: list[ClientBundle] = []
+    for spec in SDK_STOREFRONT_DOCUMENTS:
+        op_name = spec["operation_name"]
+        document = spec["document"]
+        bundle_id = f"sf-{_slugify(op_name, 'sdk')}"
+        auth_context = spec.get("auth_context") or _infer_auth_context([op_name], document)
+        bundles.append(
+            ClientBundle(
+                bundle_id=bundle_id,
+                source="saleor-storefront-sdk",
+                source_path="sdk/storefront_sdk_documents.py",
+                operation_names=[op_name],
+                document=document,
+                variables=spec.get("variables") or {},
+                auth_context=auth_context,
+                priority="P0",
+                document_hash=document_hash(document),
+            )
+        )
+    return bundles
+
+
 def import_storefront_bundles(
     *,
     storefront_path: Path,
@@ -213,14 +252,21 @@ def import_storefront_bundles(
             path.unlink()
 
     all_bundles = scan_storefront_bundles(storefront_path, priority_filter=priority_filter)
+    all_bundles.extend(scan_sdk_storefront_bundles())
     seen_hashes: set[str] = set()
+    seen_ids: set[str] = set()
     written: list[ClientBundle] = []
 
     for bundle in all_bundles:
+        if priority_filter and bundle.priority != priority_filter:
+            continue
+        if bundle.bundle_id in seen_ids:
+            continue
         dh = bundle.document_hash or document_hash(bundle.document)
         if dh in seen_hashes:
             continue
         seen_hashes.add(dh)
+        seen_ids.add(bundle.bundle_id)
         write_bundle("storefront", version, bundle)
         written.append(bundle)
 

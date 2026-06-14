@@ -234,15 +234,16 @@ async def get_report(
         category_counts[cat] = category_counts.get(cat, 0) + 1
     deprecated_excluded = category_counts.get("deprecated_excluded", 0)
     data_prereq = category_counts.get("data_prerequisite", 0)
+    seed_prereq = category_counts.get("seed_prerequisite", 0)
     real_bugs = category_counts.get("real_bug", 0)
-    effective_denominator = golden_with_status - deprecated_excluded - data_prereq
+    effective_denominator = golden_with_status - deprecated_excluded - data_prereq - seed_prereq
     effective_score = (
         round(golden_matched / effective_denominator * 100, 1)
         if effective_denominator > 0
         else compatibility_score
     )
     effective_compatible = golden_matched
-    effective_incompatible = golden_with_status - golden_matched - deprecated_excluded - data_prereq
+    effective_incompatible = golden_with_status - golden_matched - deprecated_excluded - data_prereq - seed_prereq
 
     resolved_corpus = resolve_corpus_version(run.saleor_version, settings.golden_corpus_version)
     manifest = load_manifest(resolved_corpus) or {}
@@ -336,6 +337,7 @@ async def get_report(
         effective_incompatible=effective_incompatible,
         deprecated_excluded=deprecated_excluded,
         data_prerequisite=data_prereq,
+        seed_prerequisite=seed_prereq,
         real_bugs=real_bugs,
         **dep,
     )

@@ -88,6 +88,17 @@ POST /api/runs/validate → pre-flight: version gate + same fixture resolution/s
 
 Set `RUNTIME_SEED=false` for read-only audits against production-like targets where mutations are not allowed.
 
+### Demo seed profile (`DEMO_SEED_PROFILE`)
+
+| Profile | Env / UI | Behavior |
+|---------|----------|----------|
+| `harness` (default) | Minimal seed | Creates harness-reference channel, product, customer, collection when missing |
+| `saleor_demo` | Full topology | Runs `ensure_saleor_demo_topology()` — USD/PLN channels, named warehouses, demo customers, apple-juice product, fulfillable order |
+
+Select **Saleor demo** in the run UI or set `DEMO_SEED_PROFILE=saleor_demo`. Seed-tagged L3 probes that still `shape_drift` against populatedb golden classify as `seed_prerequisite` (excluded from effective score). Official Saleor after `just fresh` (populatedb) achieves true 100% on all probes.
+
+See [COMPAT-TEST-IMPROVEMENT-REPORT.md](COMPAT-TEST-IMPROVEMENT-REPORT.md) for the eight seed-dependent bundle IDs.
+
 ### Docker URL rewrite (UI localhost)
 
 When the harness runs inside Docker (`DATABASE_URL` contains `@harness-db:`), the UI may show `http://localhost:8000/graphql/` while Saleor listens on the host. All harness paths — auth, pre-flight (`POST /api/runs/validate`), fixture capture/seed, and `TestRunner` — rewrite localhost to `SALEOR_GRAPHQL_URL` (typically `http://host.docker.internal:8000/graphql/`). The validate response includes `requested_saleor_url` and `resolved_saleor_url` when they differ.

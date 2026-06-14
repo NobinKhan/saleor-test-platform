@@ -1,0 +1,18 @@
+{
+  "bundle_id": "sf-accountupdate",
+  "source": "saleor-storefront-sdk",
+  "source_path": "sdk/storefront_sdk_documents.py",
+  "operation_names": [
+    "AccountUpdate"
+  ],
+  "document": "mutation AccountUpdate($input: AccountInput!) { accountUpdate(input: $input) { user { id firstName lastName } errors { field message code } } }",
+  "variables": {
+    "input": {
+      "firstName": "Harness",
+      "lastName": "Updated"
+    }
+  },
+  "auth_context": "customer",
+  "priority": "P0",
+  "document_hash": "sha256:0daf874ed32d25f5"
+}

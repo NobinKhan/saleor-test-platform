@@ -67,7 +67,7 @@ def test_certification_l3_set_independent_of_extra_target_fields():
 
     l3_golden = build_client_bundle_endpoints(recorded_only=True, schema_intro=golden_schema)
     l3_inflated = build_client_bundle_endpoints(recorded_only=True, schema_intro=inflated_schema)
-    # 415 certified: 417 on disk minus 2 deprecated Sale API bundles auto-excluded
+    # 415 L3 dashboard bundles on disk (11 deprecated Sale API bundles removed from corpus)
     assert len(l3_inflated) == len(l3_golden) == 415
 
     from app.services.scenario_corpus import build_scenario_endpoints

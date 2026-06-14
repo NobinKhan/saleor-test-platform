@@ -358,7 +358,7 @@
 
   function topFieldDiffs(): { key: string; expected: string; actual: string; count: number }[] {
     if (!report) return [];
-    const diffMap = new Map<string, { expected: string; actual: string; count: number }>();
+    const diffMap = new Map<string, { key: string; expected: string; actual: string; count: number }>();
     for (const row of report.results || []) {
       for (const item of row.items || []) {
         if (item.item_status !== "match") {

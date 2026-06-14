@@ -62,7 +62,7 @@ Default maintenance is **incremental patch**, not full re-record.
 
 | Scope | Contents |
 |-------|----------|
-| `full+client` | L1 (388) + L3 dashboard (certified subset) |
+| `full+client` | L1 (387) + L3 dashboard (certified subset) |
 | `full+client+storefront` | L1 + L3 dashboard + L3 storefront |
 | `scenarios` | L4 multi-step flows (`reference/scenarios/`) |
 | `variants` | Input variant matrix (`reference/variants/`) |

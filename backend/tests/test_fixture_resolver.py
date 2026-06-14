@@ -245,3 +245,28 @@ async def test_validate_preflight_fixture_missing():
         assert status == "missing", f"Expected {key} to be missing"
     assert len(result["warning_issues"]) >= 1
     assert result["blocking_issues"] == []
+
+
+@pytest.mark.asyncio
+async def test_resolve_fixtures_saleor_demo_profile():
+    with patch(
+        "app.services.fixture_resolver.capture_live_fixtures",
+        new_callable=AsyncMock,
+        return_value={},
+    ), patch(
+        "app.services.demo_seed.ensure_saleor_demo_topology",
+        new_callable=AsyncMock,
+        return_value=SeedResult(
+            fixtures={"default_channel_id": "Q2hhbm5lbDox"},
+            live_keys=frozenset({"default_channel_id"}),
+            seeded_keys=frozenset({"default_channel_id"}),
+        ),
+    ) as mock_demo:
+        resolution = await resolve_fixtures(
+            "http://example.com/graphql/",
+            "token",
+            seed_profile="saleor_demo",
+        )
+    mock_demo.assert_awaited_once()
+    assert resolution.seed_profile == "saleor_demo"
+    assert resolution.fixtures.get("default_channel_id") == "Q2hhbm5lbDox"
