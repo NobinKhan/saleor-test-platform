@@ -126,6 +126,7 @@ class TestResult(Base):
     match_status: Mapped[str | None] = mapped_column(String(20), nullable=True)
     diff_summary: Mapped[str | None] = mapped_column(Text, nullable=True)
     client_parity_note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    failure_category: Mapped[str | None] = mapped_column(String(30), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     items: Mapped[list["TestItem"]] = relationship(back_populates="test_result", lazy="selectin", cascade="all, delete-orphan")

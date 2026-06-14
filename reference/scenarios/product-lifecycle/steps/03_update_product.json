@@ -1,5 +1,7 @@
 {
   "step_id": "03_update_product",
+  "scenario_id": "product-lifecycle",
+  "order": 3,
   "name": "Update product name",
   "auth_context": "staff",
   "input_sent": "mutation ProductLifecycleUpdate($id: ID!, $input: ProductInput!) { productUpdate(id: $id, input: $input) { product { id name slug } errors { field message code } } }",
@@ -9,7 +11,33 @@
       "name": "Harness Scenario Product Updated"
     }
   },
+  "extract": {},
   "assertions": [
-    {"kind": "equals", "path": "$.data.productUpdate.product.name", "expected": "Harness Scenario Product Updated"}
-  ]
+    {
+      "kind": "equals",
+      "path": "$.data.productUpdate.product.name",
+      "expected": "Harness Scenario Product Updated"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "productUpdate": {
+        "product": {
+          "id": "UHJvZHVjdDoxODU=",
+          "name": "Harness Scenario Product Updated",
+          "slug": "harness-scenario-50ac5fd2"
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "Update product name",
+    "expected_null": true
+  },
+  "recorded_at": "2026-06-14T02:23:46.487566+00:00"
 }

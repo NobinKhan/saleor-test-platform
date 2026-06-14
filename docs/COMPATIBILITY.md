@@ -12,9 +12,12 @@ A backend is **certified Saleor-compatible** only when **all** of the following 
 |------|-------------|
 | Schema gate | Every operation in the reference corpus exists on the target schema |
 | Compatibility score | **100%** — every probe/bundle in scope passes SGRC match |
+| Effective score | **100%** — excludes deprecated + data-prerequisite probes from denominator |
 | Tier 1 | Message + data semantics (errors); normalized shape (success) |
-| Tier 2 | When `SGRC_TIER2_GATE=true`: zero `parity_gap` / `tier2_fail` — path + codes where golden has them |
+| Tier 2 | When `SGRC_TIER2_GATE=true`: zero `parity_gap` / `tier2_fail` — path + codes where golden have them |
 | Input parity | L1 replays exact `input_sent`; L3 replays exact dashboard documents + fixtures |
+| Dynamic probes | Runtime-generated values must echo in response (anti-static-response) |
+| Version gate | Target version must match corpus version (major/minor hard fail; patch drift optional) |
 
 Tier 1 is **not** byte-identical JSON to Python Saleor. Stack traces, locations, and cost extensions are never required.
 
@@ -39,14 +42,17 @@ L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFER
 
 ## How testing works
 
-1. **L1 reference corpus** — synthetic introspection probes (`reference/corpora/saleor-{VERSION}/`).
-2. **L3 dashboard bundles** — real Dashboard GraphQL (`reference/client-bundles/dashboard-{VERSION}/`).
-3. **Compatibility mode** — replays golden inputs; compares SGRC Tier 1 (+ Tier 2 when gate on).
-4. **Schema gate** — introspects target; verifies corpus operations exist.
+1. **Pre-flight validation** — `POST /api/runs/validate` checks API reachability, version match, and fixture entities.
+2. **L1 reference corpus** — synthetic introspection probes (`reference/corpora/saleor-{VERSION}/`).
+3. **L3 dashboard bundles** — real Dashboard GraphQL (`reference/client-bundles/dashboard-{VERSION}/`).
+4. **Dynamic probes** — runtime-generated inputs with echo/structural/semantic validation (anti-static-response).
+5. **Compatibility mode** — replays golden inputs; compares SGRC Tier 1 (+ Tier 2 when gate on).
+6. **Schema gate** — introspects target; verifies corpus operations exist.
+7. **Deprecated auto-exclusion** — bundles/ops referencing deprecated Saleor types are excluded from scoring.
 
-**Full-system scope** (`full+scenarios`) = 388 L1 + **417** L3 dashboard + **16** L3 storefront + scenario steps + input variants. **11** deprecated dashboard bundles were removed from the corpus (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
+**Full-system scope** (`full+scenarios`) = 388 L1 + **417** L3 dashboard + **16** L3 storefront + scenario steps + input variants + dynamic probes. **11** deprecated dashboard bundles were removed from the corpus (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
 
-Reports include `not_counted_note` and `excluded_l3_bundles` so AI agents know deprecated items are never counted toward compatibility %.
+Reports include `failure_category`, `effective_score`, `not_counted_note`, and `excluded_l3_bundles` so AI agents know deprecated items are never counted toward compatibility %.
 
 ## Recording and patching
 

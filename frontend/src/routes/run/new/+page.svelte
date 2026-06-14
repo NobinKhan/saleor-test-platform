@@ -97,7 +97,7 @@
     }
 
     loading = true;
-    startMessage = "Authenticating and creating test run…";
+    startMessage = "Pre-flight validation…";
     try {
       const payload: Record<string, unknown> = {
         saleor_url,
@@ -114,6 +114,21 @@
       if (cloneFromRunId) {
         payload.clone_from_run_id = cloneFromRunId;
       }
+
+      const validation = await api.post("/api/tests/validate", payload);
+      const issues: string[] = validation.issues ?? [];
+      if (issues.length > 0) {
+        const confirmMsg = issues.length === 1
+          ? `Pre-flight issue:\n  ${issues[0]}\n\nStart anyway?`
+          : `Pre-flight issues:\n  ${issues.map((i: string) => `  • ${i}`).join("\n")}\n\nStart anyway?`;
+        if (!confirm(confirmMsg)) {
+          loading = false;
+          startMessage = "";
+          return;
+        }
+      }
+
+      startMessage = "Creating test run…";
       const run = await api.post("/api/runs", payload);
       startMessage = "Opening live progress…";
       await goto(`/run/${run.id}/stream`);

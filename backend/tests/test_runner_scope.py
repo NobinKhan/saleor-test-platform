@@ -67,10 +67,12 @@ def test_certification_l3_set_independent_of_extra_target_fields():
 
     l3_golden = build_client_bundle_endpoints(recorded_only=True, schema_intro=golden_schema)
     l3_inflated = build_client_bundle_endpoints(recorded_only=True, schema_intro=inflated_schema)
-    assert len(l3_inflated) == len(l3_golden) == 417
+    # 415 certified: 417 on disk minus 2 deprecated Sale API bundles auto-excluded
+    assert len(l3_inflated) == len(l3_golden) == 415
 
     from app.services.scenario_corpus import build_scenario_endpoints
     from app.services.variant_corpus import build_variant_endpoints
+    from app.services.dynamic_corpus import build_dynamic_probe_endpoints
 
     l1 = build_golden_endpoints(corpus_ver, "full", False, None)
     l3_sf = build_client_bundle_endpoints(
@@ -78,5 +80,6 @@ def test_certification_l3_set_independent_of_extra_target_fields():
     )
     scenarios = build_scenario_endpoints(recorded_only=True)
     variants = build_variant_endpoints(recorded_only=True)
-    full_system = len(l1) + len(l3_golden) + len(l3_sf) + len(scenarios) + len(variants)
+    dynamic = build_dynamic_probe_endpoints("test-run")
+    full_system = len(l1) + len(l3_golden) + len(l3_sf) + len(scenarios) + len(variants) + len(dynamic)
     assert full_system >= 820

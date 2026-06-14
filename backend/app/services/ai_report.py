@@ -66,6 +66,25 @@ def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
     )
     with_status = matched + mismatched
     compatibility = round(matched / with_status * 100, 1) if with_status > 0 else None
+
+    category_counts: dict[str, int] = {}
+    for r in results:
+        cat = r.failure_category or "unknown"
+        category_counts[cat] = category_counts.get(cat, 0) + 1
+
+    deprecated_count = category_counts.get("deprecated_excluded", 0)
+    data_prereq_count = category_counts.get("data_prerequisite", 0)
+    real_bug_count = category_counts.get("real_bug", 0)
+    compatible_count = category_counts.get("compatible", 0)
+    missing_golden_count = category_counts.get("missing_golden", 0)
+
+    effective_denominator = with_status - deprecated_count - data_prereq_count
+    effective_score = (
+        round(matched / effective_denominator * 100, 1)
+        if effective_denominator > 0
+        else compatibility
+    )
+
     return {
         "golden_matched": matched,
         "golden_mismatched": mismatched,
@@ -73,6 +92,13 @@ def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
         "client_parity_gaps": parity_gaps,
         "tier2_gate_enabled": gate_on,
         "compatibility_score": compatibility,
+        "effective_score": effective_score,
+        "deprecated_excluded": deprecated_count,
+        "data_prerequisite": data_prereq_count,
+        "real_bugs": real_bug_count,
+        "effective_compatible": compatible_count,
+        "effective_incompatible": real_bug_count,
+        "failure_category_counts": category_counts,
     }
 
 
@@ -92,6 +118,7 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         compatibility_score=compat_rate,
         tier2_pass=stats["client_parity_gaps"] == 0,
         parity_gaps=stats["client_parity_gaps"] if stats.get("tier2_gate_enabled") else 0,
+        effective_score=stats.get("effective_score"),
     )
     run_meta = (run.schema_diff or {}).get("_run_meta") or {}
     test_mode = run_meta.get("test_mode", "compatibility")
@@ -129,6 +156,7 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         f"- **Compatibility score** (primary): **{compat_rate}%**"
         if compat_rate is not None
         else "- **Compatibility score**: N/A",
+        f"- **Effective score** (excludes deprecated + data-prerequisite): **{stats.get('effective_score', 'N/A')}%**",
         f"- Schema gate ({schema_gate.get('schema_gate_source', 'dashboard catalog')}): "
         f"**{'PASS' if schema_gate['schema_gate_pass'] else 'FAIL'}** "
         f"(missing {schema_gate['missing_queries']} queries, {schema_gate['missing_mutations']} mutations)",
@@ -138,6 +166,17 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         f"- Golden: {stats['golden_matched']} matched, {stats['golden_mismatched']} mismatched, {stats['golden_missing']} missing",
         f"- Client parity gaps (Tier 2, informational): {stats.get('client_parity_gaps', 0)}",
     ])
+    dep_count = stats.get("deprecated_excluded", 0)
+    prereq_count = stats.get("data_prerequisite", 0)
+    real_bugs = stats.get("real_bugs", 0)
+    if dep_count or prereq_count or real_bugs:
+        lines.extend([
+            "",
+            "### Failure category breakdown",
+            f"- Deprecated (excluded): {dep_count}",
+            f"- Data-dependent (needs seed): {prereq_count}",
+            f"- Real bugs: {real_bugs}",
+        ])
     if ctx["upgrade_hint"]:
         lines.extend(["", f"**Upgrade recommendation:** {ctx['upgrade_hint']}"])
 
@@ -200,6 +239,7 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
                 "",
                 f"### {r.endpoint_name} ({r.endpoint_kind})",
                 f"- Status: {r.status}, Match: {r.match_status or '—'}, Outcome: {r.outcome or '—'}",
+                f"- Failure category: {r.failure_category or '—'}",
             ])
             if r.diff_summary:
                 lines.append(f"- Diff: {r.diff_summary}")
@@ -248,6 +288,7 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
         compatibility_score=stats["compatibility_score"],
         tier2_pass=stats["client_parity_gaps"] == 0,
         parity_gaps=stats["client_parity_gaps"] if stats.get("tier2_gate_enabled") else 0,
+        effective_score=stats.get("effective_score"),
     )
 
     def row(r: TestResult, *, full: bool) -> dict[str, Any]:
@@ -282,6 +323,7 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
         "version_glossary": ctx,
         "executive_summary": {
             "compatibility_score": stats["compatibility_score"],
+            "effective_score": stats.get("effective_score"),
             "schema_gate_pass": schema_gate["schema_gate_pass"],
             "certified": certified,
             "total": total,
@@ -289,6 +331,9 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
             "incompatible": run.failed,
             "warnings": run.warnings,
             "skipped": run.skipped,
+            "deprecated_excluded": stats.get("deprecated_excluded", 0),
+            "data_prerequisite": stats.get("data_prerequisite", 0),
+            "real_bugs": stats.get("real_bugs", 0),
             **stats,
         },
         "schema_diff": run.schema_diff,

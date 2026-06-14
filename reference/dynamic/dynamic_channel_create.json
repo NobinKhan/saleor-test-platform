@@ -1,0 +1,15 @@
+{
+  "probe_id": "dynamic_channel_create",
+  "operation_name": "channelCreate",
+  "operation_kind": "MUTATION",
+  "category": "channels",
+  "document_template": "mutation { channelCreate(input: { name: \"Channel {{run_slug}}\", slug: \"{{run_slug}}\", currencyCode: \"USD\", isActive: true }) { channel { id name slug currencyCode } errors { field message } } }",
+  "variables_template": {},
+  "comparison_mode": "echo",
+  "binding_rules": [
+    {"field": "data.channelCreate.channel.name", "expected_input": "input.name"},
+    {"field": "data.channelCreate.channel.slug", "expected_input": "input.slug"}
+  ],
+  "description": "Create channel with unique name/slug — response must echo runtime values",
+  "auth_context": "staff"
+}

@@ -138,3 +138,28 @@ It does **not** yet guarantee:
 - **Async** worker, webhook, or payment-gateway integration behavior.
 
 When Storefront or Dashboard breaks a certified backend, platform rules require **adding probes/bundles**, not weakening Tier 1 — see workspace rules and [COMPATIBILITY.md](COMPATIBILITY.md).
+
+## Hardening changes (this release)
+
+The testing system hardening plan has been implemented with the following changes:
+
+### Phase 1A — Stop false failures
+- **Deprecated type auto-exclusion**: L3 bundles referencing `Sale`, `SaleTranslatableContent`, `SaleTranslation`, etc. are automatically excluded from scoring.
+- **Runtime fixture resolver**: `POST /api/runs/validate` pre-flight endpoint checks API reachability, version match, and fixture entity presence.
+- **Structured exclusion reporting**: `failure_category` field on all results (compatible, real_bug, deprecated_excluded, data_prerequisite, missing_golden). Effective score excludes deprecated + data-prerequisite from denominator.
+
+### Phase 1B — Close bypass holes
+- **Missing-golden auto-pass removed**: Scenario and variant probes no longer auto-pass without golden reference (gated by `SGRC_ALLOW_ASSERTION_ONLY=false`).
+- **Variant matrix variables**: `blank_name` variant now sends proper variables from `matrix.json`.
+- **Fixture KeyError handling**: Silent fallback replaced with explicit skip + `failure_category=data_prerequisite`.
+
+### Phase 2 — Anti-static-response
+- **Dynamic probes**: 4 runtime-generated probes (product/category/collection create + not-found query) validate echo/structural/semantic_error modes.
+- **Input binding checks**: `input_binding.py` service validates success mutations echo input values.
+- **Tightened stateful policy**: L1 error probes always stateless; L3 success bundles never blanket stateful; stateful drift allowed only for L1 success queries with no mismatches.
+- **Narrowed error semantics**: Stateless probes require regex/message_pattern match, not just category bucket.
+
+### Phase 3 — Reporting and perf
+- **Field-level diff**: `field_compare.py` now includes value comparison for scalar mismatches; `summarize_field_diffs()` for report display.
+- **Parallel probe tiers**: `probe_tiers.py` classifies endpoints into Tier 0 (parallel read), Tier 1 (sequential mutate), Tier 2 (scenario ordered), Tier 3 (dynamic sequential).
+- **Version hard gate**: `version_hard_gate_check()` fails certification on major/minor mismatch; patch drift requires `ALLOW_PATCH_DRIFT=true`.

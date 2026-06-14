@@ -1,12 +1,38 @@
 {
   "step_id": "04_list_after_update",
+  "scenario_id": "product-lifecycle",
+  "order": 4,
   "name": "Verify updated name by ID",
   "auth_context": "staff",
   "input_sent": "query ProductLifecycleGetUpdated($id: ID!) { product(id: $id) { id name slug } }",
   "variables": {
     "id": "{{context.created_product_id}}"
   },
+  "extract": {},
   "assertions": [
-    {"kind": "equals", "path": "$.data.product.name", "expected": "Harness Scenario Product Updated"}
-  ]
+    {
+      "kind": "equals",
+      "path": "$.data.product.name",
+      "expected": "Harness Scenario Product Updated"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "product": {
+        "id": "UHJvZHVjdDoxODU=",
+        "name": "Harness Scenario Product Updated",
+        "slug": "harness-scenario-50ac5fd2"
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "Verify updated name by ID",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>"
+  },
+  "recorded_at": "2026-06-14T02:23:46.516425+00:00"
 }

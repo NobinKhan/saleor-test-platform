@@ -2,10 +2,10 @@
   "source": "dashboard",
   "dashboard_version": "3.23.6",
   "dashboard_git_tag": "3.23.6",
-  "bundle_count": 417,
-  "recorded_count": 417,
-  "bundles_hash": "sha256:13a05639e6a1941cea355f47e5cb307f1837da7cc2de4ed692bf2fd99eb61db2",
-  "updated_at": "2026-06-10T05:23:22.729287+00:00",
+  "bundle_count": 415,
+  "recorded_count": 415,
+  "bundles_hash": "sha256:edff9c29a62e860d9904ca0b28d41a123065d0372fc9546083b6c6204965cca9",
+  "updated_at": "2026-06-14T02:23:56.069765+00:00",
   "bundles_index": {
     "_getattributechoices": {
       "document_hash": "sha256:1f0b22d55265cfe9",
@@ -2715,24 +2715,6 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success"
-    },
-    "saletranslationdetails": {
-      "document_hash": "sha256:ef5daba994a31f52",
-      "operation_names": [
-        "SaleTranslationDetails"
-      ],
-      "priority": "P1",
-      "recorded": true,
-      "golden_contract": "graphql_error"
-    },
-    "saletranslations": {
-      "document_hash": "sha256:ca616f21a0123cd7",
-      "operation_names": [
-        "SaleTranslations"
-      ],
-      "priority": "P1",
-      "recorded": true,
-      "golden_contract": "graphql_error"
     },
     "saveonboardingstate": {
       "document_hash": "sha256:7823ab235cbacdcd",

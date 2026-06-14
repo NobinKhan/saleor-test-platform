@@ -17,6 +17,7 @@ _MIGRATIONS: list[str] = [
     "ALTER TABLE test_results ADD COLUMN IF NOT EXISTS match_status VARCHAR(20)",
     "ALTER TABLE test_results ADD COLUMN IF NOT EXISTS diff_summary TEXT",
     "ALTER TABLE test_results ADD COLUMN IF NOT EXISTS client_parity_note TEXT",
+    "ALTER TABLE test_results ADD COLUMN IF NOT EXISTS failure_category VARCHAR(30)",
 ]
 
 

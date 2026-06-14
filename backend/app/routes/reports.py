@@ -228,6 +228,22 @@ async def get_report(
     )
     compatibility_score = golden_match_rate
 
+    category_counts: dict[str, int] = {}
+    for r in results:
+        cat = r.failure_category or "unknown"
+        category_counts[cat] = category_counts.get(cat, 0) + 1
+    deprecated_excluded = category_counts.get("deprecated_excluded", 0)
+    data_prereq = category_counts.get("data_prerequisite", 0)
+    real_bugs = category_counts.get("real_bug", 0)
+    effective_denominator = golden_with_status - deprecated_excluded - data_prereq
+    effective_score = (
+        round(golden_matched / effective_denominator * 100, 1)
+        if effective_denominator > 0
+        else compatibility_score
+    )
+    effective_compatible = golden_matched
+    effective_incompatible = golden_with_status - golden_matched - deprecated_excluded - data_prereq
+
     resolved_corpus = resolve_corpus_version(run.saleor_version, settings.golden_corpus_version)
     manifest = load_manifest(resolved_corpus) or {}
     golden_corpus_url = manifest.get("saleor_url") or settings.reference_saleor_url
@@ -247,6 +263,7 @@ async def get_report(
         compatibility_score=compatibility_score,
         tier2_pass=tier2_pass,
         parity_gaps=client_parity_gaps if gate_on else 0,
+        effective_score=effective_score,
     )
     run_meta = (run.schema_diff or {}).get("_run_meta") or {}
     test_mode = run_meta.get("test_mode", "compatibility")
@@ -314,6 +331,12 @@ async def get_report(
         schema_score=schema_gate["schema_score"],
         certified=certified,
         test_mode=test_mode,
+        effective_score=effective_score,
+        effective_compatible=effective_compatible,
+        effective_incompatible=effective_incompatible,
+        deprecated_excluded=deprecated_excluded,
+        data_prerequisite=data_prereq,
+        real_bugs=real_bugs,
         **dep,
     )
     compare_summary = None
@@ -360,7 +383,7 @@ async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
     writer = csv.writer(output)
     writer.writerow([
         "Endpoint", "Kind", "Category", "Is Public", "Status", "Outcome",
-        "Match Status", "Response Valid", "Expected", "Diff Summary",
+        "Match Status", "Failure Category", "Response Valid", "Expected", "Diff Summary",
         "Response Time (ms)", "Error Message",
         "Input Sent", "Expected Response", "Actual Response", "Created At",
     ])
@@ -374,6 +397,7 @@ async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
             r.status,
             r.outcome or "",
             r.match_status or "",
+            r.failure_category or "",
             r.response_valid if r.response_valid is not None else "",
             r.expected or "",
             r.diff_summary or "",
@@ -426,6 +450,7 @@ async def export_json(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), use
                 "status": r.status,
                 "outcome": r.outcome,
                 "match_status": r.match_status,
+                "failure_category": r.failure_category,
                 "diff_summary": r.diff_summary,
                 "response_time_ms": r.response_time_ms,
                 "error_message": r.error_message,

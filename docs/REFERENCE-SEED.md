@@ -72,7 +72,19 @@ If a backend passes L1 (stateless probes) but fails L3 bundles with **missing da
 
 L1 probes do **not** require seeded data; L3 bundles **do**.
 
-## Roadmap (future corpus expansion)
+## Runtime fixture resolver (certification replay)
+
+At **test-run start** (after staff auth), the harness queries the **target** Saleor and resolves live entity IDs into the same keys as `fixtures.json` (`default_product_id`, `default_variant_id`, `default_channel_id`, …). Static IDs from capture-time `fixtures.json` are used only as fallback when the target has no matching entities.
+
+```text
+just seed-reference     → capture-time (record L3 golden on official Saleor)
+TestRunner.run()        → runtime resolve_fixtures() per certification run
+POST /api/tests/validate → pre-flight: version gate + fixture entity checks
+```
+
+If L3 fails with **missing data** on an external backend, run validate first or seed equivalent entities. Set `RUNTIME_SEED=true` only when explicitly allowing the harness to seed the target (default off).
+
+See [docs/DYNAMIC-PROBES.md](DYNAMIC-PROBES.md) for anti-static dynamic probes (unique slugs/UUIDs per run).
 
 Short list — full gap analysis (Storefront L3, customer JWT, excluded bundles, runtime limits): **[COVERAGE-GAPS.md](COVERAGE-GAPS.md)**.
 

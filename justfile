@@ -140,6 +140,20 @@ self-check *extra:
     {{compose}} exec harness-backend \
       python -m app.scripts.self_check {{ extra }}
 
+check-corpus-version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "=== Corpus version + integrity check ==="
+    {{compose}} exec harness-backend python -m app.scripts.verify_corpus \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}"
+    {{compose}} exec harness-backend python -m app.scripts.check_corpus_version \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}"
+    echo "CORPUS VERSION OK"
+
 baseline *extra:
     #!/usr/bin/env bash
     set -euo pipefail

@@ -1,0 +1,12 @@
+{
+  "probe_id": "dynamic_product_not_found",
+  "operation_name": "product",
+  "operation_kind": "QUERY",
+  "category": "products",
+  "document_template": "query { product(id: \"{{uuid}}\") { id name } }",
+  "variables_template": {},
+  "comparison_mode": "not_found_null",
+  "binding_rules": [],
+  "description": "Query non-existent product by generated UUID — data.product must be null",
+  "auth_context": "anonymous"
+}

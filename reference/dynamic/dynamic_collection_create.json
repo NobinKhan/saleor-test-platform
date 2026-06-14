@@ -1,0 +1,15 @@
+{
+  "probe_id": "dynamic_collection_create",
+  "operation_name": "collectionCreate",
+  "operation_kind": "MUTATION",
+  "category": "collections",
+  "document_template": "mutation { collectionCreate(input: { name: \"Collection {{run_slug}}\", slug: \"{{run_slug}}\" }) { collection { id name slug } errors { field message } } }",
+  "variables_template": {},
+  "comparison_mode": "echo",
+  "binding_rules": [
+    {"field": "data.collectionCreate.collection.name", "expected_input": "input.name"},
+    {"field": "data.collectionCreate.collection.slug", "expected_input": "input.slug"}
+  ],
+  "description": "Create collection with unique name/slug — response must echo runtime values",
+  "auth_context": "staff"
+}

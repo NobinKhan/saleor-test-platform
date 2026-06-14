@@ -1,0 +1,22 @@
+{
+  "probe_id": "dynamic_product_create",
+  "operation_name": "productCreate",
+  "operation_kind": "MUTATION",
+  "category": "products",
+  "document_template": "mutation { productCreate(input: { name: \"Product {{run_slug}}\", slug: \"{{run_slug}}\", productType: \"{{product_type_id}}\" }) { product { id name slug } errors { field message code } } }",
+  "variables_template": {
+    "input": {
+      "name": "Product {{run_slug}}",
+      "slug": "{{run_slug}}",
+      "productType": "{{product_type_id}}"
+    }
+  },
+  "comparison_mode": "echo",
+  "binding_rules": [
+    {"field": "data.productCreate.product.name", "expected_input": "input.name"},
+    {"field": "data.productCreate.product.slug", "expected_input": "input.slug"}
+  ],
+  "description": "Create product with unique name/slug — response must echo runtime values",
+  "auth_context": "staff",
+  "requires_product_type": true
+}

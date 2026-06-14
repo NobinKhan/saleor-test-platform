@@ -172,6 +172,38 @@ async def get_run(
     )
 
 
+@router.post("/validate")
+async def validate_target(
+    data: TestRunCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """Pre-flight validation: check API reachability, version match, fixtures."""
+    from app.services.fixture_resolver import validate_preflight
+    from app.core.config import settings
+
+    saleor_url = data.saleor_url
+    saleor_email = str(data.saleor_email)
+    saleor_password = data.saleor_password
+
+    if not saleor_password:
+        raise HTTPException(400, "Saleor admin password is required")
+
+    token, error = await authenticate_saleor(saleor_url, saleor_email, saleor_password)
+    if error or not token:
+        raise HTTPException(400, f"Saleor authentication failed: {error or 'no token'}")
+
+    result = await validate_preflight(
+        saleor_url,
+        token,
+        timeout=data.timeout_seconds or 30,
+        corpus_version=settings.golden_corpus_version,
+    )
+    result["authenticated"] = True
+    result["issues_count"] = len(result.get("issues") or [])
+    return result
+
+
 @router.get("/{run_id}/results", response_model=list[TestResultResponse])
 async def list_results(
     run_id: uuid.UUID,

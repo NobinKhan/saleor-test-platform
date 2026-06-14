@@ -37,6 +37,7 @@ class InputVariant:
     golden_outcome: str | None = None
     semantic_profile: dict[str, Any] | None = None
     http_status: int | None = None
+    variables: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         d: dict[str, Any] = {
@@ -59,6 +60,8 @@ class InputVariant:
             d["semantic_profile"] = self.semantic_profile
         if self.http_status is not None:
             d["http_status"] = self.http_status
+        if self.variables:
+            d["variables"] = self.variables
         return d
 
     @classmethod
@@ -76,6 +79,7 @@ class InputVariant:
             golden_outcome=data.get("golden_outcome"),
             semantic_profile=data.get("semantic_profile"),
             http_status=data.get("http_status"),
+            variables=data.get("variables"),
         )
 
     def has_golden(self) -> bool:
@@ -146,5 +150,6 @@ def build_variant_endpoints(
             "golden_status": variant.golden_status,
             "semantic_profile": variant.semantic_profile,
             "tags": variant.tags,
+            "bundle_variables": variant.variables or {},
         })
     return endpoints

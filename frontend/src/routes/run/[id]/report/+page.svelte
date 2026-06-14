@@ -50,12 +50,15 @@
       item_status: string;
       expected_type: string | null;
       actual_type: string | null;
+      expected_value?: string | null;
+      actual_value?: string | null;
     }[];
     input_sent: string | null;
     actual_response: string | null;
     error_message: string | null;
     response_time_ms: number | null;
     is_public: boolean;
+    failure_category: string | null;
   }
 
   interface LatencySummary {
@@ -96,6 +99,12 @@
       golden_probe_count: number;
       golden_match_rate: number | null;
       compatibility_score: number | null;
+      effective_score: number | null;
+      effective_compatible: number;
+      effective_incompatible: number;
+      deprecated_excluded: number;
+      data_prerequisite: number;
+      real_bugs: number;
       golden_matched: number;
       golden_mismatched: number;
       golden_missing: number;
@@ -342,6 +351,34 @@
     return id.slice(0, 8);
   }
 
+  function truncateVal(val: string, maxLen = 40): string {
+    if (!val) return "—";
+    return val.length > maxLen ? val.slice(0, maxLen) + "…" : val;
+  }
+
+  function topFieldDiffs(): { key: string; expected: string; actual: string; count: number }[] {
+    if (!report) return [];
+    const diffMap = new Map<string, { expected: string; actual: string; count: number }>();
+    for (const row of report.results || []) {
+      for (const item of row.items || []) {
+        if (item.item_status !== "match") {
+          const key = item.item_key;
+          const existing = diffMap.get(key);
+          const expected = item.expected_value ?? item.expected_type ?? "—";
+          const actual = item.actual_value ?? item.actual_type ?? "—";
+          if (existing) {
+            existing.count++;
+          } else {
+            diffMap.set(key, { key, expected, actual, count: 1 });
+          }
+        }
+      }
+    }
+    return Array.from(diffMap.values())
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+  }
+
   onDestroy(() => {
     destroyCharts();
   });
@@ -557,6 +594,12 @@
           <span class="summary-value {getPassRateClass(report.summary.compatibility_score)}">{report.summary.compatibility_score}%</span>
         </div>
       {/if}
+      {#if report.summary.effective_score != null}
+        <div class="summary-card big" title="Excludes deprecated + data-prerequisite from denominator">
+          <span class="summary-label">Effective Score</span>
+          <span class="summary-value {getPassRateClass(report.summary.effective_score)}">{report.summary.effective_score}%</span>
+        </div>
+      {/if}
       {#if report.summary.schema_gate_pass != null}
         <div class="summary-card {report.summary.schema_gate_pass ? 'pass' : 'fail'}">
           <span class="summary-label">Schema gate ({report.summary.schema_gate_source ?? "dashboard catalog"})</span>
@@ -607,6 +650,24 @@
         <span class="summary-label">Incompatible</span>
         <span class="summary-value">{report.summary.failed}</span>
       </div>
+      {#if (report.summary.deprecated_excluded ?? 0) > 0}
+        <div class="summary-card warn" title="Deprecated types excluded from scoring">
+          <span class="summary-label">Deprecated excluded</span>
+          <span class="summary-value">{report.summary.deprecated_excluded}</span>
+        </div>
+      {/if}
+      {#if (report.summary.data_prerequisite ?? 0) > 0}
+        <div class="summary-card warn" title="Data-prerequisite failures excluded from scoring">
+          <span class="summary-label">Data prerequisite</span>
+          <span class="summary-value">{report.summary.data_prerequisite}</span>
+        </div>
+      {/if}
+      {#if (report.summary.real_bugs ?? 0) > 0}
+        <div class="summary-card fail" title="Confirmed behavioral mismatches">
+          <span class="summary-label">Real bugs</span>
+          <span class="summary-value">{report.summary.real_bugs}</span>
+        </div>
+      {/if}
       {#if report.summary.probe_outcome_rate != null}
         <div class="summary-card">
           <span class="summary-label">Probe success rate</span>
@@ -618,6 +679,29 @@
         <span class="summary-value">{report.summary.avg_response_time_ms}ms</span>
       </div>
     </div>
+
+    {#if topFieldDiffs().length > 0}
+      <div class="card diff-panel">
+        <h3>Top Field Diffs ({topFieldDiffs().length})</h3>
+        <p class="text-muted">Most frequently mismatched fields across all results.</p>
+        <table class="diff-table">
+          <thead>
+            <tr><th>#</th><th>Field Path</th><th>Expected</th><th>Actual</th><th>Occurrences</th></tr>
+          </thead>
+          <tbody>
+            {#each topFieldDiffs() as diff, i}
+              <tr>
+                <td>{i + 1}</td>
+                <td class="mono">{diff.key}</td>
+                <td class="text-muted">{truncateVal(diff.expected)}</td>
+                <td class="text-muted">{truncateVal(diff.actual)}</td>
+                <td>{diff.count}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+    {/if}
 
     {#if parityGapResults().length > 0}
       <div class="card parity-panel">
@@ -761,8 +845,8 @@
                               <tr class:field-mismatch={item.item_status !== "match"}>
                                 <td class="mono">{item.item_key}</td>
                                 <td>{item.item_status}</td>
-                                <td>{item.expected_type ?? "—"}</td>
-                                <td>{item.actual_type ?? "—"}</td>
+                                <td title={item.expected_value ?? ""}>{truncateVal(item.expected_type ?? item.expected_value ?? "—")}</td>
+                                <td title={item.actual_value ?? ""}>{truncateVal(item.actual_type ?? item.actual_value ?? "—")}</td>
                               </tr>
                             {/each}
                           </tbody>

@@ -1,12 +1,34 @@
 {
   "step_id": "06_list_after_delete",
+  "scenario_id": "product-lifecycle",
+  "order": 6,
   "name": "Confirm product deleted",
   "auth_context": "staff",
   "input_sent": "query ProductLifecycleGetDeleted($id: ID!) { product(id: $id) { id slug } }",
   "variables": {
     "id": "{{context.created_product_id}}"
   },
+  "extract": {},
   "assertions": [
-    {"kind": "equals", "path": "$.data.product", "expected": null}
-  ]
+    {
+      "kind": "equals",
+      "path": "$.data.product",
+      "expected": null
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "product": null
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "Confirm product deleted",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>"
+  },
+  "recorded_at": "2026-06-14T02:23:46.621233+00:00"
 }

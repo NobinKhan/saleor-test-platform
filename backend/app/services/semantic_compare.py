@@ -188,13 +188,49 @@ def compare_semantic_error(
     g_cat = profile.get("message_pattern") or _normalize_message_category(g_msg)
     a_cat = _normalize_message_category(a_msg)
 
-    if g_cat != a_cat and g_msg.strip() != a_msg.strip():
-        return SemanticMatchResult(
-            tier1_match=False,
-            tier2_match=False,
-            client_parity_notes=[],
-            diff_summary=f"Message mismatch: expected {g_cat!r}, got {a_cat!r}",
-        )
+    probe_stability = profile.get("probe_stability", "stateful")
+    is_stateless = probe_stability == "stateless"
+
+    if is_stateless:
+        if g_msg.strip() and a_msg.strip():
+            if g_msg.strip() != a_msg.strip():
+                golden_pattern = profile.get("message_pattern")
+                if golden_pattern:
+                    import re as _re
+                    try:
+                        if not _re.search(golden_pattern, a_msg, _re.I):
+                            return SemanticMatchResult(
+                                tier1_match=False,
+                                tier2_match=False,
+                                client_parity_notes=[],
+                                diff_summary=(
+                                    f"Stateless message mismatch: pattern {golden_pattern!r} "
+                                    f"does not match actual {a_msg!r}"
+                                ),
+                            )
+                    except _re.error:
+                        if g_cat != a_cat:
+                            return SemanticMatchResult(
+                                tier1_match=False,
+                                tier2_match=False,
+                                client_parity_notes=[],
+                                diff_summary=f"Message mismatch: expected {g_cat!r}, got {a_cat!r}",
+                            )
+                elif g_cat != a_cat:
+                    return SemanticMatchResult(
+                        tier1_match=False,
+                        tier2_match=False,
+                        client_parity_notes=[],
+                        diff_summary=f"Message mismatch: expected {g_cat!r}, got {a_cat!r}",
+                    )
+    else:
+        if g_cat != a_cat and g_msg.strip() != a_msg.strip():
+            return SemanticMatchResult(
+                tier1_match=False,
+                tier2_match=False,
+                client_parity_notes=[],
+                diff_summary=f"Message mismatch: expected {g_cat!r}, got {a_cat!r}",
+            )
 
     data_ok, data_diff = _compare_data_semantics(
         golden_resp,

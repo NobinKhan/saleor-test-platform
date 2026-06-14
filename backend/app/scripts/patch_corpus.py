@@ -8,6 +8,8 @@ Usage:
   python -m app.scripts.patch_corpus --url ... --sync-client
   python -m app.scripts.patch_corpus --url ... --client-bundles all
   python -m app.scripts.patch_corpus --url ... --client-bundles storefront:all
+  python -m app.scripts.patch_corpus --url ... --scenarios product-lifecycle
+  python -m app.scripts.patch_corpus --url ... --variants productCreate
 """
 
 from __future__ import annotations
@@ -128,6 +130,16 @@ async def main() -> int:
         action="store_true",
         help="Strip Python debug fields from L1 golden on disk",
     )
+    parser.add_argument(
+        "--scenarios",
+        default=None,
+        help="Record scenario step goldens (comma-separated scenario IDs)",
+    )
+    parser.add_argument(
+        "--variants",
+        default=None,
+        help="Record input variant goldens (comma-separated operation names)",
+    )
     args = parser.parse_args()
 
     dashboard_version = args.dashboard_version or settings.reference_baseline_version
@@ -165,6 +177,41 @@ async def main() -> int:
     version = args.version or await detect_saleor_version(args.url, token, 30)
     if not version:
         version = settings.golden_corpus_version
+
+    if args.scenarios:
+        from app.services.scenario_variant_record import record_scenario
+        from app.services.client_bundles import load_fixtures, resolve_dashboard_bundle_version
+        fixtures = load_fixtures("dashboard", resolve_dashboard_bundle_version())
+        for scenario_id in [s.strip() for s in args.scenarios.split(",") if s.strip()]:
+            result = await record_scenario(
+                saleor_url=args.url,
+                saleor_token=token,
+                scenario_id=scenario_id,
+                fixtures=fixtures,
+                timeout=30,
+            )
+            print(
+                f"Scenario {scenario_id}: recorded {result.get('recorded', 0)}/"
+                f"{result.get('total', 0)} step(s)"
+            )
+        if not args.client_bundles and not args.apply_diff and not args.ops and not args.remove and not args.variants:
+            return 0
+
+    if args.variants:
+        from app.services.scenario_variant_record import record_operation_variants
+        for op_name in [v.strip() for v in args.variants.split(",") if v.strip()]:
+            result = await record_operation_variants(
+                saleor_url=args.url,
+                saleor_token=token,
+                operation_name=op_name,
+                timeout=30,
+            )
+            print(
+                f"Variants {op_name}: recorded {result.get('recorded', 0)}/"
+                f"{result.get('total', 0)}"
+            )
+        if not args.client_bundles and not args.apply_diff and not args.ops and not args.remove:
+            return 0
 
     if args.sync_client:
         dash = sync_client_bundles_from_vendor(dashboard_version)

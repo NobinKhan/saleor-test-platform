@@ -6,21 +6,78 @@
       "operation_kind": "MUTATION",
       "category": "products",
       "input_sent": "mutation { productCreate(input: { name: \"Variant Missing Type\" }) { product { id } errors { field message code } } }",
-      "tags": ["invalid", "required_field"]
+      "tags": [
+        "invalid",
+        "required_field"
+      ],
+      "golden_response": {
+        "errors": [
+          {
+            "message": "Argument \"input\" has invalid value {name: \"Variant Missing Type\"}.\nIn field \"productType\": Expected \"ID!\", found null."
+          }
+        ]
+      },
+      "golden_contract": "graphql_error",
+      "golden_status": "warn",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      },
+      "recorded_at": "2026-06-14T02:12:08.782611+00:00"
     },
     {
       "variant_id": "empty_input",
       "operation_kind": "MUTATION",
       "category": "products",
       "input_sent": "mutation { productCreate(input: {}) { product { id } errors { field message code } } }",
-      "tags": ["invalid", "graphql_error"]
+      "tags": [
+        "invalid",
+        "graphql_error"
+      ],
+      "golden_response": {
+        "errors": [
+          {
+            "message": "Argument \"input\" has invalid value {}.\nIn field \"productType\": Expected \"ID!\", found null."
+          }
+        ]
+      },
+      "golden_contract": "graphql_error",
+      "golden_status": "warn",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productCreate",
+        "expected_null": true,
+        "message_pattern": "<validation>"
+      },
+      "recorded_at": "2026-06-14T02:12:08.794267+00:00"
     },
     {
       "variant_id": "blank_name",
       "operation_kind": "MUTATION",
       "category": "products",
       "input_sent": "mutation($input: ProductCreateInput!) { productCreate(input: $input) { product { id } errors { field message code } } }",
-      "tags": ["invalid", "business_error"]
+      "tags": [
+        "invalid",
+        "business_error"
+      ],
+      "golden_response": {
+        "errors": [
+          {
+            "message": "Argument \"input\" of required type ProductCreateInput!\" provided the variable \"$input\" which was not provided"
+          }
+        ]
+      },
+      "golden_contract": "graphql_error",
+      "golden_status": "warn",
+      "semantic_profile": {
+        "contract": "graphql_error",
+        "data_path": "productCreate__blank_name",
+        "expected_null": true,
+        "message_pattern": "<required>"
+      },
+      "recorded_at": "2026-06-14T02:12:08.806450+00:00"
     }
   ]
 }

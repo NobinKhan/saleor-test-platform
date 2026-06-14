@@ -1,13 +1,43 @@
 {
   "step_id": "02_list_products",
+  "scenario_id": "product-lifecycle",
+  "order": 2,
   "name": "Fetch created product by ID",
   "auth_context": "staff",
   "input_sent": "query ProductLifecycleGet($id: ID!) { product(id: $id) { id slug name } }",
   "variables": {
     "id": "{{context.created_product_id}}"
   },
+  "extract": {},
   "assertions": [
-    {"kind": "context_equals", "path": "$.data.product.slug", "context_key": "run_slug"},
-    {"kind": "context_equals", "path": "$.data.product.id", "context_key": "created_product_id"}
-  ]
+    {
+      "kind": "context_equals",
+      "path": "$.data.product.slug",
+      "context_key": "run_slug"
+    },
+    {
+      "kind": "context_equals",
+      "path": "$.data.product.id",
+      "context_key": "created_product_id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "product": {
+        "id": "UHJvZHVjdDoxODU=",
+        "slug": "harness-scenario-50ac5fd2",
+        "name": "Harness Scenario Product"
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "Fetch created product by ID",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>"
+  },
+  "recorded_at": "2026-06-14T02:23:46.432362+00:00"
 }

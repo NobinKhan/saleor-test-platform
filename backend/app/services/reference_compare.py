@@ -37,6 +37,31 @@ def tier2_gate_enabled(explicit: bool | None = None) -> bool:
     return settings.sgrc_tier2_gate
 
 
+L3_VOLATILE_PATH_FRAGMENTS = (
+    ".edges",
+    ".edges[",
+    ".pricing",
+    ".amount",
+    ".currency",
+    ".name",
+    ".slug",
+    "__typename",
+)
+
+
+def _connection_volatile_drift(mismatches: list[dict[str, str | None]]) -> bool:
+    """True when all field mismatches are in DB-volatile list/connection paths."""
+    if not mismatches:
+        return False
+    for item in mismatches:
+        key = item.get("item_key") or ""
+        if item.get("item_status") == "type_mismatch":
+            return False
+        if not any(frag in key for frag in L3_VOLATILE_PATH_FRAGMENTS):
+            return False
+    return True
+
+
 @dataclass
 class ComparisonResult:
     match_status: str
@@ -107,7 +132,10 @@ def compare_probe_to_actual(
         strict_contract_note = f"Contract detail: golden {golden_contract}, actual {actual_contract}"
 
     if is_error_contract(golden_contract):
-        semantic_profile = getattr(golden, "semantic_profile", None)
+        semantic_profile = getattr(golden, "semantic_profile", None) or {}
+        stability = golden.probe_stability or infer_probe_stability(golden_contract, endpoint_kind)
+        semantic_profile_with_stability = dict(semantic_profile)
+        semantic_profile_with_stability["probe_stability"] = stability
         semantic = compare_semantic_error(
             golden.golden_response,
             actual_response_json,
@@ -115,7 +143,7 @@ def compare_probe_to_actual(
             endpoint_name=endpoint_name,
             endpoint_kind=endpoint_kind,
             input_sent=query_input,
-            semantic_profile=semantic_profile,
+            semantic_profile=semantic_profile_with_stability,
             tier2_required=gate_on,
         )
         if not semantic.tier1_match:
@@ -168,7 +196,26 @@ def compare_probe_to_actual(
         field_items = compare_response_fields(norm_golden, norm_actual)
         mismatches = [i for i in field_items if i["item_status"] != "match"]
         stability = golden.probe_stability or infer_probe_stability(golden_contract, endpoint_kind)
-        if mismatches and stability == "stateful":
+
+        is_client_bundle = endpoint_kind == CLIENT_BUNDLE_KIND
+        is_error_probe = is_error_contract(golden_contract)
+
+        if is_error_probe:
+            allow_stateful_drift = False
+        elif is_client_bundle and not is_error_probe and _connection_volatile_drift(mismatches):
+            allow_stateful_drift = True
+        elif stability == "stateful" and mismatches and _connection_volatile_drift(mismatches):
+            allow_stateful_drift = True
+        elif is_client_bundle:
+            allow_stateful_drift = False
+        elif stability == "stateful" and not mismatches:
+            allow_stateful_drift = True
+        elif stability == "stateful" and mismatches:
+            allow_stateful_drift = False
+        else:
+            allow_stateful_drift = False
+
+        if mismatches and allow_stateful_drift:
             return ComparisonResult(
                 match_status="match",
                 expected_response=expected_str,

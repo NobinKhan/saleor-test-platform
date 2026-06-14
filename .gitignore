@@ -3,6 +3,7 @@ backend/.venv/
 frontend/.env
 backend/.env
 saleor-test-*.md
+report.md
 
 # Python bytecode
 __pycache__/

@@ -1,5 +1,7 @@
 {
   "step_id": "01_create_product",
+  "scenario_id": "product-lifecycle",
+  "order": 1,
   "name": "Create harness scenario product",
   "auth_context": "staff",
   "input_sent": "mutation ProductLifecycleCreate($input: ProductCreateInput!) { productCreate(input: $input) { product { id name slug } errors { field message code } } }",
@@ -15,7 +17,35 @@
     "created_product_slug": "$.data.productCreate.product.slug"
   },
   "assertions": [
-    {"kind": "path_exists", "path": "$.data.productCreate.product.id"},
-    {"kind": "context_equals", "path": "$.data.productCreate.product.slug", "context_key": "run_slug"}
-  ]
+    {
+      "kind": "path_exists",
+      "path": "$.data.productCreate.product.id"
+    },
+    {
+      "kind": "context_equals",
+      "path": "$.data.productCreate.product.slug",
+      "context_key": "run_slug"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "productCreate": {
+        "product": {
+          "id": "UHJvZHVjdDoxODU=",
+          "name": "Harness Scenario Product",
+          "slug": "harness-scenario-50ac5fd2"
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "Create harness scenario product",
+    "expected_null": true
+  },
+  "recorded_at": "2026-06-14T02:23:46.403246+00:00"
 }

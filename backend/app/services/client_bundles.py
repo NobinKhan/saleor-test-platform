@@ -328,12 +328,17 @@ def bundles_compatible_with_schema(
     intro: dict[str, list[str]],
 ) -> tuple[list[ClientBundle], list[dict[str, str]]]:
     from app.services.client_bundle_schema_gate import compute_client_bundle_schema_gate
+    from app.services.deprecated_scanner import filter_deprecated_bundles
 
     gate = compute_client_bundle_schema_gate(bundles, intro, recorded_only=False)
     incompatible = {m["bundle_id"] for m in gate.get("missing_l3_fields") or []}
-    compatible = [b for b in bundles if b.bundle_id not in incompatible]
-    excluded = [m for m in gate.get("missing_l3_fields") or [] if m["bundle_id"] in incompatible]
-    return compatible, excluded
+    schema_compatible = [b for b in bundles if b.bundle_id not in incompatible]
+    schema_excluded = [m for m in gate.get("missing_l3_fields") or [] if m["bundle_id"] in incompatible]
+
+    compatible, deprecated_excluded = filter_deprecated_bundles(schema_compatible)
+
+    all_excluded = schema_excluded + deprecated_excluded
+    return compatible, all_excluded
 
 
 def build_client_bundle_endpoints(

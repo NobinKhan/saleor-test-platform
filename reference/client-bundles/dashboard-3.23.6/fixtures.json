@@ -6,12 +6,12 @@
   "default_product_id": "UHJvZHVjdDoxNTI=",
   "default_variant_id": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
   "default_product_type_id": "UHJvZHVjdFR5cGU6MTc=",
-  "default_order_id": "T3JkZXI6ZDY5ZTZhZDMtMjAzMS00Yzg3LTljYzItNWM0MzBlYTdhM2Jm",
-  "default_customer_id": "VXNlcjo3",
-  "default_warehouse_id": "V2FyZWhvdXNlOmE1NzJhZTRhLTY5NWQtNGQ4Mi05NTIyLTU2MzJiZDRiY2Q0ZA==",
+  "default_order_id": "T3JkZXI6ZDRlNTM0MDAtYTJiNS00ODA3LThkZDEtMzYyMmFhMTllM2Jk",
+  "default_customer_id": "VXNlcjo2",
+  "default_warehouse_id": "V2FyZWhvdXNlOjYzNzM3OWM1LWFlM2YtNDI2OS04NzBiLWJkNWY2NmU5ZDk4Mw==",
   "default_category_id": "Q2F0ZWdvcnk6MQ==",
   "default_collection_id": "Q29sbGVjdGlvbjo0",
-  "default_checkout_id": "Q2hlY2tvdXQ6N2Y1ODEzZDMtY2Y2Zi00MmViLWEzYmItZTM1MGRmMjQxMWIx",
-  "default_checkout_token": "7f5813d3-cf6f-42eb-a3bb-e350df2411b1",
+  "default_checkout_id": "Q2hlY2tvdXQ6MGZhOWYzMGUtZjQwZS00YWM3LWIxMWUtYzUxMjMwNWYzZGI1",
+  "default_checkout_token": "0fa9f30e-f40e-4ac7-b11e-c512305f3db5",
   "variant_id_for_cart": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
 }

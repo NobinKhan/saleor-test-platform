@@ -164,6 +164,7 @@ class SSERunnerManager:
                     match_status=event.get("match_status"),
                     diff_summary=event.get("diff_summary"),
                     client_parity_note=event.get("client_parity_note"),
+                    failure_category=event.get("failure_category"),
                     error_message=event.get("error_message"),
                     input_sent=event.get("input_sent"),
                     actual_response=event.get("actual_response"),

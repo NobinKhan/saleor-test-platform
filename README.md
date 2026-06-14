@@ -53,8 +53,9 @@ just baseline   # re-verify golden baseline
 | `just fresh` | Reset DB volumes + Saleor migrate + populatedb + reference seed |
 | `just seed-reference` | Seed L3 fixture IDs (products, orders, customers, …) on official Saleor |
 | `just register` | Create harness user `test@example.com` |
-| `just baseline` | Golden proof: corpus integrity + 100% replay (L1 + L3, Tier 2) |
+| `just baseline` | Golden proof: corpus integrity + 100% replay (L1 + L3 + dynamic, Tier 2) |
 | `just verify-corpus` | Check reference corpus on disk (L1 + L3) |
+| `just check-corpus-version` | Corpus integrity + Saleor version hard gate vs golden corpus |
 | `just self-check` | Replay golden corpus against official Saleor |
 | `just corpus-diff` | Diff live Saleor vs on-disk reference (L1 + L3) |
 | `just patch-corpus` | Incrementally patch L1 probes and/or L3 bundles |
@@ -79,7 +80,9 @@ just baseline
 
 `just up` auto-runs Saleor DB migrations and ensures the admin user exists. Use `just fresh` only when wiping volumes.
 
-This runs `verify-corpus` (388 L1 + 417 L3 dashboard + 16 L3 storefront recorded, schema gate) then `self-check --scope full+scenarios --require-tier2` (full system: L1 + L3 + scenarios + variants, 100% SGRC).
+This runs `verify-corpus` (387 L1 + 415 L3 dashboard certified + 16 L3 storefront + 5 dynamic probes, schema gate) then `self-check --scope full+scenarios --require-tier2` (full system: L1 + L3 + scenarios + variants + dynamic, 100% SGRC).
+
+**Pre-flight:** Before starting a run in the UI, the harness calls `POST /api/tests/validate` (API reachability, version gate, fixture entities). Reports show **compatibility %** and **effective score** (excludes deprecated + data-prerequisite failures). See [docs/DYNAMIC-PROBES.md](docs/DYNAMIC-PROBES.md).
 
 ## UI certification smoke (manual)
 
@@ -88,9 +91,9 @@ CLI baseline proves the engine; confirm the report UI separately:
 1. `just up` and `just register`
 2. Open http://localhost:5999 — start a run (always full-system scope)
 3. Saleor URL: `http://localhost:8000/graphql/`, admin email/password from `just fresh`
-4. Report page: **Certified YES**, compatibility 100%, L3 bundle count shown
+4. Report page: **Certified YES**, compatibility 100%, **effective score** 100%, L3 bundle count shown
 
-Automated API certification test (POST run → assert report) is a recommended follow-up — not yet in CI.
+Automated certification logic is covered by `backend/tests/test_certification_api.py` (unit-level gate checks).
 
 ## Harness-only (external API)
 
@@ -117,7 +120,7 @@ Test runs use **Saleor admin email and password** (via `tokenCreate`). Credentia
 
 Certification requires **schema gate pass** (L1 + L3) AND **100% SGRC** (Tier 1 + Tier 2 when gate enabled). See [docs/COMPATIBILITY.md](docs/COMPATIBILITY.md).
 
-Official certification scope: **full+scenarios** — L1 (388) + L3 dashboard (417) + L3 storefront (16) + scenario steps + input variants. Deprecated schema-incompatible bundles are excluded from scoring. See [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md).
+Official certification scope: **full+scenarios** — L1 (387) + L3 dashboard (415 certified, 415 on disk after deprecated prune) + L3 storefront (16) + 5 dynamic probes + scenario steps + input variants. Deprecated schema-incompatible bundles are excluded from scoring. See [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md).
 
 ## Local verification (no CI)
 

@@ -72,9 +72,22 @@ def compute_certified(
     min_compat: float = 100.0,
     tier2_pass: bool = True,
     parity_gaps: int = 0,
+    effective_score: float | None = None,
 ) -> bool:
+    """Determine certification status.
+
+    Uses effective_score (which excludes deprecated + data-prerequisite
+    failures from the denominator) when available. Falls back to raw
+    compatibility_score if effective_score is not provided.
+
+    A backend is certified when:
+      - schema_gate_pass is True
+      - effective_score (or compatibility_score) is >= min_compat (100%)
+      - no tier2 parity gaps (when tier2 is gated)
+    """
     if not schema_gate_pass or compatibility_score is None:
         return False
     if parity_gaps > 0 or not tier2_pass:
         return False
-    return compatibility_score >= min_compat
+    score_to_check = effective_score if effective_score is not None else compatibility_score
+    return score_to_check >= min_compat

@@ -1,0 +1,20 @@
+{
+  "probe_id": "dynamic_category_create",
+  "operation_name": "categoryCreate",
+  "operation_kind": "MUTATION",
+  "category": "categories",
+  "document_template": "mutation($input: CategoryInput!) { categoryCreate(input: $input) { category { id name slug } errors { field message } } }",
+  "variables_template": {
+    "input": {
+      "name": "Category {{run_slug}}",
+      "slug": "{{run_slug}}"
+    }
+  },
+  "comparison_mode": "echo",
+  "binding_rules": [
+    {"field": "data.categoryCreate.category.name", "expected_input": "input.name"},
+    {"field": "data.categoryCreate.category.slug", "expected_input": "input.slug"}
+  ],
+  "description": "Create category with unique name/slug — response must echo runtime values",
+  "auth_context": "staff"
+}

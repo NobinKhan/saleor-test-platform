@@ -138,6 +138,7 @@ class TestResultResponse(BaseModel):
     match_status: str | None = None
     diff_summary: str | None = None
     client_parity_note: str | None = None
+    failure_category: str | None = None
     input_sent: str | None
     actual_response: str | None
     error_message: str | None
@@ -158,6 +159,8 @@ class TestItemResponse(BaseModel):
     item_status: str
     expected_type: str | None
     actual_type: str | None
+    expected_value: str | None = None
+    actual_value: str | None = None
 
     class Config:
         from_attributes = True
@@ -220,6 +223,12 @@ class ReportSummary(BaseModel):
     l3_dashboard_recorded: int = 0
     excluded_l3_bundles: list[dict[str, str]] = []
     not_counted_note: str | None = None
+    effective_score: float | None = None
+    effective_compatible: int = 0
+    effective_incompatible: int = 0
+    deprecated_excluded: int = 0
+    data_prerequisite: int = 0
+    real_bugs: int = 0
 
 
 class LatencySummary(BaseModel):

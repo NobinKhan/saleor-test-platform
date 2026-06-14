@@ -59,6 +59,7 @@ from app.services.scenario_corpus import (
     substitute_scenario_variables,
 )
 from app.services.variant_corpus import VARIANT_KIND, build_variant_endpoints
+from app.services.dynamic_corpus import DYNAMIC_PROBE_KIND, build_dynamic_probe_endpoints, compare_dynamic_response
 from app.services.reference_compare import compare_to_golden, tier2_gate_enabled
 from app.services.response_contract import CONTRACT_AUTH_ERROR, CONTRACT_SUCCESS, classify_response_contract
 
@@ -395,7 +396,12 @@ def build_golden_endpoints(
     public_only: bool = False,
     categories: list[str] | None = None,
 ) -> list[dict]:
-    """Build endpoint list from golden corpus probes for compatibility replay."""
+    """Build endpoint list from golden corpus probes for compatibility replay.
+
+    Probes referencing deprecated Saleor types are auto-excluded.
+    """
+    from app.services.deprecated_scanner import scan_l1_probe_for_deprecated
+
     catalog_names = {e["name"] for e in SALEOR_QUERIES + SALEOR_MUTATIONS}
     probes = load_all_probes_from_disk(corpus_version)
     endpoints: list[dict] = []
@@ -407,6 +413,9 @@ def build_golden_endpoints(
         if test_scope == "catalog" and probe.endpoint_name not in catalog_names:
             continue
         if test_scope == "custom" and categories and probe.category not in set(categories):
+            continue
+        is_deprecated, _deprecated_types = scan_l1_probe_for_deprecated(probe.input_sent)
+        if is_deprecated:
             continue
         is_public = probe.endpoint_name in {e["name"] for e in SALEOR_QUERIES if e["is_public"]}
         endpoints.append({
@@ -478,6 +487,8 @@ class TestRunner:
         self.saleor_version: str | None = None
         self.schema_fields: dict[str, list[dict]] | None = None
         self.corpus_version: str | None = None
+        self._resolved_fixtures: dict[str, Any] | None = None
+        self._dynamic_support: dict[str, Any] | None = None
 
     def stop(self):
         self._stopped = True
@@ -568,9 +579,40 @@ class TestRunner:
         corpus_ver = resolve_corpus_version(version, settings.golden_corpus_version)
         self.corpus_version = corpus_ver
         self._scenario_context["run_slug"] = f"harness-scenario-{str(self.run_id)[:8]}"
+        passed = failed = warnings = skipped = 0
+        counts = {"pass": 0, "fail": 0, "warn": 0, "skip": 0}
         ver_warn = version_compatibility_warning(version, corpus_ver)
         if ver_warn:
             yield {"type": "schema_diff", "diff": {"version_warning": ver_warn}}
+
+        from app.services.version_routing import version_hard_gate_check
+        import os
+        allow_patch_drift = os.environ.get("ALLOW_PATCH_DRIFT", "").lower() in ("1", "true", "yes")
+        gate = version_hard_gate_check(
+            version, corpus_ver, allow_patch_drift=allow_patch_drift
+        )
+        if not gate["gate_pass"]:
+            yield {
+                "type": "schema_diff",
+                "diff": {
+                    "version_gate_fail": gate["reason"],
+                    "version_gate_severity": gate["severity"],
+                },
+            }
+            if gate["severity"] == "error" and not allow_patch_drift:
+                yield {
+                    "type": "complete",
+                    "run_id": str(self.run_id),
+                    "total": 0,
+                    "passed": 0,
+                    "failed": 0,
+                    "warnings": 0,
+                    "skipped": 0,
+                    "status_counts": counts,
+                    "test_mode": self.test_mode,
+                    "error": gate["reason"],
+                }
+                return
 
         certification_schema = load_reference_schema(corpus_ver)
         endpoints = build_golden_endpoints(corpus_ver, "full", self.public_only, None)
@@ -585,6 +627,9 @@ class TestRunner:
             build_scenario_endpoints(recorded_only=False, fixtures=scenario_fixtures)
         )
         endpoints.extend(build_variant_endpoints(recorded_only=False))
+        endpoints.extend(
+            build_dynamic_probe_endpoints(str(self.run_id), recorded_only=False)
+        )
 
         defer_schema = self.use_introspection
 
@@ -594,10 +639,6 @@ class TestRunner:
             "message": f"Running {total} endpoint{'s' if total != 1 else ''}…",
             "total": total,
         }
-        passed = failed = warnings = skipped = 0
-        counts = {"pass": 0, "fail": 0, "warn": 0, "skip": 0}
-
-        semaphore = asyncio.Semaphore(1)
 
         async with httpx.AsyncClient(timeout=self.timeout) as http_client:
             yield {"type": "progress", "message": "Validating staff authentication…"}
@@ -613,21 +654,45 @@ class TestRunner:
                 http_client, auth_context="customer", force_refresh=True
             )
 
+            yield {"type": "progress", "message": "Resolving runtime fixtures…"}
+            try:
+                from app.services.fixture_resolver import (
+                    resolve_fixtures,
+                    resolve_dynamic_probe_support,
+                )
+                self._resolved_fixtures = await resolve_fixtures(
+                    self.saleor_url,
+                    self.saleor_token,
+                    timeout=self.timeout,
+                )
+                self._dynamic_support = await resolve_dynamic_probe_support(
+                    self.saleor_url,
+                    self.saleor_token,
+                    timeout=self.timeout,
+                )
+                endpoints = self._attach_resolved_fixtures(endpoints)
+            except Exception as exc:
+                self._resolved_fixtures = scenario_fixtures
+                self._dynamic_support = {}
+                yield {
+                    "type": "schema_diff",
+                    "diff": {"fixture_resolver_error": str(exc)},
+                }
+
             async def test_one(idx: int, endpoint: dict) -> dict:
-                async with semaphore:
-                    if self._stopped:
-                        return {
-                            "status": "skip",
-                            "outcome": "skipped",
-                            "expected": "Run stopped by user",
-                            "response_valid": None,
-                            "endpoint": endpoint["name"],
-                            "kind": endpoint["kind"],
-                            "category": endpoint["category"],
-                            "is_public": endpoint["is_public"],
-                            "skipped": True,
-                        }
-                    return await self._test_endpoint(endpoint, idx, total, http_client)
+                if self._stopped:
+                    return {
+                        "status": "skip",
+                        "outcome": "skipped",
+                        "expected": "Run stopped by user",
+                        "response_valid": None,
+                        "endpoint": endpoint["name"],
+                        "kind": endpoint["kind"],
+                        "category": endpoint["category"],
+                        "is_public": endpoint["is_public"],
+                        "skipped": True,
+                    }
+                return await self._test_endpoint(endpoint, idx, total, http_client)
 
             async def emit_result(result: dict) -> dict:
                 nonlocal passed, failed, warnings, skipped
@@ -636,8 +701,15 @@ class TestRunner:
                     passed += 1
                     counts["pass"] += 1
                 elif result.get("match_status") == "missing_golden":
-                    warnings += 1
-                    counts["warn"] += 1
+                    if (
+                        self.test_mode == "compatibility"
+                        and not settings.sgrc_allow_assertion_only
+                    ):
+                        failed += 1
+                        counts["fail"] += 1
+                    else:
+                        warnings += 1
+                        counts["warn"] += 1
                 elif status == "skip":
                     skipped += 1
                     counts["skip"] += 1
@@ -672,11 +744,54 @@ class TestRunner:
                     "response_valid": result.get("response_valid"),
                     "saleor_field_type": result.get("saleor_field_type"),
                     "actual_field_type": result.get("actual_field_type"),
+                    "failure_category": result.get("failure_category"),
                     "status_counts": counts,
                 }
 
+            tier_buckets: dict[int, list[tuple[int, dict]]] = {0: [], 1: [], 2: [], 3: []}
             for idx, endpoint in enumerate(endpoints):
-                yield await emit_result(await test_one(idx, endpoint))
+                from app.services.probe_tiers import classify_probe_tier
+                tier = classify_probe_tier(endpoint)
+                tier_buckets.setdefault(tier, []).append((idx, endpoint))
+
+            for tier in (0, 1, 2, 3):
+                items = tier_buckets.get(tier, [])
+                if not items:
+                    continue
+                from app.services.probe_tiers import tier_concurrency, tier_label
+                concurrency = tier_concurrency(tier)
+                yield {
+                    "type": "progress",
+                    "message": (
+                        f"Tier {tier} ({tier_label(tier)}): "
+                        f"{len(items)} endpoints, concurrency={concurrency}"
+                    ),
+                }
+
+                if concurrency <= 1 or len(items) == 1:
+                    for idx, endpoint in items:
+                        if self._stopped:
+                            break
+                        yield await emit_result(await test_one(idx, endpoint))
+                else:
+                    sem = asyncio.Semaphore(concurrency)
+
+                    async def run_with_sem(idx: int, endpoint: dict) -> dict:
+                        async with sem:
+                            return await test_one(idx, endpoint)
+
+                    tasks = [
+                        asyncio.create_task(run_with_sem(idx, endpoint))
+                        for idx, endpoint in items
+                    ]
+                    for fut in asyncio.as_completed(tasks):
+                        if self._stopped:
+                            for t in tasks:
+                                if not t.done():
+                                    t.cancel()
+                            break
+                        result = await fut
+                        yield await emit_result(result)
 
         if defer_schema:
             yield {"type": "progress", "message": "Introspecting GraphQL schema (post-replay)…"}
@@ -747,6 +862,39 @@ class TestRunner:
             "test_mode": self.test_mode,
         }
 
+    def _attach_resolved_fixtures(self, endpoints: list[dict]) -> list[dict]:
+        """Substitute live-resolved fixture IDs into endpoint dicts.
+
+        Replaces the static fixtures.json with the live-resolved fixture map
+        for L3 bundles, scenarios, and dynamic probes. The resolver queried
+        the target Saleor at run start, so entity IDs match the actual DB.
+        """
+        resolved = getattr(self, "_resolved_fixtures", None)
+        if not resolved:
+            return endpoints
+        for ep in endpoints:
+            if ep.get("bundle_fixtures") is not None:
+                ep["bundle_fixtures"] = dict(resolved)
+            if ep.get("step_fixtures") is not None:
+                ep["step_fixtures"] = dict(resolved)
+        for ep in endpoints:
+            if ep.get("kind") == DYNAMIC_PROBE_KIND:
+                pt_id = (getattr(self, "_dynamic_support", {}) or {}).get("product_type_id")
+                probe = ep.get("dynamic_probe")
+                if probe and probe.requires_product_type and pt_id:
+                    document = ep.get("bundle_document") or ep.get("golden_input", "")
+                    if document and "{{product_type_id}}" in document:
+                        document = document.replace("{{product_type_id}}", pt_id)
+                        ep["bundle_document"] = document
+                        ep["golden_input"] = document
+                    variables = ep.get("bundle_variables") or {}
+                    if variables and "input" in variables:
+                        for k, v in list(variables["input"].items()):
+                            if isinstance(v, str) and "{{product_type_id}}" in v:
+                                variables["input"][k] = v.replace("{{product_type_id}}", pt_id)
+                        ep["bundle_variables"] = variables
+        return endpoints
+
     async def _test_endpoint(
         self,
         endpoint: dict,
@@ -775,8 +923,22 @@ class TestRunner:
             fixtures = endpoint.get("bundle_fixtures") or {}
             try:
                 payload["variables"] = substitute_fixtures(variables, fixtures)
-            except KeyError:
+            except KeyError as e:
                 payload["variables"] = variables
+                return {
+                    "status": "skip",
+                    "outcome": "skipped",
+                    "expected": f"Fixture key not resolved: {e}",
+                    "response_valid": None,
+                    "endpoint": name,
+                    "kind": kind,
+                    "category": category,
+                    "is_public": is_public,
+                    "failure_category": "data_prerequisite",
+                    "error_message": f"Fixture substitution failed: {e}",
+                }
+        elif kind == VARIANT_KIND and endpoint.get("bundle_variables"):
+            payload["variables"] = endpoint["bundle_variables"]
         elif kind == SCENARIO_KIND:
             payload["query"] = endpoint["golden_input"]
             raw_vars = endpoint.get("step_variables") or {}
@@ -863,9 +1025,44 @@ class TestRunner:
                         compatible=False,
                         client_parity_note=comparison.client_parity_note,
                     )
+                elif kind == DYNAMIC_PROBE_KIND:
+                    dynamic_probe = endpoint.get("dynamic_probe")
+                    if dynamic_probe:
+                        generated_values = endpoint.get("generated_values") or {}
+                        dynamic_ok, dynamic_msg = compare_dynamic_response(
+                            dynamic_probe, resp_json, generated_values
+                        )
+                        if not dynamic_ok:
+                            comparison = type(comparison)(
+                                match_status="mismatch",
+                                expected_response=comparison.expected_response,
+                                diff_summary=f"Dynamic probe failed: {dynamic_msg}",
+                                recommended_status="fail",
+                                golden_outcome=comparison.golden_outcome,
+                                golden_contract=comparison.golden_contract,
+                                actual_contract=comparison.actual_contract,
+                                field_items=comparison.field_items,
+                                resolved_corpus_version=comparison.resolved_corpus_version,
+                                compatible=False,
+                                client_parity_note=comparison.client_parity_note,
+                            )
+                        else:
+                            comparison = type(comparison)(
+                                match_status="match",
+                                expected_response=comparison.expected_response,
+                                diff_summary=f"Dynamic probe: {dynamic_msg}",
+                                recommended_status="pass",
+                                golden_outcome=comparison.golden_outcome,
+                                golden_contract=comparison.golden_contract,
+                                actual_contract=comparison.actual_contract,
+                                field_items=comparison.field_items,
+                                resolved_corpus_version=comparison.resolved_corpus_version,
+                                compatible=True,
+                                client_parity_note=comparison.client_parity_note,
+                            )
                 elif comparison.match_status == "missing_golden" and kind == VARIANT_KIND:
                     variant_tags = endpoint.get("tags") or []
-                    if meta.get("response_valid") or "invalid" in variant_tags:
+                    if settings.sgrc_allow_assertion_only and (meta.get("response_valid") or "invalid" in variant_tags):
                         comparison = type(comparison)(
                             match_status="match",
                             expected_response=comparison.expected_response,
@@ -882,6 +1079,7 @@ class TestRunner:
                 elif (
                     comparison.match_status == "missing_golden"
                     and kind == SCENARIO_KIND
+                    and settings.sgrc_allow_assertion_only
                     and meta.get("response_valid")
                     and not assertion_failures
                 ):
@@ -899,9 +1097,17 @@ class TestRunner:
                         client_parity_note=comparison.client_parity_note,
                     )
                 if self.test_mode == "compatibility":
-                    status = "pass" if comparison.compatible else (
-                        "warn" if comparison.match_status == "missing_golden" else "fail"
-                    )
+                    if comparison.compatible:
+                        status = "pass"
+                    elif (
+                        comparison.match_status == "missing_golden"
+                        and not settings.sgrc_allow_assertion_only
+                    ):
+                        status = "fail"
+                    elif comparison.match_status == "missing_golden":
+                        status = "warn"
+                    else:
+                        status = "fail"
                 else:
                     status = comparison.recommended_status
                     if comparison.match_status == "missing_golden":
@@ -911,6 +1117,60 @@ class TestRunner:
                     f"Contract: {comparison.golden_contract or '?'} → {comparison.actual_contract or contract}"
                     if comparison.golden_contract
                     else meta["expected"]
+                )
+
+                binding_failures: list[str] = []
+                if (
+                    comparison.compatible
+                    and comparison.actual_contract == "success"
+                    and contract == "success"
+                    and kind in (DYNAMIC_PROBE_KIND, "MUTATION", "QUERY", "CLIENT_BUNDLE")
+                ):
+                    from app.services.input_binding import check_input_bindings
+                    op_name = endpoint.get("operation_name") or name
+                    if op_name and "input" in (endpoint.get("bundle_variables") or {}):
+                        binding_ok, binding_msgs = check_input_bindings(
+                            response=resp_json,
+                            variables=endpoint.get("bundle_variables") or {},
+                            binding_rules=[],
+                        )
+                        if not binding_ok:
+                            binding_failures = binding_msgs
+                    elif op_name:
+                        from app.services.input_binding import BINDING_RULES as _B
+                        rules = _B.get(op_name, [])
+                        if rules:
+                            binding_ok, binding_msgs = check_input_bindings(
+                                response=resp_json,
+                                variables={"input": endpoint.get("golden_input") or ""},
+                                binding_rules=rules,
+                            )
+                            if not binding_ok:
+                                binding_failures = binding_msgs
+
+                if binding_failures:
+                    comparison = type(comparison)(
+                        match_status="binding_fail",
+                        expected_response=comparison.expected_response,
+                        diff_summary="; ".join(binding_failures),
+                        recommended_status="fail",
+                        golden_outcome=comparison.golden_outcome,
+                        golden_contract=comparison.golden_contract,
+                        actual_contract=comparison.actual_contract,
+                        field_items=comparison.field_items,
+                        resolved_corpus_version=comparison.resolved_corpus_version,
+                        compatible=False,
+                        client_parity_note=comparison.client_parity_note,
+                    )
+                    status = "fail"
+
+                failure_category = _classify_failure_category(
+                    comparison=comparison,
+                    kind=kind,
+                    endpoint_name=name,
+                    meta=meta,
+                    assertion_failures=assertion_failures,
+                    endpoint=endpoint,
                 )
                 return {
                     "status": status,
@@ -934,6 +1194,7 @@ class TestRunner:
                         endpoint.get("bundle_document") or kind == SCENARIO_KIND
                     ) else query,
                     "actual_response": json.dumps(resp_json),
+                    "failure_category": failure_category,
                 }
             finally:
                 if own_client:
@@ -986,3 +1247,69 @@ def _result_from_meta(
         "input_sent": query,
         "actual_response": actual_response,
     }
+
+
+def _classify_failure_category(
+    *,
+    comparison: Any,
+    kind: str,
+    endpoint_name: str,
+    meta: dict[str, Any],
+    assertion_failures: list[str],
+    endpoint: dict[str, Any] | None = None,
+) -> str:
+    """Classify the failure category for structured reporting.
+
+    Scans the actual GraphQL document (not the bundle_id string) for
+    deprecated types. Does NOT label all scenario/variant failures as
+    data_prerequisite — only those whose match_status indicates missing data.
+    """
+    from app.services.deprecated_scanner import (
+        scan_document_for_deprecated_types,
+        scan_l1_probe_for_deprecated,
+    )
+
+    if comparison.compatible:
+        return "compatible"
+
+    match_status = comparison.match_status or ""
+
+    if match_status == "missing_golden":
+        return "missing_golden"
+
+    if match_status == "binding_fail":
+        return "static_response_suspected"
+
+    if assertion_failures:
+        return "assertion_fail"
+
+    if match_status == "tier2_fail":
+        return "parity_gap"
+
+    endpoint = endpoint or {}
+    document_to_check = (
+        endpoint.get("bundle_document")
+        or endpoint.get("golden_input")
+        or ""
+    )
+
+    if kind in ("CLIENT_BUNDLE", "DYNAMIC_PROBE"):
+        deprecated_in_doc = scan_document_for_deprecated_types(document_to_check)
+        if deprecated_in_doc:
+            return "deprecated_excluded"
+    elif kind in ("QUERY", "MUTATION"):
+        is_dep, _types = scan_l1_probe_for_deprecated(document_to_check)
+        if is_dep:
+            return "deprecated_excluded"
+
+    if match_status in ("mismatch", "shape_drift"):
+        if kind in ("VARIANT_PROBE", "SCENARIO_KIND", "SCENARIO_STEP"):
+            is_data_prereq = (
+                comparison.actual_contract in ("not_found", "graphql_error")
+                and "not found" in (comparison.diff_summary or "").lower()
+            )
+            if is_data_prereq:
+                return "data_prerequisite"
+        return "real_bug"
+
+    return "real_bug"
