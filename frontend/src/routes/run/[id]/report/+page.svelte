@@ -104,6 +104,7 @@
       effective_incompatible: number;
       deprecated_excluded: number;
       data_prerequisite: number;
+      seed_prerequisite: number;
       real_bugs: number;
       golden_matched: number;
       golden_mismatched: number;
@@ -595,7 +596,7 @@
         </div>
       {/if}
       {#if report.summary.effective_score != null}
-        <div class="summary-card big" title="Excludes deprecated + data-prerequisite from denominator">
+        <div class="summary-card big" title="Excludes deprecated, data-prerequisite, and seed-prerequisite from denominator">
           <span class="summary-label">Effective Score</span>
           <span class="summary-value {getPassRateClass(report.summary.effective_score)}">{report.summary.effective_score}%</span>
         </div>
@@ -660,6 +661,12 @@
         <div class="summary-card warn" title="Data-prerequisite failures excluded from scoring">
           <span class="summary-label">Data prerequisite</span>
           <span class="summary-value">{report.summary.data_prerequisite}</span>
+        </div>
+      {/if}
+      {#if (report.summary.seed_prerequisite ?? 0) > 0}
+        <div class="summary-card warn" title="Seed-dependent L3 failures excluded from effective score">
+          <span class="summary-label">Seed prerequisite</span>
+          <span class="summary-value">{report.summary.seed_prerequisite}</span>
         </div>
       {/if}
       {#if (report.summary.real_bugs ?? 0) > 0}
@@ -772,6 +779,7 @@
               <th>Status</th>
               <th>Endpoint</th>
               <th>Kind</th>
+              <th>Category</th>
               <th>Outcome</th>
               <th>Match</th>
               <th>Valid</th>
@@ -789,6 +797,7 @@
                 <td><span class="badge badge-{row.status}">{row.status}</span></td>
                 <td class="mono">{row.endpoint_name}</td>
                 <td>{row.endpoint_kind}</td>
+                <td class="category-cell">{row.failure_category ?? "—"}</td>
                 <td class="outcome-cell">{row.outcome ?? "—"}</td>
                 <td>
                   {#if row.match_status}
@@ -804,7 +813,7 @@
               </tr>
               {#if expandedId === row.id}
                 <tr class="detail-row">
-                  <td colspan="8">
+                  <td colspan="9">
                     <div class="detail-grid">
                       <div>
                         <h4>Expected (SGRC contract)</h4>
@@ -857,7 +866,7 @@
                 </tr>
               {/if}
             {:else}
-              <tr><td colspan="8" class="text-muted">No results match this filter.</td></tr>
+              <tr><td colspan="9" class="text-muted">No results match this filter.</td></tr>
             {/each}
           </tbody>
         </table>

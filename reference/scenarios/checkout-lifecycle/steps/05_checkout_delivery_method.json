@@ -1,0 +1,37 @@
+{
+  "step_id": "05_checkout_delivery_method",
+  "scenario_id": "checkout-lifecycle",
+  "order": 5,
+  "name": "Set checkout delivery method",
+  "auth_context": "anonymous",
+  "input_sent": "mutation CheckoutDeliveryMethodUpdate($id: ID!, $deliveryMethodId: ID!) { checkoutDeliveryMethodUpdate(id: $id, deliveryMethodId: $deliveryMethodId) { checkout { id deliveryMethod { ... on ShippingMethod { id name } } } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.checkout_id}}",
+    "deliveryMethodId": "{{fixtures.delivery_method_id}}"
+  },
+  "extract": {},
+  "assertions": [
+    {
+      "kind": "path_exists",
+      "path": "$.data.checkoutDeliveryMethodUpdate.checkout.id"
+    }
+  ],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "checkoutDeliveryMethodUpdate": {
+        "checkout": {
+          "id": "Q2hlY2tvdXQ6ZjEzYjAwOTItZjZkZi00YjhjLTk1MjAtYjhiM2NiNzg4NDEy",
+          "deliveryMethod": {
+            "id": "U2hpcHBpbmdNZXRob2Q6MQ==",
+            "name": "Default"
+          }
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_contract": "success",
+  "golden_status": "pass",
+  "recorded_at": "2026-06-15T10:09:01.560506+00:00"
+}

@@ -20,6 +20,13 @@ def test_load_dynamic_probes_contains_builtin():
     assert builtin_ids.issubset(loaded_ids)
 
 
+def test_load_dynamic_probes_deduplicates_by_probe_id():
+    probes = load_dynamic_probes()
+    probe_ids = [p.probe_id for p in probes]
+    assert len(probe_ids) == len(set(probe_ids))
+    assert len(probes) == 5
+
+
 def test_dynamic_probe_generate_input():
     probe = BUILT_IN_PROBES[0]
     doc, variables, generated = probe.generate_input("test-run", product_type_id="PT123")

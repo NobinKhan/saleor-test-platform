@@ -9,5 +9,21 @@
   "variables": {},
   "auth_context": "customer",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "me": {
+        "id": "VXNlcjo0NQ==",
+        "email": "harness-storefront-customer@example.com",
+        "firstName": "Harness",
+        "lastName": "Updated",
+        "defaultShippingAddress": null
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:851f1d5f2941a49c",
   "document_hash": "sha256:4bd3dea5b433e436"
 }

@@ -10,6 +10,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+import httpx
+
 SCENARIO_KIND = "SCENARIO_STEP"
 
 
@@ -160,6 +162,44 @@ def _extract_json_path(obj: Any, path: str) -> Any:
         else:
             return None
     return current
+
+
+async def enrich_checkout_delivery_fixture(
+    saleor_url: str,
+    *,
+    step_id: str,
+    context: dict[str, Any],
+    fixtures: dict[str, Any],
+    token: str | None = None,
+    timeout: int = 30,
+) -> None:
+    """Resolve delivery_method_id from the scenario checkout (not global preamble)."""
+    if step_id != "05_checkout_delivery_method":
+        return
+    checkout_id = context.get("checkout_id")
+    if not checkout_id:
+        return
+    headers: dict[str, str] = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token.removeprefix('Bearer ')}"
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        resp = await client.post(
+            saleor_url,
+            json={
+                "query": (
+                    "query($id: ID!) { checkout(id: $id) { "
+                    "availableShippingMethods { id } } }"
+                ),
+                "variables": {"id": checkout_id},
+            },
+            headers=headers,
+        )
+        if resp.status_code not in (200, 400):
+            resp.raise_for_status()
+        data = (resp.json().get("data") or {})
+    methods = (data.get("checkout") or {}).get("availableShippingMethods") or []
+    if methods and methods[0].get("id"):
+        fixtures["delivery_method_id"] = methods[0]["id"]
 
 
 def substitute_scenario_variables(

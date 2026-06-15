@@ -57,6 +57,7 @@ from app.services.scenario_corpus import (
     build_scenario_endpoints,
     run_assertions,
     substitute_scenario_variables,
+    enrich_checkout_delivery_fixture,
 )
 from app.services.variant_corpus import VARIANT_KIND, build_variant_endpoints
 from app.services.dynamic_corpus import DYNAMIC_PROBE_KIND, build_dynamic_probe_endpoints, compare_dynamic_response
@@ -478,6 +479,7 @@ class TestRunner:
         self.saleor_customer_password = CUSTOMER_DEFAULT_PASSWORD
         self.test_scope = test_scope or FULL_SYSTEM_SCOPE
         self._scenario_context: dict[str, Any] = {}
+        self._last_scenario_id: str | None = None
         self._customer_token: str | None = None
         self.public_only = public_only
         self.concurrency = concurrency
@@ -879,6 +881,15 @@ class TestRunner:
             "test_mode": self.test_mode,
         }
 
+    def _storefront_fixture_overlay(self, resolved: dict[str, Any]) -> dict[str, Any]:
+        """Map storefront L3 bundles to channel-pln while dashboard keeps USD."""
+        fixtures = dict(resolved)
+        if resolved.get("storefront_channel"):
+            fixtures["default_channel"] = resolved["storefront_channel"]
+        if resolved.get("storefront_channel_id"):
+            fixtures["default_channel_id"] = resolved["storefront_channel_id"]
+        return fixtures
+
     def _attach_resolved_fixtures(self, endpoints: list[dict]) -> list[dict]:
         """Substitute live-resolved fixture IDs into endpoint dicts.
 
@@ -891,7 +902,10 @@ class TestRunner:
             return endpoints
         for ep in endpoints:
             if ep.get("bundle_fixtures") is not None:
-                ep["bundle_fixtures"] = dict(resolved)
+                fixtures = dict(resolved)
+                if ep.get("client_source") == "storefront":
+                    fixtures = self._storefront_fixture_overlay(resolved)
+                ep["bundle_fixtures"] = fixtures
             if ep.get("step_fixtures") is not None:
                 ep["step_fixtures"] = dict(resolved)
         for ep in endpoints:
@@ -928,6 +942,11 @@ class TestRunner:
         auth_context = endpoint.get("auth_context", "staff")
         if kind == SCENARIO_KIND:
             auth_context = endpoint.get("auth_context", "staff")
+            scenario_id = endpoint.get("scenario_id") or ""
+            if scenario_id and scenario_id != self._last_scenario_id:
+                run_slug = self._scenario_context.get("run_slug")
+                self._scenario_context = {"run_slug": run_slug} if run_slug else {}
+                self._last_scenario_id = scenario_id
 
         if self.test_mode == "compatibility" and endpoint.get("golden_input"):
             query = endpoint["golden_input"]
@@ -959,7 +978,15 @@ class TestRunner:
         elif kind == SCENARIO_KIND:
             payload["query"] = endpoint["golden_input"]
             raw_vars = endpoint.get("step_variables") or {}
-            fixtures = endpoint.get("step_fixtures") or {}
+            fixtures = dict(endpoint.get("step_fixtures") or {})
+            await enrich_checkout_delivery_fixture(
+                self.saleor_url,
+                step_id=endpoint.get("step_id", ""),
+                context=self._scenario_context,
+                fixtures=fixtures,
+                token=self.saleor_token,
+                timeout=self.timeout,
+            )
             payload["variables"] = substitute_scenario_variables(
                 raw_vars, self._scenario_context, fixtures
             )
@@ -1267,6 +1294,37 @@ def _result_from_meta(
     }
 
 
+def _client_bundle_setup_prerequisite(
+    endpoint_name: str,
+    comparison: Any,
+    match_status: str,
+) -> bool:
+    """Detect runner setup/session gaps (not API parity bugs)."""
+    diff = (comparison.diff_summary or "").lower()
+    raw_diff = comparison.diff_summary or ""
+
+    if endpoint_name.startswith("sf-checkout") and "checkout access denied" in diff:
+        return True
+
+    if endpoint_name in ("sf-me", "sf-accountupdate", "sf-accountaddresscreate"):
+        if "account not found" in diff:
+            return True
+
+    if match_status == "shape_drift":
+        if 'edges: []' in raw_diff or '"edges": []' in raw_diff or "edges=[]" in raw_diff:
+            return True
+        if "null" in diff and any(
+            token in diff for token in ("categories", "collections", "search", "product")
+        ):
+            return True
+
+    if endpoint_name.startswith("sf-checkout") and match_status in ("mismatch", "shape_drift"):
+        if "access denied" in diff or "checkout" in diff and "not found" in diff:
+            return True
+
+    return False
+
+
 def _classify_failure_category(
     *,
     comparison: Any,
@@ -1275,7 +1333,7 @@ def _classify_failure_category(
     meta: dict[str, Any],
     assertion_failures: list[str],
     endpoint: dict[str, Any] | None = None,
-    demo_seed_profile: str = "harness",
+    demo_seed_profile: str = "saleor_demo",
 ) -> str:
     """Classify the failure category for structured reporting.
 
@@ -1332,11 +1390,10 @@ def _classify_failure_category(
                 return "data_prerequisite"
         if kind == "CLIENT_BUNDLE":
             seed_tags = resolve_seed_tags(endpoint_name, endpoint)
-            if seed_tags:
-                if match_status == "shape_drift":
-                    return "seed_prerequisite"
-                if demo_seed_profile != "saleor_demo":
-                    return "seed_prerequisite"
+            if seed_tags and match_status in ("shape_drift", "mismatch"):
+                return "seed_prerequisite"
+            if _client_bundle_setup_prerequisite(endpoint_name, comparison, match_status):
+                return "data_prerequisite"
         return "real_bug"
 
     return "real_bug"

@@ -102,6 +102,11 @@ def _strip_gql_interpolation(block: str) -> str:
 def root_fields_in_document(document: str) -> list[tuple[str, str]]:
     """Return [(root_field, QUERY|MUTATION), ...] for the primary operation."""
     doc = parse(document)
+    fragments: dict[str, FragmentDefinitionNode] = {
+        d.name.value: d
+        for d in doc.definitions
+        if isinstance(d, FragmentDefinitionNode)
+    }
     results: list[tuple[str, str]] = []
     for definition in doc.definitions:
         if not isinstance(definition, OperationDefinitionNode):
@@ -113,9 +118,16 @@ def root_fields_in_document(document: str) -> list[tuple[str, str]]:
             if isinstance(sel, FieldNode):
                 results.append((sel.name.value, kind))
             elif isinstance(sel, FragmentSpreadNode):
-                continue
+                frag = fragments.get(sel.name.value)
+                if frag and frag.selection_set:
+                    for fsel in frag.selection_set.selections:
+                        if isinstance(fsel, FieldNode):
+                            results.append((fsel.name.value, kind))
             elif isinstance(sel, InlineFragmentNode):
-                continue
+                if sel.selection_set:
+                    for fsel in sel.selection_set.selections:
+                        if isinstance(fsel, FieldNode):
+                            results.append((fsel.name.value, kind))
     if not results:
         return _root_fields_regex(document)
     return results

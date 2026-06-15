@@ -56,7 +56,7 @@ def _start_runner(
     *,
     saleor_email: str | None = None,
     saleor_password: str | None = None,
-    demo_seed_profile: str = "harness",
+    demo_seed_profile: str = "saleor_demo",
 ) -> None:
     runner_manager.start_run(
         run_id=run.id,

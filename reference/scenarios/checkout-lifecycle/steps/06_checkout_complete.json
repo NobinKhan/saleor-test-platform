@@ -1,0 +1,36 @@
+{
+  "step_id": "06_checkout_complete",
+  "scenario_id": "checkout-lifecycle",
+  "order": 6,
+  "name": "Complete checkout",
+  "auth_context": "anonymous",
+  "input_sent": "mutation CheckoutComplete($id: ID!) { checkoutComplete(id: $id) { order { id status } errors { field message code } } }",
+  "variables": {
+    "id": "{{context.checkout_id}}"
+  },
+  "extract": {},
+  "assertions": [],
+  "cleanup": false,
+  "golden_response": {
+    "data": {
+      "checkoutComplete": {
+        "order": null,
+        "errors": [
+          {
+            "field": "billingAddress",
+            "message": "Billing address is not set",
+            "code": "BILLING_ADDRESS_NOT_SET"
+          }
+        ]
+      }
+    }
+  },
+  "golden_contract": "business_error",
+  "golden_status": "warn",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "Complete checkout",
+    "expected_null": true
+  },
+  "recorded_at": "2026-06-15T10:09:01.649629+00:00"
+}

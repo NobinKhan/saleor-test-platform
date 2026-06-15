@@ -4,8 +4,8 @@
   "dashboard_git_tag": "3.23.6",
   "bundle_count": 415,
   "recorded_count": 415,
-  "bundles_hash": "sha256:5a9916b85026aaf8119b81ec1fb7f9fbb5f97903a3335308a8493e5edc38c7de",
-  "updated_at": "2026-06-14T10:09:38.827507+00:00",
+  "bundles_hash": "sha256:62d0ede3cf3e258af973d92fed6eb41649be3022d6e7dfc694bbf2e31b2a7794",
+  "updated_at": "2026-06-15T10:10:21.536208+00:00",
   "bundles_index": {
     "_getattributechoices": {
       "document_hash": "sha256:1f0b22d55265cfe9",
@@ -165,7 +165,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success",
-      "seed_tags": []
+      "seed_tags": [
+        "categories",
+        "requires_catalog_seed"
+      ]
     },
     "_searchcollectionsoperands": {
       "document_hash": "sha256:f2d225603329b014",
@@ -175,7 +178,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success",
-      "seed_tags": []
+      "seed_tags": [
+        "collections",
+        "requires_catalog_seed"
+      ]
     },
     "_searchcustomersoperands": {
       "document_hash": "sha256:cd7a5484638be0c7",
@@ -2531,7 +2537,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "not_found",
-      "seed_tags": []
+      "seed_tags": [
+        "products",
+        "requires_catalog_seed"
+      ]
     },
     "productmediacreate": {
       "document_hash": "sha256:ccd8d15f48f9851d",
@@ -3103,7 +3112,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success",
-      "seed_tags": []
+      "seed_tags": [
+        "categories",
+        "requires_catalog_seed"
+      ]
     },
     "searchcategorieswithtotalproducts": {
       "document_hash": "sha256:bfa5d436d2803513",
@@ -3113,7 +3125,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success",
-      "seed_tags": []
+      "seed_tags": [
+        "categories",
+        "requires_catalog_seed"
+      ]
     },
     "searchcollections": {
       "document_hash": "sha256:d665cf60cbd4e101",
@@ -3123,7 +3138,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success",
-      "seed_tags": []
+      "seed_tags": [
+        "collections",
+        "requires_catalog_seed"
+      ]
     },
     "searchcollectionswithtotalproducts": {
       "document_hash": "sha256:ed0763225096fec0",
@@ -3133,7 +3151,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success",
-      "seed_tags": []
+      "seed_tags": [
+        "collections",
+        "requires_catalog_seed"
+      ]
     },
     "searchcustomers": {
       "document_hash": "sha256:9413ef3333905794",
@@ -3436,7 +3457,10 @@
       "priority": "P0",
       "recorded": true,
       "golden_contract": "success",
-      "seed_tags": []
+      "seed_tags": [
+        "requires_saleor_demo_seed",
+        "site_settings"
+      ]
     },
     "stafflist": {
       "document_hash": "sha256:1ded5af5fd311500",

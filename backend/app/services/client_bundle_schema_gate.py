@@ -44,6 +44,13 @@ def compute_client_bundle_schema_gate(
         for field_name, kind in roots:
             pool = queries if kind == "QUERY" else mutations
             if field_name not in pool:
+                # Intentional invalid-root probes (e.g. SDK typo orderLineCreate).
+                if (
+                    bundle.golden_contract == "graphql_error"
+                    and bundle.golden_outcome == "schema_error"
+                    and field_name in {f for f, _ in roots}
+                ):
+                    continue
                 missing.append({
                     "bundle_id": bundle.bundle_id,
                     "field": field_name,

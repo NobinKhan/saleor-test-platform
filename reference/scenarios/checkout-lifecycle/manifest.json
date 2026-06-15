@@ -3,11 +3,13 @@
   "name": "Checkout lifecycle",
   "category": "checkout",
   "auth_context": "customer",
-  "description": "Create checkout, add line, set shipping address, attach customer",
+  "description": "Create checkout, add line, set shipping address, attach customer, delivery method, complete",
   "steps": [
     "01_checkout_create.json",
     "02_checkout_lines_add.json",
     "03_checkout_shipping_address.json",
-    "04_checkout_customer_attach.json"
+    "04_checkout_customer_attach.json",
+    "05_checkout_delivery_method.json",
+    "06_checkout_complete.json"
   ]
 }

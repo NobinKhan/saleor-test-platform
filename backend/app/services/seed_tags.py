@@ -10,14 +10,23 @@ from __future__ import annotations
 from typing import Any
 
 SEED_TAGGED_BUNDLES: dict[str, frozenset[str]] = {
+    "_searchcategoriesoperands": frozenset({"requires_catalog_seed", "categories"}),
+    "_searchcollectionsoperands": frozenset({"requires_catalog_seed", "collections"}),
     "_searchcustomersoperands": frozenset({"requires_saleor_demo_seed", "customers"}),
     "channeldiagnostics": frozenset({"requires_saleor_demo_seed", "channels", "warehouses"}),
     "channels": frozenset({"requires_saleor_demo_seed", "channels"}),
     "orderfulfilldata": frozenset({"requires_order_fixture"}),
     "orderrefunddata": frozenset({"requires_order_fixture"}),
     "ordertransactionsdata": frozenset({"requires_order_fixture"}),
+    "searchcategories": frozenset({"requires_catalog_seed", "categories"}),
+    "searchcategorieswithtotalproducts": frozenset({"requires_catalog_seed", "categories"}),
+    "searchcollections": frozenset({"requires_catalog_seed", "collections"}),
+    "searchcollectionswithtotalproducts": frozenset({"requires_catalog_seed", "collections"}),
     "searchordervariant": frozenset({"requires_harness_isolation", "search"}),
     "productvariantsetdefault": frozenset({"requires_demo_product_variant"}),
+    "sitesettings": frozenset({"requires_saleor_demo_seed", "site_settings"}),
+    "sf-homepageproducts": frozenset({"requires_catalog_seed", "categories"}),
+    "productmediabyid": frozenset({"requires_catalog_seed", "products"}),
 }
 
 

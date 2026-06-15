@@ -11,5 +11,323 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "collection": {
+        "id": "Q29sbGVjdGlvbjo0",
+        "name": "Featured Products",
+        "backgroundImage": null,
+        "products": {
+          "edges": [
+            {
+              "node": {
+                "id": "UHJvZHVjdDoxNTI=",
+                "slug": "apple-juice",
+                "name": "Apple Juice",
+                "thumbnail": null,
+                "thumbnail2x": null,
+                "pricing": {
+                  "onSale": true,
+                  "priceRangeUndiscounted": {
+                    "start": {
+                      "gross": {
+                        "amount": 5.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 5.99,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 5.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 5.99,
+                        "currency": "PLN"
+                      }
+                    }
+                  },
+                  "priceRange": {
+                    "start": {
+                      "gross": {
+                        "amount": 2.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 2.99,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 2.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 2.99,
+                        "currency": "PLN"
+                      }
+                    }
+                  }
+                },
+                "category": {
+                  "id": "Q2F0ZWdvcnk6NDM=",
+                  "name": "Juices"
+                }
+              }
+            },
+            {
+              "node": {
+                "id": "UHJvZHVjdDoxMzQ=",
+                "slug": "ascii-tee",
+                "name": "Monospace Tee",
+                "thumbnail": null,
+                "thumbnail2x": null,
+                "pricing": {
+                  "onSale": false,
+                  "priceRangeUndiscounted": {
+                    "start": {
+                      "gross": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      }
+                    }
+                  },
+                  "priceRange": {
+                    "start": {
+                      "gross": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 90.0,
+                        "currency": "PLN"
+                      }
+                    }
+                  }
+                },
+                "category": {
+                  "id": "Q2F0ZWdvcnk6Mzk=",
+                  "name": "T-shirts"
+                }
+              }
+            },
+            {
+              "node": {
+                "id": "UHJvZHVjdDoxNjE=",
+                "slug": "cubes-fountain-tee",
+                "name": "Cubes Fountain Tee",
+                "thumbnail": null,
+                "thumbnail2x": null,
+                "pricing": {
+                  "onSale": false,
+                  "priceRangeUndiscounted": {
+                    "start": {
+                      "gross": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      }
+                    }
+                  },
+                  "priceRange": {
+                    "start": {
+                      "gross": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 130.0,
+                        "currency": "PLN"
+                      }
+                    }
+                  }
+                },
+                "category": {
+                  "id": "Q2F0ZWdvcnk6Mzk=",
+                  "name": "T-shirts"
+                }
+              }
+            },
+            {
+              "node": {
+                "id": "UHJvZHVjdDoxNTA=",
+                "slug": "mighty-mug",
+                "name": "Mighty Mug",
+                "thumbnail": null,
+                "thumbnail2x": null,
+                "pricing": {
+                  "onSale": false,
+                  "priceRangeUndiscounted": {
+                    "start": {
+                      "gross": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      }
+                    }
+                  },
+                  "priceRange": {
+                    "start": {
+                      "gross": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 29.99,
+                        "currency": "PLN"
+                      }
+                    }
+                  }
+                },
+                "category": {
+                  "id": "Q2F0ZWdvcnk6NDE=",
+                  "name": "Homewares"
+                }
+              }
+            },
+            {
+              "node": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null,
+                "pricing": {
+                  "onSale": false,
+                  "priceRangeUndiscounted": {
+                    "start": {
+                      "gross": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      }
+                    }
+                  },
+                  "priceRange": {
+                    "start": {
+                      "gross": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      }
+                    },
+                    "stop": {
+                      "gross": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      },
+                      "net": {
+                        "amount": 240.0,
+                        "currency": "PLN"
+                      }
+                    }
+                  }
+                },
+                "category": {
+                  "id": "Q2F0ZWdvcnk6Mjg=",
+                  "name": "Sneakers"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:cab99cbb457facb3",
   "document_hash": "sha256:cb6fd5e3761fc338"
 }

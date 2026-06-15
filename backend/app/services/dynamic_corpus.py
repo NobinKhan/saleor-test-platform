@@ -313,8 +313,14 @@ def _load_disk_probes() -> list[DynamicProbe]:
 
 
 def load_dynamic_probes() -> list[DynamicProbe]:
-    """Return all registered dynamic probes (built-in + disk)."""
-    return list(BUILT_IN_PROBES) + _load_disk_probes()
+    """Return registered dynamic probes (built-in + disk), deduplicated by probe_id.
+
+    Disk JSON overrides built-in definitions when probe_id collides.
+    """
+    by_id: dict[str, DynamicProbe] = {p.probe_id: p for p in BUILT_IN_PROBES}
+    for probe in _load_disk_probes():
+        by_id[probe.probe_id] = probe
+    return list(by_id.values())
 
 
 def build_dynamic_probe_endpoints(

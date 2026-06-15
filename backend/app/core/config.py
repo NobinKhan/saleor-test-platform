@@ -53,9 +53,9 @@ class Settings(BaseSettings):
         description="Create missing L3 fixture entities on target via admin mutations at run start",
     )
     demo_seed_profile: str = Field(
-        default="harness",
+        default="saleor_demo",
         validation_alias="DEMO_SEED_PROFILE",
-        description="Fixture seed profile: harness (minimal) or saleor_demo (full topology)",
+        description="Fixture seed profile: saleor_demo (full topology) or harness (minimal, internal)",
     )
     client_bundles_dashboard_version: str = Field(
         default="",

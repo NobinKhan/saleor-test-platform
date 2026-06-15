@@ -22,7 +22,7 @@ def _minimal_run() -> TestRun:
         warnings=0,
         skipped=0,
         test_scope="full+scenarios",
-        schema_diff={"certification_endpoint_count": 829},
+        schema_diff={"certification_endpoint_count": 856},
     )
 
 

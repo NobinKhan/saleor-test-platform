@@ -57,7 +57,6 @@ async def test_certification_api_validate_and_run():
             "saleor_url": saleor_url,
             "saleor_email": saleor_email,
             "saleor_password": saleor_password,
-            "demo_seed_profile": "harness",
         }
         validate_resp = await client.post(
             "/api/runs/validate", json=validate_payload, headers=headers

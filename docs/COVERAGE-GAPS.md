@@ -10,10 +10,11 @@ Related: [COMPATIBILITY.md](COMPATIBILITY.md) (certification gates), [REFERENCE-
 |-------|----------|-------|------|
 | **L1** | `reference/corpora/saleor-3.23.7/probes/` | **387** | One synthetic probe per schema query/mutation (introspection-driven) |
 | **L3 Dashboard** | `reference/client-bundles/dashboard-3.23.6/` | **415 recorded**, **415 certified** | Real Dashboard GraphQL documents + golden responses |
-| **L3 Storefront** | `reference/client-bundles/storefront-3.23.6/` | **31 recorded** | Storefront + SDK checkout/account GraphQL documents |
-| **L4 Scenarios** | `reference/scenarios/` | **6 steps** (product lifecycle) | Multi-step flows with assertion checks |
+| **L3 Storefront** | `reference/client-bundles/storefront-3.23.6/` | **31 recorded** | Storefront + SDK GraphQL documents + golden responses |
+| **L4 Scenarios** | `reference/scenarios/` | **15 steps** (3 flows) | product (6), checkout (6), order (3) |
 | **Variants** | `reference/variants/` | **3** (`productCreate`) | Valid/invalid input matrices |
-| **Certification total** | `full+scenarios` scope | **829+** | L1 + L3 + scenarios + variants |
+| **Dynamic probes** | `reference/dynamic/` + built-ins | **5** | Anti-static-response |
+| **Certification total** | `full+scenarios` scope | **856** | L1 + L3 dashboard + L3 storefront + scenarios + variants + dynamic |
 
 `just baseline` proves **100%** SGRC match on official Saleor under `full+scenarios`. Deprecated L3 bundles are removed from the corpus — not counted in reports.
 
@@ -25,7 +26,7 @@ Related: [COMPATIBILITY.md](COMPATIBILITY.md) (certification gates), [REFERENCE-
   Dashboard 3.23.6  │  L3: 415 bundles (real documents)  │  ← Dashboard UX shapes
   vendor GraphQL    └─────────────────────────────────────┘
                     ┌─────────────────────────────────────┐
-  Storefront 3.23.6 │  L3: 16 bundles (real documents)     │  ← partial (legacy vendor)
+  Storefront 3.23.6 │  L3: 31 bundles (recorded)            │  ← Storefront UX shapes
   (saleor-storefront)└─────────────────────────────────────┘
 ```
 
@@ -51,13 +52,13 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 | SDK documents | `backend/app/services/storefront_sdk_documents.py` |
 | Client bundles | `reference/client-bundles/storefront-3.23.6/` (`sf-` bundle IDs) |
 | Import pipeline | `scan_sdk_storefront_bundles()` + `just patch-corpus --sync-client` |
-| Certification scope | `full+scenarios` includes all recorded storefront bundles |
+| Certification scope | `full+scenarios` includes all **31** recorded storefront bundles |
 
 **Remaining:** Record golden on official Saleor for new SDK bundles; expand as Storefront vendor pin grows.
 
 ## Gap 2 — Customer-session auth replay (partial)
 
-**Status:** Customer JWT replay path exists (`auth_context: customer` on bundles/scenarios; `ensure_customer_token` in test runner).
+**Status:** Customer JWT replay + **storefront session preamble** (`accountUpdate` + anonymous checkout chain) run automatically when `DEMO_SEED_PROFILE=saleor_demo`.
 
 **Remaining:** Not all customer-context operations have customer-auth golden recorded. Staff token remains the default for dashboard bundles. Expand customer-tagged golden capture for storefront account/checkout flows.
 
@@ -68,12 +69,12 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 | Scenario | Steps | Auth |
 |----------|-------|------|
 | `product-lifecycle` | 6 | staff |
-| `checkout-lifecycle` | 4 | anonymous → customer |
+| `checkout-lifecycle` | 6 | anonymous → customer |
 | `order-lifecycle` | 3 | staff |
 
 Record goldens: `just patch-corpus --scenarios checkout-lifecycle,order-lifecycle` on official Saleor.
 
-**Remaining:** Optional hard gate for scenario-only pass rate; payment/checkoutComplete step when gateway fixtures exist.
+**Remaining:** Record goldens for new checkout steps 05–06 (`just patch-corpus --scenarios checkout-lifecycle` on official Saleor). Optional payment gateway fixture for `checkoutComplete` success golden.
 
 ## Gap 4 — Deprecated L3 bundles (removed)
 
@@ -133,16 +134,16 @@ A backend that passes `just baseline` / `full+scenarios` with 100% SGRC:
 
 - Implements every **3.23.7** schema operation at L1 synthetic replay level.
 - Matches **415** real **Dashboard** GraphQL documents with seeded fixtures.
-- Matches **16** **Storefront** GraphQL documents with seeded fixtures.
-- Passes **product lifecycle** scenario steps and **productCreate** variant probes.
+- Matches **31** **Storefront** GraphQL documents with seeded fixtures.
+- Passes **13** scenario steps (product, checkout, order lifecycles) and **productCreate** variant probes.
+- Passes **5** dynamic probes (runtime echo validation).
 - Passes SGRC Tier 1 (and Tier 2 when `SGRC_TIER2_GATE=true`).
 - Passes L3 **document schema gate** (nested field/type validation in client documents).
 
 It does **not** yet guarantee:
 
-- Full **Storefront** GraphQL coverage (only 16 legacy vendor documents).
-- Full **customer-session** golden replay for all account/checkout ops.
-- **Order/checkout multi-step** scenario certification (product lifecycle exists; not in baseline gate).
+- Full **customer-session** golden replay for all account/checkout ops beyond recorded storefront bundles.
+- **Payment/checkoutComplete** scenario step when gateway fixtures exist.
 - **Async** worker, webhook, or payment-gateway integration behavior.
 
 When Storefront or Dashboard breaks a certified backend, platform rules require **adding probes/bundles**, not weakening Tier 1 — see workspace rules and [COMPATIBILITY.md](COMPATIBILITY.md).
@@ -162,7 +163,7 @@ The testing system hardening plan has been implemented with the following change
 - **Fixture KeyError handling**: Silent fallback replaced with explicit skip + `failure_category=data_prerequisite`.
 
 ### Phase 2 — Anti-static-response
-- **Dynamic probes**: 4 runtime-generated probes (product/category/collection create + not-found query) validate echo/structural/semantic_error modes.
+- **Dynamic probes**: 5 runtime-generated probes (product/category/collection/channel create + not-found query) validate echo/structural/semantic_error modes.
 - **Input binding checks**: `input_binding.py` service validates success mutations echo input values.
 - **Tightened stateful policy**: L1 error probes always stateless; L3 success bundles never blanket stateful; stateful drift allowed only for L1 success queries with no mismatches.
 - **Narrowed error semantics**: Stateless probes require regex/message_pattern match, not just category bucket.

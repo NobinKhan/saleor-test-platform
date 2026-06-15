@@ -22,7 +22,7 @@ The compat system replays **fixed GraphQL documents** and compares responses to 
 
 | Metric | Value |
 |--------|-------|
-| Compatibility score | **97.8%** (818/836 matched) |
+| Compatibility score | **~96.6%** raw (818/854 before setup fixes); **effective score** excludes `data_prerequisite` + `seed_prerequisite` |
 | Incompatible probes | 17 |
 | Runner failure category | All 17 labeled `real_bug` |
 | Tier 2 informational | 1 (`productmediabyid` error path alias) |
@@ -58,13 +58,15 @@ flowchart TD
 
 Before a full compat pass:
 
-1. **Database:** `just dev-setup` or `just reset-db` (applies all migrations).
-2. **Dev users:** `just dev-seed` — creates platform admin + demo merchant staff. **Does not** create Saleor demo customers, multi-channel PLN/USD topology, or order `d69e6ad3-…`.
-3. **API:** Start with `just dev-api` (see [memory-limited dev](#memory-limited-dev-api) in [`development.md`](development.md)).
-4. **Auth:**
-   - **Dashboard CLIENT_BUNDLE probes:** staff JWT (`tokenCreate` / `basmalahub { login }` with `DEMO_MERCHANT_*` from `.env`).
-   - **Storefront bundles (`sf-*`):** typically unauthenticated + `channel` variable (e.g. `"default"`).
-5. **Optional Saleor demo seed phase:** If scoring the 8 probes in section 5, run a dedicated seed step **before** those probes (see per-probe tables).
+1. **Harness stack:** `just up` (Saleor + harness). For official baseline: `just fresh` (populatedb).
+2. **Seed profile:** `DEMO_SEED_PROFILE=saleor_demo` (default) — catalog mutations + storefront session preamble run automatically at test-run start.
+3. **Auth:**
+   - **Dashboard CLIENT_BUNDLE probes:** staff JWT from run credentials.
+   - **Storefront `sf-*` probes:** customer JWT for account bundles; anonymous for checkout bundles (after preamble creates checkout).
+4. **Failure taxonomy:** `data_prerequisite` = empty catalog / checkout session; `seed_prerequisite` = populatedb Relay ID drift; `real_bug` = API parity after setup.
+5. **Scenario goldens:** After adding checkout-lifecycle steps, run `just patch-corpus --scenarios checkout-lifecycle` on official Saleor.
+
+Legacy Basmalahub-specific steps (if testing that backend): database reset, `just dev-seed`, etc. — see [`development.md`](development.md).
 
 ---
 

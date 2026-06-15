@@ -3,9 +3,9 @@
   "dashboard_version": "3.23.6",
   "dashboard_git_tag": "3.23.6",
   "bundle_count": 31,
-  "recorded_count": 0,
-  "bundles_hash": "sha256:05f967c9edaa230802b15b0471ca648a18174a4b36c841b5308651c81a76f083",
-  "updated_at": "2026-06-14T09:27:38.232977+00:00",
+  "recorded_count": 31,
+  "bundles_hash": "sha256:1b08c1a1105fde5846e533f27bef8c50e114b73b0d690de5ebf44ba7d09ac87b",
+  "updated_at": "2026-06-15T10:10:21.541061+00:00",
   "bundles_index": {
     "sf-accountaddresscreate": {
       "document_hash": "sha256:b42dcfb566a50a9a",
@@ -13,8 +13,8 @@
         "AccountAddressCreate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "business_error",
       "seed_tags": []
     },
     "sf-accountconfirm": {
@@ -23,8 +23,8 @@
         "AccountConfirm"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "business_error",
       "seed_tags": []
     },
     "sf-accountupdate": {
@@ -33,8 +33,8 @@
         "AccountUpdate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-article": {
@@ -43,8 +43,8 @@
         "Article"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-checkoutbytoken": {
@@ -53,8 +53,8 @@
         "CheckoutByToken"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-checkoutcomplete": {
@@ -63,8 +63,8 @@
         "CheckoutComplete"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "business_error",
       "seed_tags": []
     },
     "sf-checkoutcreate": {
@@ -73,8 +73,8 @@
         "CheckoutCreate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-checkoutcustomerattach": {
@@ -83,8 +83,8 @@
         "CheckoutCustomerAttach"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "graphql_error",
       "seed_tags": []
     },
     "sf-checkoutdeliverymethodupdate": {
@@ -93,8 +93,8 @@
         "CheckoutDeliveryMethodUpdate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "not_found",
       "seed_tags": []
     },
     "sf-checkoutemailupdate": {
@@ -103,8 +103,8 @@
         "CheckoutEmailUpdate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-checkoutlinesadd": {
@@ -113,8 +113,8 @@
         "CheckoutLinesAdd"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-checkoutlinesupdate": {
@@ -123,8 +123,8 @@
         "CheckoutLinesUpdate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "business_error",
       "seed_tags": []
     },
     "sf-checkoutshippingaddressupdate": {
@@ -133,8 +133,8 @@
         "CheckoutShippingAddressUpdate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "business_error",
       "seed_tags": []
     },
     "sf-checkoutshippingmethods": {
@@ -143,8 +143,8 @@
         "CheckoutShippingMethods"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-draftordercreate": {
@@ -153,8 +153,8 @@
         "DraftOrderCreate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-featuredproductsquery": {
@@ -163,8 +163,8 @@
         "FeaturedProductsQuery"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-getcategories": {
@@ -173,8 +173,8 @@
         "GetCategories"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "graphql_error",
       "seed_tags": []
     },
     "sf-getcollections": {
@@ -183,8 +183,8 @@
         "GetCollections"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "graphql_error",
       "seed_tags": []
     },
     "sf-getproducts": {
@@ -193,8 +193,8 @@
         "GetProducts"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "graphql_error",
       "seed_tags": []
     },
     "sf-homepageproducts": {
@@ -203,9 +203,12 @@
         "HomePageProducts"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
-      "seed_tags": []
+      "recorded": true,
+      "golden_contract": "success",
+      "seed_tags": [
+        "categories",
+        "requires_catalog_seed"
+      ]
     },
     "sf-me": {
       "document_hash": "sha256:4bd3dea5b433e436",
@@ -213,8 +216,8 @@
         "Me"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-orderlinecreate": {
@@ -223,8 +226,8 @@
         "OrderLineCreate"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "graphql_error",
       "seed_tags": []
     },
     "sf-pages": {
@@ -233,8 +236,8 @@
         "Pages"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-productdetails": {
@@ -243,8 +246,8 @@
         "ProductDetails"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "not_found",
       "seed_tags": []
     },
     "sf-registeraccount": {
@@ -253,8 +256,8 @@
         "RegisterAccount"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "business_error",
       "seed_tags": []
     },
     "sf-resetpasswordrequest": {
@@ -263,8 +266,8 @@
         "ResetPasswordRequest"
       ],
       "priority": "P1",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "business_error",
       "seed_tags": []
     },
     "sf-searchproducts": {
@@ -273,8 +276,8 @@
         "SearchProducts"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "graphql_error",
       "seed_tags": []
     },
     "sf-searchresults": {
@@ -283,8 +286,8 @@
         "SearchResults"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-shopattributesquery": {
@@ -293,8 +296,8 @@
         "ShopAttributesQuery"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-shopmenusquery": {
@@ -303,8 +306,8 @@
         "ShopMenusQuery"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     },
     "sf-variantlist": {
@@ -313,8 +316,8 @@
         "VariantList"
       ],
       "priority": "P0",
-      "recorded": false,
-      "golden_contract": null,
+      "recorded": true,
+      "golden_contract": "success",
       "seed_tags": []
     }
   }

@@ -21,7 +21,7 @@
     "data": {
       "checkoutCustomerAttach": {
         "checkout": {
-          "id": "Q2hlY2tvdXQ6ZjgwOTUyN2QtMWY0My00NTFhLWE2ZTEtOWIwMmNlNDM3NTUw",
+          "id": "Q2hlY2tvdXQ6ZjEzYjAwOTItZjZkZi00YjhjLTk1MjAtYjhiM2NiNzg4NDEy",
           "user": {
             "id": "VXNlcjo0NQ=="
           }
@@ -32,5 +32,5 @@
   },
   "golden_contract": "success",
   "golden_status": "pass",
-  "recorded_at": "2026-06-14T10:09:37.988047+00:00"
+  "recorded_at": "2026-06-15T10:09:01.323677+00:00"
 }

@@ -261,7 +261,15 @@ async def test_resolve_fixtures_saleor_demo_profile():
             live_keys=frozenset({"default_channel_id"}),
             seeded_keys=frozenset({"default_channel_id"}),
         ),
-    ) as mock_demo:
+    ) as mock_demo, patch(
+        "app.services.fixture_resolver._resolve_storefront_customer",
+        new_callable=AsyncMock,
+        return_value=(None, None),
+    ), patch(
+        "app.services.storefront_session.ensure_storefront_session",
+        new_callable=AsyncMock,
+        return_value=({"default_channel_id": "Q2hhbm5lbDox"}, set(), []),
+    ):
         resolution = await resolve_fixtures(
             "http://example.com/graphql/",
             "token",

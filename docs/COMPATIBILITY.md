@@ -36,7 +36,7 @@ just up
 just baseline
 ```
 
-This chains corpus integrity (387 L1 + 415 L3 dashboard + 16 L3 storefront recorded, schema gate) and full replay (`full+scenarios`, Tier 2, 100% on the full-system endpoint set).
+This chains corpus integrity (387 L1 + 415 L3 dashboard + 31 L3 storefront recorded, schema gate) and full replay (`full+scenarios`, Tier 2, 100% on **856** scored endpoints).
 
 L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFERENCE-SEED.md). `just fresh` runs `populatedb` and `just seed-reference` automatically.
 
@@ -50,7 +50,7 @@ L3 golden capture requires seeded fixture data — see [REFERENCE-SEED.md](REFER
 6. **Schema gate** — introspects target; verifies corpus operations exist.
 7. **Deprecated auto-exclusion** — bundles/ops referencing deprecated Saleor types are excluded from scoring.
 
-**Full-system scope** (`full+scenarios`) = 387 L1 + **415** L3 dashboard + **16** L3 storefront + scenario steps + input variants + dynamic probes. **11** deprecated dashboard bundles were removed from the corpus (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
+**Full-system scope** (`full+scenarios`) = 387 L1 + **415** L3 dashboard + **31** L3 storefront + **15** scenario steps + **3** variants + **5** dynamic probes = **856 scored endpoints**. **11** deprecated dashboard bundles were removed from the corpus (deprecated Sale API, `exportProducts`, Apollo `@client` fields, etc.). See [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
 
 Reports include `failure_category`, `effective_score`, `not_counted_note`, and `excluded_l3_bundles` so AI agents know deprecated and seed-dependent items are never counted toward compatibility %. See [COMPAT-TEST-IMPROVEMENT-REPORT.md](COMPAT-TEST-IMPROVEMENT-REPORT.md) for external backend seed guidance.
 

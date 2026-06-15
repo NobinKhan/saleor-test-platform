@@ -90,14 +90,27 @@ Set `RUNTIME_SEED=false` for read-only audits against production-like targets wh
 
 ### Demo seed profile (`DEMO_SEED_PROFILE`)
 
-| Profile | Env / UI | Behavior |
-|---------|----------|----------|
-| `harness` (default) | Minimal seed | Creates harness-reference channel, product, customer, collection when missing |
-| `saleor_demo` | Full topology | Runs `ensure_saleor_demo_topology()` — USD/PLN channels, named warehouses, demo customers, apple-juice product, fulfillable order |
+| Profile | Env | Behavior |
+|---------|-----|----------|
+| `saleor_demo` (default) | `DEMO_SEED_PROFILE=saleor_demo` | Runs `ensure_saleor_demo_topology()` — channels, warehouses, shipping zones, demo customers, category/collection catalog, apple-juice product, fulfillable order; then `ensure_storefront_session()` — customer profile + anonymous checkout chain |
+| `harness` (internal) | `DEMO_SEED_PROFILE=harness` | Minimal harness-reference entities only when missing |
 
-Select **Saleor demo** in the run UI or set `DEMO_SEED_PROFILE=saleor_demo`. Seed-tagged L3 probes that still `shape_drift` against populatedb golden classify as `seed_prerequisite` (excluded from effective score). Official Saleor after `just fresh` (populatedb) achieves true 100% on all probes.
+Every UI test run uses **`saleor_demo`** automatically. Seed-tagged L3 probes that `shape_drift` or `mismatch` against populatedb golden classify as `seed_prerequisite` (excluded from effective score). Empty-catalog or checkout-session gaps on untagged probes classify as `data_prerequisite`. Official Saleor after `just fresh` (populatedb) achieves true 100% on all **856** probes.
 
-See [COMPAT-TEST-IMPROVEMENT-REPORT.md](COMPAT-TEST-IMPROVEMENT-REPORT.md) for the eight seed-dependent bundle IDs.
+### Pre-run checklist (compat runs)
+
+Before a full `full+scenarios` pass against a target backend:
+
+- Staff JWT with dashboard permissions
+- `saleor_demo` seed enabled (`RUNTIME_SEED=true`, default)
+- Multi-channel topology for `channels` / `channeldiagnostics` (or accept `seed_prerequisite` on populatedb-ID goldens)
+- Category/collection catalog for search/homepage probes
+- Storefront customer session + checkout chain (automatic preamble)
+- Scenario steps executed in order (tier 2); checkout-lifecycle now includes delivery + complete steps
+
+External backends without `populatedb` may still show `seed_prerequisite` on probes that hard-code Saleor demo Relay IDs (`orderfulfilldata`, `productvariantsetdefault`, …). That is expected — fix the harness setup first, then treat remaining failures as API parity work.
+
+See [COMPAT-TEST-IMPROVEMENT-REPORT.md](COMPAT-TEST-IMPROVEMENT-REPORT.md) for seed-dependent bundle IDs and failure taxonomy.
 
 ### Docker URL rewrite (UI localhost)
 
@@ -109,10 +122,7 @@ Short list — full gap analysis (Storefront L3, customer JWT, excluded bundles,
 
 Planned corpus work:
 
-- **Storefront L3** — vendor `saleor-storefront`, bundle import/record, storefront fixtures (largest gap for Storefront parity)
-- **Customer JWT replay** — customer-context ops under real customer tokens, not staff-only golden
-- Dedicated product CRUD scenario chains (create → read → update → delete)
-- Dedicated order lifecycle scenario chains
+- Record goldens for `checkout-lifecycle` steps 05–06 (`just patch-corpus --scenarios checkout-lifecycle`)
 - Stock management L3 parity (`productVariantStocks*`)
 - `exportProducts` L1 probe when the mutation exists on the pinned Saleor release (not present on 3.23.7 introspection)
 

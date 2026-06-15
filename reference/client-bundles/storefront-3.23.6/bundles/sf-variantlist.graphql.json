@@ -12,5 +12,3558 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "productVariants": {
+        "edges": [
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU4",
+              "sku": "111223580",
+              "name": "S",
+              "quantityAvailable": 10,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE1",
+                      "name": "S",
+                      "value": "S"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzY=",
+                "slug": "darko-polo",
+                "name": "Darko Polo",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzY0",
+              "sku": "112223580",
+              "name": "S",
+              "quantityAvailable": 10,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE1",
+                      "name": "S",
+                      "value": "S"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzg=",
+                "slug": "dark-polygon-tee",
+                "name": "Dark Polygon Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc1",
+              "sku": "113223582",
+              "name": "Vinyl",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjQy",
+                    "name": "Medium",
+                    "slug": "medium"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTMy",
+                      "name": "Vinyl",
+                      "value": "Vinyl"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNDY=",
+                "slug": "enterprise-cloud-on-premises-tales",
+                "name": "Enterprise Cloud + On-premises",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQw",
+              "sku": "118223581",
+              "name": "39",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTA4",
+                      "name": "39",
+                      "value": "39"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzA=",
+                "slug": "balance-trail-720",
+                "name": "Paul's Balance 420",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc5",
+              "sku": "124223581",
+              "name": "iTunes",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjQy",
+                    "name": "Medium",
+                    "slug": "medium"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTM1",
+                      "name": "iTunes",
+                      "value": "iTunes"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNDc=",
+                "slug": "own-your-stack-and-data",
+                "name": "Own your stack and data",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzUz",
+              "sku": "128223580",
+              "name": "S",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE1",
+                      "name": "S",
+                      "value": "S"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzU=",
+                "slug": "team-shirt",
+                "name": "Team Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzYx",
+              "sku": "218223580",
+              "name": "M",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": true,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE2",
+                      "name": "M",
+                      "value": "M"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzc=",
+                "slug": "blue-polygon-shirt",
+                "name": "Blue Polygon Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ4",
+              "sku": "328223580",
+              "name": "S",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE1",
+                      "name": "S",
+                      "value": "S"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzQ=",
+                "slug": "ascii-tee",
+                "name": "Monospace Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk0",
+              "sku": "49182235820",
+              "name": "S",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE1",
+                      "name": "S",
+                      "value": "S"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNjE=",
+                "slug": "cubes-fountain-tee",
+                "name": "Cubes Fountain Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzM1",
+              "sku": "618223581",
+              "name": "39",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTA4",
+                      "name": "39",
+                      "value": "39"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjk=",
+                "slug": "dash-force",
+                "name": "Dash Force",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzMz",
+              "sku": "818223582",
+              "name": "40",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTA5",
+                      "name": "40",
+                      "value": "40"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjg=",
+                "slug": "blue-plimsolls",
+                "name": "Blue Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzI1",
+              "sku": "918223582",
+              "name": "39",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTA4",
+                      "name": "39",
+                      "value": "39"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg5",
+              "sku": "9182235820",
+              "name": "XL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE4",
+                      "name": "XL",
+                      "value": "XL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNTc=",
+                "slug": "reversed-monotype-tee",
+                "name": "Reversed Monotype Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": true,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 2.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 2.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNTI=",
+                "slug": "apple-juice",
+                "name": "Apple Juice",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ2",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6MzQ2",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxMzI=",
+                "slug": "blue-hoodie",
+                "name": "Blue Hoodie",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ3",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6MzQ3",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxMzM=",
+                "slug": "white-hoodie",
+                "name": "White Hoodie",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzcw",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzcw",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNDM=",
+                "slug": "tactical-neck-warmer",
+                "name": "Neck Warmer",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzgy",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzgy",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNTA=",
+                "slug": "mighty-mug",
+                "name": "Mighty Mug",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzgz",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzgz",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 70.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 70.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 70.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 70.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNTE=",
+                "slug": "the-dash-cushion",
+                "name": "The Dash Cushion",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg1",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg1",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNTM=",
+                "slug": "bean-juice",
+                "name": "Bean Juice",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg2",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg2",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNTQ=",
+                "slug": "banana-juice",
+                "name": "Banana Juice",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg3",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg3",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 5.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNTU=",
+                "slug": "carrot-juice",
+                "name": "Carrot Juice",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg4",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg4",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNTY=",
+                "slug": "monokai-dimmed-sunnies",
+                "name": "Monokai Dimmed Sunnies",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzkz",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzkz",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 450.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 450.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 450.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 450.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNjA=",
+                "slug": "gift-card",
+                "name": "Gift card 100",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk5",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzk5",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNjI=",
+                "slug": "white-parrot-cusion",
+                "name": "White Parrot Cushion",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6NDAw",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6NDAw",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 2300.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 2300.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 2300.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 2300.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNjM=",
+                "slug": "gift-card-500",
+                "name": "Gift card 500",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6NDAx",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6NDAx",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNjQ=",
+                "slug": "gift-card-50",
+                "name": "Gift card 50",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ1",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6MzQ1",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": true,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 100.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 100.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxMzE=",
+                "slug": "grey-hoodie",
+                "name": "Grey Hoodie",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzY4",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6MzY4",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": true,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 50.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 50.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 25.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 25.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNDE=",
+                "slug": "pirates-beanie",
+                "name": "Pirate's Beanie",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzcx",
+              "sku": null,
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzcx",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": true,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 60.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 60.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 48.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 48.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [],
+              "product": {
+                "id": "UHJvZHVjdDoxNDQ=",
+                "slug": "dry-sunglasses",
+                "name": "DRY Sunglasses",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU5",
+              "sku": "111223581",
+              "name": "M",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE2",
+                      "name": "M",
+                      "value": "M"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzY=",
+                "slug": "darko-polo",
+                "name": "Darko Polo",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzY1",
+              "sku": "112223581",
+              "name": "M",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE2",
+                      "name": "M",
+                      "value": "M"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzg=",
+                "slug": "dark-polygon-tee",
+                "name": "Dark Polygon Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc2",
+              "sku": "113223583",
+              "name": "DVD",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjQy",
+                    "name": "Medium",
+                    "slug": "medium"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTMz",
+                      "name": "DVD",
+                      "value": "DVD"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNDY=",
+                "slug": "enterprise-cloud-on-premises-tales",
+                "name": "Enterprise Cloud + On-premises",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQx",
+              "sku": "118223582",
+              "name": "40",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTA5",
+                      "name": "40",
+                      "value": "40"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzA=",
+                "slug": "balance-trail-720",
+                "name": "Paul's Balance 420",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzgw",
+              "sku": "124223582",
+              "name": "MP3",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 9.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjQy",
+                    "name": "Medium",
+                    "slug": "medium"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTM3",
+                      "name": "MP3",
+                      "value": "MP3"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNDc=",
+                "slug": "own-your-stack-and-data",
+                "name": "Own your stack and data",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU0",
+              "sku": "128223581",
+              "name": "M",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE2",
+                      "name": "M",
+                      "value": "M"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzU=",
+                "slug": "team-shirt",
+                "name": "Team Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzYy",
+              "sku": "218223581",
+              "name": "L",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE3",
+                      "name": "L",
+                      "value": "L"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzc=",
+                "slug": "blue-polygon-shirt",
+                "name": "Blue Polygon Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ5",
+              "sku": "328223581",
+              "name": "M",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE2",
+                      "name": "M",
+                      "value": "M"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzQ=",
+                "slug": "ascii-tee",
+                "name": "Monospace Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk1",
+              "sku": "49182235821",
+              "name": "M",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE2",
+                      "name": "M",
+                      "value": "M"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNjE=",
+                "slug": "cubes-fountain-tee",
+                "name": "Cubes Fountain Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzM2",
+              "sku": "618223582",
+              "name": "40",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTA5",
+                      "name": "40",
+                      "value": "40"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjk=",
+                "slug": "dash-force",
+                "name": "Dash Force",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzMy",
+              "sku": "818223583",
+              "name": "41",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEw",
+                      "name": "41",
+                      "value": "41"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjg=",
+                "slug": "blue-plimsolls",
+                "name": "Blue Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzkw",
+              "sku": "9182235821",
+              "name": "XXL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 120.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE5",
+                      "name": "XXL",
+                      "value": "XXL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNTc=",
+                "slug": "reversed-monotype-tee",
+                "name": "Reversed Monotype Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzI2",
+              "sku": "918223583",
+              "name": "40",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTA5",
+                      "name": "40",
+                      "value": "40"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzYw",
+              "sku": "111223582",
+              "name": "XXL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE5",
+                      "name": "XXL",
+                      "value": "XXL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzY=",
+                "slug": "darko-polo",
+                "name": "Darko Polo",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzY2",
+              "sku": "112223582",
+              "name": "L",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE3",
+                      "name": "L",
+                      "value": "L"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzg=",
+                "slug": "dark-polygon-tee",
+                "name": "Dark Polygon Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc3",
+              "sku": "113223584",
+              "name": "iTunes",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjQy",
+                    "name": "Medium",
+                    "slug": "medium"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTM1",
+                      "name": "iTunes",
+                      "value": "iTunes"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNDY=",
+                "slug": "enterprise-cloud-on-premises-tales",
+                "name": "Enterprise Cloud + On-premises",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQy",
+              "sku": "118223583",
+              "name": "41",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEw",
+                      "name": "41",
+                      "value": "41"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzA=",
+                "slug": "balance-trail-720",
+                "name": "Paul's Balance 420",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU1",
+              "sku": "128223582",
+              "name": "L",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE3",
+                      "name": "L",
+                      "value": "L"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzU=",
+                "slug": "team-shirt",
+                "name": "Team Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzYz",
+              "sku": "218223582",
+              "name": "XL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 150.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE4",
+                      "name": "XL",
+                      "value": "XL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzc=",
+                "slug": "blue-polygon-shirt",
+                "name": "Blue Polygon Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzUw",
+              "sku": "328223582",
+              "name": "L",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE3",
+                      "name": "L",
+                      "value": "L"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzQ=",
+                "slug": "ascii-tee",
+                "name": "Monospace Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk2",
+              "sku": "49182235822",
+              "name": "L",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE3",
+                      "name": "L",
+                      "value": "L"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNjE=",
+                "slug": "cubes-fountain-tee",
+                "name": "Cubes Fountain Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzM3",
+              "sku": "618223583",
+              "name": "41",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEw",
+                      "name": "41",
+                      "value": "41"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjk=",
+                "slug": "dash-force",
+                "name": "Dash Force",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzM0",
+              "sku": "818223584",
+              "name": "42",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": true,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 230.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 138.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 138.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEx",
+                      "name": "42",
+                      "value": "42"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjg=",
+                "slug": "blue-plimsolls",
+                "name": "Blue Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzI3",
+              "sku": "918223584",
+              "name": "41",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEw",
+                      "name": "41",
+                      "value": "41"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzc4",
+              "sku": "113223585",
+              "name": "CD",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 29.99,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjQy",
+                    "name": "Medium",
+                    "slug": "medium"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTM2",
+                      "name": "CD",
+                      "value": "CD"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNDY=",
+                "slug": "enterprise-cloud-on-premises-tales",
+                "name": "Enterprise Cloud + On-premises",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQz",
+              "sku": "118223584",
+              "name": "42",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEx",
+                      "name": "42",
+                      "value": "42"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzA=",
+                "slug": "balance-trail-720",
+                "name": "Paul's Balance 420",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU2",
+              "sku": "128223583",
+              "name": "XL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE4",
+                      "name": "XL",
+                      "value": "XL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzU=",
+                "slug": "team-shirt",
+                "name": "Team Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzUx",
+              "sku": "328223583",
+              "name": "XL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE4",
+                      "name": "XL",
+                      "value": "XL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzQ=",
+                "slug": "ascii-tee",
+                "name": "Monospace Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk3",
+              "sku": "49182235823",
+              "name": "XL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE4",
+                      "name": "XL",
+                      "value": "XL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNjE=",
+                "slug": "cubes-fountain-tee",
+                "name": "Cubes Fountain Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzM4",
+              "sku": "618223584",
+              "name": "42",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEx",
+                      "name": "42",
+                      "value": "42"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjk=",
+                "slug": "dash-force",
+                "name": "Dash Force",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzI4",
+              "sku": "918223585",
+              "name": "42",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEx",
+                      "name": "42",
+                      "value": "42"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzQ0",
+              "sku": "118223585",
+              "name": "45",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 209.96,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE0",
+                      "name": "45",
+                      "value": "45"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzA=",
+                "slug": "balance-trail-720",
+                "name": "Paul's Balance 420",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzU3",
+              "sku": "128223584",
+              "name": "XXL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 200.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE5",
+                      "name": "XXL",
+                      "value": "XXL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzU=",
+                "slug": "team-shirt",
+                "name": "Team Shirt",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzUy",
+              "sku": "328223584",
+              "name": "XXL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 90.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE5",
+                      "name": "XXL",
+                      "value": "XXL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMzQ=",
+                "slug": "ascii-tee",
+                "name": "Monospace Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzk4",
+              "sku": "49182235824",
+              "name": "XXL",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 130.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM4",
+                    "name": "Size",
+                    "slug": "size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE5",
+                      "name": "XXL",
+                      "value": "XXL"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxNjE=",
+                "slug": "cubes-fountain-tee",
+                "name": "Cubes Fountain Tee",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzM5",
+              "sku": "618223585",
+              "name": "43",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 420.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEy",
+                      "name": "43",
+                      "value": "43"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjk=",
+                "slug": "dash-force",
+                "name": "Dash Force",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzI5",
+              "sku": "918223586",
+              "name": "43",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEy",
+                      "name": "43",
+                      "value": "43"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzMw",
+              "sku": "918223587",
+              "name": "44",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTEz",
+                      "name": "44",
+                      "value": "44"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "UHJvZHVjdFZhcmlhbnQ6MzMx",
+              "sku": "918223588",
+              "name": "45",
+              "quantityAvailable": 50,
+              "images": [],
+              "pricing": {
+                "onSale": false,
+                "priceUndiscounted": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                },
+                "price": {
+                  "gross": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  },
+                  "net": {
+                    "amount": 240.0,
+                    "currency": "PLN"
+                  }
+                }
+              },
+              "attributes": [
+                {
+                  "attribute": {
+                    "id": "QXR0cmlidXRlOjM3",
+                    "name": "Shoe size",
+                    "slug": "shoe-size"
+                  },
+                  "values": [
+                    {
+                      "id": "QXR0cmlidXRlVmFsdWU6MTE0",
+                      "name": "45",
+                      "value": "45"
+                    }
+                  ]
+                }
+              ],
+              "product": {
+                "id": "UHJvZHVjdDoxMjc=",
+                "slug": "white-plimsolls",
+                "name": "White Plimsolls",
+                "thumbnail": null,
+                "thumbnail2x": null
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9bda74500b6cfbf0",
   "document_hash": "sha256:6a725e9dac7619ae"
 }

@@ -523,16 +523,21 @@ async def _seed_storefront_fixtures(
     client: httpx.AsyncClient,
     *,
     url: str,
-    headers: dict[str, str],
+    headers: dict[str, str] | None = None,
     fixtures: dict[str, Any],
 ) -> dict[str, Any]:
+    """Create anonymous checkout for fixture capture (reference seed workflow)."""
     channel_slug = fixtures.get("default_channel", "default-channel")
     variant_id = fixtures.get("default_variant_id")
     if variant_id and not fixtures.get("default_checkout_id"):
+        anon_headers = headers or {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
         checkout_data = await _gql(
             client,
             url=url,
-            headers=headers,
+            headers=anon_headers,
             query=(
                 "mutation($input: CheckoutCreateInput!) { "
                 "checkoutCreate(input: $input) { checkout { id token } "

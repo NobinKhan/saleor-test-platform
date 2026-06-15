@@ -17,5 +17,26 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "checkoutLinesAdd": {
+        "checkout": {
+          "id": "Q2hlY2tvdXQ6ZTIyZGM4YTYtYjg3Yy00MDdkLTk4YjAtOGQ2ZmY3YjZhMGI4",
+          "lines": [
+            {
+              "id": "Q2hlY2tvdXRMaW5lOjAwMjNjOGIxLWFkOTItNDFkYi1hNmQ5LTczODUzNWViMzA0Zg==",
+              "quantity": 2
+            }
+          ]
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:e6bbb7e7eccebf9f",
   "document_hash": "sha256:c0672e030cc8cb35"
 }

@@ -1,6 +1,6 @@
 # Saleor API Reference — Test Coverage Schema
 
-> **Source of truth for compatibility testing:** the reference corpus at `reference/corpora/saleor-{VERSION}/` (**387** probes for 3.23.7). This document lists the **dashboard catalog** subset (~108 operations after deprecated-op prune). Schema gate in compatibility mode uses the full corpus operation set (**818+** certification endpoints: 387 L1 + 415 L3 dashboard + 16 L3 storefront bundles on Saleor 3.23.7, plus scenarios, variants, and dynamic probes).
+> **Source of truth for compatibility testing:** the reference corpus at `reference/corpora/saleor-{VERSION}/` (**387** probes for 3.23.7). This document lists the **dashboard catalog** subset (~108 operations after deprecated-op prune). Schema gate in compatibility mode uses the full corpus operation set (**856** scored certification endpoints: 387 L1 + 415 L3 dashboard + 31 L3 storefront + 15 scenario steps + 3 variants + 5 dynamic probes).
 >
 > When Saleor deprecates or removes an operation, run `just corpus-diff` and `just patch-corpus --apply-diff` (catalog in `test_runner.py` is synced automatically). See [COMPATIBILITY.md](COMPATIBILITY.md). For Storefront L3, customer JWT, and other planned work, see [COVERAGE-GAPS.md](COVERAGE-GAPS.md).
 

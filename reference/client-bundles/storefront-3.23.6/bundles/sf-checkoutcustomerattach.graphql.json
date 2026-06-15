@@ -8,9 +8,38 @@
   "document": "mutation CheckoutCustomerAttach($id: ID!, $customerId: ID!) { checkoutCustomerAttach(id: $id, customerId: $customerId) { checkout { id user { id } } errors { field message code } } }",
   "variables": {
     "id": "{{fixtures.default_checkout_id}}",
-    "customerId": "{{fixtures.default_customer_id}}"
+    "customerId": "{{fixtures.storefront_customer_id}}"
   },
   "auth_context": "customer",
   "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "You cannot reassign a checkout that is already attached to a user."
+      }
+    ],
+    "data": {
+      "checkoutCustomerAttach": null
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:1671ea3a0cef0a67",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "sf-checkoutcustomerattach",
+    "expected_null": true,
+    "message_pattern": "You cannot reassign a checkout that is already attached to a user.",
+    "optional_path": [
+      "checkoutCustomerAttach"
+    ],
+    "tier2": {
+      "requires_path": false,
+      "requires_code": true,
+      "expected_code": "PermissionDenied"
+    }
+  },
   "document_hash": "sha256:f3285ebaeb637fa0"
 }

@@ -78,8 +78,9 @@ def test_certification_l3_set_independent_of_extra_target_fields():
     l3_sf = build_client_bundle_endpoints(
         source="storefront", recorded_only=True, schema_intro=golden_schema
     )
-    scenarios = build_scenario_endpoints(recorded_only=True)
+    scenarios = build_scenario_endpoints(recorded_only=False)
     variants = build_variant_endpoints(recorded_only=True)
     dynamic = build_dynamic_probe_endpoints("test-run")
     full_system = len(l1) + len(l3_golden) + len(l3_sf) + len(scenarios) + len(variants) + len(dynamic)
-    assert full_system >= 820
+    # 387 L1 + 415 L3 dashboard + 31 L3 storefront + 15 scenarios + 3 variants + 5 dynamic
+    assert full_system == 856

@@ -12,5 +12,21 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "checkoutEmailUpdate": {
+        "checkout": {
+          "id": "Q2hlY2tvdXQ6ZTIyZGM4YTYtYjg3Yy00MDdkLTk4YjAtOGQ2ZmY3YjZhMGI4",
+          "email": "harness-storefront-customer@example.com"
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:262d031ca5137768",
   "document_hash": "sha256:09bf39deeb85bcff"
 }

@@ -12,5 +12,29 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Invalid ID: 00000000-0000-0000-0000-000000000000."
+      }
+    ],
+    "data": {
+      "checkoutDeliveryMethodUpdate": null
+    }
+  },
+  "golden_outcome": "not_found_probe",
+  "golden_status": "warn",
+  "golden_contract": "not_found",
+  "http_status": 200,
+  "response_shape_hash": "sha256:c971c1571276d5d8",
+  "semantic_profile": {
+    "contract": "not_found",
+    "data_path": "sf-checkoutdeliverymethodupdate",
+    "expected_null": true,
+    "message_pattern": "<invalid_id>",
+    "optional_path": [
+      "checkoutDeliveryMethodUpdate"
+    ]
+  },
   "document_hash": "sha256:edd33deb708cae86"
 }

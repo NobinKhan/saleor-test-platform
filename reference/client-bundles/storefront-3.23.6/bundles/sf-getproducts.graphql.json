@@ -13,5 +13,29 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "You must provide a `first` or `last` value to properly paginate the `products` connection."
+      }
+    ],
+    "data": {
+      "products": null
+    }
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:9731be5cc44d8e7c",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "sf-getproducts",
+    "expected_null": true,
+    "message_pattern": "You must provide a `first` or `last` value to properly paginate the `products` c",
+    "optional_path": [
+      "products"
+    ]
+  },
   "document_hash": "sha256:9f99098c49645a8c"
 }

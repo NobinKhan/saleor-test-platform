@@ -19,5 +19,34 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "checkoutShippingAddressUpdate": {
+        "checkout": null,
+        "errors": [
+          {
+            "field": "countryArea",
+            "message": "This field is required.",
+            "code": "REQUIRED"
+          },
+          {
+            "field": "countryArea",
+            "message": "This field is required.",
+            "code": "REQUIRED"
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:b504ee95144b0831",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "sf-checkoutshippingaddressupdate",
+    "expected_null": true
+  },
   "document_hash": "sha256:27207be98567a314"
 }

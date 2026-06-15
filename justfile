@@ -173,6 +173,8 @@ baseline *extra:
       --min-probes 380 \
       --min-client-bundles 410 \
       --min-client-recorded-ratio 1.0 \
+      --min-storefront-bundles 31 \
+      --min-storefront-recorded-ratio 1.0 \
       --url "http://saleor-api:8000/graphql/" \
       --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
       --password "${SALEOR_ADMIN_PASSWORD:-admin123456}"

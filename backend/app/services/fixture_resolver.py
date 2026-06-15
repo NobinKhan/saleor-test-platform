@@ -91,12 +91,12 @@ async def _query_saleor(
     return None
 
 
-async def _resolve_storefront_customer_id(
+async def _resolve_storefront_customer(
     saleor_url: str,
     staff_token: str,
     timeout: int = 30,
-) -> str | None:
-    """Resolve the harness storefront JWT customer ID (distinct from reference customer)."""
+) -> tuple[str | None, str | None]:
+    """Return (customer_id, customer_jwt) for the harness storefront account."""
     from app.services.saleor_auth import ensure_customer_token
 
     customer_token = await ensure_customer_token(
@@ -108,7 +108,7 @@ async def _resolve_storefront_customer_id(
         staff_token=staff_token,
     )
     if not customer_token:
-        return None
+        return None, None
     me_data = await _query_saleor(
         saleor_url,
         "query { me { id } }",
@@ -116,9 +116,8 @@ async def _resolve_storefront_customer_id(
         timeout,
     )
     me = (me_data or {}).get("me") if isinstance(me_data, dict) else None
-    if isinstance(me, dict):
-        return me.get("id")
-    return None
+    customer_id = me.get("id") if isinstance(me, dict) else None
+    return customer_id, customer_token
 
 
 async def resolve_fixtures(
@@ -170,12 +169,25 @@ async def resolve_fixtures(
             seeded_keys.update(seed_result.seeded_keys)
             seed_errors.extend(seed_result.errors)
 
-    storefront_customer_id = await _resolve_storefront_customer_id(
+    storefront_customer_id, customer_token = await _resolve_storefront_customer(
         saleor_url, token, timeout=timeout
     )
     if storefront_customer_id:
         resolved["storefront_customer_id"] = storefront_customer_id
         live_keys.add("storefront_customer_id")
+
+    if profile == "saleor_demo" and token:
+        from app.services.storefront_session import ensure_storefront_session
+
+        session_fixtures, session_seeded, session_errors = await ensure_storefront_session(
+            saleor_url,
+            customer_token=customer_token,
+            fixtures=resolved,
+            timeout=max(timeout, 60),
+        )
+        _apply_captured(resolved, live_keys, session_fixtures)
+        seeded_keys.update(session_seeded)
+        seed_errors.extend(session_errors)
 
     return FixtureResolution(
         fixtures=resolved,

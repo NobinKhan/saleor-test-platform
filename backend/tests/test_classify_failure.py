@@ -29,6 +29,18 @@ def test_compatible_returns_compatible():
     assert cat == "compatible"
 
 
+def test_sitesettings_shape_drift_is_seed_prerequisite():
+    cat = _classify_failure_category(
+        comparison=_comparison(match_status="shape_drift"),
+        kind="CLIENT_BUNDLE",
+        endpoint_name="sitesettings",
+        meta={},
+        assertion_failures=[],
+        demo_seed_profile="harness",
+    )
+    assert cat == "seed_prerequisite"
+
+
 def test_seed_tagged_shape_drift_is_seed_prerequisite():
     cat = _classify_failure_category(
         comparison=_comparison(match_status="shape_drift"),
@@ -65,6 +77,18 @@ def test_untagged_shape_drift_is_real_bug():
     assert cat == "real_bug"
 
 
+def test_seed_tagged_mismatch_saleor_demo_is_seed_prerequisite():
+    cat = _classify_failure_category(
+        comparison=_comparison(match_status="mismatch", actual_contract="business_error"),
+        kind="CLIENT_BUNDLE",
+        endpoint_name="productvariantsetdefault",
+        meta={},
+        assertion_failures=[],
+        demo_seed_profile="saleor_demo",
+    )
+    assert cat == "seed_prerequisite"
+
+
 def test_seed_tagged_mismatch_harness_profile_is_seed_prerequisite():
     cat = _classify_failure_category(
         comparison=_comparison(match_status="mismatch", actual_contract="business_error"),
@@ -90,3 +114,46 @@ def test_scenario_not_found_is_data_prerequisite():
         assertion_failures=[],
     )
     assert cat == "data_prerequisite"
+
+
+def test_checkout_access_denied_is_data_prerequisite():
+    cat = _classify_failure_category(
+        comparison=_comparison(
+            match_status="mismatch",
+            actual_contract="graphql_error",
+            diff_summary="Checkout access denied for anonymous user",
+        ),
+        kind="CLIENT_BUNDLE",
+        endpoint_name="sf-checkoutlinesadd",
+        meta={},
+        assertion_failures=[],
+    )
+    assert cat == "data_prerequisite"
+
+
+def test_empty_catalog_edges_is_data_prerequisite():
+    cat = _classify_failure_category(
+        comparison=_comparison(
+            match_status="shape_drift",
+            diff_summary='search.edges: [] vs golden 10 edges',
+        ),
+        kind="CLIENT_BUNDLE",
+        endpoint_name="somecatalogprobe",
+        meta={},
+        assertion_failures=[],
+    )
+    assert cat == "data_prerequisite"
+
+
+def test_searchcategories_seed_tagged_stays_seed_prerequisite():
+    cat = _classify_failure_category(
+        comparison=_comparison(
+            match_status="shape_drift",
+            diff_summary='search.edges: [] vs golden 10 edges',
+        ),
+        kind="CLIENT_BUNDLE",
+        endpoint_name="searchcategories",
+        meta={},
+        assertion_failures=[],
+    )
+    assert cat == "seed_prerequisite"

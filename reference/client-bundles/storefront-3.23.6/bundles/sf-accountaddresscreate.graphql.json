@@ -18,5 +18,34 @@
   },
   "auth_context": "customer",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "accountAddressCreate": {
+        "address": null,
+        "errors": [
+          {
+            "field": "countryArea",
+            "message": "This field is required.",
+            "code": "REQUIRED"
+          },
+          {
+            "field": "countryArea",
+            "message": "This field is required.",
+            "code": "REQUIRED"
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:2476fbdb85a1ed89",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "sf-accountaddresscreate",
+    "expected_null": true
+  },
   "document_hash": "sha256:b42dcfb566a50a9a"
 }

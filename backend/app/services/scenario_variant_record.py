@@ -16,7 +16,11 @@ from typing import Any
 import httpx
 
 from app.services.client_bundle_fixtures import substitute_fixtures
-from app.services.scenario_corpus import scenario_dir, substitute_scenario_variables
+from app.services.scenario_corpus import (
+    enrich_checkout_delivery_fixture,
+    scenario_dir,
+    substitute_scenario_variables,
+)
 from app.services.response_contract import classify_response_contract
 from app.services.semantic_compare import build_semantic_profile
 from app.services.response_normalize import sanitize_for_sgrc
@@ -154,13 +158,22 @@ async def record_scenario(
     }
     recorded = 0
     for step in steps:
+        step_fixtures = dict(fixtures or {})
+        await enrich_checkout_delivery_fixture(
+            saleor_url,
+            step_id=step.step_id,
+            context=context,
+            fixtures=step_fixtures,
+            token=saleor_token,
+            timeout=timeout,
+        )
         result = await record_scenario_step(
             saleor_url=saleor_url,
             saleor_token=saleor_token,
             scenario_id=scenario_id,
             step=step,
             context=context,
-            fixtures=fixtures,
+            fixtures=step_fixtures,
             timeout=timeout,
         )
         if result:

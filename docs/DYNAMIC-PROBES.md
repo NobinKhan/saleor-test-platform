@@ -28,10 +28,13 @@ is computing responses, not serving canned golden JSON keyed on operation name.
 | `dynamic_category_create` | `categoryCreate` | echo | Unique name/slug must appear in response |
 | `dynamic_collection_create` | `collectionCreate` | echo | Unique name/slug must appear in response |
 | `dynamic_product_not_found` | `product` (query) | semantic_error | Error must reference generated UUID |
+| `dynamic_channel_create` | `channelCreate` | echo | Unique channel name/slug must appear in response |
+
+Disk JSON under `reference/dynamic/` overrides built-in probes by `probe_id` (5 unique probes total).
 
 ## Adding new dynamic probes
 
-Edit `backend/app/services/dynamic_corpus.py` and add to `DYNAMIC_PROBES`:
+Edit `backend/app/services/dynamic_corpus.py` and add to `BUILT_IN_PROBES` (or add JSON under `reference/dynamic/`):
 
 ```python
 DynamicProbe(

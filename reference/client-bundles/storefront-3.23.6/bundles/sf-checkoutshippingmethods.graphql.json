@@ -11,5 +11,17 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "checkout": {
+        "availableShippingMethods": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:87bfabb03563cafa",
   "document_hash": "sha256:4b7e9a1b8b89740e"
 }

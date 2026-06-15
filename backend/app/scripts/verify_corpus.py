@@ -60,47 +60,49 @@ async def check_corpus(min_probes: int, version: str) -> tuple[bool, str]:
 
 async def check_client_bundles(
     *,
-    dashboard_version: str,
+    source: str = "dashboard",
+    version: str,
     min_bundles: int,
     min_recorded_ratio: float,
     saleor_url: str | None = None,
     saleor_token: str | None = None,
 ) -> tuple[bool, list[str]]:
     messages: list[str] = []
-    bundles = load_all_bundles_from_disk("dashboard", dashboard_version)
-    manifest = load_bundle_manifest("dashboard", dashboard_version) or {}
+    bundles = load_all_bundles_from_disk(source, version)
+    manifest = load_bundle_manifest(source, version) or {}
+    label = "L3 dashboard" if source == "dashboard" else "L3 storefront"
 
     if len(bundles) < min_bundles:
-        return False, [f"L3 bundles: {len(bundles)} on disk (need >= {min_bundles})"]
+        return False, [f"{label} bundles: {len(bundles)} on disk (need >= {min_bundles})"]
 
     stubs = [b.bundle_id for b in bundles if is_stub_bundle(b)]
     if stubs:
-        return False, [f"L3 stub bundles detected: {', '.join(stubs[:5])}"]
+        return False, [f"{label} stub bundles detected: {', '.join(stubs[:5])}"]
 
     recorded = sum(1 for b in bundles if b.has_golden())
     ratio = recorded / len(bundles) if bundles else 0.0
     if ratio < min_recorded_ratio:
         return False, [
-            f"L3 recorded ratio {ratio:.1%} < {min_recorded_ratio:.0%} "
+            f"{label} recorded ratio {ratio:.1%} < {min_recorded_ratio:.0%} "
             f"({recorded}/{len(bundles)})"
         ]
 
     expected_hash = manifest.get("bundles_hash") or ""
-    actual_hash = bundles_hash("dashboard", dashboard_version)
+    actual_hash = bundles_hash(source, version)
     if expected_hash and expected_hash != actual_hash:
-        return False, ["L3 bundles_hash mismatch — re-run patch-corpus --sync-client"]
+        return False, [f"{label} bundles_hash mismatch — re-run patch-corpus --sync-client"]
 
     for bundle in bundles:
         try:
             root_fields_in_document(bundle.document)
         except Exception as exc:
-            return False, [f"L3 bundle {bundle.bundle_id} document parse error: {exc}"]
+            return False, [f"{label} bundle {bundle.bundle_id} document parse error: {exc}"]
 
     messages.append(
-        f"L3 bundles OK: {len(bundles)} imported, {recorded} recorded ({ratio:.1%})"
+        f"{label} bundles OK: {len(bundles)} imported, {recorded} recorded ({ratio:.1%})"
     )
 
-    failures_path = bundle_dir_for_version("dashboard", dashboard_version) / "record_failures.json"
+    failures_path = bundle_dir_for_version(source, version) / "record_failures.json"
     if failures_path.is_file():
         try:
             failures = json.loads(failures_path.read_text(encoding="utf-8")).get("errors") or []
@@ -108,27 +110,27 @@ async def check_client_bundles(
             failures = ["record_failures.json is invalid JSON"]
         if failures:
             return False, [
-                f"L3 record_failures.json has {len(failures)} error(s) — "
-                "run just seed-reference && just patch-corpus --client-bundles all"
+                f"{label} record_failures.json has {len(failures)} error(s) — "
+                f"run just seed-reference && just patch-corpus --client-bundles {source}:all"
             ]
 
     if saleor_url and saleor_token:
         intro = await introspect_saleor(saleor_url, saleor_token)
-        recorded = [b for b in bundles if b.has_golden()]
-        compatible, excluded = bundles_compatible_with_schema(recorded, intro)
+        recorded_bundles = [b for b in bundles if b.has_golden()]
+        compatible, excluded = bundles_compatible_with_schema(recorded_bundles, intro)
         if not compatible:
-            return False, ["L3 schema gate FAIL: no recorded bundles match target schema"]
+            return False, [f"{label} schema gate FAIL: no recorded bundles match target schema"]
         gate = compute_client_bundle_schema_gate(compatible, intro, recorded_only=False)
         if not gate["client_schema_gate_pass"]:
             missing = gate.get("missing_l3_fields") or []
-            return False, [f"L3 schema gate FAIL: {len(missing)} missing root field(s)"]
+            return False, [f"{label} schema gate FAIL: {len(missing)} missing root field(s)"]
         if excluded:
             messages.append(
-                f"L3 schema gate: {len({e['bundle_id'] for e in excluded})} dashboard-only "
+                f"{label} schema gate: {len({e['bundle_id'] for e in excluded})} "
                 f"bundle(s) excluded (fields not on target Saleor)"
             )
         messages.append(
-            f"L3 schema gate PASS ({len(compatible)} certification bundle(s) checked)"
+            f"{label} schema gate PASS ({len(compatible)} certification bundle(s) checked)"
         )
 
     return True, messages
@@ -167,12 +169,26 @@ async def main() -> int:
     parser.add_argument("--run-id", default=None, help="Test run UUID to check")
     parser.add_argument("--version", default=None, help="Corpus Saleor version")
     parser.add_argument("--dashboard-version", default=None, help="L3 dashboard bundle version")
+    parser.add_argument("--storefront-version", default=None, help="L3 storefront bundle version")
+    parser.add_argument(
+        "--min-storefront-bundles",
+        type=int,
+        default=0,
+        help="Minimum storefront L3 bundle count (0 = skip storefront check)",
+    )
+    parser.add_argument(
+        "--min-storefront-recorded-ratio",
+        type=float,
+        default=1.0,
+        help="Minimum fraction of storefront L3 bundles with golden recorded",
+    )
     parser.add_argument("--url", default=None, help="Saleor URL for L3 schema gate check")
     parser.add_argument("--email", default=None)
     parser.add_argument("--password", default=None)
     args = parser.parse_args()
     version = args.version or settings.golden_corpus_version
     dashboard_version = args.dashboard_version or settings.reference_baseline_version
+    storefront_version = args.storefront_version or settings.reference_baseline_version
 
     ok, msg = await check_corpus(args.min_probes, version)
     print(msg)
@@ -187,7 +203,8 @@ async def main() -> int:
             return 1
 
     l3_ok, l3_msgs = await check_client_bundles(
-        dashboard_version=dashboard_version,
+        source="dashboard",
+        version=dashboard_version,
         min_bundles=args.min_client_bundles,
         min_recorded_ratio=args.min_client_recorded_ratio,
         saleor_url=args.url,
@@ -197,6 +214,20 @@ async def main() -> int:
         print(line)
     if not l3_ok:
         return 1
+
+    if args.min_storefront_bundles > 0:
+        sf_ok, sf_msgs = await check_client_bundles(
+            source="storefront",
+            version=storefront_version,
+            min_bundles=args.min_storefront_bundles,
+            min_recorded_ratio=args.min_storefront_recorded_ratio,
+            saleor_url=args.url,
+            saleor_token=token,
+        )
+        for line in sf_msgs:
+            print(line)
+        if not sf_ok:
+            return 1
 
     if args.min_match is not None and args.run_id:
         run_ok, run_msg = await check_run_match_rate(uuid.UUID(args.run_id), args.min_match)

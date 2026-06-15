@@ -11,5 +11,29 @@
   },
   "auth_context": "anonymous",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "checkoutComplete": {
+        "order": null,
+        "errors": [
+          {
+            "field": "shippingMethod",
+            "message": "Shipping method is not set",
+            "code": "SHIPPING_METHOD_NOT_SET"
+          }
+        ]
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:d7b2b5a1cb23ab8d",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "sf-checkoutcomplete",
+    "expected_null": true
+  },
   "document_hash": "sha256:46518a4c64e62fd4"
 }

@@ -17,8 +17,8 @@ def test_product_lifecycle_manifest_loaded():
 
 def test_build_checkout_lifecycle_endpoints():
     endpoints = build_scenario_endpoints(scenario_ids=["checkout-lifecycle"])
-    assert len(endpoints) == 4
-    assert endpoints[-1]["auth_context"] == "customer"
+    assert len(endpoints) == 6
+    assert endpoints[3]["auth_context"] == "customer"
 
 
 def test_build_order_lifecycle_endpoints():

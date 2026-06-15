@@ -14,5 +14,28 @@
   },
   "auth_context": "customer",
   "priority": "P1",
+  "golden_response": {
+    "data": {
+      "accountRegister": {
+        "errors": [
+          {
+            "field": "redirectUrl",
+            "message": "This field is required."
+          }
+        ],
+        "requiresConfirmation": true
+      }
+    }
+  },
+  "golden_outcome": "validation_error",
+  "golden_status": "warn",
+  "golden_contract": "business_error",
+  "http_status": 200,
+  "response_shape_hash": "sha256:89ca39a5eabd251c",
+  "semantic_profile": {
+    "contract": "business_error",
+    "data_path": "sf-registeraccount",
+    "expected_null": true
+  },
   "document_hash": "sha256:b6950f8cced37624"
 }

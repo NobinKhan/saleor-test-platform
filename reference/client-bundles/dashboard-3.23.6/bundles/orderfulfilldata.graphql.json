@@ -14,216 +14,216 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6MjljMGFmNTEtYmJiZS00NTg2LWE2N2QtYjllNGQ0ZDJjMDJm",
-        "isPaid": true,
+        "id": "T3JkZXI6NWI0MDgzNWQtZmI2Mi00MzIwLWE1ZjMtZGZkZmY4ZWU1NWYw",
+        "isPaid": false,
         "deliveryMethod": {
           "__typename": "ShippingMethod",
-          "id": "U2hpcHBpbmdNZXRob2Q6NQ=="
+          "id": "U2hpcHBpbmdNZXRob2Q6Mw=="
         },
         "lines": [
           {
-            "id": "T3JkZXJMaW5lOmU3NGQ1NTA1LTI0OWEtNDYxZi1hYzFlLTUwZjU4Y2VkNTc0Mg==",
+            "id": "T3JkZXJMaW5lOjY0YWQxODNkLTE3YmEtNGIyZC05MmY1LWM5Mjg5OWUyYTk1Mw==",
             "allocations": [
               {
-                "quantity": 1,
+                "quantity": 4,
                 "warehouse": {
-                  "id": "V2FyZWhvdXNlOjQ4NGM2MjQ5LWY4YTctNGE4OS1hM2I1LWVkZTQ4NGZjYmQyZQ==",
+                  "id": "V2FyZWhvdXNlOmU5Y2U2MjI1LTBlYWYtNDM1Mi04YTA2LWZmYTU0Nzk5YTMxMg==",
                   "name": "Europe"
                 },
-                "id": "QWxsb2NhdGlvbjo1MQ=="
+                "id": "QWxsb2NhdGlvbjo0OQ=="
               }
             ],
-            "quantity": 1,
-            "quantityToFulfill": 1,
+            "quantity": 4,
+            "quantityToFulfill": 4,
             "variant": {
               "stocks": [
                 {
-                  "id": "U3RvY2s6NDY1",
-                  "quantity": 208,
+                  "id": "U3RvY2s6NDMz",
+                  "quantity": 396,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjc5NmU5OWUwLWFhZmEtNDEwMC1hNzYzLTQ4M2JjZmIxZDY1OQ==",
+                    "id": "V2FyZWhvdXNlOjAwYmE1MWY1LTBhOTktNDRkMi1hYzVmLWViYzZlYzUyNmU0OQ==",
                     "name": "Oceania"
                   }
                 },
                 {
-                  "id": "U3RvY2s6NDY2",
-                  "quantity": 209,
-                  "quantityAllocated": 1,
-                  "warehouse": {
-                    "id": "V2FyZWhvdXNlOjQ4NGM2MjQ5LWY4YTctNGE4OS1hM2I1LWVkZTQ4NGZjYmQyZQ==",
-                    "name": "Europe"
-                  }
-                },
-                {
-                  "id": "U3RvY2s6NDY3",
-                  "quantity": 208,
-                  "quantityAllocated": 0,
-                  "warehouse": {
-                    "id": "V2FyZWhvdXNlOjQ3MmJlMzY1LWI4ODAtNDA2NS05NGZjLWI1YWI2MTAxZWM3Yw==",
-                    "name": "Default Warehouse"
-                  }
-                },
-                {
-                  "id": "U3RvY2s6NDY5",
-                  "quantity": 208,
-                  "quantityAllocated": 0,
-                  "warehouse": {
-                    "id": "V2FyZWhvdXNlOjY0YjYyMjY5LWQ1NmQtNDIwZS1iYmM2LTA2MGVjMzI5YWM2MA==",
-                    "name": "Default"
-                  }
-                },
-                {
-                  "id": "U3RvY2s6NDcw",
-                  "quantity": 208,
-                  "quantityAllocated": 0,
-                  "warehouse": {
-                    "id": "V2FyZWhvdXNlOjU0MTEzYmQ2LThhZjYtNDMxMy1iMWRiLTkyMTZjY2Q1OTkwMA==",
-                    "name": "Asia"
-                  }
-                },
-                {
-                  "id": "U3RvY2s6NDcx",
-                  "quantity": 208,
-                  "quantityAllocated": 0,
-                  "warehouse": {
-                    "id": "V2FyZWhvdXNlOjUzZWY0NTdiLTVhNmMtNGYzYi04OWU2LTZhZDBkYWVjMzAzMA==",
-                    "name": "Americas"
-                  }
-                },
-                {
-                  "id": "U3RvY2s6NDcy",
-                  "quantity": 208,
-                  "quantityAllocated": 0,
-                  "warehouse": {
-                    "id": "V2FyZWhvdXNlOmQ3MTk4ZDQ4LWI4YjEtNGFkZi04ODM3LWE0ZGQ5MmMwMTEzYw==",
-                    "name": "Africa"
-                  }
-                }
-              ],
-              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg1",
-              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg1",
-              "sku": null,
-              "preorder": null,
-              "attributes": [],
-              "trackInventory": false
-            },
-            "isShippingRequired": true,
-            "productName": "Bean Juice",
-            "quantityFulfilled": 0,
-            "thumbnail": null
-          },
-          {
-            "id": "T3JkZXJMaW5lOmE1NjM1ZmU1LTE5MDMtNGZiOC04MGY4LTUxYWJjY2YwMmEzOQ==",
-            "allocations": [
-              {
-                "quantity": 3,
-                "warehouse": {
-                  "id": "V2FyZWhvdXNlOjQ4NGM2MjQ5LWY4YTctNGE4OS1hM2I1LWVkZTQ4NGZjYmQyZQ==",
-                  "name": "Europe"
-                },
-                "id": "QWxsb2NhdGlvbjo1Mg=="
-              }
-            ],
-            "quantity": 3,
-            "quantityToFulfill": 3,
-            "variant": {
-              "stocks": [
-                {
-                  "id": "U3RvY2s6MzM=",
-                  "quantity": 279,
-                  "quantityAllocated": 0,
-                  "warehouse": {
-                    "id": "V2FyZWhvdXNlOjc5NmU5OWUwLWFhZmEtNDEwMC1hNzYzLTQ4M2JjZmIxZDY1OQ==",
-                    "name": "Oceania"
-                  }
-                },
-                {
-                  "id": "U3RvY2s6MzQ=",
-                  "quantity": 284,
+                  "id": "U3RvY2s6NDM0",
+                  "quantity": 401,
                   "quantityAllocated": 5,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjQ4NGM2MjQ5LWY4YTctNGE4OS1hM2I1LWVkZTQ4NGZjYmQyZQ==",
+                    "id": "V2FyZWhvdXNlOmU5Y2U2MjI1LTBlYWYtNDM1Mi04YTA2LWZmYTU0Nzk5YTMxMg==",
                     "name": "Europe"
                   }
                 },
                 {
-                  "id": "U3RvY2s6MzU=",
-                  "quantity": 279,
+                  "id": "U3RvY2s6NDM2",
+                  "quantity": 396,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjQ3MmJlMzY1LWI4ODAtNDA2NS05NGZjLWI1YWI2MTAxZWM3Yw==",
-                    "name": "Default Warehouse"
+                    "id": "V2FyZWhvdXNlOmY3ZTMyMGUwLTAyNjgtNDlmMi1iNmViLTUxNDBkZjE1N2QyZg==",
+                    "name": "Default for click and collect"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mzc=",
-                  "quantity": 279,
+                  "id": "U3RvY2s6NDM3",
+                  "quantity": 396,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjY0YjYyMjY5LWQ1NmQtNDIwZS1iYmM2LTA2MGVjMzI5YWM2MA==",
+                    "id": "V2FyZWhvdXNlOjJjYTFiOGE1LWZjYTktNDVlMi1iYmUzLTI1N2JiY2VkNTA4NA==",
                     "name": "Default"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mzg=",
-                  "quantity": 279,
+                  "id": "U3RvY2s6NDM4",
+                  "quantity": 396,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjU0MTEzYmQ2LThhZjYtNDMxMy1iMWRiLTkyMTZjY2Q1OTkwMA==",
+                    "id": "V2FyZWhvdXNlOmQ4MWY2ZWMxLTE0NWItNDM1MS05NTU5LWY3NTdiNmM1OGViMQ==",
                     "name": "Asia"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mzk=",
-                  "quantity": 279,
+                  "id": "U3RvY2s6NDM5",
+                  "quantity": 396,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjUzZWY0NTdiLTVhNmMtNGYzYi04OWU2LTZhZDBkYWVjMzAzMA==",
+                    "id": "V2FyZWhvdXNlOmE4NDc2MjVlLWEyZGYtNDVjZC04ODU4LTEyY2E1ZThhZjc2Yw==",
                     "name": "Americas"
                   }
                 },
                 {
-                  "id": "U3RvY2s6NDA=",
-                  "quantity": 279,
+                  "id": "U3RvY2s6NDQw",
+                  "quantity": 396,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOmQ3MTk4ZDQ4LWI4YjEtNGFkZi04ODM3LWE0ZGQ5MmMwMTEzYw==",
+                    "id": "V2FyZWhvdXNlOjg1MzQ0YTJhLTg4YTMtNGZmNS1iNDcyLTk4NmMzZTQyNjcwMQ==",
                     "name": "Africa"
                   }
                 }
               ],
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzI4",
-              "name": "42",
-              "sku": "918223585",
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzgw",
+              "name": "MP3",
+              "sku": "124223582",
               "preorder": null,
               "attributes": [
                 {
                   "values": [
                     {
-                      "id": "QXR0cmlidXRlVmFsdWU6MTEx",
-                      "name": "42"
+                      "id": "QXR0cmlidXRlVmFsdWU6MTM3",
+                      "name": "MP3"
                     }
                   ]
                 }
               ],
               "trackInventory": true
             },
-            "isShippingRequired": true,
-            "productName": "White Plimsolls",
+            "isShippingRequired": false,
+            "productName": "Own your stack and data",
             "quantityFulfilled": 0,
             "thumbnail": null
           },
           {
-            "id": "T3JkZXJMaW5lOmUxZjIyNTc4LTQ2YTgtNGI2Zi1iN2Y3LTRmNTRiOTlkMmM2Mw==",
+            "id": "T3JkZXJMaW5lOmNmZmY3ZjdiLWRmMDktNDRmYy05YmJjLWVkNWVlN2UyMjhhYg==",
+            "allocations": [
+              {
+                "quantity": 4,
+                "warehouse": {
+                  "id": "V2FyZWhvdXNlOmU5Y2U2MjI1LTBlYWYtNDM1Mi04YTA2LWZmYTU0Nzk5YTMxMg==",
+                  "name": "Europe"
+                },
+                "id": "QWxsb2NhdGlvbjo1MA=="
+              }
+            ],
+            "quantity": 4,
+            "quantityToFulfill": 4,
+            "variant": {
+              "stocks": [
+                {
+                  "id": "U3RvY2s6NDgx",
+                  "quantity": 484,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOjAwYmE1MWY1LTBhOTktNDRkMi1hYzVmLWViYzZlYzUyNmU0OQ==",
+                    "name": "Oceania"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NDgy",
+                  "quantity": 488,
+                  "quantityAllocated": 4,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmU5Y2U2MjI1LTBlYWYtNDM1Mi04YTA2LWZmYTU0Nzk5YTMxMg==",
+                    "name": "Europe"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NDg0",
+                  "quantity": 484,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmY3ZTMyMGUwLTAyNjgtNDlmMi1iNmViLTUxNDBkZjE1N2QyZg==",
+                    "name": "Default for click and collect"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NDg1",
+                  "quantity": 484,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOjJjYTFiOGE1LWZjYTktNDVlMi1iYmUzLTI1N2JiY2VkNTA4NA==",
+                    "name": "Default"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NDg2",
+                  "quantity": 484,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmQ4MWY2ZWMxLTE0NWItNDM1MS05NTU5LWY3NTdiNmM1OGViMQ==",
+                    "name": "Asia"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NDg3",
+                  "quantity": 487,
+                  "quantityAllocated": 3,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOmE4NDc2MjVlLWEyZGYtNDVjZC04ODU4LTEyY2E1ZThhZjc2Yw==",
+                    "name": "Americas"
+                  }
+                },
+                {
+                  "id": "U3RvY2s6NDg4",
+                  "quantity": 484,
+                  "quantityAllocated": 0,
+                  "warehouse": {
+                    "id": "V2FyZWhvdXNlOjg1MzQ0YTJhLTg4YTMtNGZmNS1iNDcyLTk4NmMzZTQyNjcwMQ==",
+                    "name": "Africa"
+                  }
+                }
+              ],
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg3",
+              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg3",
+              "sku": null,
+              "preorder": null,
+              "attributes": [],
+              "trackInventory": false
+            },
+            "isShippingRequired": true,
+            "productName": "Carrot Juice",
+            "quantityFulfilled": 0,
+            "thumbnail": null
+          },
+          {
+            "id": "T3JkZXJMaW5lOmFmMGRjZmE0LTU3ZTYtNDM0YS04OTU3LWUyMTU2YzE4YWQ0ZQ==",
             "allocations": [
               {
                 "quantity": 2,
                 "warehouse": {
-                  "id": "V2FyZWhvdXNlOjQ4NGM2MjQ5LWY4YTctNGE4OS1hM2I1LWVkZTQ4NGZjYmQyZQ==",
+                  "id": "V2FyZWhvdXNlOmU5Y2U2MjI1LTBlYWYtNDM1Mi04YTA2LWZmYTU0Nzk5YTMxMg==",
                   "name": "Europe"
                 },
-                "id": "QWxsb2NhdGlvbjo1Mw=="
+                "id": "QWxsb2NhdGlvbjo1MQ=="
               }
             ],
             "quantity": 2,
@@ -231,87 +231,87 @@
             "variant": {
               "stocks": [
                 {
-                  "id": "U3RvY2s6Mjg5",
-                  "quantity": 136,
+                  "id": "U3RvY2s6MzY5",
+                  "quantity": 444,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjc5NmU5OWUwLWFhZmEtNDEwMC1hNzYzLTQ4M2JjZmIxZDY1OQ==",
+                    "id": "V2FyZWhvdXNlOjAwYmE1MWY1LTBhOTktNDRkMi1hYzVmLWViYzZlYzUyNmU0OQ==",
                     "name": "Oceania"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mjkw",
-                  "quantity": 138,
+                  "id": "U3RvY2s6Mzcw",
+                  "quantity": 446,
                   "quantityAllocated": 2,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjQ4NGM2MjQ5LWY4YTctNGE4OS1hM2I1LWVkZTQ4NGZjYmQyZQ==",
+                    "id": "V2FyZWhvdXNlOmU5Y2U2MjI1LTBlYWYtNDM1Mi04YTA2LWZmYTU0Nzk5YTMxMg==",
                     "name": "Europe"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mjkx",
-                  "quantity": 136,
+                  "id": "U3RvY2s6Mzcy",
+                  "quantity": 444,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjQ3MmJlMzY1LWI4ODAtNDA2NS05NGZjLWI1YWI2MTAxZWM3Yw==",
-                    "name": "Default Warehouse"
+                    "id": "V2FyZWhvdXNlOmY3ZTMyMGUwLTAyNjgtNDlmMi1iNmViLTUxNDBkZjE1N2QyZg==",
+                    "name": "Default for click and collect"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mjkz",
-                  "quantity": 136,
+                  "id": "U3RvY2s6Mzcz",
+                  "quantity": 444,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjY0YjYyMjY5LWQ1NmQtNDIwZS1iYmM2LTA2MGVjMzI5YWM2MA==",
+                    "id": "V2FyZWhvdXNlOjJjYTFiOGE1LWZjYTktNDVlMi1iYmUzLTI1N2JiY2VkNTA4NA==",
                     "name": "Default"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mjk0",
-                  "quantity": 136,
+                  "id": "U3RvY2s6Mzc0",
+                  "quantity": 444,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjU0MTEzYmQ2LThhZjYtNDMxMy1iMWRiLTkyMTZjY2Q1OTkwMA==",
+                    "id": "V2FyZWhvdXNlOmQ4MWY2ZWMxLTE0NWItNDM1MS05NTU5LWY3NTdiNmM1OGViMQ==",
                     "name": "Asia"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mjk1",
-                  "quantity": 136,
+                  "id": "U3RvY2s6Mzc1",
+                  "quantity": 444,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOjUzZWY0NTdiLTVhNmMtNGYzYi04OWU2LTZhZDBkYWVjMzAzMA==",
+                    "id": "V2FyZWhvdXNlOmE4NDc2MjVlLWEyZGYtNDVjZC04ODU4LTEyY2E1ZThhZjc2Yw==",
                     "name": "Americas"
                   }
                 },
                 {
-                  "id": "U3RvY2s6Mjk2",
-                  "quantity": 136,
+                  "id": "U3RvY2s6Mzc2",
+                  "quantity": 444,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOmQ3MTk4ZDQ4LWI4YjEtNGFkZi04ODM3LWE0ZGQ5MmMwMTEzYw==",
+                    "id": "V2FyZWhvdXNlOjg1MzQ0YTJhLTg4YTMtNGZmNS1iNDcyLTk4NmMzZTQyNjcwMQ==",
                     "name": "Africa"
                   }
                 }
               ],
-              "id": "UHJvZHVjdFZhcmlhbnQ6MzYw",
-              "name": "XXL",
-              "sku": "111223582",
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mzcy",
+              "name": "DVD",
+              "sku": "9018223582",
               "preorder": null,
               "attributes": [
                 {
                   "values": [
                     {
-                      "id": "QXR0cmlidXRlVmFsdWU6MTE5",
-                      "name": "XXL"
+                      "id": "QXR0cmlidXRlVmFsdWU6MTMz",
+                      "name": "DVD"
                     }
                   ]
                 }
               ],
               "trackInventory": true
             },
-            "isShippingRequired": true,
-            "productName": "Darko Polo",
+            "isShippingRequired": false,
+            "productName": "Battle-tested at brands like Lush",
             "quantityFulfilled": 0,
             "thumbnail": null
           }
@@ -324,7 +324,7 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:0f9b0593815127d7",
+  "response_shape_hash": "sha256:634e431ea3430c6b",
   "document_hash": "sha256:4c7ce392a0b6d4d3",
   "seed_tags": [
     "requires_order_fixture"

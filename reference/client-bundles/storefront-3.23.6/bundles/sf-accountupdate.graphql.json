@@ -14,5 +14,22 @@
   },
   "auth_context": "customer",
   "priority": "P0",
+  "golden_response": {
+    "data": {
+      "accountUpdate": {
+        "user": {
+          "id": "VXNlcjo0NQ==",
+          "firstName": "Harness",
+          "lastName": "Updated"
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:90f00b8cf308b228",
   "document_hash": "sha256:0daf874ed32d25f5"
 }
