@@ -21,7 +21,7 @@
     "data": {
       "checkoutDeliveryMethodUpdate": {
         "checkout": {
-          "id": "Q2hlY2tvdXQ6ZjEzYjAwOTItZjZkZi00YjhjLTk1MjAtYjhiM2NiNzg4NDEy",
+          "id": "Q2hlY2tvdXQ6NmJhMWI1ZGQtMGRhYS00NWJiLWEwYzMtMzBhNWI1NTBiNzk4",
           "deliveryMethod": {
             "id": "U2hpcHBpbmdNZXRob2Q6MQ==",
             "name": "Default"
@@ -33,5 +33,5 @@
   },
   "golden_contract": "success",
   "golden_status": "pass",
-  "recorded_at": "2026-06-15T10:09:01.560506+00:00"
+  "recorded_at": "2026-06-16T08:46:13.811049+00:00"
 }

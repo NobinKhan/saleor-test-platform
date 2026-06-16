@@ -120,8 +120,8 @@ class TestRunDetail(TestRunSummary):
     timeout_seconds: int = 30
     reference_baseline_version: str | None = None
     reference_baseline_source: str | None = None
-    reference_catalog_queries: int = 0
-    reference_catalog_mutations: int = 0
+    l1_corpus_queries: int = 0
+    l1_corpus_mutations: int = 0
 
 
 # ── Test Result ────────────────────────────────────────────────────────────────
@@ -189,8 +189,8 @@ class ReportSummary(BaseModel):
     timeout_seconds: int = 30
     reference_baseline_version: str | None = None
     reference_baseline_source: str | None = None
-    reference_catalog_queries: int = 0
-    reference_catalog_mutations: int = 0
+    l1_corpus_queries: int = 0
+    l1_corpus_mutations: int = 0
     golden_corpus_version: str | None = None
     golden_corpus_url: str | None = None
     golden_probe_count: int = 0

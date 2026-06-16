@@ -1,3 +1,5 @@
+> **Superseded** — This document describes the original platform vision. For the current certification standard, see [COMPATIBILITY.md](COMPATIBILITY.md) and [CLIENT-CONTRACT.md](CLIENT-CONTRACT.md).
+
 # Saleor API Testing Platform — SPEC.md
 
 ## 1. Concept & Vision

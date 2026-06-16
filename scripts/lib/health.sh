@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Host ports (match docker-compose.yml / .env.example)
+SALEOR_HOST_PORT="${SALEOR_HOST_PORT:-8000}"
+HARNESS_BACKEND_HOST_PORT="${HARNESS_BACKEND_HOST_PORT:-5998}"
+HARNESS_FRONTEND_HOST_PORT="${HARNESS_FRONTEND_HOST_PORT:-5999}"
+
+HARNESS_API_URL="http://localhost:${HARNESS_BACKEND_HOST_PORT}"
+HARNESS_UI_URL="http://localhost:${HARNESS_FRONTEND_HOST_PORT}"
+SALEOR_GRAPHQL_URL="http://localhost:${SALEOR_HOST_PORT}/graphql/"
 wait_for_url() {
   local url="$1"
   local label="$2"
@@ -26,7 +34,9 @@ _saleor_graphql_response_ok() {
 import json, sys
 try:
     d = json.loads(sys.argv[1])
-    sys.exit(0 if (d.get('data') or {}).get('shop') and not d.get('errors') else 1)
+    if d.get('data') is not None and not d.get('errors'):
+        sys.exit(0)
+    sys.exit(1)
 except Exception:
     sys.exit(1)
 " "${body}" 2>/dev/null
@@ -39,18 +49,18 @@ wait_for_saleor_graphql() {
 
   while [ "${attempt}" -le "${max_attempts}" ]; do
     local response
-    response=$(curl -sf http://localhost:8000/graphql/ \
+    response=$(curl -sf "http://localhost:${SALEOR_HOST_PORT}/graphql/" \
       -X POST \
       -H "Content-Type: application/json" \
       -d "${payload}" 2>/dev/null) || response=""
     if [ -n "${response}" ] && _saleor_graphql_response_ok "${response}"; then
-      echo "Saleor GraphQL (8000): OK"
+      echo "Saleor GraphQL (${SALEOR_HOST_PORT}): OK"
       return 0
     fi
     attempt=$((attempt + 1))
     sleep 2
   done
-  echo "Saleor GraphQL (8000): FAILED (schema not ready or DB unmigrated)"
+  echo "Saleor GraphQL (${SALEOR_HOST_PORT}): FAILED (schema not ready or DB unmigrated)"
   return 1
 }
 
@@ -64,7 +74,7 @@ wait_for_saleor_auth() {
 
   while [ "${attempt}" -le "${max_attempts}" ]; do
     local response
-    response=$(curl -sf http://localhost:8000/graphql/ \
+    response=$(curl -sf "http://localhost:${SALEOR_HOST_PORT}/graphql/" \
       -X POST \
       -H "Content-Type: application/json" \
       -d "${payload}" 2>/dev/null) || response=""
@@ -75,14 +85,14 @@ d = json.loads(sys.argv[1])
 tc = (d.get('data') or {}).get('tokenCreate') or {}
 sys.exit(0 if tc.get('token') else 1)
 " "${response}" 2>/dev/null; then
-        echo "Saleor admin auth (8000): OK"
+        echo "Saleor admin auth (${SALEOR_HOST_PORT}): OK"
         return 0
       fi
     fi
     attempt=$((attempt + 1))
     sleep 2
   done
-  echo "Saleor admin auth (8000): FAILED (run: just fresh)"
+  echo "Saleor admin auth (${SALEOR_HOST_PORT}): FAILED (run: just fresh)"
   return 1
 }
 
@@ -102,9 +112,9 @@ wait_for_harness_db() {
 }
 
 check_harness_health() {
-  wait_for_url "http://localhost:5998/api/health" "Harness API (5998)" 30 2 || return 1
+  wait_for_url "${HARNESS_API_URL}/api/health" "Harness API (${HARNESS_BACKEND_HOST_PORT})" 30 2 || return 1
   wait_for_harness_db 20 || return 1
-  wait_for_url "http://localhost:5999/dashboard" "Harness UI (5999)" 20 2 || return 1
+  wait_for_url "${HARNESS_UI_URL}/dashboard" "Harness UI (${HARNESS_FRONTEND_HOST_PORT})" 20 2 || return 1
   return 0
 }
 
@@ -131,8 +141,8 @@ SALEOR_ADMIN_EMAIL="${SALEOR_ADMIN_EMAIL:-admin@example.com}"
 SALEOR_ADMIN_PASSWORD="${SALEOR_ADMIN_PASSWORD:-admin123456}"
 
 register_harness_user() {
-  wait_for_url "http://localhost:5998/api/health" "Harness API" 20 2 || return 0
-  if curl -sf -X POST http://localhost:5998/api/auth/register \
+  wait_for_url "${HARNESS_API_URL}/api/health" "Harness API" 20 2 || return 0
+  if curl -sf -X POST "${HARNESS_API_URL}/api/auth/register" \
     -H "Content-Type: application/json" \
     -d "{\"email\":\"${HARNESS_USER_EMAIL}\",\"password\":\"${HARNESS_USER_PASSWORD}\",\"name\":\"${HARNESS_USER_NAME}\"}" \
     >/dev/null 2>&1; then
@@ -146,10 +156,10 @@ print_urls() {
   local show_saleor="${1:-true}"
   echo ""
   echo "=== URLs ==="
-  echo "  Harness UI:     http://localhost:5999"
-  echo "  Harness API:    http://localhost:5998"
+  echo "  Harness UI:     ${HARNESS_UI_URL}"
+  echo "  Harness API:    ${HARNESS_API_URL}"
   if [ "${show_saleor}" = "true" ]; then
-    echo "  Saleor GraphQL: http://localhost:8000/graphql/"
+    echo "  Saleor GraphQL: ${SALEOR_GRAPHQL_URL}"
   fi
   print_credentials "${show_saleor}"
 }
@@ -159,15 +169,43 @@ print_credentials() {
   echo ""
   echo "=== Login credentials ==="
   echo ""
-  echo "  Test harness UI — http://localhost:5999/login"
+  echo "  Test harness UI — ${HARNESS_UI_URL}/login"
   echo "    Email:    ${HARNESS_USER_EMAIL}"
   echo "    Password: ${HARNESS_USER_PASSWORD}"
   if [ "${show_saleor}" = "true" ]; then
     echo ""
     echo "  Saleor API (New Test Run → auth / GraphQL target)"
-    echo "    URL:      http://localhost:8000/graphql/"
+    echo "    URL:      ${SALEOR_GRAPHQL_URL}"
     echo "    Email:    ${SALEOR_ADMIN_EMAIL}"
     echo "    Password: ${SALEOR_ADMIN_PASSWORD}"
     echo "    (If login fails, run: just fresh)"
   fi
+}
+
+check_verify_prerequisites() {
+  local saleor_required="${1:-true}"
+  local failed=0
+
+  if ! docker ps --filter name=harness-backend --filter status=running -q | grep -q .; then
+    echo "ERROR: harness-backend is not running. Run: just up" >&2
+    failed=1
+  fi
+
+  if [ "${saleor_required}" = "true" ]; then
+    if ! docker ps --filter name=saleor-api --filter status=running -q | grep -q .; then
+      echo "ERROR: saleor-api is not running. Run: just up" >&2
+      failed=1
+    fi
+  fi
+
+  if [ "${failed}" -ne 0 ]; then
+    return 1
+  fi
+
+  wait_for_url "${HARNESS_API_URL}/api/health" "Harness API" 10 2 || failed=1
+  if [ "${saleor_required}" = "true" ]; then
+    wait_for_saleor_graphql 30 || failed=1
+  fi
+
+  return "${failed}"
 }

@@ -699,7 +699,7 @@ def needs_setup(operation_name: str, golden_contract: str | None) -> bool:
     - The golden contract is 'success' (error probes don't need data)
     - The operation is not a read-only shop query with no setup
     """
-    if golden_contract and golden_contract != "success":
+    if golden_contract != "success":
         return False
     setup = SETUP_MUTATIONS.get(operation_name)
     if setup is None:

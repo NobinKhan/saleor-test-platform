@@ -92,8 +92,10 @@
       timeout_seconds: number;
       reference_baseline_version: string | null;
       reference_baseline_source: string | null;
-      reference_catalog_queries: number;
-      reference_catalog_mutations: number;
+      l1_corpus_queries: number;
+      l1_corpus_mutations: number;
+      reference_catalog_queries?: number;
+      reference_catalog_mutations?: number;
       golden_corpus_version: string | null;
       golden_corpus_url: string | null;
       golden_probe_count: number;
@@ -160,6 +162,14 @@
       passed: number;
       failed: number;
     } | null;
+  }
+
+  function l1CorpusQueries(summary: ReportData["summary"]): number {
+    return summary.l1_corpus_queries ?? summary.reference_catalog_queries ?? 0;
+  }
+
+  function l1CorpusMutations(summary: ReportData["summary"]): number {
+    return summary.l1_corpus_mutations ?? summary.reference_catalog_mutations ?? 0;
   }
 
   let report: ReportData | null = null;
@@ -427,7 +437,7 @@
           </tr>
           <tr>
             <th>L1 golden probes</th>
-            <td>{report.summary.golden_probe_count ?? report.summary.reference_catalog_queries} synthetic introspection probes</td>
+            <td>{report.summary.golden_probe_count ?? l1CorpusQueries(report.summary)} synthetic introspection probes</td>
           </tr>
           <tr>
             <th>Golden reference</th>
@@ -622,9 +632,9 @@
         <span class="summary-value">{report.summary.golden_probe_count}</span>
       </div>
       <div class="summary-card">
-        <span class="summary-label">L2 catalog ops</span>
+        <span class="summary-label">L1 corpus ops</span>
         <span class="summary-value" title="Dashboard catalog query + mutation count">
-          {(report.summary.reference_catalog_queries ?? 0) + (report.summary.reference_catalog_mutations ?? 0)}
+          {l1CorpusQueries(report.summary) + l1CorpusMutations(report.summary)}
         </span>
       </div>
       {#if report.summary.client_parity_gaps != null && report.summary.client_parity_gaps > 0}

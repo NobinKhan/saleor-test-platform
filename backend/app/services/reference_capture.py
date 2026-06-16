@@ -1,5 +1,5 @@
 """
-Capture golden reference probes from a live Saleor instance.
+Capture golden reference probes from a live Saleor instance (introspection-only).
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.models import ReferenceProbe
+from app.services.auth_visibility import infer_is_public, requires_staff_auth
 from app.services.introspection import introspect_saleor
 from app.services.outcome import classify_graphql_response
 from app.services.query_builder import build_query_with_schema, introspect_field_args
@@ -28,12 +29,7 @@ from app.services.reference_corpus import (
 )
 from app.services.response_contract import CONTRACT_AUTH_ERROR, classify_response_contract
 from app.services.saleor_auth import ensure_valid_token, refresh_saleor_token, validate_saleor_token
-from app.services.test_runner import (
-    SALEOR_MUTATIONS,
-    SALEOR_QUERIES,
-    build_endpoints_list,
-    detect_saleor_version,
-)
+from app.services.test_runner import detect_saleor_version
 
 ME_CHECK_INTERVAL = 50
 CAPTURE_BATCH_SIZE = 180
@@ -67,54 +63,37 @@ CUSTOMER_CONTEXT_OPS = frozenset({
 async def build_capture_endpoints(
     saleor_url: str,
     saleor_token: str | None,
-    test_scope: str,
     timeout: int,
 ) -> tuple[list[dict], dict[str, list[dict]] | None, dict[str, list[str]] | None]:
-    endpoints = build_endpoints_list(test_scope, public_only=False)
-    schema_fields: dict[str, list[dict]] | None = None
-    intro: dict[str, list[str]] | None = None
+    """Build endpoint list from Saleor introspection (full schema capture)."""
+    intro = await introspect_saleor(saleor_url, saleor_token, timeout)
+    try:
+        schema_fields = await introspect_field_args(saleor_url, saleor_token, timeout)
+    except Exception:
+        schema_fields = None
 
-    if test_scope == "full":
-        intro = await introspect_saleor(saleor_url, saleor_token, timeout)
-        try:
-            schema_fields = await introspect_field_args(saleor_url, saleor_token, timeout)
-        except Exception:
-            schema_fields = None
-        known = {e["name"] for e in endpoints}
-        for name in intro.get("queries", []):
-            if name not in known:
-                endpoints.append(
-                    {
-                        "name": name,
-                        "kind": "QUERY",
-                        "category": "unknown",
-                        "is_public": True,
-                    }
-                )
-                known.add(name)
-        for name in intro.get("mutations", []):
-            if name not in known:
-                endpoints.append(
-                    {
-                        "name": name,
-                        "kind": "MUTATION",
-                        "category": "unknown",
-                        "is_public": False,
-                    }
-                )
-                known.add(name)
-
+    endpoints: list[dict] = []
+    for name in intro.get("queries", []):
+        endpoints.append({
+            "name": name,
+            "kind": "QUERY",
+            "category": "unknown",
+            "is_public": infer_is_public(name, "QUERY"),
+        })
+    for name in intro.get("mutations", []):
+        endpoints.append({
+            "name": name,
+            "kind": "MUTATION",
+            "category": "unknown",
+            "is_public": infer_is_public(name, "MUTATION"),
+        })
     return endpoints, schema_fields, intro
 
 
 def _requires_staff_auth(endpoint: dict) -> bool:
-    """True when auth_error under staff token indicates a capture defect."""
     if endpoint["name"] in CUSTOMER_CONTEXT_OPS:
         return False
-    if endpoint["kind"] == "MUTATION":
-        return True
-    catalog_public = {e["name"] for e in SALEOR_QUERIES if e["is_public"]}
-    return endpoint["name"] not in catalog_public
+    return requires_staff_auth(endpoint)
 
 
 def _capture_order(endpoints: list[dict]) -> list[dict]:
@@ -135,7 +114,6 @@ async def capture_reference_probes(
     saleor_url: str,
     saleor_token: str | None,
     saleor_version: str | None = None,
-    test_scope: str = "full",
     timeout: int = 30,
     db: AsyncSession | None = None,
     saleor_email: str | None = None,
@@ -146,13 +124,12 @@ async def capture_reference_probes(
         version = settings.reference_baseline_version
 
     endpoints, schema_fields, intro = await build_capture_endpoints(
-        saleor_url, saleor_token, test_scope, timeout
+        saleor_url, saleor_token, timeout
     )
     endpoints = _capture_order(endpoints)
     if not saleor_token:
         raise ValueError("Golden capture requires staff authentication token")
 
-    # Introspection can exhaust JWT validity; always start probe capture with a fresh token.
     token = saleor_token
     if saleor_email and saleor_password:
         fresh, _err = await refresh_saleor_token(
@@ -271,16 +248,8 @@ async def capture_reference_probes(
     manifest_path = directory / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest["auth_mode"] = "staff" if saleor_token else "anonymous"
-    if intro:
-        manifest["reference_queries"] = intro.get("queries", [])
-        manifest["reference_mutations"] = intro.get("mutations", [])
-    else:
-        manifest["reference_queries"] = sorted(
-            {p.endpoint_name for p in probes if p.endpoint_kind == "QUERY"}
-        )
-        manifest["reference_mutations"] = sorted(
-            {p.endpoint_name for p in probes if p.endpoint_kind == "MUTATION"}
-        )
+    manifest["reference_queries"] = intro.get("queries", [])
+    manifest["reference_mutations"] = intro.get("mutations", [])
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     chash = corpus_hash(version)
 
@@ -299,7 +268,6 @@ async def capture_reference_probes(
     return {
         "saleor_version": version,
         "saleor_url": saleor_url,
-        "test_scope": test_scope,
         "probe_count": len(probes),
         "corpus_path": str(directory),
         "corpus_hash": chash,
@@ -374,10 +342,6 @@ async def sync_corpus_from_disk(db: AsyncSession, version: str | None = None) ->
     return len(probes)
 
 
-def catalog_endpoint_count() -> tuple[int, int]:
-    return len(SALEOR_QUERIES), len(SALEOR_MUTATIONS)
-
-
 async def _capture_single_probe(
     client: httpx.AsyncClient,
     *,
@@ -389,8 +353,6 @@ async def _capture_single_probe(
     saleor_password: str | None,
     timeout: int,
 ) -> tuple[Any | None, str | None]:
-    from app.services.query_builder import build_query_with_schema
-
     query = build_query_with_schema(endpoint["name"], endpoint["kind"], schema_fields)
     headers = {
         "Content-Type": "application/json",
@@ -449,7 +411,7 @@ async def capture_subset_probes(
         raise ValueError("Capture requires staff authentication token")
 
     endpoints, schema_fields, intro = await build_capture_endpoints(
-        saleor_url, saleor_token, "full", timeout
+        saleor_url, saleor_token, timeout
     )
     by_key = {(e["name"], e["kind"]): e for e in endpoints}
     new_probes = []

@@ -55,8 +55,7 @@ alwaysApply: true
 
 ## Test defaults
 
-- Default mode: `compatibility`. Default scope: `full`. **Official certification** = `full+client` + L3 schema gate + Tier 2 when gate enabled.
-- `discovery` = legacy/debug only.
+- Default mode: `compatibility`. Default scope: `full+scenarios`. **Official certification** = `full+scenarios` + L3 schema gate + Tier 2 when gate enabled.
 
 ## Infrastructure
 

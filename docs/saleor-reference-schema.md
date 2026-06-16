@@ -283,7 +283,7 @@
 
 ## Reference baseline
 
-The harness compares each target API against a **static catalog** aligned with **Saleor Dashboard 3.23.6** (see `REFERENCE_BASELINE_VERSION` / `REFERENCE_BASELINE_SOURCE`). This is a dashboard-style compatibility check, not a live clone of every dashboard GraphQL document.
+The harness compares each target API against the **L1 introspection corpus** plus **L3 vendor GraphQL bundles** (see `REFERENCE_BASELINE_VERSION` / `GOLDEN_CORPUS_VERSION`). This is golden replay with SGRC — not a live clone of every dashboard GraphQL document.
 
 ## Test Result Classification
 

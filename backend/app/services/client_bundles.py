@@ -249,14 +249,17 @@ def update_bundle_manifest(source: str, version: str, *, dashboard_git_tag: str 
     bundles = load_all_bundles_from_disk(source, version)
     bundles_index: dict[str, Any] = {}
     for b in bundles:
-        bundles_index[b.bundle_id] = {
+        entry: dict[str, Any] = {
             "document_hash": b.document_hash or document_hash(b.document),
             "operation_names": b.operation_names,
             "priority": b.priority,
             "recorded": b.has_golden(),
             "golden_contract": b.golden_contract,
-            "seed_tags": merge_seed_tags_into_bundle(b.bundle_id, b.seed_tags),
         }
+        tags = merge_seed_tags_into_bundle(b.bundle_id, b.seed_tags)
+        if tags:
+            entry["seed_tags"] = tags
+        bundles_index[b.bundle_id] = entry
     manifest = load_bundle_manifest(source, version) or {}
     manifest.update({
         "source": source,
@@ -373,6 +376,7 @@ def build_client_bundle_endpoints(
     for bundle in bundles:
         endpoints.append({
             "name": bundle.bundle_id,
+            "bundle_id": bundle.bundle_id,
             "kind": CLIENT_BUNDLE_KIND,
             "category": bundle.client_category(),
             "is_public": bundle.auth_context == "anonymous",

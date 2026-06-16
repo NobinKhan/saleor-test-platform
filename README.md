@@ -24,6 +24,8 @@ Browser → harness-frontend:5999 → harness-backend:5998 → target Saleor Gra
 
 ## Quick start
 
+Copy [`.env.example`](.env.example) to `.env` when default ports conflict (e.g. `SALEOR_HOST_PORT=18000`).
+
 ```bash
 just up
 just baseline   # prove official Saleor matches golden reference (must PASS)
@@ -54,6 +56,7 @@ just baseline   # re-verify golden baseline
 | `just seed-reference` | Seed L3 fixture IDs (products, orders, customers, …) on official Saleor |
 | `just register` | Create harness user `test@example.com` |
 | `just baseline` | Golden proof: corpus integrity + 100% replay (L1 + L3 + dynamic, Tier 2) |
+| `just verify` | Full local matrix: unit + types + baseline + e2e (`--skip-e2e` optional) |
 | `just verify-corpus` | Check reference corpus on disk (L1 + L3) |
 | `just check-corpus-version` | Corpus integrity + Saleor version hard gate vs golden corpus |
 | `just self-check` | Replay golden corpus against official Saleor |
@@ -93,7 +96,9 @@ CLI baseline proves the engine; confirm the report UI separately:
 3. Saleor URL: `http://localhost:8000/graphql/`, admin email/password from `just fresh`
 4. Report page: **Certified YES**, compatibility 100%, **effective score** 100%, L3 bundle count shown
 
-Automated certification logic is covered by `backend/tests/test_certification_api.py` (unit-level gate checks).
+Automated certification logic is covered by `backend/tests/test_certification_api.py` (unit-level gate checks) and `just test-e2e` (full API run).
+
+Optional local git hook (mutation-first guard): `cp scripts/pre-commit-mutation-first.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit` (requires host `backend/.venv`).
 
 ## Harness-only (external API)
 
@@ -127,6 +132,7 @@ Official certification scope: **full+scenarios** — L1 (387) + L3 dashboard (41
 | Check | Command |
 |-------|---------|
 | Golden baseline (do this first) | `just baseline` |
+| Full local verification | `just verify` |
 | Corpus integrity only | `just verify-corpus` |
 | Replay only | `just self-check --scope full+scenarios --require-tier2 --min-compat 100` |
 | Backend unit tests | `just test` |
@@ -139,5 +145,7 @@ Official certification scope: **full+scenarios** — L1 (387) + L3 dashboard (41
 - [docs/CORPUS-MAINTENANCE.md](docs/CORPUS-MAINTENANCE.md) — incremental corpus workflow (no new just recipes)
 - [docs/COVERAGE-GAPS.md](docs/COVERAGE-GAPS.md) — remaining gaps (runtime integrations, richer scenarios)
 - [docs/SPEC.md](docs/SPEC.md) — product spec (some sections superseded)
-- [docs/saleor-reference-schema.md](docs/saleor-reference-schema.md) — catalog reference
+- [docs/saleor-reference-schema.md](docs/saleor-reference-schema.md) — L1 introspection corpus + L3 vendor bundles
 - [docs/REFERENCE-SEED.md](docs/REFERENCE-SEED.md) — fixture seeding for L3 certification
+
+`POST /api/reference/capture` records L1 probes from **full Saleor introspection** (all queries and mutations). The legacy `catalog` scope was removed; clients must not send `test_scope`.

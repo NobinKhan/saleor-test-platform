@@ -20,7 +20,7 @@
     "data": {
       "productDelete": {
         "product": {
-          "id": "UHJvZHVjdDoxODU="
+          "id": "UHJvZHVjdDoxNjg="
         },
         "errors": []
       }
@@ -33,5 +33,5 @@
     "data_path": "Delete created product",
     "expected_null": true
   },
-  "recorded_at": "2026-06-14T02:23:46.591481+00:00"
+  "recorded_at": "2026-06-16T08:46:14.381898+00:00"
 }

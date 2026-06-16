@@ -30,7 +30,7 @@ from app.services.saleor_auth import (
     refresh_saleor_token,
 )
 from app.services.outcome import classify_graphql_response, classify_transport_error
-from app.services.query_builder import build_query_with_schema, introspect_field_args
+from app.services.query_builder import introspect_field_args
 from app.services.client_bundle_fixtures import substitute_fixtures
 from app.services.client_bundles import (
     build_all_client_bundle_endpoints,
@@ -64,282 +64,9 @@ from app.services.dynamic_corpus import DYNAMIC_PROBE_KIND, build_dynamic_probe_
 from app.services.reference_compare import compare_to_golden, tier2_gate_enabled
 from app.services.response_contract import CONTRACT_AUTH_ERROR, CONTRACT_SUCCESS, classify_response_contract
 
-# Saleor reference queries/mutations
-SALEOR_QUERIES: list[dict] = [
-    # Products
-    {"name": "products", "kind": "QUERY", "category": "products", "is_public": True},
-    {"name": "product", "kind": "QUERY", "category": "products", "is_public": True},
-    {"name": "productTypes", "kind": "QUERY", "category": "products", "is_public": True},
-    {"name": "productType", "kind": "QUERY", "category": "products", "is_public": True},
-    # Orders
-    {"name": "orders", "kind": "QUERY", "category": "orders", "is_public": False},
-    {"name": "order", "kind": "QUERY", "category": "orders", "is_public": False},
-    # Checkout
-    {"name": "checkout", "kind": "QUERY", "category": "checkout", "is_public": True},
-    {"name": "checkouts", "kind": "QUERY", "category": "checkout", "is_public": True},
-    # Channels
-    {"name": "channels", "kind": "QUERY", "category": "channels", "is_public": True},
-    {"name": "channel", "kind": "QUERY", "category": "channels", "is_public": True},
-    # Categories
-    {"name": "categories", "kind": "QUERY", "category": "categories", "is_public": True},
-    {"name": "category", "kind": "QUERY", "category": "categories", "is_public": True},
-    # Collections
-    {"name": "collections", "kind": "QUERY", "category": "collections", "is_public": True},
-    {"name": "collection", "kind": "QUERY", "category": "collections", "is_public": True},
-    # Attributes
-    {"name": "attributes", "kind": "QUERY", "category": "attributes", "is_public": True},
-    {"name": "attribute", "kind": "QUERY", "category": "attributes", "is_public": True},
-    # Account
-    {"name": "me", "kind": "QUERY", "category": "account", "is_public": False},
-    {"name": "user", "kind": "QUERY", "category": "account", "is_public": False},
-    {"name": "permissionGroups", "kind": "QUERY", "category": "account", "is_public": False},
-    # Gift cards
-    {"name": "giftCards", "kind": "QUERY", "category": "giftcards", "is_public": False},
-    {"name": "giftCard", "kind": "QUERY", "category": "giftcards", "is_public": False},
-    # Shipping
-    {"name": "shippingZones", "kind": "QUERY", "category": "shipping", "is_public": True},
-    {"name": "shippingZone", "kind": "QUERY", "category": "shipping", "is_public": True},
-    # Payments
-    {"name": "payments", "kind": "QUERY", "category": "payments", "is_public": False},
-    {"name": "payment", "kind": "QUERY", "category": "payments", "is_public": False},
-    # Discounts
-    {"name": "vouchers", "kind": "QUERY", "category": "discounts", "is_public": True},
-    {"name": "voucher", "kind": "QUERY", "category": "discounts", "is_public": True},
-    {"name": "promotions", "kind": "QUERY", "category": "discounts", "is_public": True},
-    # Warehouse
-    {"name": "warehouses", "kind": "QUERY", "category": "warehouse", "is_public": False},
-    {"name": "warehouse", "kind": "QUERY", "category": "warehouse", "is_public": False},
-    # Shop
-    {"name": "shop", "kind": "QUERY", "category": "shop", "is_public": True},
-    # Pages
-    {"name": "pages", "kind": "QUERY", "category": "pages", "is_public": True},
-    {"name": "page", "kind": "QUERY", "category": "pages", "is_public": True},
-    # Plugins
-    {"name": "plugins", "kind": "QUERY", "category": "plugins", "is_public": False},
-    {"name": "plugin", "kind": "QUERY", "category": "plugins", "is_public": False},
-    # Webhooks
-]
+from app.services.auth_visibility import infer_is_public
 
-SALEOR_MUTATIONS: list[dict] = [
-    # Products
-    {"name": "productCreate", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productUpdate", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productDelete", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productVariantCreate", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productVariantUpdate", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productVariantDelete", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productTypeCreate", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productTypeUpdate", "kind": "MUTATION", "category": "products", "is_public": False},
-    {"name": "productTypeDelete", "kind": "MUTATION", "category": "products", "is_public": False},
-    # Orders
-    {"name": "orderUpdate", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderConfirm", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderCancel", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderFulfill", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderRefund", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderLineDelete", "kind": "MUTATION", "category": "orders", "is_public": False},
-    {"name": "orderLineUpdate", "kind": "MUTATION", "category": "orders", "is_public": False},
-    # Checkout
-    {"name": "checkoutCreate", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutDelete", "kind": "MUTATION", "category": "checkout", "is_public": False},
-    {"name": "checkoutComplete", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutAddPromoCode", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutRemovePromoCode", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutEmailUpdate", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutShippingAddressUpdate", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    {"name": "checkoutPaymentCreate", "kind": "MUTATION", "category": "checkout", "is_public": True},
-    # Channels
-    {"name": "channelCreate", "kind": "MUTATION", "category": "channels", "is_public": False},
-    {"name": "channelUpdate", "kind": "MUTATION", "category": "channels", "is_public": False},
-    {"name": "channelDelete", "kind": "MUTATION", "category": "channels", "is_public": False},
-    # Categories
-    {"name": "categoryCreate", "kind": "MUTATION", "category": "categories", "is_public": False},
-    {"name": "categoryUpdate", "kind": "MUTATION", "category": "categories", "is_public": False},
-    {"name": "categoryDelete", "kind": "MUTATION", "category": "categories", "is_public": False},
-    # Collections
-    {"name": "collectionCreate", "kind": "MUTATION", "category": "collections", "is_public": False},
-    {"name": "collectionUpdate", "kind": "MUTATION", "category": "collections", "is_public": False},
-    {"name": "collectionDelete", "kind": "MUTATION", "category": "collections", "is_public": False},
-    {"name": "collectionAddProducts", "kind": "MUTATION", "category": "collections", "is_public": False},
-    {"name": "collectionRemoveProducts", "kind": "MUTATION", "category": "collections", "is_public": False},
-    # Attributes
-    {"name": "attributeCreate", "kind": "MUTATION", "category": "attributes", "is_public": False},
-    {"name": "attributeUpdate", "kind": "MUTATION", "category": "attributes", "is_public": False},
-    {"name": "attributeDelete", "kind": "MUTATION", "category": "attributes", "is_public": False},
-    # Account
-    {"name": "accountRegister", "kind": "MUTATION", "category": "account", "is_public": True},
-    {"name": "accountUpdate", "kind": "MUTATION", "category": "account", "is_public": False},
-    {"name": "accountRequestDeletion", "kind": "MUTATION", "category": "account", "is_public": False},
-    {"name": "confirmAccount", "kind": "MUTATION", "category": "account", "is_public": True},
-    {"name": "requestPasswordReset", "kind": "MUTATION", "category": "account", "is_public": True},
-    {"name": "passwordChange", "kind": "MUTATION", "category": "account", "is_public": False},
-    # Gift cards
-    {"name": "giftCardCreate", "kind": "MUTATION", "category": "giftcards", "is_public": False},
-    {"name": "giftCardUpdate", "kind": "MUTATION", "category": "giftcards", "is_public": False},
-    {"name": "giftCardDelete", "kind": "MUTATION", "category": "giftcards", "is_public": False},
-    {"name": "giftCardResend", "kind": "MUTATION", "category": "giftcards", "is_public": False},
-    # Shipping
-    {"name": "shippingZoneCreate", "kind": "MUTATION", "category": "shipping", "is_public": False},
-    {"name": "shippingZoneUpdate", "kind": "MUTATION", "category": "shipping", "is_public": False},
-    {"name": "shippingZoneDelete", "kind": "MUTATION", "category": "shipping", "is_public": False},
-    # Payments
-    {"name": "paymentInitialize", "kind": "MUTATION", "category": "payments", "is_public": False},
-    {"name": "paymentCapture", "kind": "MUTATION", "category": "payments", "is_public": False},
-    {"name": "paymentRefund", "kind": "MUTATION", "category": "payments", "is_public": False},
-    {"name": "paymentVoid", "kind": "MUTATION", "category": "payments", "is_public": False},
-    # Discounts
-    {"name": "voucherCreate", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    {"name": "voucherUpdate", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    {"name": "voucherDelete", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    {"name": "promotionCreate", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    {"name": "promotionUpdate", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    {"name": "promotionDelete", "kind": "MUTATION", "category": "discounts", "is_public": False},
-    # Warehouse
-    # Pages
-    {"name": "pageCreate", "kind": "MUTATION", "category": "pages", "is_public": False},
-    {"name": "pageUpdate", "kind": "MUTATION", "category": "pages", "is_public": False},
-    {"name": "pageDelete", "kind": "MUTATION", "category": "pages", "is_public": False},
-    # Shop
-    {"name": "shopSettingsUpdate", "kind": "MUTATION", "category": "shop", "is_public": False},
-    {"name": "shopAddressUpdate", "kind": "MUTATION", "category": "shop", "is_public": False},
-    # Webhooks
-    {"name": "webhookCreate", "kind": "MUTATION", "category": "webhooks", "is_public": False},
-    {"name": "webhookUpdate", "kind": "MUTATION", "category": "webhooks", "is_public": False},
-    {"name": "webhookDelete", "kind": "MUTATION", "category": "webhooks", "is_public": False},
-    # Metadata
-    {"name": "updateMetadata", "kind": "MUTATION", "category": "meta", "is_public": False},
-    {"name": "deleteMetadata", "kind": "MUTATION", "category": "meta", "is_public": False},
-    {"name": "updatePrivateMetadata", "kind": "MUTATION", "category": "meta", "is_public": False},
-    {"name": "deletePrivateMetadata", "kind": "MUTATION", "category": "meta", "is_public": False},
-]
-
-
-def build_query(endpoint_name: str, kind: str) -> str:
-    """Build a GraphQL query/mutation string for testing."""
-    if kind == "QUERY":
-        if endpoint_name == "shop":
-            return 'query { shop { domain { host } version displayGrossPrices } }'
-        elif endpoint_name == "products":
-            return 'query { products(first: 3) { edges { node { id name slug } } pageInfo { hasNextPage endCursor } } }'
-        elif endpoint_name == "categories":
-            return 'query { categories(first: 3, level: 0) { edges { node { id name slug } } } }'
-        elif endpoint_name == "collections":
-            return 'query { collections(first: 3) { edges { node { id name slug } } } }'
-        elif endpoint_name == "checkout":
-            return 'query { checkout(token: "00000000-0000-0000-0000-000000000000") { id token } }'
-        elif endpoint_name == "checkouts":
-            return 'query { checkouts(first: 3) { edges { node { id token } } } }'
-        elif endpoint_name == "orders":
-            return 'query { orders(first: 3) { edges { node { id status } } } }'
-        elif endpoint_name == "channels":
-            return 'query { channels(first: 3) { edges { node { id name slug currencyCode isActive } } } }'
-        elif endpoint_name == "shippingZones":
-            return 'query { shippingZones(first: 3) { edges { node { id name countries } } } }'
-        elif endpoint_name == "shippingMethods":
-            return 'query { shippingZones(first: 1) { edges { node { shippingMethods { id name price { amount currency } } } } } }'
-        elif endpoint_name == "attributes":
-            return 'query { attributes(first: 3) { edges { node { id name slug } } } }'
-        elif endpoint_name == "giftCards":
-            return 'query { giftCards(first: 3) { edges { node { id isActive currentBalance { amount currency } } } } }'
-        elif endpoint_name == "sales":
-            return 'query { sales(first: 3) { edges { node { id name type startDate endDate } } } }'
-        elif endpoint_name == "vouchers":
-            return 'query { vouchers(first: 3) { edges { node { id name code discountValueType } } } }'
-        elif endpoint_name == "promotions":
-            return 'query { promotions(first: 3) { edges { node { id name startedAt endedAt } } } }'
-        elif endpoint_name == "warehouses":
-            return 'query { warehouses(first: 3) { edges { node { id name isPrimary } } } }'
-        elif endpoint_name == "productTypes":
-            return 'query { productTypes(first: 3) { edges { node { id name hasVariants isShippingRequired } } } }'
-        elif endpoint_name == "plugins":
-            return 'query { plugins(first: 3) { edges { node { id name active } } } }'
-        elif endpoint_name == "webhookEvents":
-            return 'query { webhookEvents { eventTypes { id name } } }'
-        elif endpoint_name == "paymentGateways":
-            return 'query { paymentGateways(first: 3) { id name } }'
-        elif endpoint_name == "languages":
-            return 'query { languages(first: 3) { code language } }'
-        elif endpoint_name == "me":
-            return 'query { me { id email firstName lastName } }'
-        elif endpoint_name == "users":
-            return 'query { users(first: 3) { edges { node { id email firstName lastName } } } }'
-        elif endpoint_name == "ordersDraft":
-            return 'query { ordersDraft(first: 3) { edges { node { id status } } } }'
-        elif endpoint_name == "ordersByUser":
-            return 'query { ordersByUser(first: 3) { edges { node { id status } } } }'
-        elif endpoint_name == "product":
-            return 'query { products(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "productType":
-            return 'query { productTypes(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "category":
-            return 'query { categories(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "collection":
-            return 'query { collections(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "attribute":
-            return 'query { attributes(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "giftCard":
-            return 'query { giftCards(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "sale":
-            return 'query { sales(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "voucher":
-            return 'query { vouchers(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "channel":
-            return 'query { channels(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "shippingZone":
-            return 'query { shippingZones(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "warehouse":
-            return 'query { warehouses(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "payment":
-            return 'query { payments(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "page":
-            return 'query { pages(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "pages":
-            return 'query { pages(first: 3) { edges { node { id title slug } } } }'
-        elif endpoint_name == "plugin":
-            return 'query { plugins(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "order":
-            return 'query { orders(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "user":
-            return 'query { users(first: 1) { edges { node { id } } } }'
-        elif endpoint_name == "permissionGroups":
-            return 'query { permissionGroups(first: 3) { edges { node { id name } } } }'
-        else:
-            # Generic introspection query for unknown endpoints
-            return f'query {{ {endpoint_name}(first: 1) {{ edges {{ node {{ id }} }} }} }}'
-
-    elif kind == "MUTATION":
-        # Mutations use dummy data — they may fail but we check for schema errors
-        if endpoint_name == "checkoutCreate":
-            return 'mutation { checkoutCreate(input: { channel: "default" }) { checkout { id } errors { field message code } } }'
-        elif endpoint_name == "checkoutComplete":
-            return 'mutation { checkoutComplete(id: "00000000-0000-0000-0000-000000000000") { order { id } errors { field message } } }'
-        elif endpoint_name == "checkoutAddPromoCode":
-            return 'mutation { checkoutAddPromoCode(id: "00000000-0000-0000-0000-000000000000", promoCode: "TEST") { checkout { id } errors { field message } } }'
-        elif endpoint_name == "checkoutEmailUpdate":
-            return 'mutation { checkoutEmailUpdate(id: "00000000-0000-0000-0000-000000000000", email: "test@test.com") { checkout { id } errors { field message } } }'
-        elif endpoint_name == "accountRegister":
-            return 'mutation { accountRegister(input: { email: "test@test.com", password: "Test1234!", channel: "default" }) { user { id email } errors { field message } } }'
-        elif endpoint_name == "confirmAccount":
-            return 'mutation { confirmAccount(email: "test@test.com", token: "testtoken") { user { id } errors { field message } } }'
-        elif endpoint_name == "requestPasswordReset":
-            return 'mutation { requestPasswordReset(email: "test@test.com", channel: "default") { errors { field message } } }'
-        elif endpoint_name == "resetPassword":
-            return 'mutation { resetPassword(token: "testtoken", password: "Test1234!") { user { id } errors { field message } } }'
-        elif endpoint_name == "productCreate":
-            return 'mutation { productCreate(input: { name: "Test", slug: "test-product-xyz", productType: "PHYSICAL" }) { product { id name } errors { field message code } } }'
-        elif endpoint_name == "categoryCreate":
-            return 'mutation { categoryCreate(input: { name: "Test Category", slug: "test-cat-xyz" }) { category { id name } errors { field message } } }'
-        elif endpoint_name == "collectionCreate":
-            return 'mutation { collectionCreate(input: { name: "Test Collection", slug: "test-col-xyz" }) { collection { id name } errors { field message } } }'
-        elif endpoint_name == "channelCreate":
-            return 'mutation { channelCreate(input: { name: "Test Channel", slug: "test-channel-xyz", currencyCode: "USD", isActive: true }) { channel { id name } errors { field message } } }'
-        elif endpoint_name == "saleCreate":
-            return 'mutation { saleCreate(input: { name: "Test Sale", type: PERCENTAGE, value: 10 }) { sale { id name } errors { field message } } }'
-        elif endpoint_name == "voucherCreate":
-            return 'mutation { voucherCreate(input: { code: "TESTXYZ", name: "Test Voucher", discountValueType: PERCENTAGE, discountValue: 10 }) { voucher { id code } errors { field message } } }'
-        else:
-            # Generic mutation with minimal args
-            return f'mutation {{ {endpoint_name}(input: {{}}) {{ errors {{ field message code }} }} }}'
+TEST_MODE_COMPATIBILITY = "compatibility"
 
 
 async def detect_saleor_version(url: str, token: str | None, timeout: int) -> str | None:
@@ -364,71 +91,27 @@ async def detect_saleor_version(url: str, token: str | None, timeout: int) -> st
     return None
 
 
-def build_endpoints_list(
-    test_scope: str,
-    public_only: bool = False,
-    categories: list[str] | None = None,
-) -> list[dict]:
-    """Build the endpoint list for a test run from scope and filters."""
-    if test_scope == "queries":
-        endpoints = SALEOR_QUERIES.copy()
-    elif test_scope == "mutations":
-        endpoints = SALEOR_MUTATIONS.copy()
-    elif test_scope == "catalog":
-        endpoints = SALEOR_QUERIES + SALEOR_MUTATIONS
-    elif test_scope == "custom" and categories:
-        cats = set(categories)
-        endpoints = [
-            e
-            for e in SALEOR_QUERIES + SALEOR_MUTATIONS
-            if e["category"] in cats
-        ]
-    else:
-        endpoints = SALEOR_QUERIES + SALEOR_MUTATIONS
-
-    if public_only:
-        endpoints = [e for e in endpoints if e["is_public"]]
-    return endpoints
-
-
-def build_golden_endpoints(
-    corpus_version: str,
-    test_scope: str,
-    public_only: bool = False,
-    categories: list[str] | None = None,
-) -> list[dict]:
+def build_golden_endpoints(corpus_version: str) -> list[dict]:
     """Build endpoint list from golden corpus probes for compatibility replay.
 
     Probes referencing deprecated Saleor types are auto-excluded.
     """
     from app.services.deprecated_scanner import scan_l1_probe_for_deprecated
 
-    catalog_names = {e["name"] for e in SALEOR_QUERIES + SALEOR_MUTATIONS}
     probes = load_all_probes_from_disk(corpus_version)
     endpoints: list[dict] = []
     for probe in probes:
-        if test_scope == "queries" and probe.endpoint_kind != "QUERY":
-            continue
-        if test_scope == "mutations" and probe.endpoint_kind != "MUTATION":
-            continue
-        if test_scope == "catalog" and probe.endpoint_name not in catalog_names:
-            continue
-        if test_scope == "custom" and categories and probe.category not in set(categories):
-            continue
         is_deprecated, _deprecated_types = scan_l1_probe_for_deprecated(probe.input_sent)
         if is_deprecated:
             continue
-        is_public = probe.endpoint_name in {e["name"] for e in SALEOR_QUERIES if e["is_public"]}
         endpoints.append({
             "name": probe.endpoint_name,
             "kind": probe.endpoint_kind,
             "category": probe.category,
-            "is_public": is_public,
+            "is_public": infer_is_public(probe.endpoint_name, probe.endpoint_kind),
             "golden_input": probe.input_sent,
             "golden_contract": probe.golden_contract,
         })
-    if public_only:
-        endpoints = [e for e in endpoints if e["is_public"]]
     return endpoints
 
 
@@ -486,7 +169,6 @@ class TestRunner:
         self.concurrency = concurrency
         self.timeout = timeout
         self.use_introspection = use_introspection
-        self.test_mode = "compatibility"
         self.tier2_required = tier2_required
         self._stopped = False
         self.saleor_version: str | None = None
@@ -622,13 +304,13 @@ class TestRunner:
                     "warnings": 0,
                     "skipped": 0,
                     "status_counts": counts,
-                    "test_mode": self.test_mode,
+                    "test_mode": TEST_MODE_COMPATIBILITY,
                     "error": gate["reason"],
                 }
                 return
 
         certification_schema = load_reference_schema(corpus_ver)
-        endpoints = build_golden_endpoints(corpus_ver, "full", self.public_only, None)
+        endpoints = build_golden_endpoints(corpus_ver)
         endpoints.extend(
             build_all_client_bundle_endpoints(
                 recorded_only=True,
@@ -727,15 +409,8 @@ class TestRunner:
                     passed += 1
                     counts["pass"] += 1
                 elif result.get("match_status") == "missing_golden":
-                    if (
-                        self.test_mode == "compatibility"
-                        and not settings.sgrc_allow_assertion_only
-                    ):
-                        failed += 1
-                        counts["fail"] += 1
-                    else:
-                        warnings += 1
-                        counts["warn"] += 1
+                    failed += 1
+                    counts["fail"] += 1
                 elif status == "skip":
                     skipped += 1
                     counts["skip"] += 1
@@ -874,7 +549,7 @@ class TestRunner:
 
         yield {
             "type": "schema_diff",
-            "diff": {"_run_meta": {"test_mode": self.test_mode}},
+            "diff": {"_run_meta": {"test_mode": TEST_MODE_COMPATIBILITY}},
         }
         yield {
             "type": "complete",
@@ -885,7 +560,7 @@ class TestRunner:
             "warnings": warnings,
             "skipped": skipped,
             "status_counts": counts,
-            "test_mode": self.test_mode,
+            "test_mode": TEST_MODE_COMPATIBILITY,
         }
 
     def _storefront_fixture_overlay(self, resolved: dict[str, Any]) -> dict[str, Any]:
@@ -955,15 +630,74 @@ class TestRunner:
                 self._scenario_context = {"run_slug": run_slug} if run_slug else {}
                 self._last_scenario_id = scenario_id
 
-        if self.test_mode == "compatibility" and endpoint.get("golden_input"):
-            query = endpoint["golden_input"]
+        golden_input = endpoint.get("golden_input")
+        bundle_document = endpoint.get("bundle_document")
+        if kind in (SCENARIO_KIND, VARIANT_KIND, DYNAMIC_PROBE_KIND):
+            if not golden_input:
+                return {
+                    "status": "skip",
+                    "outcome": "skipped",
+                    "expected": "Missing golden input for probe",
+                    "response_valid": None,
+                    "endpoint": name,
+                    "kind": kind,
+                    "category": category,
+                    "is_public": is_public,
+                    "match_status": "missing_golden",
+                    "compatible": False,
+                    "failure_category": "missing_golden",
+                }
+            query = golden_input
+        elif kind == CLIENT_BUNDLE_KIND:
+            if not bundle_document:
+                return {
+                    "status": "skip",
+                    "outcome": "skipped",
+                    "expected": "Missing L3 bundle document",
+                    "response_valid": None,
+                    "endpoint": name,
+                    "kind": kind,
+                    "category": category,
+                    "is_public": is_public,
+                    "match_status": "missing_golden",
+                    "compatible": False,
+                    "failure_category": "missing_golden",
+                }
+            query = bundle_document
+        elif kind in ("QUERY", "MUTATION"):
+            if not golden_input:
+                return {
+                    "status": "skip",
+                    "outcome": "skipped",
+                    "expected": "Missing golden input for L1 probe",
+                    "response_valid": None,
+                    "endpoint": name,
+                    "kind": kind,
+                    "category": category,
+                    "is_public": is_public,
+                    "match_status": "missing_golden",
+                    "compatible": False,
+                    "failure_category": "missing_golden",
+                }
+            query = golden_input
         else:
-            query = build_query_with_schema(name, kind, self.schema_fields)
+            query = golden_input or bundle_document or ""
         payload: dict[str, Any] = {"query": query}
-        if endpoint.get("bundle_document"):
-            payload["query"] = endpoint["bundle_document"]
+        if bundle_document:
+            payload["query"] = bundle_document
             variables = endpoint.get("bundle_variables") or {}
-            fixtures = endpoint.get("bundle_fixtures") or {}
+            fixtures = dict(endpoint.get("bundle_fixtures") or {})
+            bundle_id = endpoint.get("bundle_id") or name
+            from app.services.bundle_setup import apply_bundle_setup
+
+            setup_overlay = await apply_bundle_setup(
+                bundle_id=bundle_id,
+                fixtures=fixtures,
+                run_setup_mutation=lambda setup, auth: self._run_setup_mutation(
+                    client=http_client, setup=setup, auth_context=auth
+                ),
+            )
+            fixtures.update(setup_overlay)
             try:
                 payload["variables"] = substitute_fixtures(variables, fixtures)
             except KeyError as e:
@@ -1007,7 +741,6 @@ class TestRunner:
             kind in ("QUERY", "MUTATION")
             and not endpoint.get("bundle_document")
             and not endpoint.get("dynamic_probe")
-            and self.test_mode == "compatibility"
         ):
             from app.services.probe_setup import get_setup_for_operation, needs_setup
             golden_contract_check = endpoint.get("golden_contract")
@@ -1042,7 +775,7 @@ class TestRunner:
                 resp_json = {}
                 resp_status = 500
                 for attempt in range(3):
-                    if self.test_mode == "compatibility" and (
+                    if (
                         auth_context != "anonymous"
                         or kind in (CLIENT_BUNDLE_KIND, SCENARIO_KIND, VARIANT_KIND)
                     ):
@@ -1061,11 +794,19 @@ class TestRunner:
                     if contract != CONTRACT_AUTH_ERROR:
                         break
                     if attempt < 2:
+                        from app.services.saleor_auth import validate_saleor_token
+
                         if auth_context == "customer":
-                            await self._ensure_auth_for_context(
-                                client, auth_context="customer", force_refresh=True
-                            )
-                        else:
+                            cust = self._customer_token
+                            if not cust or not await validate_saleor_token(
+                                self.saleor_url, cust, self.timeout, client
+                            ):
+                                await self._ensure_auth_for_context(
+                                    client, auth_context="customer", force_refresh=True
+                                )
+                        elif not await validate_saleor_token(
+                            self.saleor_url, self.saleor_token, self.timeout, client
+                        ):
                             await self._force_refresh_token()
                         await asyncio.sleep(0.25 * (attempt + 1))
                 elapsed_ms = int((time.time() - start) * 1000)
@@ -1147,58 +888,12 @@ class TestRunner:
                                 compatible=True,
                                 client_parity_note=comparison.client_parity_note,
                             )
-                elif comparison.match_status == "missing_golden" and kind == VARIANT_KIND:
-                    variant_tags = endpoint.get("tags") or []
-                    if settings.sgrc_allow_assertion_only and (meta.get("response_valid") or "invalid" in variant_tags):
-                        comparison = type(comparison)(
-                            match_status="match",
-                            expected_response=comparison.expected_response,
-                            diff_summary="Variant probe (assertion-based, no golden)",
-                            recommended_status="pass",
-                            golden_outcome=comparison.golden_outcome,
-                            golden_contract=comparison.golden_contract,
-                            actual_contract=comparison.actual_contract,
-                            field_items=comparison.field_items,
-                            resolved_corpus_version=comparison.resolved_corpus_version,
-                            compatible=True,
-                            client_parity_note=comparison.client_parity_note,
-                        )
-                elif (
-                    comparison.match_status == "missing_golden"
-                    and kind == SCENARIO_KIND
-                    and settings.sgrc_allow_assertion_only
-                    and meta.get("response_valid")
-                    and not assertion_failures
-                ):
-                    comparison = type(comparison)(
-                        match_status="match",
-                        expected_response=comparison.expected_response,
-                        diff_summary="Assertion-based step (no golden recorded)",
-                        recommended_status="pass",
-                        golden_outcome=comparison.golden_outcome,
-                        golden_contract=comparison.golden_contract,
-                        actual_contract=comparison.actual_contract,
-                        field_items=comparison.field_items,
-                        resolved_corpus_version=comparison.resolved_corpus_version,
-                        compatible=True,
-                        client_parity_note=comparison.client_parity_note,
-                    )
-                if self.test_mode == "compatibility":
-                    if comparison.compatible:
-                        status = "pass"
-                    elif (
-                        comparison.match_status == "missing_golden"
-                        and not settings.sgrc_allow_assertion_only
-                    ):
-                        status = "fail"
-                    elif comparison.match_status == "missing_golden":
-                        status = "warn"
-                    else:
-                        status = "fail"
+                if comparison.compatible:
+                    status = "pass"
+                elif comparison.match_status == "missing_golden":
+                    status = "fail"
                 else:
-                    status = comparison.recommended_status
-                    if comparison.match_status == "missing_golden":
-                        status = meta["status"]
+                    status = "fail"
                 contract = meta.get("response_contract") or comparison.actual_contract
                 expected_label = (
                     f"Contract: {comparison.golden_contract or '?'} → {comparison.actual_contract or contract}"

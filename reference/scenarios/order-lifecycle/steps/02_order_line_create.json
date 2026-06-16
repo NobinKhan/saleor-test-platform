@@ -26,10 +26,10 @@
     "data": {
       "orderLinesCreate": {
         "order": {
-          "id": "T3JkZXI6ZTI4Njc5ZDgtOWM1OS00ZTk2LThhZGEtNTFmNWZkZWFiNDE3",
+          "id": "T3JkZXI6ZmE5MGNiNjktM2I1YS00ZjcxLWE3NmQtMjcyZWNhMTQyOTU3",
           "lines": [
             {
-              "id": "T3JkZXJMaW5lOjc5YjZmYTBkLWJhYjctNGRiNC1iNjk0LTVjNDg2OTAxNTM3Zg==",
+              "id": "T3JkZXJMaW5lOmQ0MmI5ZTBiLTcxZDMtNDczNi05OWMwLTU0NzA0ZThjZjcxYg==",
               "quantity": 1
             }
           ]
@@ -40,5 +40,5 @@
   },
   "golden_contract": "success",
   "golden_status": "pass",
-  "recorded_at": "2026-06-14T10:09:38.184332+00:00"
+  "recorded_at": "2026-06-16T08:46:14.033459+00:00"
 }

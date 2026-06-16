@@ -325,8 +325,5 @@
   "golden_contract": "success",
   "http_status": 200,
   "response_shape_hash": "sha256:634e431ea3430c6b",
-  "document_hash": "sha256:4c7ce392a0b6d4d3",
-  "seed_tags": [
-    "requires_order_fixture"
-  ]
+  "document_hash": "sha256:4c7ce392a0b6d4d3"
 }

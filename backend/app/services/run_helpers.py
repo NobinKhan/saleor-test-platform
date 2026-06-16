@@ -110,6 +110,6 @@ def run_detail_fields(run: TestRun) -> dict:
         "timeout_seconds": run.timeout_seconds or 30,
         "reference_baseline_version": run.reference_baseline_version,
         "reference_baseline_source": run.reference_baseline_source,
-        "reference_catalog_queries": q_count,
-        "reference_catalog_mutations": m_count,
+        "l1_corpus_queries": q_count,
+        "l1_corpus_mutations": m_count,
     }

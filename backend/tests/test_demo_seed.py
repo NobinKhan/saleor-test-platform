@@ -40,6 +40,6 @@ def test_demo_channels_are_two_channel_golden_slugs():
     assert DEMO_CHANNEL_PLN_SLUG == "channel-pln"
 
 
-def test_sitesettings_is_seed_tagged():
-    assert "sitesettings" in SEED_TAGGED_BUNDLES
-    assert "requires_saleor_demo_seed" in SEED_TAGGED_BUNDLES["sitesettings"]
+def test_seed_tag_registry_cleared_for_mutation_first():
+    """Static seed tag registry retired — tags live on bundle JSON when needed."""
+    assert SEED_TAGGED_BUNDLES == {}

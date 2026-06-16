@@ -38,12 +38,120 @@ STOREFRONT_FIXTURE_KEYS = (
 )
 
 
-STOREFRONT_FIXTURE_KEYS = (
-    "default_checkout_id",
-    "default_checkout_token",
-    "variant_id_for_cart",
-    "storefront_customer_id",
+CATALOG_CATEGORY_SPECS: tuple[tuple[str, str], ...] = (
+    ("Harness Default Category", "default-category"),
+    ("Harness Accessories", "accessories"),
 )
+
+
+async def _ensure_catalog_categories(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> set[str]:
+    """Idempotent category tree for search/homepage L3 bundles."""
+    seeded: set[str] = set()
+    for name, slug in CATALOG_CATEGORY_SPECS:
+        existing = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "query($slug: String!) { category(slug: $slug) { id slug } }"
+            ),
+            variables={"slug": slug},
+            allow_errors=True,
+        )
+        if (existing.get("category") or {}).get("id"):
+            if slug == "default-category":
+                fixtures["default_category_id"] = existing["category"]["id"]
+            continue
+        data = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($input: CategoryInput!) { "
+                "categoryCreate(input: $input) { category { id slug } "
+                "errors { field message code } } }"
+            ),
+            variables={"input": {"name": name, "slug": slug}},
+            allow_errors=True,
+            error_log=error_log,
+            operation="categoryCreate",
+        )
+        category = (data.get("categoryCreate") or {}).get("category")
+        if category:
+            seeded.add(f"category:{slug}")
+            if slug == "default-category":
+                fixtures["default_category_id"] = category["id"]
+                fixtures["default_slug"] = slug
+    return seeded
+
+
+async def ensure_certification_topology(
+    saleor_url: str,
+    token: str,
+    *,
+    timeout: int = 120,
+    full_topology: bool = False,
+) -> SeedResult:
+    """Mutation-first fixture topology for L3 certification runs."""
+    if full_topology:
+        from app.services.demo_seed import ensure_saleor_demo_topology
+
+        return await ensure_saleor_demo_topology(
+            saleor_url, token, timeout=max(timeout, 120)
+        )
+
+    saleor_url = resolve_saleor_url_for_runner(saleor_url)
+    result = await ensure_runtime_fixture_entities(saleor_url, token, timeout=timeout)
+
+    error_log = list(result.errors)
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token.removeprefix('Bearer ')}",
+    }
+    fixtures = dict(result.fixtures)
+    seeded = set(result.seeded_keys)
+
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        from app.services.demo_seed import seed_demo_fulfillable_order
+
+        if not fixtures.get("default_order_id"):
+            seeded.update(
+                await seed_demo_fulfillable_order(
+                    client,
+                    url=saleor_url,
+                    headers=headers,
+                    fixtures=fixtures,
+                    error_log=error_log,
+                )
+            )
+        seeded.update(
+            await _ensure_catalog_categories(
+                client,
+                url=saleor_url,
+                headers=headers,
+                fixtures=fixtures,
+                error_log=error_log,
+            )
+        )
+        fixtures = await _capture_fixtures(client, url=saleor_url, headers=headers)
+        fixtures = await _seed_storefront_fixtures(
+            client, url=saleor_url, headers=headers, fixtures=fixtures
+        )
+
+    live_keys = {k for k, v in fixtures.items() if v and k != "placeholder_id"}
+    return SeedResult(
+        fixtures=fixtures,
+        live_keys=frozenset(live_keys),
+        seeded_keys=frozenset(seeded),
+        errors=tuple(error_log),
+    )
 
 
 @dataclass(frozen=True)
@@ -147,18 +255,27 @@ async def _capture_fixtures(
         headers=headers,
         query=(
             "query($ch: String!) { products(first: 5, channel: $ch) "
-            "{ edges { node { id slug isPublished variants { id name } "
-            "productType { id } } } } }"
+            "{ edges { node { id slug variants { id name } "
+            "productType { id } channelListings { channel { slug } isPublished } "
+            "} } } }"
         ),
         variables={"ch": ch},
         allow_errors=True,
     )
     edges = (prod_data.get("products") or {}).get("edges") or []
-    # Pick the best candidate: published with variants
+
+    def _published_on_channel(node: dict[str, Any], channel_slug: str) -> bool:
+        for listing in node.get("channelListings") or []:
+            ch_info = listing.get("channel") or {}
+            if ch_info.get("slug") == channel_slug and listing.get("isPublished"):
+                return True
+        return False
+
+    # Pick the best candidate: published on default channel with variants
     best_product = None
     for edge in edges:
         node = edge.get("node") or {}
-        if node.get("isPublished") and node.get("variants"):
+        if _published_on_channel(node, ch) and node.get("variants"):
             best_product = node
             break
     if not best_product and edges:

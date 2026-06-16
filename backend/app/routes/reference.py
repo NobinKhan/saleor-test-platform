@@ -24,7 +24,6 @@ class ReferenceCaptureRequest(BaseModel):
     saleor_email: str = Field(min_length=3, max_length=255)
     saleor_password: str = Field(min_length=1)
     saleor_version: str | None = None
-    test_scope: str = Field(default="catalog")
 
     @field_validator("saleor_email")
     @classmethod
@@ -53,7 +52,6 @@ async def capture_reference(
         saleor_url=data.saleor_url,
         saleor_token=token,
         saleor_version=data.saleor_version,
-        test_scope=data.test_scope,
         db=db,
         saleor_email=data.saleor_email,
         saleor_password=data.saleor_password,

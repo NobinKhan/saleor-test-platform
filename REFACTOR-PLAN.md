@@ -3,9 +3,9 @@
 **Date:** 2026-06-15 (Updated: 2026-06-17)
 **Goal:** Transform the testing methodology from "replay demo data and compare" to "create data via mutations, query, validate schema shape."
 
-## Current Status: ✅ COMPLETE
+## Current Status: ✅ COMPLETE (refactor) + ✅ VERIFIED (production readiness)
 
-All 16 fixes have been implemented and tested. The platform now:
+All **17** fixes have been implemented and tested. The platform now:
 - Creates required data via mutations before querying (mutation-first)
 - Validates response schema shape (field types) instead of data values
 - Eliminates dependency on hardcoded Saleor demo data
@@ -69,7 +69,7 @@ just record-golden  # re-record goldens if needed
 | 3 | Schema-based comparison logic | ✅ Done | `services/reference_compare.py`, `services/schema_compare.py` (new) |
 | 4 | Data-independent scenario comparison | ✅ Done | `services/reference_compare.py` |
 | 5 | Data-independent storefront L3 | ✅ Done | Inherits from schema comparison + storefront session |
-| 6 | Robust fixture resolver | ✅ Done | `services/reference_seed.py` |
+| 6 | Robust fixture resolver | ✅ Done | `services/fixture_resolver.py`, `services/reference_seed.py` |
 | 7 | L1 success probe comparison fix | ✅ Done | `services/reference_compare.py` |
 | 8 | Failure reporting transparency | ✅ Done | `services/ai_report.py`, `services/test_runner.py` |
 | 9 | Golden staleness detection | ✅ Done | `services/version_routing.py` |
@@ -190,3 +190,19 @@ The refactoring is **complete**. The platform now:
 - Re-record golden corpus against freshly seeded Saleor
 - Run full E2E test suite
 - Deploy to CI/CD pipeline
+
+## Phase 2: Production verification (2026-06-16)
+
+Local verification (no GitHub CI). Run **one** `just baseline` per session; reset `saleor-cache` volume if Saleor login rate-limits after repeated runs.
+
+| Check | Command | Result (2026-06-16) |
+|-------|---------|---------------------|
+| Unit tests | `just test` | 238 passed, 1 skipped |
+| Frontend types | `just check` | 0 errors |
+| Golden baseline | `just baseline` | **100%** (856/856) on official Saleor 3.23.7 |
+| Full local matrix | `just verify` | Orchestrates unit + check + baseline + e2e |
+| E2E API certification | `just test-e2e` | Passed (in-compose `saleor-api:8000`) |
+
+**Fixes landed for verification:** env-driven host ports (`.env.example`), runtime corpus paths on `/app/reference/`, `golden_contract` on L1 endpoints (mutation-first guard), Saleor 3.23.7 health probe (`{ __typename }`), fixture discovery via `channelListings`, auth refresh only when token invalid.
+
+**Remaining baseline gaps:** None after scenario re-record on 2026-06-16 (`just patch-corpus --scenarios …` then `just baseline` → 100%).

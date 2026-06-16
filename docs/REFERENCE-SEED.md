@@ -88,27 +88,34 @@ POST /api/runs/validate → pre-flight: version gate + same fixture resolution/s
 
 Set `RUNTIME_SEED=false` for read-only audits against production-like targets where mutations are not allowed.
 
+### Certification topology (`ensure_certification_topology`)
+
+At test-run start, when `RUNTIME_SEED=true` (default), the harness calls **`ensure_certification_topology()`** in [`reference_seed.py`](../backend/app/services/reference_seed.py):
+
+- **`saleor_demo` profile** (default for UI runs): full populatedb-like topology via `demo_seed.ensure_saleor_demo_topology()` — multi-channel, warehouses, catalog, fulfillable order, storefront session.
+- **`harness` profile** (unit tests / minimal targets): harness-reference channel/product/customer/collection, fulfillable order chain, search categories, storefront checkout — all via admin mutations.
+
+L3 bundles substitute `{{fixtures.*}}` from this live-resolved map. Per-bundle setup (`bundle_setup.py`) runs additional mutations when a bundle needs extra state (e.g. second variant for `productvariantsetdefault`).
+
 ### Demo seed profile (`DEMO_SEED_PROFILE`)
 
 | Profile | Env | Behavior |
 |---------|-----|----------|
-| `saleor_demo` (default) | `DEMO_SEED_PROFILE=saleor_demo` | Runs `ensure_saleor_demo_topology()` — channels, warehouses, shipping zones, demo customers, category/collection catalog, apple-juice product, fulfillable order; then `ensure_storefront_session()` — customer profile + anonymous checkout chain |
-| `harness` (internal) | `DEMO_SEED_PROFILE=harness` | Minimal harness-reference entities only when missing |
+| `saleor_demo` (default) | `DEMO_SEED_PROFILE=saleor_demo` | Full certification topology (see above) + `ensure_storefront_session()` |
+| `harness` (internal) | `DEMO_SEED_PROFILE=harness` | Minimal mutation-first topology when `RUNTIME_SEED=true` |
 
-Every UI test run uses **`saleor_demo`** automatically. Seed-tagged L3 probes that `shape_drift` or `mismatch` against populatedb golden classify as `seed_prerequisite` (excluded from effective score). Empty-catalog or checkout-session gaps on untagged probes classify as `data_prerequisite`. Official Saleor after `just fresh` (populatedb) achieves true 100% on all **856** probes.
+Every UI test run uses **`saleor_demo`** automatically. Legacy `seed_tags` metadata has been removed from the L3 corpus; topology gaps classify as `data_prerequisite` or `real_bug` per SGRC.
 
 ### Pre-run checklist (compat runs)
 
 Before a full `full+scenarios` pass against a target backend:
 
 - Staff JWT with dashboard permissions
-- `saleor_demo` seed enabled (`RUNTIME_SEED=true`, default)
-- Multi-channel topology for `channels` / `channeldiagnostics` (or accept `seed_prerequisite` on populatedb-ID goldens)
-- Category/collection catalog for search/homepage probes
-- Storefront customer session + checkout chain (automatic preamble)
+- `RUNTIME_SEED=true` (default) so certification topology is created on the target
+- Storefront customer session + checkout chain (automatic when `saleor_demo` profile)
 - Scenario steps executed in order (tier 2); checkout-lifecycle now includes delivery + complete steps
 
-External backends without `populatedb` may still show `seed_prerequisite` on probes that hard-code Saleor demo Relay IDs (`orderfulfilldata`, `productvariantsetdefault`, …). That is expected — fix the harness setup first, then treat remaining failures as API parity work.
+External backends without `populatedb` rely on mutation-first topology at run start. Remaining failures after seed are API parity work, not fixture gaps to ignore.
 
 See [COMPAT-TEST-IMPROVEMENT-REPORT.md](COMPAT-TEST-IMPROVEMENT-REPORT.md) for seed-dependent bundle IDs and failure taxonomy.
 

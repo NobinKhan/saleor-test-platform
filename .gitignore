@@ -1,7 +1,9 @@
 node_modules
+.env
 backend/.venv/
 frontend/.env
 backend/.env
+frontend/.svelte-kit/
 saleor-test-*.md
 report.md
 frontend/.svelte-kit/

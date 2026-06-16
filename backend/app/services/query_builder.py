@@ -36,14 +36,135 @@ def _default_scalar_value(type_name: str) -> str:
     return '"test"'
 
 
+def build_query(endpoint_name: str, kind: str) -> str:
+    """Build a synthetic GraphQL document for golden corpus capture (not certification replay)."""
+    if kind == "QUERY":
+        if endpoint_name == "shop":
+            return 'query { shop { domain { host } version displayGrossPrices } }'
+        elif endpoint_name == "products":
+            return 'query { products(first: 3) { edges { node { id name slug } } pageInfo { hasNextPage endCursor } } }'
+        elif endpoint_name == "categories":
+            return 'query { categories(first: 3, level: 0) { edges { node { id name slug } } } }'
+        elif endpoint_name == "collections":
+            return 'query { collections(first: 3) { edges { node { id name slug } } } }'
+        elif endpoint_name == "checkout":
+            return 'query { checkout(token: "00000000-0000-0000-0000-000000000000") { id token } }'
+        elif endpoint_name == "checkouts":
+            return 'query { checkouts(first: 3) { edges { node { id token } } } }'
+        elif endpoint_name == "orders":
+            return 'query { orders(first: 3) { edges { node { id status } } } }'
+        elif endpoint_name == "channels":
+            return 'query { channels(first: 3) { edges { node { id name slug currencyCode isActive } } } }'
+        elif endpoint_name == "shippingZones":
+            return 'query { shippingZones(first: 3) { edges { node { id name countries } } } }'
+        elif endpoint_name == "shippingMethods":
+            return 'query { shippingZones(first: 1) { edges { node { shippingMethods { id name price { amount currency } } } } } }'
+        elif endpoint_name == "attributes":
+            return 'query { attributes(first: 3) { edges { node { id name slug } } } }'
+        elif endpoint_name == "giftCards":
+            return 'query { giftCards(first: 3) { edges { node { id isActive currentBalance { amount currency } } } } }'
+        elif endpoint_name == "sales":
+            return 'query { sales(first: 3) { edges { node { id name type startDate endDate } } } }'
+        elif endpoint_name == "vouchers":
+            return 'query { vouchers(first: 3) { edges { node { id name code discountValueType } } } }'
+        elif endpoint_name == "promotions":
+            return 'query { promotions(first: 3) { edges { node { id name startedAt endedAt } } } }'
+        elif endpoint_name == "warehouses":
+            return 'query { warehouses(first: 3) { edges { node { id name isPrimary } } } }'
+        elif endpoint_name == "productTypes":
+            return 'query { productTypes(first: 3) { edges { node { id name hasVariants isShippingRequired } } } }'
+        elif endpoint_name == "plugins":
+            return 'query { plugins(first: 3) { edges { node { id name active } } } }'
+        elif endpoint_name == "webhookEvents":
+            return 'query { webhookEvents { eventTypes { id name } } }'
+        elif endpoint_name == "paymentGateways":
+            return 'query { paymentGateways(first: 3) { id name } }'
+        elif endpoint_name == "languages":
+            return 'query { languages(first: 3) { code language } }'
+        elif endpoint_name == "me":
+            return 'query { me { id email firstName lastName } }'
+        elif endpoint_name == "users":
+            return 'query { users(first: 3) { edges { node { id email firstName lastName } } } }'
+        elif endpoint_name == "ordersDraft":
+            return 'query { ordersDraft(first: 3) { edges { node { id status } } } }'
+        elif endpoint_name == "ordersByUser":
+            return 'query { ordersByUser(first: 3) { edges { node { id status } } } }'
+        elif endpoint_name == "product":
+            return 'query { products(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "productType":
+            return 'query { productTypes(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "category":
+            return 'query { categories(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "collection":
+            return 'query { collections(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "attribute":
+            return 'query { attributes(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "giftCard":
+            return 'query { giftCards(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "sale":
+            return 'query { sales(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "voucher":
+            return 'query { vouchers(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "channel":
+            return 'query { channels(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "shippingZone":
+            return 'query { shippingZones(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "warehouse":
+            return 'query { warehouses(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "payment":
+            return 'query { payments(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "page":
+            return 'query { pages(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "pages":
+            return 'query { pages(first: 3) { edges { node { id title slug } } } }'
+        elif endpoint_name == "plugin":
+            return 'query { plugins(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "order":
+            return 'query { orders(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "user":
+            return 'query { users(first: 1) { edges { node { id } } } }'
+        elif endpoint_name == "permissionGroups":
+            return 'query { permissionGroups(first: 3) { edges { node { id name } } } }'
+        else:
+            return f'query {{ {endpoint_name}(first: 1) {{ edges {{ node {{ id }} }} }} }}'
+
+    if endpoint_name == "checkoutCreate":
+        return 'mutation { checkoutCreate(input: { channel: "default" }) { checkout { id } errors { field message code } } }'
+    if endpoint_name == "checkoutComplete":
+        return 'mutation { checkoutComplete(id: "00000000-0000-0000-0000-000000000000") { order { id } errors { field message } } }'
+    if endpoint_name == "checkoutAddPromoCode":
+        return 'mutation { checkoutAddPromoCode(id: "00000000-0000-0000-0000-000000000000", promoCode: "TEST") { checkout { id } errors { field message } } }'
+    if endpoint_name == "checkoutEmailUpdate":
+        return 'mutation { checkoutEmailUpdate(id: "00000000-0000-0000-0000-000000000000", email: "test@test.com") { checkout { id } errors { field message } } }'
+    if endpoint_name == "accountRegister":
+        return 'mutation { accountRegister(input: { email: "test@test.com", password: "Test1234!", channel: "default" }) { user { id email } errors { field message } } }'
+    if endpoint_name == "confirmAccount":
+        return 'mutation { confirmAccount(email: "test@test.com", token: "testtoken") { user { id } errors { field message } } }'
+    if endpoint_name == "requestPasswordReset":
+        return 'mutation { requestPasswordReset(email: "test@test.com", channel: "default") { errors { field message } } }'
+    if endpoint_name == "resetPassword":
+        return 'mutation { resetPassword(token: "testtoken", password: "Test1234!") { user { id } errors { field message } } }'
+    if endpoint_name == "productCreate":
+        return 'mutation { productCreate(input: { name: "Test", slug: "test-product-xyz", productType: "PHYSICAL" }) { product { id name } errors { field message code } } }'
+    if endpoint_name == "categoryCreate":
+        return 'mutation { categoryCreate(input: { name: "Test Category", slug: "test-cat-xyz" }) { category { id name } errors { field message } } }'
+    if endpoint_name == "collectionCreate":
+        return 'mutation { collectionCreate(input: { name: "Test Collection", slug: "test-col-xyz" }) { collection { id name } errors { field message } } }'
+    if endpoint_name == "channelCreate":
+        return 'mutation { channelCreate(input: { name: "Test Channel", slug: "test-channel-xyz", currencyCode: "USD", isActive: true }) { channel { id name } errors { field message } } }'
+    if endpoint_name == "saleCreate":
+        return 'mutation { saleCreate(input: { name: "Test Sale", type: PERCENTAGE, value: 10 }) { sale { id name } errors { field message } } }'
+    if endpoint_name == "voucherCreate":
+        return 'mutation { voucherCreate(input: { code: "TESTXYZ", name: "Test Voucher", discountValueType: PERCENTAGE, discountValue: 10 }) { voucher { id code } errors { field message } } }'
+    return f'mutation {{ {endpoint_name}(input: {{}}) {{ errors {{ field message code }} }} }}'
+
+
 def build_query_with_schema(
     endpoint_name: str,
     kind: str,
     schema_fields: dict[str, list[dict[str, Any]]] | None = None,
 ) -> str:
     """Build a probe query using introspection arg metadata when available."""
-    from app.services.test_runner import build_query
-
     if not schema_fields:
         return build_query(endpoint_name, kind)
 

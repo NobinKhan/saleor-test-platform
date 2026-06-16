@@ -34,11 +34,6 @@ async def main() -> int:
     parser.add_argument("--email", required=True, help="Saleor admin email")
     parser.add_argument("--password", required=True, help="Saleor admin password")
     parser.add_argument("--version", default=None, help="Override detected Saleor version")
-    parser.add_argument(
-        "--scope",
-        default="full",
-        help="Test scope (full=all introspected endpoints, catalog=static list only)",
-    )
     parser.add_argument("--ops", default=None, help="Comma-separated ops for subset capture (delegates to patch)")
     parser.add_argument("--remove", default=None, help="Comma-separated ops to remove from corpus")
     parser.add_argument("--apply-diff", action="store_true", help="Apply last corpus-diff report")
@@ -95,7 +90,6 @@ async def main() -> int:
             saleor_url=args.url,
             saleor_token=token,
             saleor_version=args.version,
-            test_scope=args.scope,
             db=db,
             saleor_email=args.email,
             saleor_password=args.password,
@@ -105,7 +99,7 @@ async def main() -> int:
     print(f"Corpus: {result['corpus_path']}")
     print(f"Hash: {result['corpus_hash']}")
 
-    if args.scope == "full" and not args.no_client_sync:
+    if not args.no_client_sync:
         from app.services.reference_seed import seed_reference_data
 
         print("Seeding reference fixture data for L3 capture…")

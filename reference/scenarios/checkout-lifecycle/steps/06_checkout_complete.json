@@ -17,9 +17,9 @@
         "order": null,
         "errors": [
           {
-            "field": "billingAddress",
-            "message": "Billing address is not set",
-            "code": "BILLING_ADDRESS_NOT_SET"
+            "field": null,
+            "message": "Checkout email must be set.",
+            "code": "EMAIL_NOT_SET"
           }
         ]
       }
@@ -32,5 +32,5 @@
     "data_path": "Complete checkout",
     "expected_null": true
   },
-  "recorded_at": "2026-06-15T10:09:01.649629+00:00"
+  "recorded_at": "2026-06-16T08:46:13.858122+00:00"
 }

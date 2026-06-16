@@ -30,7 +30,6 @@ from app.services.client_bundle_record import (
 )
 from app.services.dashboard_bundle_import import sync_client_bundles_from_vendor
 from app.services.storefront_bundle_import import sync_storefront_bundles_from_vendor
-from app.services.catalog_sync import sync_catalog_from_diff
 from app.services.reference_capture import capture_subset_probes, remove_corpus_ops
 from app.services.run_helpers import authenticate_saleor
 from app.services.test_runner import detect_saleor_version
@@ -274,9 +273,6 @@ async def main() -> int:
                 [(k.rsplit("__", 1)[0], k.rsplit("__", 1)[1]) for k in diff.removed if "__" in k],
             )
             print(f"Removed {len(diff.removed)} deprecated probe(s)")
-            catalog_removed = sync_catalog_from_diff(diff.removed)
-            if catalog_removed:
-                print(f"Removed {catalog_removed} entry(ies) from test_runner catalog")
         await _apply_client_diff(
             saleor_url=args.url,
             token=token,

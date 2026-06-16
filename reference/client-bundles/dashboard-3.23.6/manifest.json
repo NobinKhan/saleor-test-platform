@@ -4,8 +4,8 @@
   "dashboard_git_tag": "3.23.6",
   "bundle_count": 415,
   "recorded_count": 415,
-  "bundles_hash": "sha256:62d0ede3cf3e258af973d92fed6eb41649be3022d6e7dfc694bbf2e31b2a7794",
-  "updated_at": "2026-06-15T10:10:21.536208+00:00",
+  "bundles_hash": "sha256:322d05ad9a4bb4b2185a770bddbab75c881255c0bd35e4fb76b7ec81d7dcb7d3",
+  "updated_at": "2026-06-16T10:07:29.753556+00:00",
   "bundles_index": {
     "_getattributechoices": {
       "document_hash": "sha256:1f0b22d55265cfe9",
@@ -14,8 +14,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getcategorieschoices": {
       "document_hash": "sha256:0ae3c57cf257f43a",
@@ -24,8 +23,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getchanneloperands": {
       "document_hash": "sha256:4a5e9ab23d24feb7",
@@ -34,8 +32,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getcollectionschoices": {
       "document_hash": "sha256:44bf42f74f5c0072",
@@ -44,8 +41,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getcustomerschoices": {
       "document_hash": "sha256:9a1def11d11947e8",
@@ -54,8 +50,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getdynamicleftoperands": {
       "document_hash": "sha256:fb108a464363cff6",
@@ -64,8 +59,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getgiftcardtagschoices": {
       "document_hash": "sha256:d794983bdf1150b6",
@@ -74,8 +68,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getlegacychanneloperands": {
       "document_hash": "sha256:e3323c62af9aede9",
@@ -84,8 +77,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getpageschoices": {
       "document_hash": "sha256:e2fd4751a921ee16",
@@ -94,8 +86,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getpagetypeschoices": {
       "document_hash": "sha256:cf19928514848e04",
@@ -104,8 +95,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getproductchoices": {
       "document_hash": "sha256:58a6bf562fd4de58",
@@ -114,8 +104,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getproducttypeschoices": {
       "document_hash": "sha256:84f472d25630a71a",
@@ -124,8 +113,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getproductvariantchoices": {
       "document_hash": "sha256:ea09b524fe104ab1",
@@ -134,8 +122,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_getwarehousechoices": {
       "document_hash": "sha256:3c727e59ffd36372",
@@ -144,8 +131,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_searchattributeoperands": {
       "document_hash": "sha256:42fab5e306d2b885",
@@ -154,8 +140,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_searchcategoriesoperands": {
       "document_hash": "sha256:20b0c5de0280de7b",
@@ -164,11 +149,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "categories",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "success"
     },
     "_searchcollectionsoperands": {
       "document_hash": "sha256:f2d225603329b014",
@@ -177,11 +158,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "collections",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "success"
     },
     "_searchcustomersoperands": {
       "document_hash": "sha256:cd7a5484638be0c7",
@@ -190,11 +167,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "customers",
-        "requires_saleor_demo_seed"
-      ]
+      "golden_contract": "success"
     },
     "_searchpageoperands": {
       "document_hash": "sha256:4e8b81d3d479c827",
@@ -203,8 +176,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_searchpagetypesoperands": {
       "document_hash": "sha256:556ad0f94fb4c29b",
@@ -213,8 +185,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_searchproductoperands": {
       "document_hash": "sha256:84d356827fc94494",
@@ -223,8 +194,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_searchproducttypesoperands": {
       "document_hash": "sha256:d15fb022c0d5faef",
@@ -233,8 +203,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_searchproductvariantoperands": {
       "document_hash": "sha256:0db2fd38bf7999b5",
@@ -243,8 +212,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "_searchwarehouseoperands": {
       "document_hash": "sha256:c1d444515794ca5a",
@@ -253,8 +221,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "accountconfirm": {
       "document_hash": "sha256:f93cd9df0bd3210e",
@@ -263,8 +230,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "accountdelete": {
       "document_hash": "sha256:4e16c26661fee6a1",
@@ -273,8 +239,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "accountrequestdeletion": {
       "document_hash": "sha256:ba5330063998dd02",
@@ -283,8 +248,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "accountupdate": {
       "document_hash": "sha256:c0984f8cd9e7e7ea",
@@ -293,8 +257,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "addressvalidationrules": {
       "document_hash": "sha256:ed40f69f52836647",
@@ -303,8 +266,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "app": {
       "document_hash": "sha256:dbfdbf2e6b2f2647",
@@ -313,8 +275,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "appactivate": {
       "document_hash": "sha256:75492e70f2f127d3",
@@ -323,8 +284,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "appallproblems": {
       "document_hash": "sha256:b0e273463196d58a",
@@ -333,8 +293,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "appcreate": {
       "document_hash": "sha256:fc9687f826a6609f",
@@ -343,8 +302,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "appdeactivate": {
       "document_hash": "sha256:f41f207e5f0cae1a",
@@ -353,8 +311,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "appdelete": {
       "document_hash": "sha256:2b7413a8c398b3ca",
@@ -363,8 +320,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "appdeletefailedinstallation": {
       "document_hash": "sha256:93f49c4c42fa302b",
@@ -373,8 +329,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "appfailedpendingwebhooks": {
       "document_hash": "sha256:b030720af6d055c9",
@@ -383,8 +338,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "appfetch": {
       "document_hash": "sha256:0e27a8ed7670f183",
@@ -393,8 +347,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "apphasproblems": {
       "document_hash": "sha256:7b65df9a38ec76f0",
@@ -403,8 +356,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "appinstall": {
       "document_hash": "sha256:6b19c60034d4dba5",
@@ -413,8 +365,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "appproblemdismiss": {
       "document_hash": "sha256:9d89a313b0ca733d",
@@ -423,8 +374,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "appretryinstall": {
       "document_hash": "sha256:487052996b3a7800",
@@ -433,8 +383,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "appsinstallations": {
       "document_hash": "sha256:7185b71b7bf811f8",
@@ -443,8 +392,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "appslist": {
       "document_hash": "sha256:59f50aa8eccd1e10",
@@ -453,8 +401,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "apptokencreate": {
       "document_hash": "sha256:a29075d154bc4e7b",
@@ -463,8 +410,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "apptokendelete": {
       "document_hash": "sha256:226dc02629f9d192",
@@ -473,8 +419,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "appupdate": {
       "document_hash": "sha256:034f849c0f11bc92",
@@ -483,8 +428,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "appupdatepermissions": {
       "document_hash": "sha256:4e6d133542aef8b2",
@@ -493,8 +437,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "appwebhookdeliveries": {
       "document_hash": "sha256:f2ee54dd22f87690",
@@ -503,8 +446,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "assignpageattribute": {
       "document_hash": "sha256:838933ec4cde71ed",
@@ -513,8 +455,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "assignproductattribute": {
       "document_hash": "sha256:f01958591ea410cd",
@@ -523,8 +464,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributebulkdelete": {
       "document_hash": "sha256:ec238d077f928f16",
@@ -533,8 +473,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributecreate": {
       "document_hash": "sha256:05f21444379407a7",
@@ -543,8 +482,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributedelete": {
       "document_hash": "sha256:defb35fd61b3af35",
@@ -553,8 +491,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "attributedetails": {
       "document_hash": "sha256:2054ceae21480b41",
@@ -563,8 +500,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "attributelist": {
       "document_hash": "sha256:f8218d56546968e9",
@@ -573,8 +509,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributetranslationdetails": {
       "document_hash": "sha256:2f3f0361dd006036",
@@ -583,8 +518,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributetranslations": {
       "document_hash": "sha256:3a0069c59fe0c781",
@@ -593,8 +527,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributeupdate": {
       "document_hash": "sha256:c1fbb9345cc77daf",
@@ -603,8 +536,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributevaluecreate": {
       "document_hash": "sha256:08dfbd79d0110fac",
@@ -613,8 +545,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributevaluedelete": {
       "document_hash": "sha256:412098a31222a627",
@@ -623,8 +554,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "attributevaluereorder": {
       "document_hash": "sha256:0bbb31759ebc9454",
@@ -633,8 +563,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "attributevalueupdate": {
       "document_hash": "sha256:a66e2673f2ac0116",
@@ -643,8 +572,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "availablecolumnattributes": {
       "document_hash": "sha256:c5ceb8011251f348",
@@ -653,8 +581,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "availableexternalauthentications": {
       "document_hash": "sha256:705f71224644c182",
@@ -663,8 +590,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "basechannels": {
       "document_hash": "sha256:174d77aa3298debb",
@@ -673,8 +599,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "bulkdeletegiftcard": {
       "document_hash": "sha256:294476222ed726f0",
@@ -683,8 +608,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "bulkdeleteshippingrate": {
       "document_hash": "sha256:dcd7429a4b9c8905",
@@ -693,8 +617,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "bulkdeleteshippingzone": {
       "document_hash": "sha256:3d88f4d2d1c4dba3",
@@ -703,8 +626,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "bulkremovecustomers": {
       "document_hash": "sha256:296dbba049b89a7a",
@@ -713,8 +635,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "categorybulkdelete": {
       "document_hash": "sha256:cc35675bbb36315e",
@@ -723,8 +644,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "categorycreate": {
       "document_hash": "sha256:03ebe701442731e5",
@@ -733,8 +653,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "categorydelete": {
       "document_hash": "sha256:1d77b9c6195aafaf",
@@ -743,8 +662,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "categorydetails": {
       "document_hash": "sha256:7daa9ae0475cdb63",
@@ -753,8 +671,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "categorytranslationdetails": {
       "document_hash": "sha256:3af10cca534bf7e3",
@@ -763,8 +680,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "categorytranslations": {
       "document_hash": "sha256:3e60ae23288ff452",
@@ -773,8 +689,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "categoryupdate": {
       "document_hash": "sha256:ea345937a1144681",
@@ -783,8 +698,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "changeuserpassword": {
       "document_hash": "sha256:ae1748ae9ec67c43",
@@ -793,8 +707,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "channel": {
       "document_hash": "sha256:33870de52525ae52",
@@ -803,8 +716,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "channelactivate": {
       "document_hash": "sha256:a6212e28c03a16ba",
@@ -813,8 +725,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "channelcreate": {
       "document_hash": "sha256:ffa91c644dbe00e1",
@@ -823,8 +734,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "channelcurrencies": {
       "document_hash": "sha256:95c2cce905d53e78",
@@ -833,8 +743,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "channeldeactivate": {
       "document_hash": "sha256:ce2a601cc3dc3268",
@@ -843,8 +752,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "channeldelete": {
       "document_hash": "sha256:6f8eca77351b01aa",
@@ -853,8 +761,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "channeldiagnostics": {
       "document_hash": "sha256:b9c44aa60b9de7a7",
@@ -863,12 +770,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "channels",
-        "requires_saleor_demo_seed",
-        "warehouses"
-      ]
+      "golden_contract": "success"
     },
     "channellist": {
       "document_hash": "sha256:28d2b88cad030a7a",
@@ -877,8 +779,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "channelreorderwarehouses": {
       "document_hash": "sha256:96deff4b4e3048cb",
@@ -887,8 +788,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "channels": {
       "document_hash": "sha256:f576077b756f5c77",
@@ -897,11 +797,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "channels",
-        "requires_saleor_demo_seed"
-      ]
+      "golden_contract": "success"
     },
     "channelshippingzones": {
       "document_hash": "sha256:aacc24cd8525cc20",
@@ -910,8 +806,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "channelupdate": {
       "document_hash": "sha256:2dad64bee5b1330d",
@@ -920,8 +815,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "channelusabilitydata": {
       "document_hash": "sha256:8e9bf012e02ebda9",
@@ -930,8 +824,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "checkexportfilestatus": {
       "document_hash": "sha256:a49d54d22662e074",
@@ -940,8 +833,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "checkorderinvoicesstatus": {
       "document_hash": "sha256:8f9b5b5587a611c1",
@@ -950,8 +842,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "checkoutlist": {
       "document_hash": "sha256:333986e77e0cd6bf",
@@ -960,8 +851,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "clearrefundreasontype": {
       "document_hash": "sha256:3bfd44e7fdc49989",
@@ -970,8 +860,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "collectionassignproduct": {
       "document_hash": "sha256:5d2ebc0483ee2046",
@@ -980,8 +869,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "collectionbulkdelete": {
       "document_hash": "sha256:a5cf17d73cff1d2d",
@@ -990,8 +878,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "collectionchannellistingupdate": {
       "document_hash": "sha256:7b12ae63ac4f5338",
@@ -1000,8 +887,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "collectiondetails": {
       "document_hash": "sha256:cc13d6338d8ad9c2",
@@ -1010,8 +896,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "collectionlist": {
       "document_hash": "sha256:a13c47b9a78c6171",
@@ -1020,8 +905,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "collectionproducts": {
       "document_hash": "sha256:da21e56b331704b7",
@@ -1030,8 +914,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "collectiontranslationdetails": {
       "document_hash": "sha256:fa229f26ce99ae2b",
@@ -1040,8 +923,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "collectiontranslations": {
       "document_hash": "sha256:1872352ccc5f0cef",
@@ -1050,8 +932,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "collectionupdate": {
       "document_hash": "sha256:ce43bb757db6c99a",
@@ -1060,8 +941,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "confirmemailchange": {
       "document_hash": "sha256:c220e3b1368ac0c6",
@@ -1070,8 +950,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "createaccountaddress": {
       "document_hash": "sha256:ae47c69025fe87a2",
@@ -1080,8 +959,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "createcollection": {
       "document_hash": "sha256:0ec698e0735d7016",
@@ -1090,8 +968,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "createcustomer": {
       "document_hash": "sha256:f6897e0ff336e8c5",
@@ -1100,8 +977,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "createcustomeraddress": {
       "document_hash": "sha256:a6572553d92a193d",
@@ -1110,8 +986,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "createmanualtransactioncapture": {
       "document_hash": "sha256:95c9e3588eb9760f",
@@ -1120,8 +995,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "createmanualtransactionrefund": {
       "document_hash": "sha256:c3225822af160490",
@@ -1130,8 +1004,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "createshippingrate": {
       "document_hash": "sha256:4e20c642983717b3",
@@ -1140,8 +1013,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "createshippingzone": {
       "document_hash": "sha256:be97a2cbd14799e3",
@@ -1150,8 +1022,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "customeraddresses": {
       "document_hash": "sha256:f9ab9b32d0c15132",
@@ -1160,8 +1031,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "customercreatedata": {
       "document_hash": "sha256:2bd0b4fcafaebd05",
@@ -1170,8 +1040,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "customerdetails": {
       "document_hash": "sha256:6fe428a2cf989890",
@@ -1180,8 +1049,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "customergiftcardlist": {
       "document_hash": "sha256:f2ceddebafe94f94",
@@ -1190,8 +1058,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "deleteaccountaddress": {
       "document_hash": "sha256:c39a87b1e6886bf3",
@@ -1200,8 +1067,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "deletegiftcard": {
       "document_hash": "sha256:d59dd1cf300e30ff",
@@ -1210,8 +1076,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "deleteshippingrate": {
       "document_hash": "sha256:076368a726ae0437",
@@ -1220,8 +1085,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "deleteshippingzone": {
       "document_hash": "sha256:b1623a37be5faabe",
@@ -1230,8 +1094,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "eventdelivery": {
       "document_hash": "sha256:a8dbf70b8e643fda",
@@ -1240,8 +1103,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "extensionlist": {
       "document_hash": "sha256:112f481289572425",
@@ -1250,8 +1112,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "externalauthenticationurl": {
       "document_hash": "sha256:893d5545a9aa2e46",
@@ -1260,8 +1121,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "externallogout": {
       "document_hash": "sha256:6c3e5b6c48994953",
@@ -1270,8 +1130,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "externalobtainaccesstokens": {
       "document_hash": "sha256:ad777b991222a5a9",
@@ -1280,8 +1139,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "externalrefresh": {
       "document_hash": "sha256:f9e6ce78983c9341",
@@ -1290,8 +1148,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "externalrefreshwithuser": {
       "document_hash": "sha256:b444a2ee6312b95f",
@@ -1300,8 +1157,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "externalverify": {
       "document_hash": "sha256:4328ca56b79e7432",
@@ -1310,8 +1166,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "fileupload": {
       "document_hash": "sha256:5c0a0a647918f85b",
@@ -1320,8 +1175,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "fulfillmentreturnproducts": {
       "document_hash": "sha256:2604189fd61eb71b",
@@ -1330,8 +1184,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "fulfillorder": {
       "document_hash": "sha256:b107c0e9eec4ba42",
@@ -1340,8 +1193,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardactivate": {
       "document_hash": "sha256:1b741d722c0d24ac",
@@ -1350,8 +1202,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "giftcardaddnote": {
       "document_hash": "sha256:134634d4eb12dfca",
@@ -1360,8 +1211,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardbulkactivate": {
       "document_hash": "sha256:5be2aff505f3ca40",
@@ -1370,8 +1220,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardbulkcreate": {
       "document_hash": "sha256:57f487293edff2d8",
@@ -1380,8 +1229,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardbulkdeactivate": {
       "document_hash": "sha256:a82ceb9511fb1d08",
@@ -1390,8 +1238,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardcreate": {
       "document_hash": "sha256:0d14f3523f40431e",
@@ -1400,8 +1247,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcarddeactivate": {
       "document_hash": "sha256:89da9ca46551351b",
@@ -1410,8 +1256,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "giftcarddetails": {
       "document_hash": "sha256:4f954d8fa780679f",
@@ -1420,8 +1265,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "giftcardlist": {
       "document_hash": "sha256:3db0f15e7bba63c2",
@@ -1430,8 +1274,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardproductscount": {
       "document_hash": "sha256:7c46020d4e4e04a9",
@@ -1440,8 +1283,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "giftcardresend": {
       "document_hash": "sha256:4f942ab65402e9f2",
@@ -1450,8 +1292,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardsettings": {
       "document_hash": "sha256:7c258c9d81936c91",
@@ -1460,8 +1301,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "giftcardsettingsupdate": {
       "document_hash": "sha256:d11162e748d02489",
@@ -1470,8 +1310,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftcardtotalcount": {
       "document_hash": "sha256:62085b57c1c940c7",
@@ -1480,8 +1319,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "giftcardupdate": {
       "document_hash": "sha256:1f265a5860ac01c3",
@@ -1490,8 +1328,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "giftlabels": {
       "document_hash": "sha256:2e384c105b10f1dc",
@@ -1500,8 +1337,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "globalsearch": {
       "document_hash": "sha256:d428ee4f940c2ea1",
@@ -1510,8 +1346,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "gridattributes": {
       "document_hash": "sha256:fed423a3e34d6721",
@@ -1520,8 +1355,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "gridwarehouses": {
       "document_hash": "sha256:d6cd47bce519bc6d",
@@ -1530,8 +1364,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "installedapps": {
       "document_hash": "sha256:4e43390b2bce98ee",
@@ -1540,8 +1373,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "installedappslist": {
       "document_hash": "sha256:fe96cfca164736bd",
@@ -1550,8 +1382,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "invoiceemailsend": {
       "document_hash": "sha256:21dcba886ccc56f9",
@@ -1560,8 +1391,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "invoicerequest": {
       "document_hash": "sha256:4c6a44bdbb9325d5",
@@ -1570,8 +1400,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "listcustomers": {
       "document_hash": "sha256:cb8a54b46667d73d",
@@ -1580,8 +1409,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "login": {
       "document_hash": "sha256:7cb8b0c058bcf2ff",
@@ -1590,8 +1418,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "loginwithoutdetails": {
       "document_hash": "sha256:aa6a40d5279a48cf",
@@ -1600,8 +1427,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "menubulkdelete": {
       "document_hash": "sha256:e8ce01ec65ec1898",
@@ -1610,8 +1436,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "menucreate": {
       "document_hash": "sha256:98bfa3d3e7a2ba0b",
@@ -1620,8 +1445,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "menudelete": {
       "document_hash": "sha256:eb13c8dcc0712ba6",
@@ -1630,8 +1454,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "menudetails": {
       "document_hash": "sha256:67c4df9a9e082a74",
@@ -1640,8 +1463,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "menuitemcreate": {
       "document_hash": "sha256:b69f03c9e97cd30a",
@@ -1650,8 +1472,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "menuitemtranslationdetails": {
       "document_hash": "sha256:f0be6dbe87b40c26",
@@ -1660,8 +1481,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "menuitemtranslations": {
       "document_hash": "sha256:103d11d960bd7222",
@@ -1670,8 +1490,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "menuitemupdate": {
       "document_hash": "sha256:4812c3a26695f9b5",
@@ -1680,8 +1499,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "menulist": {
       "document_hash": "sha256:f55a84360917c8e8",
@@ -1690,8 +1508,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "menuupdate": {
       "document_hash": "sha256:c0f9a106a6a8c9d3",
@@ -1700,8 +1517,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "modelsoftype": {
       "document_hash": "sha256:9500fffea18f9347",
@@ -1710,8 +1526,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "modeltypes": {
       "document_hash": "sha256:2c40f17353660a12",
@@ -1720,8 +1535,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "navigatorsearch": {
       "document_hash": "sha256:258d4b3e216afa5e",
@@ -1730,8 +1544,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "ordercancel": {
       "document_hash": "sha256:1ae04509f238db14",
@@ -1740,8 +1553,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "ordercapture": {
       "document_hash": "sha256:2e6dde3cc36adb4d",
@@ -1750,8 +1562,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderconfirm": {
       "document_hash": "sha256:2ed58087121e4108",
@@ -1760,8 +1571,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderdetails": {
       "document_hash": "sha256:4e73c2e66d7fdc4e",
@@ -1770,8 +1580,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "orderdetailsgrantrefund": {
       "document_hash": "sha256:6f225b718a1b1ad2",
@@ -1780,8 +1589,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "orderdetailsgrantrefundedit": {
       "document_hash": "sha256:129cd9e4e20a8503",
@@ -1790,8 +1598,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "orderdetailswithmetadata": {
       "document_hash": "sha256:88777b7b54386319",
@@ -1800,8 +1607,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "orderdiscountadd": {
       "document_hash": "sha256:85f377cb6a8e9064",
@@ -1810,8 +1616,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderdiscountdelete": {
       "document_hash": "sha256:a9d060d10b75234c",
@@ -1820,8 +1625,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderdiscountupdate": {
       "document_hash": "sha256:ad568ec7df394ea8",
@@ -1830,8 +1634,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderdraftbulkcancel": {
       "document_hash": "sha256:722843391aa08555",
@@ -1840,8 +1643,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderdraftcancel": {
       "document_hash": "sha256:e37622c5539d0cdb",
@@ -1850,8 +1652,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderdraftcreate": {
       "document_hash": "sha256:dd57aabc5a787fad",
@@ -1860,8 +1661,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderdraftfinalize": {
       "document_hash": "sha256:2051519407b65167",
@@ -1870,8 +1670,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderdraftlist": {
       "document_hash": "sha256:3c3e9ffac0dd224d",
@@ -1880,8 +1679,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderdraftupdate": {
       "document_hash": "sha256:79907debc9e27117",
@@ -1890,8 +1688,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderfulfilldata": {
       "document_hash": "sha256:4c7ce392a0b6d4d3",
@@ -1900,10 +1697,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "requires_order_fixture"
-      ]
+      "golden_contract": "success"
     },
     "orderfulfillmentapprove": {
       "document_hash": "sha256:1d633bead77805be",
@@ -1912,8 +1706,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderfulfillmentcancel": {
       "document_hash": "sha256:27abc1799ecc5b41",
@@ -1922,8 +1715,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderfulfillmentrefundproducts": {
       "document_hash": "sha256:bd3b4e75e6795016",
@@ -1932,8 +1724,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderfulfillmentupdatetracking": {
       "document_hash": "sha256:fbef8cfb596d59b2",
@@ -1942,8 +1733,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderfulfillsettings": {
       "document_hash": "sha256:46fa0ef0c5ef8f97",
@@ -1952,8 +1742,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "ordergrantrefundadd": {
       "document_hash": "sha256:0c8dcdc88f2342ee",
@@ -1962,8 +1751,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "ordergrantrefundaddwithorder": {
       "document_hash": "sha256:bc7a8340c951ae09",
@@ -1972,8 +1760,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "ordergrantrefundedit": {
       "document_hash": "sha256:c40008d23fabbc2c",
@@ -1982,8 +1769,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderlinedelete": {
       "document_hash": "sha256:6fc7dc511d5829cc",
@@ -1992,8 +1778,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderlinediscountremove": {
       "document_hash": "sha256:12ddcb7dbd922ea2",
@@ -2002,8 +1787,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "orderlinediscountupdate": {
       "document_hash": "sha256:041cd344fd2e7083",
@@ -2012,8 +1796,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderlinesadd": {
       "document_hash": "sha256:4596875ef228514b",
@@ -2022,8 +1805,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderlinesmetadata": {
       "document_hash": "sha256:566eb5a3fe6961cc",
@@ -2032,8 +1814,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "orderlineupdate": {
       "document_hash": "sha256:7ab90a4113f5830b",
@@ -2042,8 +1823,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderlist": {
       "document_hash": "sha256:81cb86821cfc286d",
@@ -2052,8 +1832,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "ordermarkaspaid": {
       "document_hash": "sha256:b2f65613c83aa367",
@@ -2062,8 +1841,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "ordernoteadd": {
       "document_hash": "sha256:112b5f64566a749a",
@@ -2072,8 +1850,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "ordernoteupdate": {
       "document_hash": "sha256:0aaa943ec58ffc7f",
@@ -2082,8 +1859,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderrefund": {
       "document_hash": "sha256:f4b90d92de08da3a",
@@ -2092,8 +1868,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "orderrefunddata": {
       "document_hash": "sha256:c95de3f27632d712",
@@ -2102,10 +1877,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "requires_order_fixture"
-      ]
+      "golden_contract": "success"
     },
     "ordersendrefund": {
       "document_hash": "sha256:6a1dbf0a5d206023",
@@ -2114,8 +1886,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "ordersendrefundforgrantedrefund": {
       "document_hash": "sha256:b223b1368acc15bb",
@@ -2124,8 +1895,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "ordershippingmethodupdate": {
       "document_hash": "sha256:a489587154f4d5f8",
@@ -2134,8 +1904,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "ordertransactionrequestaction": {
       "document_hash": "sha256:5fe1af1ddccaa94e",
@@ -2144,8 +1913,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "ordertransactionsdata": {
       "document_hash": "sha256:aaf2b7f12d0d2aa0",
@@ -2154,10 +1922,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "requires_order_fixture"
-      ]
+      "golden_contract": "success"
     },
     "orderupdate": {
       "document_hash": "sha256:165e21853aa16f54",
@@ -2166,8 +1931,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "ordervoid": {
       "document_hash": "sha256:841655d50acf5c7e",
@@ -2176,8 +1940,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "pagebulkpublish": {
       "document_hash": "sha256:31afd19bb9402e8f",
@@ -2186,8 +1949,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagebulkremove": {
       "document_hash": "sha256:3b4f20af6d79e4d6",
@@ -2196,8 +1958,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagecount": {
       "document_hash": "sha256:84d0d3097076184f",
@@ -2206,8 +1967,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "pagecreate": {
       "document_hash": "sha256:f959a188cfb3de6c",
@@ -2216,8 +1976,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagedetails": {
       "document_hash": "sha256:1e18b791549c2d8f",
@@ -2226,8 +1985,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "pagelist": {
       "document_hash": "sha256:16dbd8a8a3e13819",
@@ -2236,8 +1994,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pageremove": {
       "document_hash": "sha256:7a275c2dfeb53d1f",
@@ -2246,8 +2003,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "pagetranslationdetails": {
       "document_hash": "sha256:d28376e12db83534",
@@ -2256,8 +2012,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagetranslations": {
       "document_hash": "sha256:10eab5f65bcee9f2",
@@ -2266,8 +2021,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagetype": {
       "document_hash": "sha256:7f020c9dd2354d5b",
@@ -2276,8 +2030,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "pagetypeattributereorder": {
       "document_hash": "sha256:ff460ae7724d2f51",
@@ -2286,8 +2039,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagetypebulkdelete": {
       "document_hash": "sha256:0ca9634b36e03e52",
@@ -2296,8 +2048,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagetypecreate": {
       "document_hash": "sha256:4cf4fa3e24c7a29f",
@@ -2306,8 +2057,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagetypedelete": {
       "document_hash": "sha256:c41a021d28a104ce",
@@ -2316,8 +2066,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "pagetypedetails": {
       "document_hash": "sha256:a4dd9db8f0a9d780",
@@ -2326,8 +2075,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "pagetypelist": {
       "document_hash": "sha256:8b54cb9e2616ea17",
@@ -2336,8 +2084,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pagetypeupdate": {
       "document_hash": "sha256:9f27574a651a4e20",
@@ -2346,8 +2093,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "pageupdate": {
       "document_hash": "sha256:06e6940c94c73510",
@@ -2356,8 +2102,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "passwordchange": {
       "document_hash": "sha256:6a3444760b4b418b",
@@ -2366,8 +2111,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "permissiongroupcreate": {
       "document_hash": "sha256:a94b668107588674",
@@ -2376,8 +2120,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "permissiongroupdelete": {
       "document_hash": "sha256:3f08f4b1b7c6fe4f",
@@ -2386,8 +2129,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "permissiongroupdetails": {
       "document_hash": "sha256:d756ed2f142ac312",
@@ -2396,8 +2138,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "permissiongrouplist": {
       "document_hash": "sha256:835da041781370a8",
@@ -2406,8 +2147,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "permissiongroupupdate": {
       "document_hash": "sha256:cd843261efcf4af8",
@@ -2416,8 +2156,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "plugin": {
       "document_hash": "sha256:d9d6869cb24f0ccb",
@@ -2426,8 +2165,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "plugins": {
       "document_hash": "sha256:8bf787488e02dfba",
@@ -2436,8 +2174,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "pluginupdate": {
       "document_hash": "sha256:ed5cbccb6c8c6fbc",
@@ -2446,8 +2183,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productattributeassignmentupdate": {
       "document_hash": "sha256:af2282f34f66a0ce",
@@ -2456,8 +2192,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productbulkdelete": {
       "document_hash": "sha256:ca7101206532d650",
@@ -2466,8 +2201,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productchannellistingupdate": {
       "document_hash": "sha256:7714161cc8bfdb75",
@@ -2476,8 +2210,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productcount": {
       "document_hash": "sha256:6c588ddd635d8ea8",
@@ -2486,8 +2219,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "productcreate": {
       "document_hash": "sha256:60257a810fb8abcc",
@@ -2496,8 +2228,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productdelete": {
       "document_hash": "sha256:2adc08a308790cf5",
@@ -2506,8 +2237,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "productdetails": {
       "document_hash": "sha256:89dd0072ca017890",
@@ -2516,8 +2246,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "productlist": {
       "document_hash": "sha256:94cf91f91d568590",
@@ -2526,8 +2255,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productmediabyid": {
       "document_hash": "sha256:d0cdc61dcbb55df0",
@@ -2536,11 +2264,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": [
-        "products",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "not_found"
     },
     "productmediacreate": {
       "document_hash": "sha256:ccd8d15f48f9851d",
@@ -2549,8 +2273,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "productmediadelete": {
       "document_hash": "sha256:9ea8021e76e81723",
@@ -2559,8 +2282,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "productmediareorder": {
       "document_hash": "sha256:7884ac1a8b82cdce",
@@ -2569,8 +2291,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productmediaupdate": {
       "document_hash": "sha256:ca6c0372e03ed287",
@@ -2579,8 +2300,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "producttranslationdetails": {
       "document_hash": "sha256:26ef7d9caf68f96f",
@@ -2589,8 +2309,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "producttranslations": {
       "document_hash": "sha256:b93bee75eaabd3bc",
@@ -2599,8 +2318,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "producttype": {
       "document_hash": "sha256:2bbb9eaec51416c0",
@@ -2609,8 +2327,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "producttypeattributereorder": {
       "document_hash": "sha256:40905f053f8d505a",
@@ -2619,8 +2336,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "producttypebulkdelete": {
       "document_hash": "sha256:47e46f5dfbd533d0",
@@ -2629,8 +2345,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "producttypecreate": {
       "document_hash": "sha256:01358a08809eef77",
@@ -2639,8 +2354,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "producttypecreatedata": {
       "document_hash": "sha256:2c3731b0332aea19",
@@ -2649,8 +2363,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "producttypedelete": {
       "document_hash": "sha256:e977264d8e81bd60",
@@ -2659,8 +2372,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "producttypedetails": {
       "document_hash": "sha256:a2d449b69dce1ab5",
@@ -2669,8 +2381,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "producttypelist": {
       "document_hash": "sha256:cf17472d28c54cd9",
@@ -2679,8 +2390,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "producttypeupdate": {
       "document_hash": "sha256:b2468df57b5f554f",
@@ -2689,8 +2399,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productupdate": {
       "document_hash": "sha256:e93bc0a5ccbd71e4",
@@ -2699,8 +2408,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productvariantbulkcreate": {
       "document_hash": "sha256:ac2e6990dad587a8",
@@ -2709,8 +2417,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productvariantbulkdelete": {
       "document_hash": "sha256:45392a5f533bf9f3",
@@ -2719,8 +2426,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productvariantbulkupdate": {
       "document_hash": "sha256:a61293e6f40ba0c3",
@@ -2729,8 +2435,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productvariantchannellistingupdate": {
       "document_hash": "sha256:09559b77a5755244",
@@ -2739,8 +2444,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productvariantcreatedata": {
       "document_hash": "sha256:0b5c5bfe00fcfbec",
@@ -2749,8 +2453,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "productvariantdetails": {
       "document_hash": "sha256:c9775ebb2e41d32c",
@@ -2759,8 +2462,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "productvariantlist": {
       "document_hash": "sha256:3496468cdde043b8",
@@ -2769,8 +2471,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "productvariantpreorderdeactivate": {
       "document_hash": "sha256:a335606cc859451b",
@@ -2779,8 +2480,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "productvariantreorder": {
       "document_hash": "sha256:4032e5e94e1087c0",
@@ -2789,8 +2489,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "productvariantsetdefault": {
       "document_hash": "sha256:7c075c5386497ad9",
@@ -2799,10 +2498,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "requires_demo_product_variant"
-      ]
+      "golden_contract": "success"
     },
     "productvarianttranslationdetails": {
       "document_hash": "sha256:dd81c9e9ff8c5cf8",
@@ -2811,8 +2507,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "promotioncreate": {
       "document_hash": "sha256:8093858ef51e6193",
@@ -2821,8 +2516,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "promotiondelete": {
       "document_hash": "sha256:ea24442a76ea596e",
@@ -2831,8 +2525,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "promotiondetails": {
       "document_hash": "sha256:b2b244af58fc1955",
@@ -2841,8 +2534,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "promotionrulecreate": {
       "document_hash": "sha256:a726e12511762a4e",
@@ -2851,8 +2543,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "promotionruledelete": {
       "document_hash": "sha256:fc40a9371d35112a",
@@ -2861,8 +2552,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "promotionruleupdate": {
       "document_hash": "sha256:b7f2e8d9f4194007",
@@ -2871,8 +2561,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "promotionslist": {
       "document_hash": "sha256:b99687f78267ba73",
@@ -2881,8 +2570,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "promotionupdate": {
       "document_hash": "sha256:637b8b85418d7365",
@@ -2891,8 +2579,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "refreshlimits": {
       "document_hash": "sha256:ffc7fd0b50cef4ef",
@@ -2901,8 +2588,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "refreshtoken": {
       "document_hash": "sha256:81fe396a7e97ae57",
@@ -2911,8 +2597,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "refreshtokenwithuser": {
       "document_hash": "sha256:5a72df12b4cc5161",
@@ -2921,8 +2606,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "refundreasonreferenceclear": {
       "document_hash": "sha256:58c6561b7f67d57d",
@@ -2931,8 +2615,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "refundsettings": {
       "document_hash": "sha256:3913d970f8e99867",
@@ -2941,8 +2624,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "refundsettingsupdate": {
       "document_hash": "sha256:fd3b2b3069541eb3",
@@ -2951,8 +2633,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "refundssettings": {
       "document_hash": "sha256:a67f222955ca7045",
@@ -2961,8 +2642,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "removecollection": {
       "document_hash": "sha256:f7c6de736b9a582e",
@@ -2971,8 +2651,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "removecustomer": {
       "document_hash": "sha256:40eb6f469e807e99",
@@ -2981,8 +2660,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "removecustomeraddress": {
       "document_hash": "sha256:e18a541b24276157",
@@ -2991,8 +2669,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "reorderproductsincollection": {
       "document_hash": "sha256:f8b42a6affae9d12",
@@ -3001,8 +2678,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "requestemailchange": {
       "document_hash": "sha256:4de64c5f1ab082ad",
@@ -3011,8 +2687,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "requestpasswordreset": {
       "document_hash": "sha256:7e99dc683b6e3a55",
@@ -3021,8 +2696,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "rootcategories": {
       "document_hash": "sha256:04c7b9122be29b79",
@@ -3031,8 +2705,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "ruleconditionsselectedoptionsdetails": {
       "document_hash": "sha256:96311ba0183092b2",
@@ -3041,8 +2714,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "saveonboardingstate": {
       "document_hash": "sha256:7823ab235cbacdcd",
@@ -3051,8 +2723,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "searchattributes": {
       "document_hash": "sha256:ae75763eb4bbd818",
@@ -3061,8 +2732,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchattributevalues": {
       "document_hash": "sha256:977d0d2f308eb483",
@@ -3071,8 +2741,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "searchavailableingridattributes": {
       "document_hash": "sha256:1ed1c6ce0d61652c",
@@ -3081,8 +2750,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchavailablepageattributes": {
       "document_hash": "sha256:96a461d45d534bfa",
@@ -3091,8 +2759,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "searchavailableproductattributes": {
       "document_hash": "sha256:788eb700c6526b3a",
@@ -3101,8 +2768,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "searchcategories": {
       "document_hash": "sha256:df785c331fa1e0cc",
@@ -3111,11 +2777,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "categories",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "success"
     },
     "searchcategorieswithtotalproducts": {
       "document_hash": "sha256:bfa5d436d2803513",
@@ -3124,11 +2786,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "categories",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "success"
     },
     "searchcollections": {
       "document_hash": "sha256:d665cf60cbd4e101",
@@ -3137,11 +2795,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "collections",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "success"
     },
     "searchcollectionswithtotalproducts": {
       "document_hash": "sha256:ed0763225096fec0",
@@ -3150,11 +2804,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "collections",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "success"
     },
     "searchcustomers": {
       "document_hash": "sha256:9413ef3333905794",
@@ -3163,8 +2813,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchgiftcardtags": {
       "document_hash": "sha256:e8c21a1586cb5099",
@@ -3173,8 +2822,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "searchordervariant": {
       "document_hash": "sha256:bf41e0393e9bcd6c",
@@ -3183,11 +2831,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "requires_harness_isolation",
-        "search"
-      ]
+      "golden_contract": "success"
     },
     "searchpages": {
       "document_hash": "sha256:8ca9fbca1927e826",
@@ -3196,8 +2840,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchpagetypes": {
       "document_hash": "sha256:02dee8284a31d2be",
@@ -3206,8 +2849,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchpermissiongroups": {
       "document_hash": "sha256:367db520670081bb",
@@ -3216,8 +2858,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchproducts": {
       "document_hash": "sha256:4d88612307675e92",
@@ -3226,8 +2867,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchproducttypes": {
       "document_hash": "sha256:527f70ed9f4501a7",
@@ -3236,8 +2876,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchshippingzones": {
       "document_hash": "sha256:57ba406af6ec4dda",
@@ -3246,8 +2885,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "searchstaffmembers": {
       "document_hash": "sha256:ba7ebc12c43cf6ef",
@@ -3256,8 +2894,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchvariants": {
       "document_hash": "sha256:491d613bd94e349f",
@@ -3266,8 +2903,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchvariantswithproductdata": {
       "document_hash": "sha256:5c02af670498c310",
@@ -3276,8 +2912,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "searchwarehouses": {
       "document_hash": "sha256:09fe2c06955d6bbb",
@@ -3286,8 +2921,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "setaccountdefaultaddress": {
       "document_hash": "sha256:49b0080e49bc10dc",
@@ -3296,8 +2930,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "setcustomerdefaultaddress": {
       "document_hash": "sha256:77a73c123aa05b4b",
@@ -3306,8 +2939,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "setpassword": {
       "document_hash": "sha256:9c31465af35f03b3",
@@ -3316,8 +2948,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "setrefundreasontype": {
       "document_hash": "sha256:43b6fbf194cbc5de",
@@ -3326,8 +2957,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "shippingmethodchannellistingupdate": {
       "document_hash": "sha256:741dadee011279e8",
@@ -3336,8 +2966,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "shippingmethodtranslationdetails": {
       "document_hash": "sha256:94bf93c82f9ef167",
@@ -3346,8 +2975,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "shippingmethodtranslations": {
       "document_hash": "sha256:2a281899d72e9cbe",
@@ -3356,8 +2984,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "shippingpriceexcludeproduct": {
       "document_hash": "sha256:0afd723d22af35f1",
@@ -3366,8 +2993,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "shippingpriceremoveproductfromexclude": {
       "document_hash": "sha256:cf081947bf982718",
@@ -3376,8 +3002,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "shippingzone": {
       "document_hash": "sha256:63ff246bf205166b",
@@ -3386,8 +3011,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "shippingzonechannels": {
       "document_hash": "sha256:b20e6c790cb8386c",
@@ -3396,8 +3020,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "shippingzones": {
       "document_hash": "sha256:21770c3ae2dbf2b2",
@@ -3406,8 +3029,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "shippingzonescount": {
       "document_hash": "sha256:8d92b71fea4ea03c",
@@ -3416,8 +3038,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "shopcountries": {
       "document_hash": "sha256:76cdc46ea43e27f0",
@@ -3426,8 +3047,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "shopinfo": {
       "document_hash": "sha256:e41e092175ae7c82",
@@ -3436,8 +3056,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "shopsettingsupdate": {
       "document_hash": "sha256:84d826d1828ce4c4",
@@ -3446,8 +3065,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "sitesettings": {
       "document_hash": "sha256:d6b0161659d2095f",
@@ -3456,11 +3074,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "requires_saleor_demo_seed",
-        "site_settings"
-      ]
+      "golden_contract": "success"
     },
     "stafflist": {
       "document_hash": "sha256:1ded5af5fd311500",
@@ -3469,8 +3083,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "staffmemberadd": {
       "document_hash": "sha256:9167262d413245f4",
@@ -3479,8 +3092,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "staffmemberdelete": {
       "document_hash": "sha256:be0d19871c36f825",
@@ -3489,8 +3101,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "staffmemberdetails": {
       "document_hash": "sha256:8af4fa02e8d5cc80",
@@ -3499,8 +3110,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "staffmemberupdate": {
       "document_hash": "sha256:57ab0b1cabd034cf",
@@ -3509,8 +3119,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "stockvisibilitymode": {
       "document_hash": "sha256:f6c32323af45f101",
@@ -3519,8 +3128,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "taxclassassign": {
       "document_hash": "sha256:f27063f330b93db2",
@@ -3529,8 +3137,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "taxclasscreate": {
       "document_hash": "sha256:ee97b975cf2a4a48",
@@ -3539,8 +3146,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "taxclassdelete": {
       "document_hash": "sha256:7b867b47f48b92d5",
@@ -3549,8 +3155,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "taxclasseslist": {
       "document_hash": "sha256:d1ea8436d50ccb1d",
@@ -3559,8 +3164,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "taxclassupdate": {
       "document_hash": "sha256:c5ade74e1333d031",
@@ -3569,8 +3173,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "taxconfigurationslist": {
       "document_hash": "sha256:764e757c05a76cd3",
@@ -3579,8 +3182,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "taxconfigurationupdate": {
       "document_hash": "sha256:e2ebf3b950abcfa0",
@@ -3589,8 +3191,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "taxcountrieslist": {
       "document_hash": "sha256:25d85fdd2c65c360",
@@ -3599,8 +3200,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "taxcountryconfigurationdelete": {
       "document_hash": "sha256:311d8430ab6ef14b",
@@ -3609,8 +3209,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "taxcountryconfigurationupdate": {
       "document_hash": "sha256:18db5a8cb3bb993c",
@@ -3619,8 +3218,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "taxstrategychoices": {
       "document_hash": "sha256:3856f852893ac867",
@@ -3629,8 +3227,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "triggerwebhookdryrun": {
       "document_hash": "sha256:ad5c8c0a9691a60a",
@@ -3639,8 +3236,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "unassigncollectionproduct": {
       "document_hash": "sha256:89001624015262db",
@@ -3649,8 +3245,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "unassignpageattribute": {
       "document_hash": "sha256:f855438fe4ae682b",
@@ -3659,8 +3254,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "unassignproductattribute": {
       "document_hash": "sha256:e685ff33e1e7ef74",
@@ -3669,8 +3263,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateaccountaddress": {
       "document_hash": "sha256:8b7093351421db3c",
@@ -3679,8 +3272,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateattributetranslations": {
       "document_hash": "sha256:b5aee59b704b398f",
@@ -3689,8 +3281,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateattributevaluetranslations": {
       "document_hash": "sha256:beb0768832d3ef74",
@@ -3699,8 +3290,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatecategorytranslations": {
       "document_hash": "sha256:3d5c86d788dfa269",
@@ -3709,8 +3299,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatecollectiontranslations": {
       "document_hash": "sha256:c4fd47e177ef8848",
@@ -3719,8 +3308,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatecustomer": {
       "document_hash": "sha256:a161eaaa3ba024a8",
@@ -3729,8 +3317,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatecustomeraddress": {
       "document_hash": "sha256:7ef86f01f93b1b1c",
@@ -3739,8 +3326,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatedefaultweightunit": {
       "document_hash": "sha256:64823d4dac22b18c",
@@ -3749,8 +3335,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "updatemenuitemtranslations": {
       "document_hash": "sha256:b1a4222f85fc3927",
@@ -3759,8 +3344,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatemetadata": {
       "document_hash": "sha256:5ad397f7a2f51984",
@@ -3769,8 +3353,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatepagetranslations": {
       "document_hash": "sha256:492363871b5a56ed",
@@ -3779,8 +3362,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateprivatemetadata": {
       "document_hash": "sha256:35d27ff5a12495e2",
@@ -3789,8 +3371,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateproducttranslations": {
       "document_hash": "sha256:e36d853eb7bda831",
@@ -3799,8 +3380,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateproductvarianttranslations": {
       "document_hash": "sha256:af32d01d5dee8a56",
@@ -3809,8 +3389,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateshippingmethodtranslations": {
       "document_hash": "sha256:9bee4c44e1842e73",
@@ -3819,8 +3398,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateshippingrate": {
       "document_hash": "sha256:eb1a58eafa0a952d",
@@ -3829,8 +3407,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updateshippingzone": {
       "document_hash": "sha256:a08a4bbf9684baf0",
@@ -3839,8 +3416,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "updatevouchertranslations": {
       "document_hash": "sha256:fce26cb19360ca3f",
@@ -3849,8 +3425,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "useraccountupdate": {
       "document_hash": "sha256:f1227b11b7666748",
@@ -3859,8 +3434,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "useravatardelete": {
       "document_hash": "sha256:c11cf1418bf6991f",
@@ -3869,8 +3443,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "useravatarupdate": {
       "document_hash": "sha256:62bb35b57276b684",
@@ -3879,8 +3452,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "userdetails": {
       "document_hash": "sha256:861fe852f2501464",
@@ -3889,8 +3461,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "userpassowrdchange": {
       "document_hash": "sha256:d8d4813235f9159a",
@@ -3899,8 +3470,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "variantcreate": {
       "document_hash": "sha256:dea7d9386ba36d99",
@@ -3909,8 +3479,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "variantdelete": {
       "document_hash": "sha256:0a98858afcaf62a0",
@@ -3919,8 +3488,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "variantmediaassign": {
       "document_hash": "sha256:f8387d018e897a77",
@@ -3929,8 +3497,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "variantmediaunassign": {
       "document_hash": "sha256:e44eff73000f5ee5",
@@ -3939,8 +3506,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "variantupdate": {
       "document_hash": "sha256:0e7857feb3f0dce0",
@@ -3949,8 +3515,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "verifytoken": {
       "document_hash": "sha256:9b743acb68dd71a2",
@@ -3959,8 +3524,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "voucherbulkdelete": {
       "document_hash": "sha256:6125662b768171c2",
@@ -3969,8 +3533,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "vouchercataloguesadd": {
       "document_hash": "sha256:9cb73a9f077df0b5",
@@ -3979,8 +3542,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "vouchercataloguesremove": {
       "document_hash": "sha256:be7a7304ff0633cf",
@@ -3989,8 +3551,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "voucherchannellistingupdate": {
       "document_hash": "sha256:189fbe82d7dab079",
@@ -3999,8 +3560,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "vouchercodebulkdelete": {
       "document_hash": "sha256:992ac1f2ef1a0eef",
@@ -4009,8 +3569,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "vouchercodes": {
       "document_hash": "sha256:5ca2acce4e70bf89",
@@ -4019,8 +3578,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "vouchercreate": {
       "document_hash": "sha256:ee0258ba98918094",
@@ -4029,8 +3587,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "voucherdelete": {
       "document_hash": "sha256:a3f9e55cbd8e4d35",
@@ -4039,8 +3596,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "voucherdetails": {
       "document_hash": "sha256:79a641acf64f6a56",
@@ -4049,8 +3605,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "voucherlist": {
       "document_hash": "sha256:107878d82601d47c",
@@ -4059,8 +3614,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "vouchertranslationdetails": {
       "document_hash": "sha256:05ea0bb4ec868912",
@@ -4069,8 +3623,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "vouchertranslations": {
       "document_hash": "sha256:2c7089bb0ac7de07",
@@ -4079,8 +3632,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "voucherupdate": {
       "document_hash": "sha256:3f75333884a47808",
@@ -4089,8 +3641,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "warehousecreate": {
       "document_hash": "sha256:31f64d73d9e50fea",
@@ -4099,8 +3650,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "warehousedelete": {
       "document_hash": "sha256:2e958b5717f50baa",
@@ -4109,8 +3659,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "warehousedetails": {
       "document_hash": "sha256:b4055ac8bdbf7e3e",
@@ -4119,8 +3668,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "warehouselist": {
       "document_hash": "sha256:abc964ca47b6ca80",
@@ -4129,8 +3677,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "warehousescount": {
       "document_hash": "sha256:f255520ba6786bcd",
@@ -4139,8 +3686,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     },
     "warehouseupdate": {
       "document_hash": "sha256:c6f1c1f9057c943b",
@@ -4149,8 +3695,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "webhookcreate": {
       "document_hash": "sha256:44c10d13a13fdafc",
@@ -4159,8 +3704,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "webhookdelete": {
       "document_hash": "sha256:5398f6c1785f2d61",
@@ -4169,8 +3713,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "business_error",
-      "seed_tags": []
+      "golden_contract": "business_error"
     },
     "webhookdetails": {
       "document_hash": "sha256:eda6662839f93c8b",
@@ -4179,8 +3722,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "not_found",
-      "seed_tags": []
+      "golden_contract": "not_found"
     },
     "webhookupdate": {
       "document_hash": "sha256:8e16a74087e8d7fc",
@@ -4189,8 +3731,7 @@
       ],
       "priority": "P1",
       "recorded": true,
-      "golden_contract": "graphql_error",
-      "seed_tags": []
+      "golden_contract": "graphql_error"
     },
     "welcomepagenotifications": {
       "document_hash": "sha256:6870644cd3cf1626",
@@ -4199,8 +3740,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": []
+      "golden_contract": "success"
     }
   }
 }

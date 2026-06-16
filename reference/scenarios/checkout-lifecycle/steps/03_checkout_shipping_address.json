@@ -29,7 +29,7 @@
     "data": {
       "checkoutShippingAddressUpdate": {
         "checkout": {
-          "id": "Q2hlY2tvdXQ6ZjEzYjAwOTItZjZkZi00YjhjLTk1MjAtYjhiM2NiNzg4NDEy",
+          "id": "Q2hlY2tvdXQ6NmJhMWI1ZGQtMGRhYS00NWJiLWEwYzMtMzBhNWI1NTBiNzk4",
           "shippingAddress": {
             "city": "SAN FRANCISCO",
             "country": {
@@ -43,5 +43,5 @@
   },
   "golden_contract": "success",
   "golden_status": "pass",
-  "recorded_at": "2026-06-15T10:09:00.981688+00:00"
+  "recorded_at": "2026-06-16T08:46:13.330160+00:00"
 }

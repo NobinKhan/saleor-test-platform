@@ -61,5 +61,5 @@ DynamicProbe(
 
 ## Configuration
 
-Set `SGRC_ALLOW_ASSERTION_ONLY=false` (default) to require golden evidence
+Scenario and variant probes require recorded golden JSON — there is no assertion-only bypass.
 for scenario and variant probes. Dynamic probes always validate runtime values.

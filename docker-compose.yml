@@ -45,7 +45,7 @@ services:
     restart: unless-stopped
     networks: [app]
     ports:
-      - "8000:8000"
+      - "${SALEOR_HOST_PORT:-8000}:8000"
     stdin_open: true
     tty: true
     depends_on:
@@ -121,7 +121,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     ports:
-      - "5998:5998"
+      - "${HARNESS_BACKEND_HOST_PORT:-5998}:5998"
     volumes:
       - harness_reference:/app/reference
     environment:
@@ -134,9 +134,9 @@ services:
       APP_ENV: development
       APP_HOST: 0.0.0.0
       APP_PORT: 5998
-      FRONTEND_URL: http://localhost:5999
+      FRONTEND_URL: http://localhost:${HARNESS_FRONTEND_HOST_PORT:-5999}
       # Rewrite target when UI sends localhost — reaches Saleor on the Docker host
-      SALEOR_GRAPHQL_URL: http://host.docker.internal:8000/graphql/
+      SALEOR_GRAPHQL_URL: http://host.docker.internal:${SALEOR_HOST_PORT:-8000}/graphql/
       REFERENCE_BASELINE_VERSION: "3.23.6"
       REFERENCE_BASELINE_SOURCE: saleor-dashboard
       GOLDEN_CORPUS_VERSION: "3.23.7"
@@ -170,14 +170,14 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        PUBLIC_BACKEND_URL: http://localhost:5998
+        PUBLIC_BACKEND_URL: http://localhost:${HARNESS_BACKEND_HOST_PORT:-5998}
     container_name: harness-frontend
     restart: unless-stopped
     networks: [app]
     ports:
-      - "5999:5999"
+      - "${HARNESS_FRONTEND_HOST_PORT:-5999}:5999"
     environment:
-      PUBLIC_BACKEND_URL: http://localhost:5998
+      PUBLIC_BACKEND_URL: http://localhost:${HARNESS_BACKEND_HOST_PORT:-5998}
     depends_on:
       - harness-backend
 

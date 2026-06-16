@@ -113,9 +113,8 @@ Certification replays HTTP GraphQL JSON. It does **not** certify:
 
 | Item | Status |
 |------|--------|
-| Automated API certification test (POST run → assert certified) | `just test-e2e` (requires `SALEOR_E2E=1` + full stack) |
-| GitHub CI | Intentionally absent — local `just baseline` + pytest |
-| L2 static catalog in `test_runner.py` (~108 ops) | Legacy / discovery; not the certification path |
+| Automated API certification test (POST run → assert certified) | `just test-e2e` or `just verify` |
+| GitHub CI | Intentionally absent — local `just verify` / `just baseline` + pytest |
 
 ## Priority matrix (for later planning)
 
@@ -135,7 +134,7 @@ A backend that passes `just baseline` / `full+scenarios` with 100% SGRC:
 - Implements every **3.23.7** schema operation at L1 synthetic replay level.
 - Matches **415** real **Dashboard** GraphQL documents with seeded fixtures.
 - Matches **31** **Storefront** GraphQL documents with seeded fixtures.
-- Passes **13** scenario steps (product, checkout, order lifecycles) and **productCreate** variant probes.
+- Passes **15** scenario steps (product, checkout, order lifecycles) and **productCreate** variant probes.
 - Passes **5** dynamic probes (runtime echo validation).
 - Passes SGRC Tier 1 (and Tier 2 when `SGRC_TIER2_GATE=true`).
 - Passes L3 **document schema gate** (nested field/type validation in client documents).
@@ -158,7 +157,7 @@ The testing system hardening plan has been implemented with the following change
 - **Structured exclusion reporting**: `failure_category` field on all results (compatible, real_bug, deprecated_excluded, data_prerequisite, seed_prerequisite, missing_golden). Effective score excludes deprecated + data-prerequisite + seed-prerequisite from denominator.
 
 ### Phase 1B — Close bypass holes
-- **Missing-golden auto-pass removed**: Scenario and variant probes no longer auto-pass without golden reference (gated by `SGRC_ALLOW_ASSERTION_ONLY=false`).
+- **Missing-golden auto-pass removed**: Scenario and variant probes fail without golden reference.
 - **Variant matrix variables**: `blank_name` variant now sends proper variables from `matrix.json`.
 - **Fixture KeyError handling**: Silent fallback replaced with explicit skip + `failure_category=data_prerequisite`.
 

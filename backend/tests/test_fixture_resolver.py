@@ -97,7 +97,7 @@ async def test_resolve_fixtures_runtime_seed_when_missing():
         return_value={"default_channel_id": "Q2hhbm5lbDox", "default_channel": "default"},
     ):
         with patch(
-            "app.services.fixture_resolver.ensure_runtime_fixture_entities",
+            "app.services.fixture_resolver.ensure_certification_topology",
             new_callable=AsyncMock,
             return_value=SeedResult(
                 fixtures={
@@ -120,9 +120,11 @@ async def test_resolve_fixtures_runtime_seed_when_missing():
             with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
                 with patch("app.services.fixture_resolver.settings") as mock_settings:
                     mock_settings.runtime_seed = True
+                    mock_settings.demo_seed_profile = "harness"
                     result = await resolve_fixtures("http://example.com/graphql/", "token")
 
     mock_ensure.assert_awaited_once()
+    assert mock_ensure.await_args.kwargs.get("full_topology") is False
     assert result.fixtures["default_product_id"] == "UHJvZHVjdDox"
     assert "default_product_id" in result.seeded_keys
 

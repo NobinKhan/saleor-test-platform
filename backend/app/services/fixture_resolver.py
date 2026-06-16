@@ -18,7 +18,7 @@ from app.core.url_utils import resolve_harness_saleor_url, resolve_saleor_url_fo
 from app.services.client_bundles import load_fixtures, resolve_dashboard_bundle_version
 from app.services.reference_seed import (
     capture_live_fixtures,
-    ensure_runtime_fixture_entities,
+    ensure_certification_topology,
 )
 
 logger = logging.getLogger(__name__)
@@ -146,28 +146,31 @@ async def resolve_fixtures(
     missing_required = [
         k for k in PREFLIGHT_REQUIRED_FIXTURE_KEYS if k not in live_keys
     ]
-    if settings.runtime_seed or profile == "saleor_demo":
-        if profile == "saleor_demo":
-            logger.info("Runtime seed: saleor_demo topology on target")
-            from app.services.demo_seed import ensure_saleor_demo_topology
-
-            seed_result = await ensure_saleor_demo_topology(
-                saleor_url, token, timeout=max(timeout, 120)
-            )
-        elif missing_required:
-            logger.info(
-                "Runtime seed: creating missing fixture entities on target: %s",
-                ", ".join(missing_required),
-            )
-            seed_result = await ensure_runtime_fixture_entities(
-                saleor_url, token, timeout=timeout
-            )
-        else:
-            seed_result = None
-        if seed_result:
-            _apply_captured(resolved, live_keys, seed_result.fixtures)
-            seeded_keys.update(seed_result.seeded_keys)
-            seed_errors.extend(seed_result.errors)
+    if profile == "saleor_demo":
+        logger.info("Runtime seed: saleor_demo certification topology")
+        seed_result = await ensure_certification_topology(
+            saleor_url,
+            token,
+            timeout=max(timeout, 120),
+            full_topology=True,
+        )
+        _apply_captured(resolved, live_keys, seed_result.fixtures)
+        seeded_keys.update(seed_result.seeded_keys)
+        seed_errors.extend(seed_result.errors)
+    elif settings.runtime_seed and missing_required:
+        logger.info(
+            "Runtime seed: creating missing fixture entities on target: %s",
+            ", ".join(missing_required),
+        )
+        seed_result = await ensure_certification_topology(
+            saleor_url,
+            token,
+            timeout=timeout,
+            full_topology=False,
+        )
+        _apply_captured(resolved, live_keys, seed_result.fixtures)
+        seeded_keys.update(seed_result.seeded_keys)
+        seed_errors.extend(seed_result.errors)
 
     storefront_customer_id, customer_token = await _resolve_storefront_customer(
         saleor_url, token, timeout=timeout

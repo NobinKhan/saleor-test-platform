@@ -32,6 +32,7 @@ Do not run RAM-heavy tasks in parallel. Prefer these `just` recipes:
 |------|---------|
 | Backend unit tests | `just test` |
 | Frontend type check | `just check` |
+| Full local verification | `just verify` (add `--skip-e2e` to omit API certification) |
 | Rebuild harness images (serial) | `just build-harness` |
 | Start harness without rebuild | `just up-harness-fast` |
 | Start harness with rebuild | `just up-harness` |

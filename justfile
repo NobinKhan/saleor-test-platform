@@ -4,7 +4,7 @@
 #   just up | up-harness | up-harness-fast | down | fresh | register | logs | status
 #
 # Verification (RAM-safe):
-#   just test | check | build-harness
+#   just test | check | build-harness | verify
 #
 # Reference corpus (local Saleor defaults; pass script flags via *extra):
 #   just corpus-diff | patch-corpus | record-reference | verify-corpus | self-check
@@ -40,7 +40,12 @@ test-e2e:
     #!/usr/bin/env bash
     set -euo pipefail
     source "{{ root }}/scripts/lib/resources.sh"
-    {{compose}} exec -e SALEOR_E2E=1 harness-backend pytest tests/test_certification_e2e.py -q
+    source "{{ root }}/scripts/lib/health.sh"
+    SALEOR_E2E_URL="${SALEOR_E2E_URL:-http://saleor-api:8000/graphql/}"
+    {{compose}} exec \
+      -e SALEOR_E2E=1 \
+      -e SALEOR_E2E_URL="${SALEOR_E2E_URL}" \
+      harness-backend pytest tests/test_certification_e2e.py -q
 
 check:
     #!/usr/bin/env bash
@@ -87,11 +92,7 @@ export-reference:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p "{{ root }}/reference"
-    if docker exec harness-backend python -c "import os; raise SystemExit(0 if os.path.isdir('/app/reference-baked') else 1)" 2>/dev/null; then
-      docker cp harness-backend:/app/reference-baked/. "{{ root }}/reference/"
-    else
-      docker cp harness-backend:/app/reference/. "{{ root }}/reference/"
-    fi
+    docker cp harness-backend:/app/reference/. "{{ root }}/reference/"
     echo "Exported reference corpus from harness container to ./reference/"
 
 import-reference:
@@ -209,3 +210,63 @@ baseline *extra:
       --scope full+scenarios --require-tier2 --min-compat 100 {{ extra }}
     echo ""
     echo "BASELINE PASS"
+
+# Full local verification (serialized — do not run alongside builds or other RAM-heavy tasks).
+# Pass --skip-e2e to omit the long certification API test.
+verify *extra:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    source "{{ root }}/scripts/lib/resources.sh"
+    source "{{ root }}/scripts/lib/health.sh"
+
+    SKIP_E2E=false
+    BASELINE_EXTRA=()
+    for arg in {{ extra }}; do
+      case "${arg}" in
+        --skip-e2e) SKIP_E2E=true ;;
+        *) BASELINE_EXTRA+=("${arg}") ;;
+      esac
+    done
+
+    echo "=== verify: prerequisites ==="
+    check_verify_prerequisites true
+
+    declare -A RESULTS
+    run_step() {
+      local name="$1"
+      shift
+      echo ""
+      echo "=== verify: ${name} ==="
+      if "$@"; then
+        RESULTS["${name}"]="PASS"
+      else
+        RESULTS["${name}"]="FAIL"
+        echo ""
+        echo "VERIFY FAILED at step: ${name}"
+        for k in unit types baseline e2e; do
+          if [ -n "${RESULTS[$k]:-}" ]; then
+            echo "  ${k}: ${RESULTS[$k]}"
+          fi
+        done
+        exit 1
+      fi
+    }
+
+    run_step unit just test
+    run_step types just check
+    run_step baseline just baseline "${BASELINE_EXTRA[@]}"
+
+    if [ "${SKIP_E2E}" = "true" ]; then
+      echo ""
+      echo "=== verify: e2e (skipped) ==="
+      RESULTS["e2e"]="SKIP"
+    else
+      run_step e2e just test-e2e
+    fi
+
+    echo ""
+    echo "=== VERIFY PASS ==="
+    echo "  unit:     ${RESULTS[unit]}"
+    echo "  types:    ${RESULTS[types]}"
+    echo "  baseline: ${RESULTS[baseline]}"
+    echo "  e2e:      ${RESULTS[e2e]}"

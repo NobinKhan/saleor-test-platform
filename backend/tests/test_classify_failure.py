@@ -36,6 +36,7 @@ def test_sitesettings_shape_drift_is_seed_prerequisite():
         endpoint_name="sitesettings",
         meta={},
         assertion_failures=[],
+        endpoint={"seed_tags": ["requires_saleor_demo_seed"]},
         demo_seed_profile="harness",
     )
     assert cat == "seed_prerequisite"
@@ -48,6 +49,7 @@ def test_seed_tagged_shape_drift_is_seed_prerequisite():
         endpoint_name="channeldiagnostics",
         meta={},
         assertion_failures=[],
+        endpoint={"seed_tags": ["requires_saleor_demo_seed"]},
         demo_seed_profile="harness",
     )
     assert cat == "seed_prerequisite"
@@ -60,6 +62,7 @@ def test_seed_tagged_shape_drift_after_saleor_demo_still_seed_prerequisite():
         endpoint_name="orderfulfilldata",
         meta={},
         assertion_failures=[],
+        endpoint={"seed_tags": ["requires_order_fixture"]},
         demo_seed_profile="saleor_demo",
     )
     assert cat == "seed_prerequisite"
@@ -106,6 +109,7 @@ def test_seed_tagged_mismatch_saleor_demo_is_seed_prerequisite():
         endpoint_name="productvariantsetdefault",
         meta={},
         assertion_failures=[],
+        endpoint={"seed_tags": ["requires_demo_product_variant"]},
         demo_seed_profile="saleor_demo",
     )
     assert cat == "seed_prerequisite"
@@ -118,6 +122,7 @@ def test_seed_tagged_mismatch_harness_profile_is_seed_prerequisite():
         endpoint_name="productvariantsetdefault",
         meta={},
         assertion_failures=[],
+        endpoint={"seed_tags": ["requires_demo_product_variant"]},
         demo_seed_profile="harness",
     )
     assert cat == "seed_prerequisite"
@@ -177,5 +182,6 @@ def test_searchcategories_seed_tagged_stays_seed_prerequisite():
         endpoint_name="searchcategories",
         meta={},
         assertion_failures=[],
+        endpoint={"seed_tags": ["requires_catalog_seed"]},
     )
     assert cat == "seed_prerequisite"

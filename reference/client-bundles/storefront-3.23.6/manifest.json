@@ -204,11 +204,7 @@
       ],
       "priority": "P0",
       "recorded": true,
-      "golden_contract": "success",
-      "seed_tags": [
-        "categories",
-        "requires_catalog_seed"
-      ]
+      "golden_contract": "success"
     },
     "sf-me": {
       "document_hash": "sha256:4bd3dea5b433e436",

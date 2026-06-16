@@ -150,6 +150,9 @@ async def fetch_saleor_token(
 
         token = result.get("token")
         if not token:
+            body_text = resp.text[:300]
+            if "suspended" in body_text.lower():
+                return None, "Saleor login rate-limited — wait and retry or restart saleor-cache"
             return None, "No token returned from Saleor"
 
         return token, None
