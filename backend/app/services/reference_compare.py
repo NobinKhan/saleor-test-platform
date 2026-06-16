@@ -192,55 +192,71 @@ def compare_probe_to_actual(
     golden_hash = golden.response_shape_hash or _normalized_hash(golden.golden_response)
     actual_hash = _normalized_hash(actual_response_json)
 
+    # ── Schema-based comparison for success probes ────────────────────────
+    # Instead of comparing data values (which differ between databases),
+    # validate that the response has the correct schema shape (field types,
+    # nullability, nesting). Only structural mismatches are real failures.
+    from app.services.schema_compare import compare_schemas
+
+    is_client_bundle = endpoint_kind == CLIENT_BUNDLE_KIND
+    stability = golden.probe_stability or infer_probe_stability(golden_contract, endpoint_kind)
+
     if golden_hash.replace("sha256:", "") != actual_hash.replace("sha256:", ""):
-        field_items = compare_response_fields(norm_golden, norm_actual)
-        mismatches = [i for i in field_items if i["item_status"] != "match"]
-        stability = golden.probe_stability or infer_probe_stability(golden_contract, endpoint_kind)
+        # Schema comparison: validate types, not values
+        schema_result = compare_schemas(
+            golden.golden_response,
+            actual_response_json,
+            golden_contract=golden_contract,
+        )
 
-        is_client_bundle = endpoint_kind == CLIENT_BUNDLE_KIND
-        is_error_probe = is_error_contract(golden_contract)
-
-        if is_error_probe:
-            allow_stateful_drift = False
-        elif is_client_bundle and not is_error_probe and _connection_volatile_drift(mismatches):
-            allow_stateful_drift = True
-        elif stability == "stateful" and mismatches and _connection_volatile_drift(mismatches):
-            allow_stateful_drift = True
-        elif is_client_bundle:
-            allow_stateful_drift = False
-        elif stability == "stateful" and not mismatches:
-            allow_stateful_drift = True
-        elif stability == "stateful" and mismatches:
-            allow_stateful_drift = False
-        else:
-            allow_stateful_drift = False
-
-        if mismatches and allow_stateful_drift:
+        if schema_result.compatible:
+            # Schema matches — data differences are forgiven
             return ComparisonResult(
                 match_status="match",
                 expected_response=expected_str,
-                diff_summary=f"Stateful probe shape differs ({len(mismatches)} paths) — DB state may differ",
+                diff_summary=schema_result.summary,
                 recommended_status="pass",
                 golden_outcome=golden.golden_outcome,
                 golden_contract=golden_contract,
                 actual_contract=actual_contract,
-                field_items=field_items,
+                field_items=compare_response_fields(norm_golden, norm_actual),
                 resolved_corpus_version=resolved_corpus_version,
                 compatible=True,
             )
-        if mismatches:
+
+        # Schema mismatch — check if all mismatches are in volatile paths
+        # (same forgiveness logic, but using schema comparison results)
+        if schema_result.schema_diffs and not any(
+            d.severity == "error" for d in schema_result.schema_diffs
+        ):
+            # All schema diffs are warnings (volatile paths) — forgive
             return ComparisonResult(
-                match_status="shape_drift",
+                match_status="match",
                 expected_response=expected_str,
-                diff_summary=f"Normalized shape differs ({len(mismatches)} field paths)",
-                recommended_status="fail",
+                diff_summary=f"Schema match ({len(schema_result.diffs)} volatile diffs forgiven)",
+                recommended_status="pass",
                 golden_outcome=golden.golden_outcome,
                 golden_contract=golden_contract,
                 actual_contract=actual_contract,
-                field_items=field_items,
+                field_items=compare_response_fields(norm_golden, norm_actual),
                 resolved_corpus_version=resolved_corpus_version,
-                compatible=False,
+                compatible=True,
             )
+
+        # Real schema mismatch — report it
+        field_items = compare_response_fields(norm_golden, norm_actual)
+        return ComparisonResult(
+            match_status="shape_drift",
+            expected_response=expected_str,
+            diff_summary=schema_result.summary,
+            recommended_status="fail",
+            golden_outcome=golden.golden_outcome,
+            golden_contract=golden_contract,
+            actual_contract=actual_contract,
+            field_items=field_items,
+            resolved_corpus_version=resolved_corpus_version,
+            compatible=False,
+        )
 
     field_items = compare_response_fields(norm_golden, norm_actual)
     return ComparisonResult(
@@ -298,25 +314,107 @@ def compare_to_golden(
                 resolved_corpus_version=corpus_version,
                 compatible=False,
             )
-        inline = GoldenProbe(
-            endpoint_name=endpoint_name,
-            endpoint_kind=endpoint_kind,
-            category=meta.get("category", "unknown"),
-            input_sent=meta.get("golden_input") or "",
-            golden_response=golden_response,
-            golden_outcome=meta.get("golden_outcome") or "unknown",
-            golden_status=meta.get("golden_status") or "warn",
-            golden_contract=meta.get("golden_contract"),
-            semantic_profile=meta.get("semantic_profile"),
-            probe_stability="stateful" if endpoint_kind == SCENARIO_KIND else "stateless",
+
+        # ── Schema-based comparison for scenarios ──────────────────────────
+        # Scenarios chain state between steps and their golden responses
+        # contain demo-specific data. Use schema comparison directly to
+        # validate response shape, not data values.
+        from app.services.schema_compare import compare_schemas
+
+        golden_contract = meta.get("golden_contract") or classify_response_contract(
+            golden_response, http_status=200
         )
-        return compare_probe_to_actual(
-            inline,
+        actual_contract = classify_response_contract(actual_response_json, http_status=http_status)
+
+        # Check contract family match first
+        golden_family = contract_family(golden_contract)
+        actual_family = contract_family(actual_contract)
+
+        if golden_family != actual_family:
+            # Contract mismatch — use standard comparison for error cases
+            if is_error_contract(golden_contract):
+                inline = GoldenProbe(
+                    endpoint_name=endpoint_name,
+                    endpoint_kind=endpoint_kind,
+                    category=meta.get("category", "unknown"),
+                    input_sent=meta.get("golden_input") or "",
+                    golden_response=golden_response,
+                    golden_outcome=meta.get("golden_outcome") or "unknown",
+                    golden_status=meta.get("golden_status") or "warn",
+                    golden_contract=golden_contract,
+                    semantic_profile=meta.get("semantic_profile"),
+                    probe_stability="stateful",
+                )
+                return compare_probe_to_actual(
+                    inline,
+                    actual_response_json,
+                    http_status=http_status,
+                    resolved_corpus_version=corpus_version,
+                    tier2_required=tier2_required,
+                    input_sent=inline.input_sent,
+                )
+            # Success vs error mismatch is a real failure
+            return ComparisonResult(
+                match_status="mismatch",
+                expected_response=None,
+                diff_summary=(
+                    f"Scenario contract mismatch: expected {golden_family} ({golden_contract}), "
+                    f"got {actual_family} ({actual_contract})"
+                ),
+                recommended_status="fail",
+                golden_outcome=meta.get("golden_outcome"),
+                golden_contract=golden_contract,
+                actual_contract=actual_contract,
+                resolved_corpus_version=corpus_version,
+                compatible=False,
+            )
+
+        # Both have the same contract family — use schema comparison
+        schema_result = compare_schemas(
+            golden_response,
             actual_response_json,
-            http_status=http_status,
+            golden_contract=golden_contract,
+        )
+
+        if schema_result.compatible:
+            return ComparisonResult(
+                match_status="match",
+                expected_response=None,
+                diff_summary=f"Scenario schema match: {schema_result.summary}",
+                recommended_status="pass",
+                golden_outcome=meta.get("golden_outcome"),
+                golden_contract=golden_contract,
+                actual_contract=actual_contract,
+                resolved_corpus_version=corpus_version,
+                compatible=True,
+            )
+
+        # Schema mismatch in scenario — check if only volatile diffs
+        if not schema_result.schema_diffs or all(
+            d.severity == "warning" for d in schema_result.schema_diffs
+        ):
+            return ComparisonResult(
+                match_status="match",
+                expected_response=None,
+                diff_summary=f"Scenario schema match ({len(schema_result.diffs)} volatile diffs forgiven)",
+                recommended_status="pass",
+                golden_outcome=meta.get("golden_outcome"),
+                golden_contract=golden_contract,
+                actual_contract=actual_contract,
+                resolved_corpus_version=corpus_version,
+                compatible=True,
+            )
+
+        return ComparisonResult(
+            match_status="shape_drift",
+            expected_response=None,
+            diff_summary=f"Scenario schema mismatch: {schema_result.summary}",
+            recommended_status="fail",
+            golden_outcome=meta.get("golden_outcome"),
+            golden_contract=golden_contract,
+            actual_contract=actual_contract,
             resolved_corpus_version=corpus_version,
-            tier2_required=tier2_required,
-            input_sent=inline.input_sent,
+            compatible=False,
         )
 
     if endpoint_kind == CLIENT_BUNDLE_KIND:

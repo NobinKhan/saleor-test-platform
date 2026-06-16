@@ -591,8 +591,14 @@ class TestRunner:
         if ver_warn:
             yield {"type": "schema_diff", "diff": {"version_warning": ver_warn}}
 
-        from app.services.version_routing import version_hard_gate_check
+        from app.services.version_routing import version_hard_gate_check, detect_golden_staleness
         import os
+
+        # Check if golden data may be stale
+        staleness = detect_golden_staleness(version, corpus_ver)
+        if staleness.get("stale") and staleness.get("warning"):
+            yield {"type": "schema_diff", "diff": {"golden_staleness": staleness["warning"]}}
+
         allow_patch_drift = os.environ.get("ALLOW_PATCH_DRIFT", "").lower() in ("1", "true", "yes")
         gate = version_hard_gate_check(
             version, corpus_ver, allow_patch_drift=allow_patch_drift
@@ -990,6 +996,42 @@ class TestRunner:
             payload["variables"] = substitute_scenario_variables(
                 raw_vars, self._scenario_context, fixtures
             )
+
+        # ── Mutation-first setup for L1 probes ───────────────────────────
+        # For L1 success probes, create the required entity first, then
+        # substitute the created ID into the query. This eliminates the
+        # dependency on hardcoded Saleor demo data.
+        created_entity_id: str | None = None
+        if (
+            kind in ("QUERY", "MUTATION")
+            and not endpoint.get("bundle_document")
+            and not endpoint.get("dynamic_probe")
+            and self.test_mode == "compatibility"
+        ):
+            from app.services.probe_setup import get_setup_for_operation, needs_setup
+            golden_contract_check = endpoint.get("golden_contract")
+            if needs_setup(name, golden_contract_check):
+                setup = get_setup_for_operation(name)
+                if setup and setup.get("mutation"):
+                    try:
+                        created_entity_id = await self._run_setup_mutation(
+                            client=http_client,
+                            setup=setup,
+                            auth_context=setup.get("auth", "staff"),
+                        )
+                        if created_entity_id:
+                            # Substitute the created ID into the query
+                            query = payload.get("query", "")
+                            # Replace common ID patterns in the query
+                            # The golden query may reference specific entity IDs
+                            # that we replace with our dynamically created entity
+                            payload["query"] = self._inject_created_id(
+                                query, created_entity_id, name
+                            )
+                    except Exception:
+                        # Setup failed — proceed without it (golden may still pass)
+                        pass
+
         start = time.time()
 
         try:
@@ -1267,6 +1309,142 @@ class TestRunner:
             meta = classify_transport_error(kind="error", message=str(e))
             return _result_from_meta(meta, name, kind, category, is_public, elapsed_ms, query)
 
+    async def _run_setup_mutation(
+        self,
+        client: httpx.AsyncClient | None,
+        setup: dict[str, Any],
+        auth_context: str = "staff",
+    ) -> str | None:
+        """Execute a setup mutation and return the created entity's Relay ID.
+
+        Returns None if the mutation fails or returns no ID.
+        """
+        mutation = setup["mutation"]
+        variables_fn = setup["variables"]
+        variables = variables_fn() if callable(variables_fn) else variables_fn
+        extract_path = setup.get("extract")
+
+        # Resolve product_type_id placeholder if needed
+        if self._resolved_fixtures:
+            pt_id = self._resolved_fixtures.get("default_product_type_id") or (
+                getattr(self, "_dynamic_support", {}) or {}
+            ).get("product_type_id")
+            if pt_id:
+                # Replace in mutation text
+                mutation = mutation.replace("{{product_type_id}}", pt_id)
+                # Replace in variables
+                for key, val in variables.get("input", {}).items():
+                    if isinstance(val, str) and "{{product_type_id}}" in val:
+                        variables["input"][key] = val.replace("{{product_type_id}}", pt_id)
+
+        payload = {"query": mutation, "variables": variables}
+        use_client = client or httpx.AsyncClient(timeout=self.timeout)
+        own_client = client is None
+        try:
+            await self._ensure_valid_token(use_client, force_refresh=False)
+            headers = self._auth_headers(auth_context)
+            resp = await use_client.post(self.saleor_url, json=payload, headers=headers)
+            resp_json = resp.json()
+
+            # Check for errors
+            if resp_json.get("errors"):
+                return None
+
+            # Extract entity ID from response
+            if extract_path:
+                from app.services.scenario_corpus import _extract_json_path
+                entity_id = _extract_json_path(resp_json, extract_path)
+                if entity_id:
+                    return str(entity_id)
+            return None
+        except Exception:
+            return None
+        finally:
+            if own_client:
+                await use_client.aclose()
+
+    def _inject_created_id(
+        self,
+        query: str,
+        entity_id: str,
+        operation_name: str,
+    ) -> str:
+        """Inject a dynamically created entity ID into a golden query.
+
+        The golden query may contain hardcoded Saleor demo IDs. This method
+        replaces common ID patterns with the dynamically created entity ID.
+        """
+        import base64
+        import re
+
+        # Map operation name → Relay entity type prefix
+        _ENTITY_TYPES = {
+            "product": "Product",
+            "products": "Product",
+            "productType": "ProductType",
+            "productTypes": "ProductType",
+            "category": "Category",
+            "categories": "Category",
+            "collection": "Collection",
+            "collections": "Collection",
+            "channel": "Channel",
+            "channels": "Channel",
+            "attribute": "Attribute",
+            "attributes": "Attribute",
+            "page": "Page",
+            "pages": "Page",
+            "shippingZone": "ShippingZone",
+            "shippingZones": "ShippingZone",
+            "warehouse": "Warehouse",
+            "warehouses": "Warehouse",
+            "staffUser": "User",
+            "staffUsers": "User",
+            "customer": "User",
+            "customers": "User",
+            "user": "User",
+            "users": "User",
+            "giftCard": "GiftCard",
+            "giftCards": "GiftCard",
+            "menu": "Menu",
+            "menus": "Menu",
+            "voucher": "Voucher",
+            "vouchers": "Voucher",
+            "draftOrder": "Order",
+            "draftOrders": "Order",
+            "order": "Order",
+            "orders": "Order",
+            "permissionGroup": "Group",
+            "permissionGroups": "Group",
+            "webhook": "Webhook",
+            "webhooks": "Webhook",
+            "taxClass": "TaxClass",
+            "taxClasses": "TaxClass",
+        }
+
+        entity_type = _ENTITY_TYPES.get(operation_name, "Product")
+
+        # Encode the entity ID as a Relay global ID if it's a plain UUID or numeric ID
+        if entity_id.isdigit():
+            relay_id = base64.b64encode(f"{entity_type}:{entity_id}".encode()).decode()
+        elif re.match(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$", entity_id, re.I):
+            relay_id = base64.b64encode(f"{entity_type}:{entity_id}".encode()).decode()
+        else:
+            relay_id = entity_id
+
+        # Replace the null UUID placeholder (used in L1 probes for not-found queries)
+        # with the created entity ID for success probes
+        null_uuid = "00000000-0000-0000-0000-000000000000"
+        null_gid = base64.b64encode(f"{entity_type}:{null_uuid}".encode()).decode()
+
+        # Only replace if the query uses the null UUID (indicating a not-found probe)
+        # Don't replace if the query has a specific real ID
+        if null_uuid in query:
+            query = query.replace(null_uuid, entity_id)
+        if null_gid in query:
+            query = query.replace(null_gid, relay_id)
+
+        return query
+
 
 def _result_from_meta(
     meta: dict,
@@ -1394,6 +1572,18 @@ def _classify_failure_category(
                 return "seed_prerequisite"
             if _client_bundle_setup_prerequisite(endpoint_name, comparison, match_status):
                 return "data_prerequisite"
+
+        # Distinguish schema mismatch (structural) from data drift (data differs)
+        diff_summary = (comparison.diff_summary or "").lower()
+        if match_status == "shape_drift":
+            # shape_drift means normalized shape differs — check if it's structural
+            if "schema" in diff_summary or "structural" in diff_summary:
+                return "schema_mismatch"
+            # Check if the diff summary mentions type mismatches (structural)
+            if "type_mismatch" in diff_summary or "missing" in diff_summary:
+                return "schema_mismatch"
+            # Otherwise it's likely data drift (values differ but types match)
+            return "data_drift"
         return "real_bug"
 
     return "real_bug"

@@ -65,7 +65,13 @@ def test_seed_tagged_shape_drift_after_saleor_demo_still_seed_prerequisite():
     assert cat == "seed_prerequisite"
 
 
-def test_untagged_shape_drift_is_real_bug():
+def test_untagged_shape_drift_is_data_drift():
+    """Untagged CLIENT_BUNDLE shape_drift with generic diff is data drift (not real bug).
+
+    With schema-based comparison, shape_drift without type mismatches means
+    the response has the correct types but different values — data drift, not
+    an API defect.
+    """
     cat = _classify_failure_category(
         comparison=_comparison(match_status="shape_drift"),
         kind="CLIENT_BUNDLE",
@@ -74,7 +80,23 @@ def test_untagged_shape_drift_is_real_bug():
         assertion_failures=[],
         demo_seed_profile="harness",
     )
-    assert cat == "real_bug"
+    assert cat == "data_drift"
+
+
+def test_shape_drift_with_type_mismatch_is_schema_mismatch():
+    """Shape_drift with type mismatch in diff is a structural API defect."""
+    cat = _classify_failure_category(
+        comparison=_comparison(
+            match_status="shape_drift",
+            diff_summary="Normalized shape differs: type_mismatch at $.data.product.name",
+        ),
+        kind="CLIENT_BUNDLE",
+        endpoint_name="productdetails",
+        meta={},
+        assertion_failures=[],
+        demo_seed_profile="harness",
+    )
+    assert cat == "schema_mismatch"
 
 
 def test_seed_tagged_mismatch_saleor_demo_is_seed_prerequisite():

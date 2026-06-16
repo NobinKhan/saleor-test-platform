@@ -254,7 +254,7 @@ async def seed_demo_warehouses(
             headers=headers,
             query=(
                 "mutation($input: WarehouseCreateInput!) { "
-                "warehouseCreate(input: $input) { warehouse { id name } "
+                "createWarehouse(input: $input) { warehouse { id name } "
                 "errors { field message code } } }"
             ),
             variables={
@@ -270,13 +270,13 @@ async def seed_demo_warehouses(
             },
             allow_errors=True,
             error_log=error_log,
-            operation="warehouseCreate",
+            operation="createWarehouse",
         )
-        payload = data.get("warehouseCreate")
+        payload = data.get("createWarehouse")
         if (payload or {}).get("warehouse"):
             seeded.add(f"warehouse:{name}")
         else:
-            _append_mutation_errors(error_log, f"warehouseCreate({name})", payload)
+            _append_mutation_errors(error_log, f"createWarehouse({name})", payload)
 
     default_wh = await _warehouse_by_name(
         client, url=url, headers=headers, name="Default Warehouse"
@@ -522,7 +522,7 @@ async def seed_demo_customers(
             url=url,
             headers=headers,
             query=(
-                "mutation($input: CustomerCreateInput!) { "
+                "mutation($input: UserCreateInput!) { "
                 "customerCreate(input: $input) { user { id email } "
                 "errors { field message code } } }"
             ),
@@ -618,71 +618,255 @@ async def seed_demo_product_variant(
             seeded.update({"default_product_id", "default_slug", "default_variant_id"})
         else:
             _append_mutation_errors(error_log, "productCreate(demo)", payload)
-            return seeded
+    return seeded
 
-    if existing:
-        fixtures["default_product_id"] = existing["id"]
-        fixtures["default_slug"] = existing.get("slug") or DEMO_PRODUCT_SLUG
-        variants = existing.get("variants") or []
-        if not variants:
-            vdata = await _gql(
+
+# ── Extended fixture coverage (pages, attributes, vouchers, menus) ───────────
+
+async def seed_demo_pages(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> set[str]:
+    """Create pages with page types for L3 bundle coverage."""
+    seeded: set[str] = set()
+    page_specs = [
+        ("About", "about"),
+        ("CozyNest", "cozynest"),
+        ("Damaged Item", "damaged-item"),
+        ("Frutello", "frutello"),
+        ("Incorrect Address", "incorrect-address"),
+        ("Package Lost", "package-lost"),
+        ("Package Not Picked Up By Customer", "package-not-picked-up-by-customer"),
+        ("Saleor Loom", "saleor-loom"),
+    ]
+
+    # Ensure page type exists
+    pt_result = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="""mutation($input: PageTypeCreateInput!) {
+            pageTypeCreate(input: $input) { pageType { id name } errors { field message } }
+        }""",
+        variables={"input": {"name": "Default Page Type"}},
+        allow_errors=True,
+        error_log=error_log,
+        operation="pageTypeCreate",
+    )
+    pt_data = (pt_result.get("pageTypeCreate") or {})
+    pt_errors = pt_data.get("errors") or []
+    pt = pt_data.get("pageType")
+
+    # If creation failed because it already exists, try to find it
+    if not pt and pt_errors:
+        find_result = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query="{ pageTypes(first: 1) { edges { node { id name } } } }",
+        )
+        edges = (find_result.get("pageTypes") or {}).get("edges") or []
+        if edges:
+            pt = edges[0].get("node")
+
+    if not pt:
+        return seeded
+
+    page_type_id = pt["id"]
+    for title, slug in page_specs:
+        result = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query="""mutation($input: PageCreateInput!) {
+                pageCreate(input: $input) { page { id title slug } errors { field message } }
+            }""",
+            variables={
+                "input": {
+                    "title": title,
+                    "slug": slug,
+                    "pageType": page_type_id,
+                    "isPublished": True,
+                    "content": '{"blocks": [{"data": {"text": "%s"}, "type": "paragraph"}]}' % title,
+                }
+            },
+            allow_errors=True,
+            error_log=error_log,
+            operation="pageCreate",
+        )
+        page_data = (result.get("pageCreate") or {})
+        page = page_data.get("page")
+        if page:
+            seeded.add(f"page_{slug}")
+    return seeded
+
+
+async def seed_demo_attributes(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> set[str]:
+    """Create attributes and attribute values for L3 bundle coverage."""
+    seeded: set[str] = set()
+
+    # Create a product attribute
+    result = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="""mutation($input: AttributeCreateInput!) {
+            attributeCreate(input: $input) { attribute { id name slug } errors { field message } }
+        }""",
+        variables={
+            "input": {
+                "name": "Brand",
+                "slug": "brand",
+                "inputType": "DROPDOWN",
+                "type": "PRODUCT_TYPE",
+            }
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="attributeCreate",
+    )
+    attr_data = (result.get("attributeCreate") or {})
+    attr = attr_data.get("attribute")
+    if not attr:
+        # Try to find existing
+        find = await _gql(
+            client, url=url, headers=headers,
+            query="""{ attributes(first: 1, filter: {type: PRODUCT_TYPE}) {
+                edges { node { id name slug } } } }""",
+        )
+        edges = (find.get("attributes") or {}).get("edges") or []
+        if edges:
+            attr = edges[0].get("node")
+
+    if attr:
+        seeded.add("attribute_brand")
+        # Create attribute values
+        for val_name in ("Digital Audio", "Saleor Publishing"):
+            await _gql(
                 client,
                 url=url,
                 headers=headers,
-                query=(
-                    "mutation($pid: ID!, $input: ProductVariantCreateInput!) { "
-                    "productVariantCreate(product: $pid, input: $input) { "
-                    "productVariant { id sku } errors { field message code } } }"
-                ),
+                query="""mutation($input: AttributeValueCreateInput!) {
+                    attributeValueCreate(input: $input) { attributeValue { id name } errors { field message } }
+                }""",
                 variables={
-                    "pid": existing["id"],
-                    "input": {"sku": "demo-apple-juice", "attributes": []},
+                    "input": {
+                        "attribute": attr["id"],
+                        "name": val_name,
+                    }
                 },
                 allow_errors=True,
                 error_log=error_log,
-                operation="productVariantCreate",
+                operation="attributeValueCreate",
             )
-            vp = vdata.get("productVariantCreate")
-            variant = (vp or {}).get("productVariant")
-            if variant:
-                variants = [variant]
-                seeded.add("default_variant_id")
-            else:
-                _append_mutation_errors(error_log, "productVariantCreate", vp)
-        if variants:
-            fixtures["default_variant_id"] = variants[0]["id"]
-            fixtures["variant_id_for_cart"] = variants[0]["id"]
-            wh_id = fixtures.get("default_warehouse_id")
-            if wh_id:
-                await _gql(
-                    client,
-                    url=url,
-                    headers=headers,
-                    query=(
-                        "mutation($variantId: ID!, $stocks: [StockInput!]!) { "
-                        "productVariantStocksCreate(variantId: $variantId, stocks: $stocks) { "
-                        "errors { field message code } } }"
-                    ),
-                    variables={
-                        "variantId": variants[0]["id"],
-                        "stocks": [{"warehouse": wh_id, "quantity": 500}],
-                    },
-                    allow_errors=True,
-                    error_log=error_log,
-                    operation="productVariantStocksCreate",
-                )
-                seeded.add("stock")
-        seeded.update(
-            await _ensure_product_channel_listings(
-                client,
-                url=url,
-                headers=headers,
-                product_id=existing["id"],
-                channel_ids=channel_ids,
-                error_log=error_log,
-            )
-        )
+
     return seeded
+
+
+async def seed_demo_vouchers(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> set[str]:
+    """Create vouchers for L3 bundle coverage."""
+    seeded: set[str] = set()
+    result = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="""mutation($input: VoucherInput!) {
+            voucherCreate(input: $input) { voucher { id code } errors { field message } }
+        }""",
+        variables={
+            "input": {
+                "type": "ENTIRE_ORDER",
+                "code": "DEMO-VOUCHER-10",
+                "discountValueType": "PERCENTAGE",
+                "discountValue": 10,
+                "isActive": True,
+            }
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="voucherCreate",
+    )
+    voucher_data = (result.get("voucherCreate") or {})
+    if voucher_data.get("voucher"):
+        seeded.add("voucher_demo")
+    return seeded
+
+
+async def seed_demo_gift_cards(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> set[str]:
+    """Create gift cards for L3 bundle coverage."""
+    seeded: set[str] = set()
+    for amount in (10, 50, 500):
+        result = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query="""mutation {
+                giftCardCreate(input: { balance: { amount: %d.0, currency: "USD" } }) {
+                    giftCard { id code } errors { field message }
+                }
+            }""" % amount,
+            allow_errors=True,
+            error_log=error_log,
+            operation="giftCardCreate",
+        )
+        gc_data = (result.get("giftCardCreate") or {})
+        if gc_data.get("giftCard"):
+            seeded.add(f"gift_card_{amount}")
+    return seeded
+
+
+async def seed_demo_menus(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> set[str]:
+    """Create menus for L3 bundle coverage."""
+    seeded: set[str] = set()
+    result = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="""mutation($input: MenuCreateInput!) {
+            menuCreate(input: $input) { menu { id name slug } errors { field message } }
+        }""",
+        variables={"input": {"name": "Sidebar Menu", "slug": "sidebar-menu"}},
+        allow_errors=True,
+        error_log=error_log,
+        operation="menuCreate",
+    )
+    menu_data = (result.get("menuCreate") or {})
+    if menu_data.get("menu"):
+        seeded.add("menu_sidebar")
+    return seeded
+
 
 
 async def _category_by_slug(
@@ -1118,6 +1302,31 @@ async def ensure_saleor_demo_topology(
         seeded.update(
             await seed_search_isolation(
                 client, url=saleor_url, headers=headers, fixtures=fixtures
+            )
+        )
+        seeded.update(
+            await seed_demo_pages(
+                client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
+            )
+        )
+        seeded.update(
+            await seed_demo_attributes(
+                client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
+            )
+        )
+        seeded.update(
+            await seed_demo_vouchers(
+                client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
+            )
+        )
+        seeded.update(
+            await seed_demo_gift_cards(
+                client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
+            )
+        )
+        seeded.update(
+            await seed_demo_menus(
+                client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
             )
         )
         preserve_keys = (

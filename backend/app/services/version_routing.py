@@ -117,3 +117,55 @@ def version_hard_gate_check(
         "reason": None,
         "severity": None,
     }
+
+
+def detect_golden_staleness(
+    target_version: str | None,
+    corpus_version: str,
+    *,
+    recorded_date: str | None = None,
+) -> dict[str, Any]:
+    """Detect if golden data might be stale.
+
+    Checks if the target version is newer than the corpus version,
+    which means the golden responses may not reflect the latest
+    Saleor API behavior.
+
+    Returns a dict with:
+      - stale: bool
+      - warning: str or None
+      - severity: "info" | "warning" | None
+    """
+    if not target_version:
+        return {"stale": False, "warning": None, "severity": None}
+
+    target_parts = parse_version_parts(target_version)
+    corpus_parts = parse_version_parts(corpus_version)
+
+    if not target_parts or not corpus_parts:
+        return {"stale": False, "warning": None, "severity": None}
+
+    # Target is newer than corpus
+    if target_parts > corpus_parts:
+        return {
+            "stale": True,
+            "warning": (
+                f"Golden data may be stale: target Saleor {target_version} is newer "
+                f"than golden corpus {corpus_version}. "
+                f"Consider re-recording golden data with `just record-reference`."
+            ),
+            "severity": "warning",
+        }
+
+    # Target is older than corpus (unusual but possible)
+    if target_parts < corpus_parts:
+        return {
+            "stale": True,
+            "warning": (
+                f"Target Saleor {target_version} is older than golden corpus {corpus_version}. "
+                f"Some golden responses may reference newer API features."
+            ),
+            "severity": "info",
+        }
+
+    return {"stale": False, "warning": None, "severity": None}

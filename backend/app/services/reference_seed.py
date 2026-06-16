@@ -102,48 +102,88 @@ async def _capture_fixtures(
     url: str,
     headers: dict[str, str],
 ) -> dict[str, Any]:
+    """Read fixture IDs from the target Saleor (no mutations).
+
+    Uses intelligent discovery: tries to find entities that match expected
+    characteristics (published products with variants, multi-channel setup),
+    falls back to first available entity if no match found.
+    """
     fixtures: dict[str, Any] = {
         "default_channel": "default-channel",
         "default_slug": "test-product",
         "placeholder_id": "00000000-0000-0000-0000-000000000000",
     }
 
+    # ── Channels ─────────────────────────────────────────────────────────
     ch_data = await _gql(
-        client, url=url, headers=headers, query="query { channels { id slug } }"
+        client, url=url, headers=headers, query="query { channels { id slug isActive } }"
     )
     channels = ch_data.get("channels") or []
     if channels:
-        fixtures["default_channel"] = channels[0].get("slug") or fixtures["default_channel"]
-        fixtures["default_channel_id"] = channels[0].get("id")
+        # Prefer the default-channel or first active channel
+        preferred = None
+        for ch in channels:
+            if ch.get("slug") == "default-channel" and ch.get("isActive"):
+                preferred = ch
+                break
+        if not preferred:
+            for ch in channels:
+                if ch.get("isActive"):
+                    preferred = ch
+                    break
+        if not preferred:
+            preferred = channels[0]
+        fixtures["default_channel"] = preferred.get("slug") or fixtures["default_channel"]
+        fixtures["default_channel_id"] = preferred.get("id")
 
+    # ── Products ─────────────────────────────────────────────────────────
     ch = fixtures["default_channel"]
+    # Try to find a published product with variants (best candidate for probing)
     prod_data = await _gql(
         client,
         url=url,
         headers=headers,
         query=(
-            "query($ch: String!) { products(first: 1, channel: $ch) "
-            "{ edges { node { id slug variants { id } } } } }"
+            "query($ch: String!) { products(first: 5, channel: $ch) "
+            "{ edges { node { id slug isPublished variants { id name } "
+            "productType { id } } } } }"
         ),
         variables={"ch": ch},
         allow_errors=True,
     )
     edges = (prod_data.get("products") or {}).get("edges") or []
-    if edges:
-        node = edges[0].get("node") or {}
-        fixtures["default_slug"] = node.get("slug") or fixtures["default_slug"]
-        fixtures["default_product_id"] = node.get("id")
-        variants = node.get("variants") or []
+    # Pick the best candidate: published with variants
+    best_product = None
+    for edge in edges:
+        node = edge.get("node") or {}
+        if node.get("isPublished") and node.get("variants"):
+            best_product = node
+            break
+    if not best_product and edges:
+        best_product = edges[0].get("node") or {}
+
+    if best_product:
+        fixtures["default_slug"] = best_product.get("slug") or fixtures["default_slug"]
+        fixtures["default_product_id"] = best_product.get("id")
+        variants = best_product.get("variants") or []
         if variants:
             fixtures["default_variant_id"] = variants[0].get("id")
+        pt = best_product.get("productType") or {}
+        if pt.get("id"):
+            fixtures["default_product_type_id"] = pt["id"]
 
-    pt_data = await _gql(
-        client, url=url, headers=headers, query="query { productTypes(first: 1) { edges { node { id } } } }", allow_errors=True
-    )
-    pt_edges = (pt_data.get("productTypes") or {}).get("edges") or []
-    if pt_edges:
-        fixtures["default_product_type_id"] = pt_edges[0]["node"]["id"]
+    # ── Product Type (fallback) ──────────────────────────────────────────
+    if not fixtures.get("default_product_type_id"):
+        pt_data = await _gql(
+            client, url=url, headers=headers,
+            query="query { productTypes(first: 1) { edges { node { id } } } }",
+            allow_errors=True,
+        )
+        pt_edges = (pt_data.get("productTypes") or {}).get("edges") or []
+        if pt_edges:
+            fixtures["default_product_type_id"] = pt_edges[0]["node"]["id"]
 
+    # ── Other entities ───────────────────────────────────────────────────
     for query_name, key in (
         ("orders(first: 1)", "default_order_id"),
         ("customers(first: 1)", "default_customer_id"),
@@ -162,20 +202,29 @@ async def _capture_fixtures(
         if edges:
             fixtures[key] = edges[0]["node"]["id"]
 
+    # ── Collections ──────────────────────────────────────────────────────
     coll_data = await _gql(
         client,
         url=url,
         headers=headers,
         query=(
-            "query($ch: String!) { collections(first: 1, channel: $ch) "
-            "{ edges { node { id } } } }"
+            "query($ch: String!) { collections(first: 3, channel: $ch) "
+            "{ edges { node { id name slug } } } }"
         ),
         variables={"ch": ch},
         allow_errors=True,
     )
     coll_edges = (coll_data.get("collections") or {}).get("edges") or []
     if coll_edges:
-        fixtures["default_collection_id"] = coll_edges[0]["node"]["id"]
+        # Prefer a collection with a recognizable name
+        best_coll = coll_edges[0].get("node") or {}
+        for edge in coll_edges:
+            node = edge.get("node") or {}
+            name = (node.get("name") or "").lower()
+            if "featured" in name or "default" in name:
+                best_coll = node
+                break
+        fixtures["default_collection_id"] = best_coll.get("id")
 
     return fixtures
 
