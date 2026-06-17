@@ -52,9 +52,9 @@ Score: **100% (856/856)** against official Saleor 3.23.7 on `just baseline` (`fu
 ### Key architecture decisions
 
 - `populatedb` removed from `cmd_fresh()` — fresh runs only create data via mutations (`seed_reference`)
-- `self_check.py` and E2E certification use `demo_seed_profile="harness"` to match baked goldens
-- `patch_corpus --scenarios` defaults `--seed-profile` to `harness` (override with `--seed-profile saleor_demo` if needed)
-- `just record-scenarios` records all three lifecycles and exports from `/app/reference-baked/scenarios/`
+- Single **mutation-first harness** topology for all certification (UI, baseline, E2E, recording)
+- `ensure_storefront_session()` runs on every certification run
+- `just record-scenarios` / `just record-golden` seed harness topology before recording and export from `/app/reference-baked/`
 - `just export-reference` copies both runtime volume (`/app/reference/`) and baked paths (`/app/reference-baked/*`)
 - Goldens are baked into the image (`COPY reference/` → `/app/reference-baked/`). After recording: `just export-reference`, then `just build-harness`
 
@@ -76,3 +76,7 @@ docker volume rm saleor-test-platform_harness_reference 2>/dev/null || true
 just fresh
 just baseline
 ```
+
+### Golden literal lint
+
+`just verify-corpus` / `just baseline` run a **non-blocking** demo-literal lint on baked corpus paths (`REFERENCE_CORPUS_ROOT`, `CLIENT_BUNDLES_ROOT`, `SCENARIOS_ROOT`). After re-recording L3/scenario goldens on harness topology, set `GOLDEN_LITERAL_LINT_BLOCKING=true` to fail on remaining demo literals.

@@ -85,12 +85,8 @@ class TestRunCreate(BaseModel):
         default=None,
         description="Optional prior run UUID for side-by-side comparison on report",
     )
-    concurrency: int = Field(default=5, ge=1, le=20)
+    concurrency: int = Field(default=1, ge=1, le=20)
     timeout_seconds: int = Field(default=30, ge=5, le=120)
-    demo_seed_profile: str = Field(
-        default="saleor_demo",
-        description="Fixture seed profile: saleor_demo (full topology) or harness (minimal, internal)",
-    )
 
 
 class TestRunSummary(BaseModel):

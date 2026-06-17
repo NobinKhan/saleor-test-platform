@@ -172,7 +172,8 @@ self-check *extra:
 record-golden source:
     #!/usr/bin/env bash
     set -euo pipefail
-    echo "=== Recording golden against fresh Saleor (no populatedb) ==="
+    echo "=== Recording L3 golden against fresh Saleor (mutation-first harness) ==="
+    echo "Ensure Saleor is fresh: just fresh"
     if [ "{{ source }}" = "dashboard" ] || [ "{{ source }}" = "all" ]; then
       echo "--- Recording L3 dashboard bundles ---"
       {{compose}} exec harness-backend \
@@ -191,20 +192,31 @@ record-golden source:
         --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
         --client-bundles storefront:all
     fi
-    echo "GOLDEN RECORD COMPLETE"
+    if [ "{{ source }}" = "dashboard" ] || [ "{{ source }}" = "all" ]; then
+      {{compose}} exec harness-backend \
+        python -c "from app.services.client_bundles import update_bundle_manifest; update_bundle_manifest('dashboard', '${REFERENCE_BASELINE_VERSION:-3.23.6}')"
+    fi
+    if [ "{{ source }}" = "storefront" ] || [ "{{ source }}" = "all" ]; then
+      {{compose}} exec harness-backend \
+        python -c "from app.services.client_bundles import update_bundle_manifest; update_bundle_manifest('storefront', '${REFERENCE_BASELINE_VERSION:-3.23.6}')"
+    fi
+    mkdir -p "{{ root }}/reference/client-bundles"
+    docker cp harness-backend:/app/reference-baked/client-bundles/. "{{ root }}/reference/client-bundles/"
+    echo ""
+    echo "L3 goldens exported to ./reference/client-bundles/"
+    echo "Next: just build-harness && docker volume rm saleor-test-platform_harness_reference 2>/dev/null || true"
 
 record-scenarios scenarios="product-lifecycle,checkout-lifecycle,order-lifecycle":
     #!/usr/bin/env bash
     set -euo pipefail
-    echo "=== Recording scenario goldens (seed-profile: harness) ==="
+    echo "=== Recording scenario goldens (harness topology) ==="
     echo "Ensure Saleor is fresh: just fresh"
     {{compose}} exec harness-backend \
       python -m app.scripts.patch_corpus \
       --url "http://saleor-api:8000/graphql/" \
       --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
       --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
-      --scenarios "{{ scenarios }}" \
-      --seed-profile harness
+      --scenarios "{{ scenarios }}"
     mkdir -p "{{ root }}/reference/scenarios"
     docker cp harness-backend:/app/reference-baked/scenarios/. "{{ root }}/reference/scenarios/"
     echo ""
@@ -290,6 +302,11 @@ verify *extra:
 
     run_step unit just test
     run_step types just check
+
+    echo ""
+    echo "=== verify: fresh Saleor before baseline (certification mutates target) ==="
+    just fresh
+
     run_step baseline just baseline "${BASELINE_EXTRA[@]}"
 
     if [ "${SKIP_E2E}" = "true" ]; then

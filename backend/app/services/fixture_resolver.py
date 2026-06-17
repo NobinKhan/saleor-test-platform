@@ -45,7 +45,6 @@ class FixtureResolution:
     live_keys: frozenset[str] = field(default_factory=frozenset)
     seeded_keys: frozenset[str] = field(default_factory=frozenset)
     seed_errors: tuple[str, ...] = ()
-    seed_profile: str = "harness"
 
 
 def _apply_captured(
@@ -125,12 +124,9 @@ async def resolve_fixtures(
     token: str | None,
     timeout: int = 30,
     source: str = "dashboard",
-    *,
-    seed_profile: str | None = None,
 ) -> FixtureResolution:
     """Resolve fixture IDs from target Saleor; optionally create missing entities."""
     saleor_url = resolve_saleor_url_for_runner(saleor_url)
-    profile = seed_profile or settings.demo_seed_profile
     static_fixtures = load_fixtures(source, resolve_dashboard_bundle_version())
     resolved: dict[str, Any] = dict(static_fixtures)
     live_keys: set[str] = set()
@@ -138,35 +134,17 @@ async def resolve_fixtures(
     seed_errors: list[str] = []
 
     if not token:
-        return FixtureResolution(fixtures=resolved, live_keys=frozenset(), seed_profile=profile)
+        return FixtureResolution(fixtures=resolved, live_keys=frozenset())
 
     captured = await capture_live_fixtures(saleor_url, token, timeout=timeout)
     _apply_captured(resolved, live_keys, captured)
 
-    missing_required = [
-        k for k in PREFLIGHT_REQUIRED_FIXTURE_KEYS if k not in live_keys
-    ]
-    if profile == "saleor_demo":
-        logger.info("Runtime seed: saleor_demo certification topology")
+    if settings.runtime_seed:
+        logger.info("Runtime seed: mutation-first harness certification topology")
         seed_result = await ensure_certification_topology(
             saleor_url,
             token,
             timeout=max(timeout, 120),
-            full_topology=True,
-        )
-        _apply_captured(resolved, live_keys, seed_result.fixtures)
-        seeded_keys.update(seed_result.seeded_keys)
-        seed_errors.extend(seed_result.errors)
-    elif settings.runtime_seed and missing_required:
-        logger.info(
-            "Runtime seed: creating missing fixture entities on target: %s",
-            ", ".join(missing_required),
-        )
-        seed_result = await ensure_certification_topology(
-            saleor_url,
-            token,
-            timeout=timeout,
-            full_topology=False,
         )
         _apply_captured(resolved, live_keys, seed_result.fixtures)
         seeded_keys.update(seed_result.seeded_keys)
@@ -179,25 +157,23 @@ async def resolve_fixtures(
         resolved["storefront_customer_id"] = storefront_customer_id
         live_keys.add("storefront_customer_id")
 
-    if profile == "saleor_demo" and token:
-        from app.services.storefront_session import ensure_storefront_session
+    from app.services.storefront_session import ensure_storefront_session
 
-        session_fixtures, session_seeded, session_errors = await ensure_storefront_session(
-            saleor_url,
-            customer_token=customer_token,
-            fixtures=resolved,
-            timeout=max(timeout, 60),
-        )
-        _apply_captured(resolved, live_keys, session_fixtures)
-        seeded_keys.update(session_seeded)
-        seed_errors.extend(session_errors)
+    session_fixtures, session_seeded, session_errors = await ensure_storefront_session(
+        saleor_url,
+        customer_token=customer_token,
+        fixtures=resolved,
+        timeout=max(timeout, 60),
+    )
+    _apply_captured(resolved, live_keys, session_fixtures)
+    seeded_keys.update(session_seeded)
+    seed_errors.extend(session_errors)
 
     return FixtureResolution(
         fixtures=resolved,
         live_keys=frozenset(live_keys),
         seeded_keys=frozenset(seeded_keys),
         seed_errors=tuple(seed_errors),
-        seed_profile=profile,
     )
 
 
@@ -240,7 +216,6 @@ async def validate_preflight(
     corpus_version: str | None = None,
     *,
     allow_patch_drift: bool = False,
-    seed_profile: str | None = None,
 ) -> dict[str, Any]:
     """Pre-flight validation: check API reachability, version match, fixtures."""
     from app.services.version_routing import (
@@ -261,7 +236,6 @@ async def validate_preflight(
         "version_gate_reason": None,
         "fixture_status": {},
         "runtime_seed_enabled": settings.runtime_seed,
-        "demo_seed_profile": settings.demo_seed_profile,
         "requested_saleor_url": requested_url,
         "resolved_saleor_url": resolved_url,
         "issues": [],
@@ -311,27 +285,21 @@ async def validate_preflight(
                 )
             )
 
-    resolution = await resolve_fixtures(
-        resolved_url, token, timeout=timeout, seed_profile=seed_profile
-    )
-    result["demo_seed_profile"] = resolution.seed_profile
+    resolution = await resolve_fixtures(resolved_url, token, timeout=timeout)
     for key in PREFLIGHT_REQUIRED_FIXTURE_KEYS:
         present = key in resolution.live_keys
         result["fixture_status"][key] = "present" if present else "missing"
         if not present:
-            detail = f"Could not resolve or create {key} on target"
-            if resolution.seed_errors:
-                detail += f" — {'; '.join(resolution.seed_errors[:3])}"
-            elif settings.runtime_seed:
-                detail += " — check admin permissions for channel/product mutations"
-            else:
-                detail += " — set RUNTIME_SEED=true to auto-create harness fixture entities"
-            issues.append(PreflightIssue(message=detail, severity="warning"))
+            issues.append(
+                PreflightIssue(
+                    message=f"Fixture key missing: {key}",
+                    severity="warning" if settings.runtime_seed else "blocking",
+                )
+            )
 
-    if resolution.seeded_keys:
-        result["seeded_fixture_keys"] = sorted(resolution.seeded_keys)
     if resolution.seed_errors:
-        result["seed_errors"] = list(resolution.seed_errors)
+        for err in resolution.seed_errors[:5]:
+            issues.append(PreflightIssue(message=f"Seed error: {err}", severity="warning"))
 
     result.update(_classify_preflight_issues(issues))
     return result

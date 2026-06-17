@@ -1,8 +1,8 @@
 """
 Per-probe seed requirement tags for L3 client bundles.
 
-Seed-tagged probes may fail with shape_drift when the target DB lacks Saleor
-populatedb topology — classify as seed_prerequisite, not real_bug.
+Explicit bundle metadata only; mutation-first harness topology seeds entities
+at run start. Empty registry means no automatic seed_prerequisite bypass.
 """
 
 from __future__ import annotations

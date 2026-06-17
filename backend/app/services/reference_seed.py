@@ -1,8 +1,8 @@
 """
 Seed minimal reference data on official Saleor for L3 fixture capture.
 
-Uses populatedb/demo data when present; creates harness-reference entities only for
-missing fixture keys required by L3 dashboard bundles.
+Mutation-first harness topology: creates harness-reference entities via admin
+GraphQL when fixture keys are missing. No populatedb dependency.
 """
 
 from __future__ import annotations
@@ -97,16 +97,8 @@ async def ensure_certification_topology(
     token: str,
     *,
     timeout: int = 120,
-    full_topology: bool = False,
 ) -> SeedResult:
     """Mutation-first fixture topology for L3 certification runs."""
-    if full_topology:
-        from app.services.demo_seed import ensure_saleor_demo_topology
-
-        return await ensure_saleor_demo_topology(
-            saleor_url, token, timeout=max(timeout, 120)
-        )
-
     saleor_url = resolve_saleor_url_for_runner(saleor_url)
     result = await ensure_runtime_fixture_entities(saleor_url, token, timeout=timeout)
 
@@ -119,18 +111,6 @@ async def ensure_certification_topology(
     seeded = set(result.seeded_keys)
 
     async with httpx.AsyncClient(timeout=timeout) as client:
-        from app.services.demo_seed import seed_demo_fulfillable_order
-
-        if not fixtures.get("default_order_id"):
-            seeded.update(
-                await seed_demo_fulfillable_order(
-                    client,
-                    url=saleor_url,
-                    headers=headers,
-                    fixtures=fixtures,
-                    error_log=error_log,
-                )
-            )
         seeded.update(
             await _ensure_catalog_categories(
                 client,

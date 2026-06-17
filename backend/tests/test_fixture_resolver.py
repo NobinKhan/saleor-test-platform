@@ -78,10 +78,22 @@ async def test_resolve_fixtures_uses_capture():
         new_callable=AsyncMock,
         return_value=captured,
     ):
-        with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
-            with patch("app.services.fixture_resolver.settings") as mock_settings:
-                mock_settings.runtime_seed = False
-                result = await resolve_fixtures("http://example.com/graphql/", "token")
+        with patch(
+            "app.services.fixture_resolver._resolve_storefront_customer",
+            new_callable=AsyncMock,
+            return_value=(None, None),
+        ):
+            with patch(
+                "app.services.storefront_session.ensure_storefront_session",
+                new_callable=AsyncMock,
+                return_value=({}, set(), []),
+            ):
+                with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
+                    with patch("app.services.fixture_resolver.settings") as mock_settings:
+                        mock_settings.runtime_seed = False
+                        result = await resolve_fixtures(
+                            "http://example.com/graphql/", "token"
+                        )
 
     assert result.fixtures["default_product_id"] == "UHJvZHVjdDox"
     assert "default_variant_id" in result.live_keys
@@ -90,7 +102,7 @@ async def test_resolve_fixtures_uses_capture():
 
 
 @pytest.mark.asyncio
-async def test_resolve_fixtures_runtime_seed_when_missing():
+async def test_resolve_fixtures_runtime_seed():
     with patch(
         "app.services.fixture_resolver.capture_live_fixtures",
         new_callable=AsyncMock,
@@ -117,14 +129,24 @@ async def test_resolve_fixtures_runtime_seed_when_missing():
                 seeded_keys=frozenset({"default_product_id", "default_variant_id"}),
             ),
         ) as mock_ensure:
-            with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
-                with patch("app.services.fixture_resolver.settings") as mock_settings:
-                    mock_settings.runtime_seed = True
-                    mock_settings.demo_seed_profile = "harness"
-                    result = await resolve_fixtures("http://example.com/graphql/", "token")
+            with patch(
+                "app.services.fixture_resolver._resolve_storefront_customer",
+                new_callable=AsyncMock,
+                return_value=(None, None),
+            ):
+                with patch(
+                    "app.services.storefront_session.ensure_storefront_session",
+                    new_callable=AsyncMock,
+                    return_value=({}, set(), []),
+                ):
+                    with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
+                        with patch("app.services.fixture_resolver.settings") as mock_settings:
+                            mock_settings.runtime_seed = True
+                            result = await resolve_fixtures(
+                                "http://example.com/graphql/", "token"
+                            )
 
     mock_ensure.assert_awaited_once()
-    assert mock_ensure.await_args.kwargs.get("full_topology") is False
     assert result.fixtures["default_product_id"] == "UHJvZHVjdDox"
     assert "default_product_id" in result.seeded_keys
 
@@ -250,33 +272,35 @@ async def test_validate_preflight_fixture_missing():
 
 
 @pytest.mark.asyncio
-async def test_resolve_fixtures_saleor_demo_profile():
+async def test_resolve_fixtures_always_runs_storefront_session():
     with patch(
         "app.services.fixture_resolver.capture_live_fixtures",
         new_callable=AsyncMock,
         return_value={},
     ), patch(
-        "app.services.demo_seed.ensure_saleor_demo_topology",
+        "app.services.fixture_resolver.ensure_certification_topology",
         new_callable=AsyncMock,
         return_value=SeedResult(
             fixtures={"default_channel_id": "Q2hhbm5lbDox"},
             live_keys=frozenset({"default_channel_id"}),
-            seeded_keys=frozenset({"default_channel_id"}),
+            seeded_keys=frozenset(),
         ),
-    ) as mock_demo, patch(
+    ), patch(
         "app.services.fixture_resolver._resolve_storefront_customer",
         new_callable=AsyncMock,
-        return_value=(None, None),
+        return_value=("VXNlcjox", "customer-jwt"),
     ), patch(
         "app.services.storefront_session.ensure_storefront_session",
         new_callable=AsyncMock,
-        return_value=({"default_channel_id": "Q2hhbm5lbDox"}, set(), []),
-    ):
-        resolution = await resolve_fixtures(
-            "http://example.com/graphql/",
-            "token",
-            seed_profile="saleor_demo",
-        )
-    mock_demo.assert_awaited_once()
-    assert resolution.seed_profile == "saleor_demo"
-    assert resolution.fixtures.get("default_channel_id") == "Q2hhbm5lbDox"
+        return_value=({"default_checkout_id": "Q2hlY2tvdXQ6MQ=="}, {"default_checkout_id"}, []),
+    ) as mock_session:
+        with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
+            with patch("app.services.fixture_resolver.settings") as mock_settings:
+                mock_settings.runtime_seed = True
+                resolution = await resolve_fixtures(
+                    "http://example.com/graphql/",
+                    "token",
+                )
+
+    mock_session.assert_awaited_once()
+    assert resolution.fixtures.get("default_checkout_id") == "Q2hlY2tvdXQ6MQ=="

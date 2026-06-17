@@ -17,7 +17,7 @@
   let saleor_email = "";
   let saleor_password = "";
   let showPassword = false;
-  let concurrency = 5;
+  let concurrency = 1;
   let timeout_seconds = 30;
   let compare_run_id = "";
   let priorRuns: PriorRun[] = [];
@@ -60,7 +60,7 @@
       const run = await api.get(`/api/runs/${from}`);
       saleor_url = run.saleor_url;
       saleor_email = run.saleor_email ?? "";
-      concurrency = run.concurrency ?? 5;
+      concurrency = run.concurrency ?? 1;
       timeout_seconds = run.timeout_seconds ?? 30;
       prefillMessage =
         "Prefilled from previous run — review settings and click Start when ready.";
@@ -245,6 +245,7 @@
         <div class="field">
           <label for="concurrency">Concurrency</label>
           <input id="concurrency" type="number" min="1" max="20" bind:value={concurrency} />
+          <p class="field-hint">Certification uses mutation-first harness seeding on the target (no demo data required).</p>
         </div>
         <div class="field">
           <label for="timeout">Timeout (seconds)</label>

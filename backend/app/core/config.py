@@ -51,11 +51,6 @@ class Settings(BaseSettings):
         validation_alias="RUNTIME_SEED",
         description="Create missing L3 fixture entities on target via admin mutations at run start",
     )
-    demo_seed_profile: str = Field(
-        default="saleor_demo",
-        validation_alias="DEMO_SEED_PROFILE",
-        description="Fixture seed profile: saleor_demo (full topology) or harness (minimal, internal)",
-    )
     client_bundles_dashboard_version: str = Field(
         default="",
         validation_alias="CLIENT_BUNDLES_DASHBOARD_VERSION",

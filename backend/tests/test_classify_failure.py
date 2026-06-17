@@ -36,8 +36,7 @@ def test_sitesettings_shape_drift_is_seed_prerequisite():
         endpoint_name="sitesettings",
         meta={},
         assertion_failures=[],
-        endpoint={"seed_tags": ["requires_saleor_demo_seed"]},
-        demo_seed_profile="harness",
+        endpoint={"seed_tags": ["requires_catalog_seed"]},
     )
     assert cat == "seed_prerequisite"
 
@@ -49,13 +48,12 @@ def test_seed_tagged_shape_drift_is_seed_prerequisite():
         endpoint_name="channeldiagnostics",
         meta={},
         assertion_failures=[],
-        endpoint={"seed_tags": ["requires_saleor_demo_seed"]},
-        demo_seed_profile="harness",
+        endpoint={"seed_tags": ["requires_catalog_seed"]},
     )
     assert cat == "seed_prerequisite"
 
 
-def test_seed_tagged_shape_drift_after_saleor_demo_still_seed_prerequisite():
+def test_seed_tagged_shape_drift_with_order_fixture_tag():
     cat = _classify_failure_category(
         comparison=_comparison(match_status="shape_drift"),
         kind="CLIENT_BUNDLE",
@@ -63,31 +61,23 @@ def test_seed_tagged_shape_drift_after_saleor_demo_still_seed_prerequisite():
         meta={},
         assertion_failures=[],
         endpoint={"seed_tags": ["requires_order_fixture"]},
-        demo_seed_profile="saleor_demo",
     )
     assert cat == "seed_prerequisite"
 
 
 def test_untagged_shape_drift_is_data_drift():
-    """Untagged CLIENT_BUNDLE shape_drift with generic diff is data drift (not real bug).
-
-    With schema-based comparison, shape_drift without type mismatches means
-    the response has the correct types but different values — data drift, not
-    an API defect.
-    """
+    """Untagged CLIENT_BUNDLE shape_drift with generic diff is data drift (not real bug)."""
     cat = _classify_failure_category(
         comparison=_comparison(match_status="shape_drift"),
         kind="CLIENT_BUNDLE",
         endpoint_name="productdetails",
         meta={},
         assertion_failures=[],
-        demo_seed_profile="harness",
     )
     assert cat == "data_drift"
 
 
 def test_shape_drift_with_type_mismatch_is_schema_mismatch():
-    """Shape_drift with type mismatch in diff is a structural API defect."""
     cat = _classify_failure_category(
         comparison=_comparison(
             match_status="shape_drift",
@@ -97,12 +87,11 @@ def test_shape_drift_with_type_mismatch_is_schema_mismatch():
         endpoint_name="productdetails",
         meta={},
         assertion_failures=[],
-        demo_seed_profile="harness",
     )
     assert cat == "schema_mismatch"
 
 
-def test_seed_tagged_mismatch_saleor_demo_is_seed_prerequisite():
+def test_seed_tagged_mismatch_is_seed_prerequisite():
     cat = _classify_failure_category(
         comparison=_comparison(match_status="mismatch", actual_contract="business_error"),
         kind="CLIENT_BUNDLE",
@@ -110,20 +99,6 @@ def test_seed_tagged_mismatch_saleor_demo_is_seed_prerequisite():
         meta={},
         assertion_failures=[],
         endpoint={"seed_tags": ["requires_demo_product_variant"]},
-        demo_seed_profile="saleor_demo",
-    )
-    assert cat == "seed_prerequisite"
-
-
-def test_seed_tagged_mismatch_harness_profile_is_seed_prerequisite():
-    cat = _classify_failure_category(
-        comparison=_comparison(match_status="mismatch", actual_contract="business_error"),
-        kind="CLIENT_BUNDLE",
-        endpoint_name="productvariantsetdefault",
-        meta={},
-        assertion_failures=[],
-        endpoint={"seed_tags": ["requires_demo_product_variant"]},
-        demo_seed_profile="harness",
     )
     assert cat == "seed_prerequisite"
 

@@ -61,7 +61,7 @@ flowchart TD
 Before a full compat pass:
 
 1. **Harness stack:** `just up` (Saleor + harness). For official baseline: `just fresh` (populatedb).
-2. **Seed profile:** `DEMO_SEED_PROFILE=saleor_demo` (default) — catalog mutations + storefront session preamble run automatically at test-run start.
+2. **Seed topology:** Mutation-first harness seed (`ensure_certification_topology` + `ensure_storefront_session`) runs automatically at test-run start. See [COMPATIBILITY.md](COMPATIBILITY.md) for current workflow (this section is historical).
 3. **Auth:**
    - **Dashboard CLIENT_BUNDLE probes:** staff JWT from run credentials.
    - **Storefront `sf-*` probes:** customer JWT for account bundles; anonymous for checkout bundles (after preamble creates checkout).

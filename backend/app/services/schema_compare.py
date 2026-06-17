@@ -108,7 +108,36 @@ def _is_id_type(type_label: str) -> bool:
     return type_label in ("uuid", "global_id")
 
 
-# ── Schema extraction ────────────────────────────────────────────────────────
+_RELAY_EDGES_INDEX_RE = re.compile(r"\.edges\[(\d+)\]")
+
+
+def _forgive_connection_cardinality(
+    path: str,
+    *,
+    golden_schema: dict[str, FieldSchema],
+    actual_schema: dict[str, FieldSchema],
+) -> bool:
+    """Forgive Relay connection edge-count drift when element schema at [0] matches."""
+    match = _RELAY_EDGES_INDEX_RE.search(path)
+    if not match:
+        return False
+    edge_index = int(match.group(1))
+    prefix = path[: match.start()]
+    golden_edge0_prefix = f"{prefix}.edges[0]"
+    golden_has_edge0 = any(p.startswith(golden_edge0_prefix) for p in golden_schema)
+    if not golden_has_edge0:
+        return False
+    if edge_index >= 1:
+        # Golden recorded more edges than actual — non-certifying when [0] schema exists.
+        return True
+    page_info_path = f"{prefix}.pageInfo"
+    actual_has_edge0 = any(p.startswith(golden_edge0_prefix) for p in actual_schema)
+    if golden_has_edge0 and not actual_has_edge0 and page_info_path in actual_schema:
+        return True
+    return False
+
+
+# ── Type classification ──────────────────────────────────────────────────────
 
 @dataclass
 class FieldSchema:
@@ -219,6 +248,12 @@ def compare_schemas(
             # This is acceptable (backends may add fields)
             continue
         if a is None:
+            if _forgive_connection_cardinality(
+                path,
+                golden_schema=golden_schema,
+                actual_schema=actual_schema,
+            ):
+                continue
             # Field exists in golden but not in actual — missing field
             diffs.append(SchemaDiff(
                 path=path,

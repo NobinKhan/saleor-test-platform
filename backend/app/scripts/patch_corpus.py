@@ -139,11 +139,6 @@ async def main() -> int:
         default=None,
         help="Record input variant goldens (comma-separated operation names)",
     )
-    parser.add_argument(
-        "--seed-profile",
-        default=None,
-        help="Fixture seed profile for scenario recording (e.g. harness, saleor_demo)",
-    )
     args = parser.parse_args()
 
     dashboard_version = args.dashboard_version or settings.reference_baseline_version
@@ -186,8 +181,7 @@ async def main() -> int:
         from app.services.scenario_variant_record import record_scenario
         from app.services.fixture_resolver import resolve_fixtures
 
-        seed_profile = args.seed_profile or "harness"
-        resolution = await resolve_fixtures(args.url, token, timeout=30, seed_profile=seed_profile)
+        resolution = await resolve_fixtures(args.url, token, timeout=30)
         fixtures = resolution.fixtures
         for scenario_id in [s.strip() for s in args.scenarios.split(",") if s.strip()]:
             result = await record_scenario(
@@ -230,6 +224,9 @@ async def main() -> int:
             return 0
 
     if args.client_bundles:
+        from app.services.fixture_resolver import resolve_fixtures
+
+        await resolve_fixtures(args.url, token, timeout=30)
         for source, bundle_ids in _parse_client_bundle_targets(args.client_bundles):
             ver = dashboard_version if source == "dashboard" else storefront_version
             record_fn = record_dashboard_bundles if source == "dashboard" else record_storefront_bundles

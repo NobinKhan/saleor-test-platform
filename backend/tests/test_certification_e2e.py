@@ -59,7 +59,6 @@ async def test_certification_api_validate_and_run():
             "saleor_password": saleor_password,
             "concurrency": 1,
             "timeout_seconds": 60,
-            "demo_seed_profile": "harness",
         }
         run_resp = await client.post("/api/runs", json=run_payload, headers=headers)
         assert run_resp.status_code == 200, run_resp.text

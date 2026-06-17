@@ -64,7 +64,6 @@ class SSERunnerManager:
         timeout_seconds: int = 30,
         saleor_email: str | None = None,
         saleor_password: str | None = None,
-        demo_seed_profile: str = "saleor_demo",
     ):
         token = decrypt_token(saleor_token) if saleor_token else None
         email = decrypt_token(saleor_email) if saleor_email else None
@@ -80,7 +79,6 @@ class SSERunnerManager:
             timeout=timeout_seconds,
             saleor_email=email,
             saleor_password=password,
-            demo_seed_profile=demo_seed_profile,
         )
         rid = str(run_id)
         self._runners[rid] = runner

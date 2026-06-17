@@ -32,9 +32,9 @@ docker volume rm saleor-test-platform_harness_reference  # optional: re-seed vol
 just up
 ```
 
-### Scenario goldens (`harness` profile)
+### Scenario goldens
 
-Official baseline (`just baseline`) replays with `demo_seed_profile=harness`. Record scenario goldens on a fresh Saleor with the same profile:
+Record scenario goldens on a fresh Saleor (mutation-first harness topology):
 
 ```bash
 just fresh
@@ -42,7 +42,7 @@ just record-scenarios    # all three lifecycles; exports to ./reference/scenario
 just build-harness
 ```
 
-`patch_corpus --scenarios` defaults `--seed-profile` to `harness` when omitted.
+`patch_corpus --scenarios` seeds harness topology via `resolve_fixtures()` before recording.
 
 Fixture keys used by dashboard bundles:
 
@@ -103,19 +103,11 @@ Set `RUNTIME_SEED=false` for read-only audits against production-like targets wh
 
 At test-run start, when `RUNTIME_SEED=true` (default), the harness calls **`ensure_certification_topology()`** in [`reference_seed.py`](../backend/app/services/reference_seed.py):
 
-- **`saleor_demo` profile** (default for UI runs): full populatedb-like topology via `demo_seed.ensure_saleor_demo_topology()` — multi-channel, warehouses, catalog, fulfillable order, storefront session.
-- **`harness` profile** (unit tests / minimal targets): harness-reference channel/product/customer/collection, fulfillable order chain, search categories, storefront checkout — all via admin mutations.
+- Harness-reference channel, product, customer, collection, order, catalog categories
+- Storefront checkout fixtures via `_seed_storefront_fixtures()`
+- **`ensure_storefront_session()`** on every certification run (customer JWT + checkout chain)
 
 L3 bundles substitute `{{fixtures.*}}` from this live-resolved map. Per-bundle setup (`bundle_setup.py`) runs additional mutations when a bundle needs extra state (e.g. second variant for `productvariantsetdefault`).
-
-### Demo seed profile (`DEMO_SEED_PROFILE`)
-
-| Profile | Env | Behavior |
-|---------|-----|----------|
-| `saleor_demo` (default) | `DEMO_SEED_PROFILE=saleor_demo` | Full certification topology (see above) + `ensure_storefront_session()` |
-| `harness` (baseline / E2E) | `DEMO_SEED_PROFILE=harness` | Minimal mutation-first topology; used by `just baseline`, `self_check`, and E2E certification |
-
-UI test runs default to **`saleor_demo`** unless `demo_seed_profile` is set on `POST /api/runs`. Baked scenario goldens and official baseline use **`harness`**.
 
 ### Pre-run checklist (compat runs)
 
@@ -123,8 +115,8 @@ Before a full `full+scenarios` pass against a target backend:
 
 - Staff JWT with dashboard permissions
 - `RUNTIME_SEED=true` (default) so certification topology is created on the target
-- Storefront customer session + checkout chain (automatic when `saleor_demo` profile)
-- Scenario steps executed in order (tier 2); checkout-lifecycle now includes delivery + complete steps
+- Storefront customer session + checkout chain (automatic at run start)
+- Scenario steps executed in order (tier 2); checkout-lifecycle includes delivery + complete steps
 
 External backends without `populatedb` rely on mutation-first topology at run start. Remaining failures after seed are API parity work, not fixture gaps to ignore.
 

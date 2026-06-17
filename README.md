@@ -52,7 +52,7 @@ just baseline   # re-verify golden baseline
 | `just test` | Backend unit tests (in harness container, RAM-safe) |
 | `just check` | Frontend type check (capped Node heap) |
 | `just build-harness` | Rebuild harness-backend then harness-frontend (serial) |
-| `just fresh` | Reset DB volumes + Saleor migrate + populatedb + reference seed |
+| `just fresh` | Reset DB volumes + Saleor migrate + reference seed (no populatedb) |
 | `just seed-reference` | Seed L3 fixture IDs (products, orders, customers, …) on official Saleor |
 | `just register` | Create harness user `test@example.com` |
 | `just baseline` | Golden proof: corpus integrity + 100% replay (L1 + L3 + dynamic, Tier 2) |

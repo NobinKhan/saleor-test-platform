@@ -58,7 +58,7 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 
 ## Gap 2 — Customer-session auth replay (partial)
 
-**Status:** Customer JWT replay + **storefront session preamble** (`accountUpdate` + anonymous checkout chain) run automatically when `DEMO_SEED_PROFILE=saleor_demo`.
+**Status:** Customer JWT replay + **storefront session preamble** (`accountUpdate` + anonymous checkout chain) run automatically on every certification run.
 
 **Remaining:** Not all customer-context operations have customer-auth golden recorded. Staff token remains the default for dashboard bundles. Expand customer-tagged golden capture for storefront account/checkout flows.
 
@@ -72,7 +72,7 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 | `checkout-lifecycle` | 6 | anonymous → customer |
 | `order-lifecycle` | 3 | staff |
 
-Record goldens: `just record-scenarios` or `just patch-corpus --scenarios checkout-lifecycle,order-lifecycle --seed-profile harness` on official Saleor after `just fresh`.
+Record goldens: `just record-scenarios` or `just patch-corpus --scenarios checkout-lifecycle,order-lifecycle` on official Saleor after `just fresh`.
 
 **Status:** Scenario goldens recorded with `harness` profile (aligned with `just baseline`). Remaining optional: payment gateway fixture for `checkoutComplete` **success** golden.
 

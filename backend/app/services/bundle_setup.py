@@ -9,33 +9,34 @@ from typing import Any, Awaitable, Callable
 RunSetupFn = Callable[[dict[str, Any], str], Awaitable[str | None]]
 
 # Bundles needing extra fixture keys beyond global runtime seed.
+_SECONDARY_VARIANT_STEP: dict[str, Any] = {
+    "mutation": """mutation($input: ProductVariantCreateInput!) {
+        productVariantCreate(input: $input) {
+            productVariant { id }
+            errors { field message }
+        }
+    }""",
+    "variables": lambda fixtures: {
+        "input": {
+            "product": fixtures.get("default_product_id"),
+            "sku": "harness-second-variant",
+            "attributes": [],
+            "channelListings": [
+                {
+                    "channelId": fixtures.get("default_channel_id"),
+                    "price": "12.00",
+                }
+            ],
+        }
+    },
+    "extract": "$.data.productVariantCreate.productVariant.id",
+    "fixture_key": "secondary_variant_id",
+    "auth": "staff",
+}
+
 BUNDLE_SETUP: dict[str, list[dict[str, Any]]] = {
-    "productvariantsetdefault": [
-        {
-            "mutation": """mutation($input: ProductVariantCreateInput!) {
-                productVariantCreate(input: $input) {
-                    productVariant { id }
-                    errors { field message }
-                }
-            }""",
-            "variables": lambda fixtures: {
-                "input": {
-                    "product": fixtures.get("default_product_id"),
-                    "sku": "harness-second-variant",
-                    "attributes": [],
-                    "channelListings": [
-                        {
-                            "channelId": fixtures.get("default_channel_id"),
-                            "price": "12.00",
-                        }
-                    ],
-                }
-            },
-            "extract": "$.data.productVariantCreate.productVariant.id",
-            "fixture_key": "secondary_variant_id",
-            "auth": "staff",
-        },
-    ],
+    "productvariantsetdefault": [_SECONDARY_VARIANT_STEP],
+    "productvariantreorder": [_SECONDARY_VARIANT_STEP],
 }
 
 

@@ -149,10 +149,8 @@ class TestRunner:
         saleor_email: str | None = None,
         saleor_password: str | None = None,
         tier2_required: bool | None = None,
-        demo_seed_profile: str | None = None,
     ):
         from app.services.run_scope import FULL_SYSTEM_SCOPE
-        from app.core.config import settings as _settings
 
         self.run_id = run_id
         self.saleor_url = resolve_saleor_url_for_runner(saleor_url)
@@ -176,7 +174,6 @@ class TestRunner:
         self.corpus_version: str | None = None
         self._resolved_fixtures: dict[str, Any] | None = None
         self._dynamic_support: dict[str, Any] | None = None
-        self.demo_seed_profile: str = demo_seed_profile or _settings.demo_seed_profile
 
     def stop(self):
         self._stopped = True
@@ -359,10 +356,8 @@ class TestRunner:
                     self.saleor_url,
                     self.saleor_token,
                     timeout=self.timeout,
-                    seed_profile=self.demo_seed_profile,
                 )
                 self._resolved_fixtures = resolution.fixtures
-                self.demo_seed_profile = resolution.seed_profile
                 if resolution.seeded_keys:
                     yield {
                         "type": "progress",
@@ -953,7 +948,6 @@ class TestRunner:
                     meta=meta,
                     assertion_failures=assertion_failures,
                     endpoint=endpoint,
-                    demo_seed_profile=self.demo_seed_profile,
                 )
                 return {
                     "status": status,
@@ -1207,13 +1201,12 @@ def _classify_failure_category(
     meta: dict[str, Any],
     assertion_failures: list[str],
     endpoint: dict[str, Any] | None = None,
-    demo_seed_profile: str = "saleor_demo",
 ) -> str:
     """Classify the failure category for structured reporting.
 
     Scans the actual GraphQL document (not the bundle_id string) for
     deprecated types. Seed-tagged L3 bundles that shape_drift against
-    populatedb golden are seed_prerequisite, not real_bug.
+    missing mutation capability are seed_prerequisite, not real_bug.
     """
     from app.services.deprecated_scanner import (
         scan_document_for_deprecated_types,

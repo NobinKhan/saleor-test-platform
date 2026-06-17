@@ -195,6 +195,21 @@ async def main() -> int:
     if not ok:
         return 1
 
+    from app.scripts.lint_golden_literals import lint_blocking_enabled, lint_golden_files
+
+    blocking = lint_blocking_enabled()
+    lint_ok, lint_findings = lint_golden_files(blocking=blocking)
+    if lint_findings:
+        print(f"Golden literal lint: {len(lint_findings)} warning(s)")
+        for finding in lint_findings[:10]:
+            print(f"  [{finding.severity}] {finding.path}: {finding.message}")
+        if len(lint_findings) > 10:
+            print(f"  … and {len(lint_findings) - 10} more")
+    else:
+        print("Golden literal lint: OK")
+    if not lint_ok:
+        return 1
+
     token = None
     if args.url and args.email and args.password:
         token, err = await authenticate_saleor(args.url, args.email, args.password)

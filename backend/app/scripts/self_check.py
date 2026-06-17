@@ -44,7 +44,6 @@ async def run_self_check(
             saleor_email=email,
             saleor_password=password,
             tier2_required=True,
-            demo_seed_profile="harness",
         )
     else:
         runner = TestRunner(
@@ -56,7 +55,6 @@ async def run_self_check(
             concurrency=1,
             saleor_email=email,
             saleor_password=password,
-            demo_seed_profile="harness",
         )
 
     from collections import Counter

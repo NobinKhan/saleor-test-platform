@@ -1,18 +1,15 @@
-"""patch_corpus scenario recording defaults."""
+"""patch_corpus scenario recording uses harness mutation-first topology."""
 
-from __future__ import annotations
-
-import inspect
+from pathlib import Path
 
 
-def test_self_check_uses_harness_seed_profile():
-    from app.scripts import self_check
+def test_patch_corpus_scenarios_resolve_fixtures_before_record():
+    source = Path(__file__).resolve().parents[1] / "app" / "scripts" / "patch_corpus.py"
+    text = source.read_text(encoding="utf-8")
+    assert "resolve_fixtures(args.url, token" in text
+    assert "--seed-profile" not in text
 
-    source = inspect.getsource(self_check.run_self_check)
-    assert 'demo_seed_profile="harness"' in source
 
-
-def test_patch_corpus_scenarios_default_seed_profile():
-    """--scenarios without --seed-profile must match self_check (harness)."""
-    seed_profile = None or "harness"
-    assert seed_profile == "harness"
+def test_self_check_uses_concurrency_one():
+    source = Path(__file__).resolve().parents[1] / "app" / "scripts" / "self_check.py"
+    assert "concurrency=1" in source.read_text(encoding="utf-8")

@@ -1,6 +1,6 @@
 {
-  "default_channel": "channel-pln",
-  "default_slug": "apple-juice",
+  "default_channel": "harness-channel",
+  "default_slug": "harness-reference-product",
   "placeholder_id": "00000000-0000-0000-0000-000000000000",
   "default_channel_id": "Q2hhbm5lbDoy",
   "default_product_id": "UHJvZHVjdDoxNTI=",

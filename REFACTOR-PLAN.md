@@ -40,17 +40,12 @@ The current system records golden responses from the Saleor demo database and ex
 
 ### Workflow
 
-**Before (old approach):**
-```
-just fresh  # runs populatedb + seed_reference
-just baseline  # compares against populatedb data
-```
-
-**After (new approach):**
-```
-just fresh  # runs seed_reference only (no populatedb)
-just baseline  # compares against mutation-created data
-just record-golden  # re-record goldens if needed
+```bash
+just fresh           # migrate + seed_reference only (no populatedb)
+just baseline        # 856/856 on official Saleor
+just record-golden   # re-record L3 goldens when needed
+just record-scenarios
+just export-reference && just build-harness
 ```
 
 ### Why This Matters
@@ -201,9 +196,9 @@ Local verification (no GitHub CI). Run **one** `just baseline` per session; rese
 | Frontend types | `just check` | 0 errors |
 | Golden baseline | `just baseline` | **100%** (856/856) on official Saleor 3.23.7 |
 | Full local matrix | `just verify` | unit + types + baseline + e2e |
-| E2E API certification | `just test-e2e` | Passed (`demo_seed_profile=harness`) |
+| E2E API certification | `just test-e2e` | Passed (mutation-first harness topology) |
 
-**Fixes landed for 100% baseline:** scenario goldens re-recorded with `--seed-profile harness`; `searchcollections` / `searchcollectionswithtotalproducts` L3 goldens aligned to harness topology; `just record-scenarios` and `just export-reference` (baked + volume paths); E2E run uses `harness` profile to match `self_check`.
+**Fixes landed for 100% baseline:** scenario goldens re-recorded on harness topology; `searchcollections` / `searchcollectionswithtotalproducts` L3 goldens aligned; `just record-scenarios`, `just record-golden`, and `just export-reference` (baked + volume paths); single mutation-first certification path (no `saleor_demo` profile).
 
 **L2 static catalog removed (2026-06-17):** `catalog_sync` retired; corpus-only `build_golden_endpoints()`; `auth_visibility` + `bundle_setup` for L3 mutation-first replay.
 
