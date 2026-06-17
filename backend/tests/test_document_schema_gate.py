@@ -1,6 +1,9 @@
 """Tests for deep document schema gate."""
 
-from app.services.document_schema_gate import validate_document_against_schema
+from app.services.document_schema_gate import (
+    _introspection_data_for_build,
+    validate_document_against_schema,
+)
 
 MINIMAL_INTROSPECTION = {
     "data": {
@@ -49,3 +52,13 @@ def test_invalid_field_reported():
     doc = "query { shop { missingField } }"
     issues = validate_document_against_schema(doc, MINIMAL_INTROSPECTION)
     assert len(issues) >= 1
+
+
+def test_introspection_data_strips_saleor_extensions_wrapper():
+    wrapped = {
+        "data": {"__schema": {"queryType": {"name": "Query"}}},
+        "extensions": {"cost": {"requestedQueryCost": 1}},
+    }
+    inner = _introspection_data_for_build(wrapped)
+    assert inner == {"__schema": {"queryType": {"name": "Query"}}}
+    assert "extensions" not in inner

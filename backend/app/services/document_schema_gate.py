@@ -10,6 +10,18 @@ from graphql import GraphQLError, build_client_schema, parse, validate
 
 from app.services.client_bundles import ClientBundle
 from app.services.introspection import introspect_full_schema
+from app.services.semantic_compare import is_error_contract
+
+
+def _introspection_data_for_build(introspection_result: dict[str, Any]) -> dict[str, Any]:
+    """Extract the introspection ``data`` object for ``build_client_schema``."""
+    if isinstance(introspection_result, dict) and "data" in introspection_result:
+        inner = introspection_result["data"]
+        if isinstance(inner, dict) and "__schema" in inner:
+            return inner
+    if isinstance(introspection_result, dict) and "__schema" in introspection_result:
+        return introspection_result
+    return introspection_result
 
 
 def validate_document_against_schema(
@@ -18,11 +30,7 @@ def validate_document_against_schema(
 ) -> list[dict[str, str]]:
     """Return validation issues for a GraphQL document against a full introspection schema."""
     issues: list[dict[str, str]] = []
-    schema_input = introspection_result
-    if isinstance(introspection_result, dict) and "data" in introspection_result:
-        schema_input = introspection_result
-    elif isinstance(introspection_result, dict) and "__schema" in introspection_result:
-        schema_input = {"data": introspection_result}
+    schema_input = _introspection_data_for_build(introspection_result)
     try:
         client_schema = build_client_schema(schema_input)
     except Exception as exc:
@@ -63,6 +71,8 @@ def compute_document_schema_gate(
     checked = 0
     for bundle in bundles:
         if recorded_only and not bundle.has_golden():
+            continue
+        if bundle.golden_contract and is_error_contract(bundle.golden_contract):
             continue
         checked += 1
         doc_issues = validate_document_against_schema(bundle.document, introspection_result)
