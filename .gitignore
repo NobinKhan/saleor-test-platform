@@ -4,6 +4,9 @@ frontend/.env
 backend/.env
 saleor-test-*.md
 report.md
+frontend/.svelte-kit/
+deploy/saleor/jwt-private.pem
+prompt.md
 
 # Python bytecode
 __pycache__/
