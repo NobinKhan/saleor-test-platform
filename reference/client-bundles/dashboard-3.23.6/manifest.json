@@ -4,8 +4,8 @@
   "dashboard_git_tag": "3.23.6",
   "bundle_count": 415,
   "recorded_count": 415,
-  "bundles_hash": "sha256:322d05ad9a4bb4b2185a770bddbab75c881255c0bd35e4fb76b7ec81d7dcb7d3",
-  "updated_at": "2026-06-16T10:07:29.753556+00:00",
+  "bundles_hash": "sha256:e60b509779be318e665b7f28605afe30484fb489631423e2cf76bd048b4522b4",
+  "updated_at": "2026-06-17T06:18:59.867734+00:00",
   "bundles_index": {
     "_getattributechoices": {
       "document_hash": "sha256:1f0b22d55265cfe9",

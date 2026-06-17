@@ -4,7 +4,7 @@ L3 dashboard bundles replay real GraphQL documents with `{{fixtures.*}}` placeho
 
 ## What `just seed-reference` does
 
-After `just fresh` (migrate + `populatedb` demo data + admin user), the harness:
+After `just fresh` (migrate + `seed_reference` mutations + admin user), the harness:
 
 1. Queries live Saleor for channel, product, variant, order, customer, collection, warehouse, category IDs
 2. Creates a reference customer/collection if still missing
@@ -15,23 +15,34 @@ After `just fresh` (migrate + `populatedb` demo data + admin user), the harness:
 The **harness** stack uses **Chainguard Python + Chainguard Postgres** — no host bind mounts for reference data:
 
 - Golden corpus is **baked into** the `harness-backend` image at `/app/reference-baked/`
-- On first start, a **named volume** (`harness_reference`) is seeded at `/app/reference/`
-- `just patch-corpus`, `just seed-reference`, and `just record-reference` write to that volume
+- `docker-compose.yml` sets `REFERENCE_CORPUS_ROOT`, `CLIENT_BUNDLES_ROOT`, and `SCENARIOS_ROOT` to `/app/reference-baked/*` — `patch_corpus` writes there
+- On first start, a **named volume** (`harness_reference`) is seeded at `/app/reference/` from baked copy (entrypoint)
 
-Persist volume changes back to git:
+Persist changes back to git:
 
 ```bash
-just export-reference    # docker cp volume → ./reference/
+just export-reference    # volume + /app/reference-baked/* → ./reference/
 ```
 
 After pulling corpus updates from git:
 
 ```bash
 just import-reference    # rebuild image with new ./reference/
-# optional: remove stale volume so entrypoint re-seeds from new image
-docker volume rm saleor-test-platform_harness_reference
+docker volume rm saleor-test-platform_harness_reference  # optional: re-seed volume from image
 just up
 ```
+
+### Scenario goldens (`harness` profile)
+
+Official baseline (`just baseline`) replays with `demo_seed_profile=harness`. Record scenario goldens on a fresh Saleor with the same profile:
+
+```bash
+just fresh
+just record-scenarios    # all three lifecycles; exports to ./reference/scenarios/
+just build-harness
+```
+
+`patch_corpus --scenarios` defaults `--seed-profile` to `harness` when omitted.
 
 Fixture keys used by dashboard bundles:
 
@@ -48,7 +59,7 @@ Fixture keys used by dashboard bundles:
 
 ```bash
 just up
-just fresh              # includes populatedb + seed-reference
+just fresh              # seed_reference only (no populatedb)
 just patch-corpus --client-bundles all   # after corpus changes
 just export-reference    # if you changed golden JSON and want to commit
 just baseline
@@ -102,9 +113,9 @@ L3 bundles substitute `{{fixtures.*}}` from this live-resolved map. Per-bundle s
 | Profile | Env | Behavior |
 |---------|-----|----------|
 | `saleor_demo` (default) | `DEMO_SEED_PROFILE=saleor_demo` | Full certification topology (see above) + `ensure_storefront_session()` |
-| `harness` (internal) | `DEMO_SEED_PROFILE=harness` | Minimal mutation-first topology when `RUNTIME_SEED=true` |
+| `harness` (baseline / E2E) | `DEMO_SEED_PROFILE=harness` | Minimal mutation-first topology; used by `just baseline`, `self_check`, and E2E certification |
 
-Every UI test run uses **`saleor_demo`** automatically. Legacy `seed_tags` metadata has been removed from the L3 corpus; topology gaps classify as `data_prerequisite` or `real_bug` per SGRC.
+UI test runs default to **`saleor_demo`** unless `demo_seed_profile` is set on `POST /api/runs`. Baked scenario goldens and official baseline use **`harness`**.
 
 ### Pre-run checklist (compat runs)
 
@@ -129,7 +140,6 @@ Short list — full gap analysis (Storefront L3, customer JWT, excluded bundles,
 
 Planned corpus work:
 
-- Record goldens for `checkout-lifecycle` steps 05–06 (`just patch-corpus --scenarios checkout-lifecycle`)
 - Stock management L3 parity (`productVariantStocks*`)
 - `exportProducts` L1 probe when the mutation exists on the pinned Saleor release (not present on 3.23.7 introspection)
 

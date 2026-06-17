@@ -25,8 +25,8 @@
   "golden_response": {
     "data": {
       "product": {
-        "id": "UHJvZHVjdDoxNjg=",
-        "slug": "harness-scenario-9f4f7d68",
+        "id": "UHJvZHVjdDoy",
+        "slug": "harness-scenario-f9d72e1b",
         "name": "Harness Scenario Product"
       }
     }
@@ -39,5 +39,5 @@
     "expected_null": true,
     "message_pattern": "<invalid_id>"
   },
-  "recorded_at": "2026-06-16T08:46:14.255187+00:00"
+  "recorded_at": "2026-06-17T06:18:55.704153+00:00"
 }

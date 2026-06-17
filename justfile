@@ -9,6 +9,7 @@
 # Reference corpus (local Saleor defaults; pass script flags via *extra):
 #   just corpus-diff | patch-corpus | record-reference | verify-corpus | self-check
 #   just export-reference | import-reference  (volume ↔ git)
+#   just record-scenarios | record-golden
 #
 # Golden baseline (official Saleor must pass before testing other backends):
 #   just baseline
@@ -42,6 +43,11 @@ test-e2e:
     source "{{ root }}/scripts/lib/resources.sh"
     source "{{ root }}/scripts/lib/health.sh"
     SALEOR_E2E_URL="${SALEOR_E2E_URL:-http://saleor-api:8000/graphql/}"
+    echo "=== E2E: fresh Saleor before certification API test ==="
+    just fresh
+    docker exec -e PYTHONPATH=/app saleor-api python3 -c \
+      "import os; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'saleor.settings'); import django; django.setup(); from django.core.cache import cache; cache.clear()" \
+      2>/dev/null || true
     {{compose}} exec \
       -e SALEOR_E2E=1 \
       -e SALEOR_E2E_URL="${SALEOR_E2E_URL}" \
@@ -92,8 +98,20 @@ export-reference:
     #!/usr/bin/env bash
     set -euo pipefail
     mkdir -p "{{ root }}/reference"
-    docker cp harness-backend:/app/reference/. "{{ root }}/reference/"
-    echo "Exported reference corpus from harness container to ./reference/"
+    # Runtime volume (patch-corpus when REFERENCE_*_ROOT points at /app/reference/)
+    if docker exec harness-backend test -f /app/reference/corpora/registry.json 2>/dev/null; then
+      docker cp harness-backend:/app/reference/. "{{ root }}/reference/"
+      echo "Exported /app/reference/ (runtime volume) → ./reference/"
+    fi
+    # Baked image paths (default in docker-compose: /app/reference-baked/*)
+    for sub in corpora client-bundles scenarios variants dynamic; do
+      if docker exec harness-backend test -d "/app/reference-baked/${sub}" 2>/dev/null; then
+        mkdir -p "{{ root }}/reference/${sub}"
+        docker cp "harness-backend:/app/reference-baked/${sub}/." "{{ root }}/reference/${sub}/"
+        echo "Exported /app/reference-baked/${sub}/ → ./reference/${sub}/"
+      fi
+    done
+    echo "Export complete — commit ./reference/ then run: just import-reference"
 
 import-reference:
     #!/usr/bin/env bash
@@ -174,6 +192,24 @@ record-golden source:
         --client-bundles storefront:all
     fi
     echo "GOLDEN RECORD COMPLETE"
+
+record-scenarios scenarios="product-lifecycle,checkout-lifecycle,order-lifecycle":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "=== Recording scenario goldens (seed-profile: harness) ==="
+    echo "Ensure Saleor is fresh: just fresh"
+    {{compose}} exec harness-backend \
+      python -m app.scripts.patch_corpus \
+      --url "http://saleor-api:8000/graphql/" \
+      --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+      --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
+      --scenarios "{{ scenarios }}" \
+      --seed-profile harness
+    mkdir -p "{{ root }}/reference/scenarios"
+    docker cp harness-backend:/app/reference-baked/scenarios/. "{{ root }}/reference/scenarios/"
+    echo ""
+    echo "Scenario goldens exported to ./reference/scenarios/"
+    echo "Next: just build-harness && docker volume rm saleor-test-platform_harness_reference 2>/dev/null || true"
 
 check-corpus-version:
     #!/usr/bin/env bash
@@ -261,6 +297,9 @@ verify *extra:
       echo "=== verify: e2e (skipped) ==="
       RESULTS["e2e"]="SKIP"
     else
+      echo ""
+      echo "=== verify: fresh Saleor before e2e (baseline mutates target) ==="
+      just fresh
       run_step e2e just test-e2e
     fi
 

@@ -186,7 +186,8 @@ async def main() -> int:
         from app.services.scenario_variant_record import record_scenario
         from app.services.fixture_resolver import resolve_fixtures
 
-        resolution = await resolve_fixtures(args.url, token, timeout=30, seed_profile=args.seed_profile)
+        seed_profile = args.seed_profile or "harness"
+        resolution = await resolve_fixtures(args.url, token, timeout=30, seed_profile=seed_profile)
         fixtures = resolution.fixtures
         for scenario_id in [s.strip() for s in args.scenarios.split(",") if s.strip()]:
             result = await record_scenario(

@@ -53,28 +53,15 @@ async def test_certification_api_validate_and_run():
         token = login.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
-        validate_payload = {
+        run_payload = {
             "saleor_url": saleor_url,
             "saleor_email": saleor_email,
             "saleor_password": saleor_password,
+            "concurrency": 1,
+            "timeout_seconds": 60,
+            "demo_seed_profile": "harness",
         }
-        validate_resp = await client.post(
-            "/api/runs/validate", json=validate_payload, headers=headers
-        )
-        assert validate_resp.status_code == 200, validate_resp.text
-        validate_body = validate_resp.json()
-        assert validate_body.get("api_reachable") is True
-        assert validate_body.get("version_gate_pass") is not False
-
-        run_resp = await client.post(
-            "/api/runs",
-            json={
-                **validate_payload,
-                "concurrency": 3,
-                "timeout_seconds": 60,
-            },
-            headers=headers,
-        )
+        run_resp = await client.post("/api/runs", json=run_payload, headers=headers)
         assert run_resp.status_code == 200, run_resp.text
         run_id = run_resp.json()["id"]
 

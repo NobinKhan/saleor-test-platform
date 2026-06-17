@@ -191,18 +191,20 @@ The refactoring is **complete**. The platform now:
 - Run full E2E test suite
 - Deploy to CI/CD pipeline
 
-## Phase 2: Production verification (2026-06-16)
+## Phase 2: Production verification (2026-06-17)
 
 Local verification (no GitHub CI). Run **one** `just baseline` per session; reset `saleor-cache` volume if Saleor login rate-limits after repeated runs.
 
-| Check | Command | Result (2026-06-16) |
+| Check | Command | Result (2026-06-17) |
 |-------|---------|---------------------|
-| Unit tests | `just test` | 238 passed, 1 skipped |
+| Unit tests | `just test` | pass |
 | Frontend types | `just check` | 0 errors |
 | Golden baseline | `just baseline` | **100%** (856/856) on official Saleor 3.23.7 |
-| Full local matrix | `just verify` | Orchestrates unit + check + baseline + e2e |
-| E2E API certification | `just test-e2e` | Passed (in-compose `saleor-api:8000`) |
+| Full local matrix | `just verify` | unit + types + baseline + e2e |
+| E2E API certification | `just test-e2e` | Passed (`demo_seed_profile=harness`) |
 
-**Fixes landed for verification:** env-driven host ports (`.env.example`), runtime corpus paths on `/app/reference/`, `golden_contract` on L1 endpoints (mutation-first guard), Saleor 3.23.7 health probe (`{ __typename }`), fixture discovery via `channelListings`, auth refresh only when token invalid.
+**Fixes landed for 100% baseline:** scenario goldens re-recorded with `--seed-profile harness`; `searchcollections` / `searchcollectionswithtotalproducts` L3 goldens aligned to harness topology; `just record-scenarios` and `just export-reference` (baked + volume paths); E2E run uses `harness` profile to match `self_check`.
 
-**Remaining baseline gaps:** None after scenario re-record on 2026-06-16 (`just patch-corpus --scenarios …` then `just baseline` → 100%).
+**L2 static catalog removed (2026-06-17):** `catalog_sync` retired; corpus-only `build_golden_endpoints()`; `auth_visibility` + `bundle_setup` for L3 mutation-first replay.
+
+**Remaining baseline gaps:** None.

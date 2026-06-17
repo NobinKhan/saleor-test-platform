@@ -72,9 +72,9 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 | `checkout-lifecycle` | 6 | anonymous → customer |
 | `order-lifecycle` | 3 | staff |
 
-Record goldens: `just patch-corpus --scenarios checkout-lifecycle,order-lifecycle` on official Saleor.
+Record goldens: `just record-scenarios` or `just patch-corpus --scenarios checkout-lifecycle,order-lifecycle --seed-profile harness` on official Saleor after `just fresh`.
 
-**Remaining:** Record goldens for new checkout steps 05–06 (`just patch-corpus --scenarios checkout-lifecycle` on official Saleor). Optional payment gateway fixture for `checkoutComplete` success golden.
+**Status:** Scenario goldens recorded with `harness` profile (aligned with `just baseline`). Remaining optional: payment gateway fixture for `checkoutComplete` **success** golden.
 
 ## Gap 4 — Deprecated L3 bundles (removed)
 

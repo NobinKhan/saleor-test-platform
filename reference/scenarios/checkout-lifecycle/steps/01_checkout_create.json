@@ -31,14 +31,14 @@
     "data": {
       "checkoutCreate": {
         "checkout": {
-          "id": "Q2hlY2tvdXQ6NmJhMWI1ZGQtMGRhYS00NWJiLWEwYzMtMzBhNWI1NTBiNzk4",
-          "token": "6ba1b5dd-0daa-45bb-a0c3-30a5b550b798",
+          "id": "Q2hlY2tvdXQ6OWU2NjAzZGYtOTBmYS00YmIyLWJiMWQtMzUzOTk1YWYzNmIy",
+          "token": "9e6603df-90fa-4bb2-bb1d-353995af36b2",
           "lines": [
             {
-              "id": "Q2hlY2tvdXRMaW5lOjhmYmVkNWY1LTU0YWQtNDUzMC05NTAwLWI0NGU0ZTJmMWFlMQ==",
+              "id": "Q2hlY2tvdXRMaW5lOjI2N2I0YjU4LTc2NzEtNDBiZC05M2FkLTljMDgwM2EyOGYyNg==",
               "quantity": 1,
               "variant": {
-                "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
+                "id": "UHJvZHVjdFZhcmlhbnQ6MQ=="
               }
             }
           ]
@@ -49,5 +49,5 @@
   },
   "golden_contract": "success",
   "golden_status": "pass",
-  "recorded_at": "2026-06-16T08:46:13.129021+00:00"
+  "recorded_at": "2026-06-17T06:18:56.116786+00:00"
 }

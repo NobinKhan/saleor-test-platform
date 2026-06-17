@@ -17,31 +17,12 @@
   "golden_response": {
     "data": {
       "search": {
-        "edges": [
-          {
-            "node": {
-              "id": "Q29sbGVjdGlvbjo0",
-              "name": "Featured Products",
-              "products": {
-                "totalCount": 5
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q29sbGVjdGlvbjo1",
-              "name": "Summer Picks",
-              "products": {
-                "totalCount": 4
-              }
-            }
-          }
-        ],
+        "edges": [],
         "pageInfo": {
-          "endCursor": "WyJzdW1tZXItcGlja3MiXQ==",
+          "endCursor": null,
           "hasNextPage": false,
           "hasPreviousPage": false,
-          "startCursor": "WyJmZWF0dXJlZC1wcm9kdWN0cyJd"
+          "startCursor": null
         }
       }
     }
@@ -50,6 +31,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:2da92286800ac348",
+  "response_shape_hash": "sha256:448ff6a3c5ff587c",
   "document_hash": "sha256:ed0763225096fec0"
 }
