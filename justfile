@@ -150,6 +150,30 @@ self-check *extra:
     {{compose}} exec harness-backend \
       python -m app.scripts.self_check {{ extra }}
 
+record-golden source:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    echo "=== Recording golden against fresh Saleor (no populatedb) ==="
+    if [ "{{ source }}" = "dashboard" ] || [ "{{ source }}" = "all" ]; then
+      echo "--- Recording L3 dashboard bundles ---"
+      {{compose}} exec harness-backend \
+        python -m app.scripts.patch_corpus \
+        --url "http://saleor-api:8000/graphql/" \
+        --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+        --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
+        --client-bundles dashboard:all
+    fi
+    if [ "{{ source }}" = "storefront" ] || [ "{{ source }}" = "all" ]; then
+      echo "--- Recording L3 storefront bundles ---"
+      {{compose}} exec harness-backend \
+        python -m app.scripts.patch_corpus \
+        --url "http://saleor-api:8000/graphql/" \
+        --email "${SALEOR_ADMIN_EMAIL:-admin@example.com}" \
+        --password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
+        --client-bundles storefront:all
+    fi
+    echo "GOLDEN RECORD COMPLETE"
+
 check-corpus-version:
     #!/usr/bin/env bash
     set -euo pipefail

@@ -425,6 +425,7 @@ def build_golden_endpoints(
             "category": probe.category,
             "is_public": is_public,
             "golden_input": probe.input_sent,
+            "golden_contract": probe.golden_contract,
         })
     if public_only:
         endpoints = [e for e in endpoints if e["is_public"]]

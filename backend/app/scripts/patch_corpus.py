@@ -140,6 +140,11 @@ async def main() -> int:
         default=None,
         help="Record input variant goldens (comma-separated operation names)",
     )
+    parser.add_argument(
+        "--seed-profile",
+        default=None,
+        help="Fixture seed profile for scenario recording (e.g. harness, saleor_demo)",
+    )
     args = parser.parse_args()
 
     dashboard_version = args.dashboard_version or settings.reference_baseline_version
@@ -182,7 +187,7 @@ async def main() -> int:
         from app.services.scenario_variant_record import record_scenario
         from app.services.fixture_resolver import resolve_fixtures
 
-        resolution = await resolve_fixtures(args.url, token, timeout=30)
+        resolution = await resolve_fixtures(args.url, token, timeout=30, seed_profile=args.seed_profile)
         fixtures = resolution.fixtures
         for scenario_id in [s.strip() for s in args.scenarios.split(",") if s.strip()]:
             result = await record_scenario(

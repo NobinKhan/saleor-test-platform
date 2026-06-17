@@ -65,7 +65,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "python3 -c \"import urllib.request,json; r=urllib.request.Request('http://127.0.0.1:8000/graphql/',data=b'{\\\"query\\\":\\\"{ shop { version } }\\\"}',headers={'Content-Type':'application/json'},method='POST'); d=json.loads(urllib.request.urlopen(r,timeout=5).read()); exit(0 if (d.get('data') or {}).get('shop') else 1)\"",
+          "python3 -c \"import urllib.request,json; r=urllib.request.Request('http://127.0.0.1:8000/graphql/',data=b'{\\\"query\\\":\\\"{ shop { name } }\\\"}',headers={'Content-Type':'application/json'},method='POST'); d=json.loads(urllib.request.urlopen(r,timeout=5).read()); exit(0 if (d.get('data') or {}).get('shop') else 1)\"",
         ]
       interval: 10s
       timeout: 10s
@@ -143,6 +143,7 @@ services:
       SGRC_TIER2_GATE: "true"
       RUNTIME_SEED: "true"
       CLIENT_BUNDLES_DASHBOARD_VERSION: "3.23.6"
+      CLIENT_BUNDLES_STOREFRONT_VERSION: "3.23.6"
       REFERENCE_CORPUS_ROOT: /app/reference-baked/corpora
       CLIENT_BUNDLES_ROOT: /app/reference-baked/client-bundles
       SCENARIOS_ROOT: /app/reference-baked/scenarios

@@ -26,14 +26,15 @@ REQUIRED_FIXTURE_KEYS = (
     "default_product_id",
     "default_variant_id",
     "default_customer_id",
-    "default_order_id",
     "default_collection_id",
+    "default_order_id",
 )
 
 STOREFRONT_FIXTURE_KEYS = (
     "default_checkout_id",
     "default_checkout_token",
     "variant_id_for_cart",
+    "storefront_customer_id",
 )
 
 
@@ -41,6 +42,7 @@ STOREFRONT_FIXTURE_KEYS = (
     "default_checkout_id",
     "default_checkout_token",
     "variant_id_for_cart",
+    "storefront_customer_id",
 )
 
 
@@ -187,7 +189,6 @@ async def _capture_fixtures(
     for query_name, key in (
         ("orders(first: 1)", "default_order_id"),
         ("customers(first: 1)", "default_customer_id"),
-        ("warehouses(first: 1)", "default_warehouse_id"),
         ("categories(first: 1)", "default_category_id"),
     ):
         data = await _gql(
@@ -201,6 +202,9 @@ async def _capture_fixtures(
         edges = (data.get(root) or {}).get("edges") or []
         if edges:
             fixtures[key] = edges[0]["node"]["id"]
+            # storefront_customer_id is the same as default_customer_id
+            if key == "default_customer_id":
+                fixtures["storefront_customer_id"] = edges[0]["node"]["id"]
 
     # ── Collections ──────────────────────────────────────────────────────
     coll_data = await _gql(
@@ -349,10 +353,10 @@ async def _ensure_reference_product(
         url=url,
         headers=headers,
         query=(
-            "query($slug: String!, $channel: String!) { "
-            "product(slug: $slug, channel: $channel) { id slug variants { id } } }"
+            "query($slug: String!) { "
+            "product(slug: $slug) { id slug variants { id } channelListings { channel { id } } } }"
         ),
-        variables={"slug": REFERENCE_PRODUCT_SLUG, "channel": channel_slug or "default-channel"},
+        variables={"slug": REFERENCE_PRODUCT_SLUG},
         allow_errors=True,
         error_log=error_log,
         operation="productBySlug",
@@ -363,8 +367,138 @@ async def _ensure_reference_product(
         fixtures["default_slug"] = existing.get("slug") or REFERENCE_PRODUCT_SLUG
         variants = existing.get("variants") or []
         if variants:
-            fixtures["default_variant_id"] = variants[0]["id"]
-            fixtures["variant_id_for_cart"] = variants[0]["id"]
+            variant_id = variants[0]["id"]
+            fixtures["default_variant_id"] = variant_id
+            fixtures["variant_id_for_cart"] = variant_id
+            # Ensure product is assigned to channel with variant available for purchase
+            channel_listings = existing.get("channelListings") or []
+            if not any(cl.get("channel", {}).get("id") == channel_id for cl in channel_listings):
+                # Assign category first (required for publishing)
+                category_id = fixtures.get("default_category_id")
+                if category_id:
+                    await _gql(
+                        client,
+                        url=url,
+                        headers=headers,
+                        query=(
+                            "mutation($id: ID!, $input: ProductUpdateInput!) { "
+                            "productUpdate(id: $id, input: $input) { product { id } "
+                            "errors { field message code } } }"
+                        ),
+                        variables={
+                            "id": existing["id"],
+                            "input": {"category": category_id},
+                        },
+                        allow_errors=True,
+                        error_log=error_log,
+                        operation="productUpdate(category)",
+                    )
+                await _gql(
+                    client,
+                    url=url,
+                    headers=headers,
+                    query=(
+                        "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
+                        "productChannelListingUpdate(id: $id, input: $input) { product { id } "
+                        "errors { field message code } } }"
+                    ),
+                    variables={
+                        "id": existing["id"],
+                        "input": {
+                            "updateChannels": [{
+                                "channelId": channel_id,
+                                "isPublished": True,
+                                "isAvailableForPurchase": True,
+                                "addVariants": [variant_id],
+                            }],
+                        },
+                    },
+                    allow_errors=True,
+                    error_log=error_log,
+                    operation="productChannelListingUpdate",
+                )
+                # Set variant price
+                await _gql(
+                    client,
+                    url=url,
+                    headers=headers,
+                    query=(
+                        "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
+                        "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
+                        "errors { field message code } } }"
+                    ),
+                    variables={
+                        "id": variant_id,
+                        "input": [{"channelId": channel_id, "price": "10.00"}],
+                    },
+                    allow_errors=True,
+                    error_log=error_log,
+                    operation="productVariantChannelListingUpdate",
+                )
+                # Create stock
+                warehouse_data = await _gql(
+                    client,
+                    url=url,
+                    headers=headers,
+                    query="query { warehouses(first: 1) { edges { node { id } } } }",
+                    allow_errors=True,
+                    error_log=error_log,
+                    operation="warehouses",
+                )
+                warehouses = (warehouse_data.get("warehouses") or {}).get("edges") or []
+                if warehouses:
+                    wh_id = warehouses[0]["node"]["id"]
+                    await _gql(
+                        client,
+                        url=url,
+                        headers=headers,
+                        query=(
+                            "mutation($variantId: ID!, $stocks: [StockInput!]!) { "
+                            "productVariantStocksCreate(variantId: $variantId, stocks: $stocks) "
+                            "{ productVariant { id } errors { field message code } } }"
+                        ),
+                        variables={
+                            "variantId": variant_id,
+                            "stocks": [{"warehouse": wh_id, "quantity": 100}],
+                        },
+                        allow_errors=True,
+                        error_log=error_log,
+                        operation="productVariantStocksCreate",
+                    )
+                # Also assign to storefront channel (channel-pln)
+                pln_data = await _gql(
+                    client,
+                    url=url,
+                    headers=headers,
+                    query="query { channels { id slug isActive } }",
+                    allow_errors=True,
+                    error_log=error_log,
+                    operation="channels",
+                )
+                for ch in (pln_data.get("channels") or []):
+                    if ch.get("slug") == "channel-pln" and ch.get("isActive") and ch.get("id") != channel_id:
+                        pln_id = ch["id"]
+                        await _gql(
+                            client, url=url, headers=headers,
+                            query=(
+                                "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
+                                "productChannelListingUpdate(id: $id, input: $input) { product { id } "
+                                "errors { field message code } } }"
+                            ),
+                            variables={"id": existing["id"], "input": {"updateChannels": [{"channelId": pln_id, "isPublished": True, "isAvailableForPurchase": True, "addVariants": [variant_id]}]}},
+                            allow_errors=True, error_log=error_log, operation="productChannelListingUpdate(pln)",
+                        )
+                        await _gql(
+                            client, url=url, headers=headers,
+                            query=(
+                                "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
+                                "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
+                                "errors { field message code } } }"
+                            ),
+                            variables={"id": variant_id, "input": [{"channelId": pln_id, "price": "10.00"}]},
+                            allow_errors=True, error_log=error_log, operation="productVariantChannelListingUpdate(pln)",
+                        )
+                        break
             return True
 
     data = await _gql(
@@ -381,7 +515,7 @@ async def _ensure_reference_product(
                 "name": "Harness Reference Product",
                 "slug": REFERENCE_PRODUCT_SLUG,
                 "productType": product_type_id,
-                "channelListings": [{"channelId": channel_id, "isPublished": True}],
+                "category": fixtures.get("default_category_id"),
             }
         },
         allow_errors=True,
@@ -395,41 +529,180 @@ async def _ensure_reference_product(
         return False
     fixtures["default_product_id"] = product["id"]
     fixtures["default_slug"] = product.get("slug") or REFERENCE_PRODUCT_SLUG
-    variants = product.get("variants") or []
-    if variants:
-        fixtures["default_variant_id"] = variants[0]["id"]
-        fixtures["variant_id_for_cart"] = variants[0]["id"]
-        return True
 
-    variant_data = await _gql(
+    # Create variant first (if not returned by productCreate)
+    variants = product.get("variants") or []
+    variant_id = variants[0]["id"] if variants else None
+
+    if not variant_id:
+        variant_data = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($input: ProductVariantCreateInput!) { "
+                "productVariantCreate(input: $input) { productVariant { id } "
+                "errors { field message code } } }"
+            ),
+            variables={
+                "input": {
+                    "product": product["id"],
+                    "sku": "harness-ref-sku",
+                    "attributes": [],
+                }
+            },
+            allow_errors=True,
+            error_log=error_log,
+            operation="productVariantCreate",
+        )
+        variant_payload = variant_data.get("productVariantCreate")
+        variant = (variant_payload or {}).get("productVariant")
+        if variant:
+            variant_id = variant["id"]
+        else:
+            _append_mutation_errors(error_log, "productVariantCreate", variant_payload)
+            return False
+
+    # Assign product to channel with variant (Saleor 3.23.7 uses productChannelListingUpdate)
+    # Include addVariants and isAvailableForPurchase so variant is available for purchase
+    await _gql(
         client,
         url=url,
         headers=headers,
         query=(
-            "mutation($input: ProductVariantCreateInput!) { "
-            "productVariantCreate(input: $input) { productVariant { id } "
+            "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
+            "productChannelListingUpdate(id: $id, input: $input) { product { id } "
             "errors { field message code } } }"
         ),
         variables={
+            "id": product["id"],
             "input": {
-                "product": product["id"],
-                "sku": "harness-ref-sku",
-                "attributes": [],
-                "channelListings": [{"channelId": channel_id, "price": "10.00"}],
-            }
+                "updateChannels": [{
+                    "channelId": channel_id,
+                    "isPublished": True,
+                    "isAvailableForPurchase": True,
+                    "addVariants": [variant_id],
+                }],
+            },
         },
         allow_errors=True,
         error_log=error_log,
-        operation="productVariantCreate",
+        operation="productChannelListingUpdate",
     )
-    variant_payload = variant_data.get("productVariantCreate")
-    variant = (variant_payload or {}).get("productVariant")
-    if variant:
-        fixtures["default_variant_id"] = variant["id"]
-        fixtures["variant_id_for_cart"] = variant["id"]
-        return True
-    _append_mutation_errors(error_log, "productVariantCreate", variant_payload)
-    return False
+
+    # Set price on variant channel listing (required for checkout)
+    await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
+            "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
+            "errors { field message code } } }"
+        ),
+        variables={
+            "id": variant_id,
+            "input": [{"channelId": channel_id, "price": "10.00"}],
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="productVariantChannelListingUpdate",
+    )
+
+    # Also assign product to storefront channel (channel-pln) if it exists
+    pln_data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="query { channels { id slug isActive } }",
+        allow_errors=True,
+        error_log=error_log,
+        operation="channels",
+    )
+    all_channels = (pln_data.get("channels") or [])
+    pln_channel = None
+    for ch in all_channels:
+        if ch.get("slug") == "channel-pln" and ch.get("isActive"):
+            pln_channel = ch
+            break
+    if pln_channel and pln_channel.get("id") != channel_id:
+        pln_id = pln_channel["id"]
+        await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
+                "productChannelListingUpdate(id: $id, input: $input) { product { id } "
+                "errors { field message code } } }"
+            ),
+            variables={
+                "id": product["id"],
+                "input": {
+                    "updateChannels": [{
+                        "channelId": pln_id,
+                        "isPublished": True,
+                        "isAvailableForPurchase": True,
+                        "addVariants": [variant_id],
+                    }],
+                },
+            },
+            allow_errors=True,
+            error_log=error_log,
+            operation="productChannelListingUpdate(pln)",
+        )
+        await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
+                "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
+                "errors { field message code } } }"
+            ),
+            variables={
+                "id": variant_id,
+                "input": [{"channelId": pln_id, "price": "10.00"}],
+            },
+            allow_errors=True,
+            error_log=error_log,
+            operation="productVariantChannelListingUpdate(pln)",
+        )
+
+    # Create stock for variant in the first warehouse
+    warehouse_data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="query { warehouses(first: 1) { edges { node { id } } } }",
+        allow_errors=True,
+        error_log=error_log,
+        operation="warehouses",
+    )
+    warehouses = (warehouse_data.get("warehouses") or {}).get("edges") or []
+    if warehouses:
+        wh_id = warehouses[0]["node"]["id"]
+        await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($variantId: ID!, $stocks: [StockInput!]!) { "
+                "productVariantStocksCreate(variantId: $variantId, stocks: $stocks) "
+                "{ productVariant { id } errors { field message code } } }"
+            ),
+            variables={
+                "variantId": variant_id,
+                "stocks": [{"warehouse": wh_id, "quantity": 100}],
+            },
+            allow_errors=True,
+            error_log=error_log,
+            operation="productVariantStocksCreate",
+        )
+
+    fixtures["default_variant_id"] = variant_id
+    fixtures["variant_id_for_cart"] = variant_id
+    return True
 
 
 async def _ensure_customer_and_collection(
@@ -463,31 +736,49 @@ async def _ensure_customer_and_collection(
         user = (create_cust.get("customerCreate") or {}).get("user")
         if user:
             fixtures["default_customer_id"] = user["id"]
+            fixtures["storefront_customer_id"] = user["id"]
             seeded.add("default_customer_id")
 
     if channel_id and not fixtures.get("default_collection_id"):
-        create_coll = await _gql(
+        # First check if collection exists by slug
+        existing_coll = await _gql(
             client,
             url=url,
             headers=headers,
             query=(
-                "mutation($input: CollectionCreateInput!) { "
-                "collectionCreate(input: $input) { collection { id } "
-                "errors { field message code } } }"
+                "query($slug: String!) { "
+                "collection(slug: $slug) { id slug channelListings { channel { id } } } }"
             ),
-            variables={
-                "input": {
-                    "name": "Harness Reference Collection",
-                    "slug": REFERENCE_COLLECTION_SLUG,
-                    "channelListings": [{"channelId": channel_id, "isPublished": True}],
-                }
-            },
+            variables={"slug": REFERENCE_COLLECTION_SLUG},
             allow_errors=True,
         )
-        coll = (create_coll.get("collectionCreate") or {}).get("collection")
-        if coll:
-            fixtures["default_collection_id"] = coll["id"]
+        coll_data = existing_coll.get("collection")
+        if coll_data and coll_data.get("id"):
+            fixtures["default_collection_id"] = coll_data["id"]
             seeded.add("default_collection_id")
+        else:
+            create_coll = await _gql(
+                client,
+                url=url,
+                headers=headers,
+                query=(
+                    "mutation($input: CollectionCreateInput!) { "
+                    "collectionCreate(input: $input) { collection { id } "
+                    "errors { field message code } } }"
+                ),
+                variables={
+                    "input": {
+                        "name": "Harness Reference Collection",
+                        "slug": REFERENCE_COLLECTION_SLUG,
+                        "isPublished": True,
+                    }
+                },
+                allow_errors=True,
+            )
+            coll = (create_coll.get("collectionCreate") or {}).get("collection")
+            if coll:
+                fixtures["default_collection_id"] = coll["id"]
+                seeded.add("default_collection_id")
 
     if fixtures.get("default_collection_id") and fixtures.get("default_product_id"):
         await _gql(
@@ -506,6 +797,264 @@ async def _ensure_customer_and_collection(
             allow_errors=True,
         )
     return seeded
+
+
+REFERENCE_CATEGORY_SLUG = "harness-reference-category"
+REFERENCE_WAREHOUSE_SLUG = "harness-reference-warehouse"
+
+
+async def _ensure_category(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> bool:
+    """Create a category if none exists."""
+    if fixtures.get("default_category_id"):
+        return False
+    data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($input: CategoryInput!) { "
+            "categoryCreate(input: $input) { category { id } "
+            "errors { field message code } } }"
+        ),
+        variables={
+            "input": {
+                "name": "Harness Reference Category",
+                "slug": REFERENCE_CATEGORY_SLUG,
+            }
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="categoryCreate",
+    )
+    payload = data.get("categoryCreate")
+    category = (payload or {}).get("category")
+    if category:
+        fixtures["default_category_id"] = category["id"]
+        return True
+    _append_mutation_errors(error_log, "categoryCreate", payload)
+    return False
+
+
+async def _ensure_warehouse(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> bool:
+    """Create a warehouse assigned to all active channels."""
+    if fixtures.get("default_warehouse_id"):
+        return False
+    channel_id = fixtures.get("default_channel_id")
+    if not channel_id:
+        return False
+    # Discover all channels to assign warehouse to all of them
+    ch_data = await _gql(
+        client, url=url, headers=headers,
+        query="query { channels { id slug isActive } }",
+        allow_errors=True, error_log=error_log, operation="channels",
+    )
+    all_channel_ids = [ch["id"] for ch in (ch_data.get("channels") or []) if ch.get("isActive")]
+    if not all_channel_ids:
+        all_channel_ids = [channel_id]
+    data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($input: WarehouseCreateInput!) { "
+            "warehouseCreate(input: $input) { warehouse { id } "
+            "errors { field message code } } }"
+        ),
+        variables={
+            "input": {
+                "name": "Harness Reference Warehouse",
+                "slug": REFERENCE_WAREHOUSE_SLUG,
+                "email": "warehouse@example.com",
+                "channels": all_channel_ids,
+            }
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="warehouseCreate",
+    )
+    payload = data.get("warehouseCreate")
+    warehouse = (payload or {}).get("warehouse")
+    if warehouse:
+        fixtures["default_warehouse_id"] = warehouse["id"]
+        return True
+    _append_mutation_errors(error_log, "warehouseCreate", payload)
+    return False
+
+
+async def _ensure_order(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> bool:
+    """Create a draft order with line items and complete it.
+
+    The order needs to exist for L3 dashboard bundles that query or mutate
+    orders (e.g., orderRefundData, fulfillOrder, orderNoteAdd).
+    """
+    if fixtures.get("default_order_id"):
+        return False
+
+    channel_id = fixtures.get("default_channel_id")
+    variant_id = fixtures.get("default_variant_id")
+    customer_id = fixtures.get("default_customer_id")
+    if not channel_id or not variant_id:
+        return False
+
+    # Ensure a permission group with channel access exists (Saleor 3.23.7 requires this)
+    # Get admin user ID
+    me_data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="query { me { id } }",
+        allow_errors=True,
+        error_log=error_log,
+        operation="me",
+    )
+    admin_user_id = (me_data.get("me") or {}).get("id")
+    if admin_user_id:
+        # Check if any unrestricted group already exists
+        pg_data = await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "query { permissionGroups(first: 10) { edges { node { id name "
+                "restrictedAccessToChannels } } } }"
+            ),
+            allow_errors=True,
+            error_log=error_log,
+            operation="permissionGroups",
+        )
+        pg_edges = (pg_data.get("permissionGroups") or {}).get("edges") or []
+        has_access = False
+        for edge in pg_edges:
+            node = edge.get("node") or {}
+            if not node.get("restrictedAccessToChannels", True):
+                has_access = True
+                break
+        if not has_access:
+            await _gql(
+                client,
+                url=url,
+                headers=headers,
+                query=(
+                    "mutation($input: PermissionGroupCreateInput!) { "
+                    "permissionGroupCreate(input: $input) { group { id } "
+                    "errors { field message code } } }"
+                ),
+                variables={
+                    "input": {
+                        "name": "Harness Full Access",
+                        "addUsers": [admin_user_id],
+                        "addChannels": [channel_id],
+                        "addPermissions": [
+                            "MANAGE_ORDERS", "MANAGE_PRODUCTS", "MANAGE_USERS",
+                            "MANAGE_CHECKOUTS", "MANAGE_SETTINGS", "MANAGE_SHIPPING",
+                            "MANAGE_DISCOUNTS", "MANAGE_GIFT_CARD", "MANAGE_TAXES",
+                            "MANAGE_PAGE_TYPES_AND_ATTRIBUTES",
+                            "MANAGE_PRODUCT_TYPES_AND_ATTRIBUTES",
+                            "MANAGE_CHANNELS", "MANAGE_TRANSLATIONS",
+                        ],
+                    }
+                },
+                allow_errors=True,
+                error_log=error_log,
+                operation="permissionGroupCreate",
+            )
+
+    # Step 1: Create draft order with addresses and lines
+    draft_input: dict[str, Any] = {
+        "channelId": channel_id,
+        "billingAddress": {
+            "firstName": "John",
+            "lastName": "Doe",
+            "streetAddress1": "123 Test St",
+            "city": "New York",
+            "country": "US",
+            "countryArea": "NY",
+            "postalCode": "10001",
+        },
+        "shippingAddress": {
+            "firstName": "John",
+            "lastName": "Doe",
+            "streetAddress1": "123 Test St",
+            "city": "New York",
+            "country": "US",
+            "countryArea": "NY",
+            "postalCode": "10001",
+        },
+        "lines": [
+            {"variantId": variant_id, "quantity": 1},
+            {"variantId": variant_id, "quantity": 2},
+        ],
+    }
+
+    draft_data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($input: DraftOrderCreateInput!) { "
+            "draftOrderCreate(input: $input) { order { id } "
+            "errors { field message code } } }"
+        ),
+        variables={"input": draft_input},
+        allow_errors=True,
+        error_log=error_log,
+        operation="draftOrderCreate",
+    )
+    draft_payload = draft_data.get("draftOrderCreate")
+    draft_order = (draft_payload or {}).get("order")
+    if not draft_order:
+        # Order creation failed (likely channel access issue) - log but don't fail the whole seed
+        errors = (draft_payload or {}).get("errors") or ["no data returned"]
+        error_log.append(f"Order creation skipped: {errors}")
+        return False
+
+    order_id = draft_order["id"]
+
+    # Step 2: Add line items using orderLinesCreate (plural, Saleor 3.23.7)
+    await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($id: ID!, $input: [OrderLineCreateInput!]!) { "
+            "orderLinesCreate(id: $id, input: $input) { order { id } "
+            "errors { field message code } } }"
+        ),
+        variables={
+            "id": order_id,
+            "input": [
+                {"variantId": variant_id, "quantity": 1},
+                {"variantId": variant_id, "quantity": 2},
+            ],
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="orderLinesCreate",
+    )
+
+    fixtures["default_order_id"] = order_id
+    return True
 
 
 async def ensure_runtime_fixture_entities(
@@ -553,8 +1102,19 @@ async def ensure_runtime_fixture_entities(
                 client, url=saleor_url, headers=headers, fixtures=fixtures
             )
         )
+        if await _ensure_category(
+            client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
+        ):
+            seeded.add("default_category_id")
+        if await _ensure_warehouse(
+            client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
+        ):
+            seeded.add("default_warehouse_id")
+        if await _ensure_order(
+            client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
+        ):
+            seeded.add("default_order_id")
 
-        fixtures = await _capture_fixtures(client, url=saleor_url, headers=headers)
         fixtures = await _seed_storefront_fixtures(
             client, url=saleor_url, headers=headers, fixtures=fixtures
         )
@@ -631,7 +1191,7 @@ async def seed_reference_data(
     if missing:
         raise RuntimeError(
             f"Missing fixture keys after seed: {', '.join(missing)}. "
-            "Run `just fresh` (includes populatedb) before recording L3 bundles."
+            "Ensure the target Saleor instance is reachable and supports the required mutations."
         )
 
     save_fixtures("dashboard", ver, fixtures)

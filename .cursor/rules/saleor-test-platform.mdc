@@ -75,3 +75,34 @@ alwaysApply: true
 | Patch reference | `just patch-corpus` |
 | Backend unit tests | `just test` |
 | Frontend types | `just check` |
+
+## Golden recording methodology (data independence)
+
+The test system must work against **any Saleor-compatible backend** — official, custom, Go, Node, Rust — regardless of what data exists. Goldens are **schema templates**, not data snapshots.
+
+### Core principle
+- **Never record goldens against a `populatedb` instance.** The `populatedb` demo data is Saleor-specific and won't exist on custom backends.
+- **All entities must be created via mutations** before testing. The `seed_reference` script handles this.
+- **Golden responses are schema-validated**, not data-compared. `compare_schemas()` validates field types (string, integer, array, object) and nullability. Data values are ignored.
+
+### Rules for agents
+1. **Never run `populatedb`** in the test workflow. Remove it from `cmd_fresh()`.
+2. **Never record goldens from a `populatedb` instance.** Record from a fresh Saleor where `seed_reference` created all entities.
+3. **Data-specific expectations are forbidden in goldens.** No specific entity names, IDs, amounts, or counts.
+4. **Golden responses for success contracts are schema-validated.** The `response_shape_hash` triggers schema comparison, not data comparison.
+5. **Volatile paths are forgiven.** `.edges`, `.name`, `.amount`, `.slug`, `.email`, `.status`, etc. are data-dependent and forgiven during comparison.
+6. **Error contracts use semantic comparison.** Message categories (`<not_found>`, `<validation>`, `<auth>`), not exact text.
+7. **Fixture substitution is dynamic.** `{{fixtures.key}}` in variables is resolved at test-run time via `fixture_resolver.py`.
+8. **Re-recording uses `just record-golden`.** This records against a fresh Saleor with `seed_reference` entities only.
+
+### Recording process
+1. Start fresh Saleor: `just fresh` (no `populatedb`, only `seed_reference`)
+2. Record L3 bundles: `just record-golden dashboard` or `just record-golden storefront`
+3. Verify: `just baseline` (must pass at 100%)
+
+### What is NOT allowed
+- Running `populatedb` before testing
+- Recording goldens from a populated instance
+- Hard-coding entity names, IDs, or data values in goldens
+- Assuming specific data exists (orders, products, customers) — create via mutations
+- Using `just fresh` with `populatedb` (it should only run `seed_reference`)

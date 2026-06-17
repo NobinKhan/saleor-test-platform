@@ -1,6 +1,6 @@
 # Saleor Test Platform — Data-Independence Refactor Plan
 
-**Date:** 2026-06-15 (Updated: 2026-06-16)
+**Date:** 2026-06-15 (Updated: 2026-06-17)
 **Goal:** Transform the testing methodology from "replay demo data and compare" to "create data via mutations, query, validate schema shape."
 
 ## Current Status: ✅ COMPLETE
@@ -10,10 +10,55 @@ All 16 fixes have been implemented and tested. The platform now:
 - Validates response schema shape (field types) instead of data values
 - Eliminates dependency on hardcoded Saleor demo data
 - Includes enforcement tests to prevent regression
+- **Does NOT use `populatedb`** — all entities are created via mutations
 
 ## Problem Statement
 
 The current system records golden responses from the Saleor demo database and expects the target backend to reproduce structurally identical responses. This is fundamentally wrong — a compatibility tester should validate that the backend implements the same schema and mutation semantics, not that it has the same data.
+
+## Data Independence (2026-06-17 Update)
+
+### Key Changes
+
+1. **Removed `populatedb` from `cmd_fresh()`** — The test workflow no longer runs `manage.py populatedb`. All entities are created via mutations.
+
+2. **Extended `seed_reference_data()`** — Now creates orders, categories, and warehouses via mutations:
+   - `_ensure_order()`: Creates a draft order with line items and completes it
+   - `_ensure_category()`: Creates a category via `categoryCreate`
+   - `_ensure_warehouse()`: Creates a warehouse via `warehouseCreate`
+
+3. **Added `just record-golden` command** — Easy re-recording against fresh Saleor:
+   - `just record-golden` (records all L3 bundles)
+   - `just record-golden dashboard` (dashboard only)
+   - `just record-golden storefront` (storefront only)
+
+4. **Updated rules** — Added golden recording methodology to `.cursor/rules/saleor-test-platform.mdc`:
+   - Never record goldens against `populatedb` instance
+   - Data-specific expectations are forbidden in goldens
+   - Golden responses are schema-validated, not data-compared
+   - Volatile paths are forgiven during comparison
+
+### Workflow
+
+**Before (old approach):**
+```
+just fresh  # runs populatedb + seed_reference
+just baseline  # compares against populatedb data
+```
+
+**After (new approach):**
+```
+just fresh  # runs seed_reference only (no populatedb)
+just baseline  # compares against mutation-created data
+just record-golden  # re-record goldens if needed
+```
+
+### Why This Matters
+
+- **Custom backends** (Go, Node, Rust) don't have Saleor's `populatedb` data
+- **Testing should be self-contained** — create data via mutations, query, verify
+- **Golden responses are schema templates** — field types, not data values
+- **Volatile paths are forgiven** — `.edges`, `.name`, `.amount`, etc.
 
 ## Fix Order (dependency-driven)
 

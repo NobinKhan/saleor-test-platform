@@ -33,7 +33,7 @@ except Exception:
 }
 
 wait_for_saleor_graphql() {
-  local payload='{"query":"{ shop { version } }"}'
+  local payload='{"query":"{ shop { name } }"}'
   local max_attempts="${1:-60}"
   local attempt=1
 

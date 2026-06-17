@@ -111,14 +111,7 @@ cmd_fresh() {
   echo ""
   sleep 5
   ensure_saleor_migrated
-  echo "=== Saleor demo data (orders, products, channel access) ==="
-  docker exec saleor-api python3 manage.py populatedb \
-    --createsuperuser \
-    --superuser_password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
-    --staff_password "${SALEOR_ADMIN_PASSWORD:-admin123456}" \
-    --withoutimages \
-    || echo "Warning: populatedb failed (may already be populated)"
-  echo "=== Reference seed (L3 fixtures) ==="
+  echo "=== Reference seed (L3 fixtures — no populatedb) ==="
   docker compose -f "${COMPOSE_FILE}" exec -T harness-backend \
     python -m app.scripts.seed_reference \
     --url "http://saleor-api:8000/graphql/" \

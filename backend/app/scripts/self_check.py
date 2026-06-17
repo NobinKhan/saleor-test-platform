@@ -44,6 +44,7 @@ async def run_self_check(
             saleor_email=email,
             saleor_password=password,
             tier2_required=True,
+            demo_seed_profile="harness",
         )
     else:
         runner = TestRunner(
@@ -55,12 +56,14 @@ async def run_self_check(
             concurrency=1,
             saleor_email=email,
             saleor_password=password,
+            demo_seed_profile="harness",
         )
 
     from collections import Counter
 
     total = matched = mismatched = tier2_fail = 0
     mismatch_reasons: Counter[str] = Counter()
+    mismatched_ids: list[str] = []
     async for event in runner.run():
         if event.get("type") == "result":
             total += 1
@@ -74,6 +77,7 @@ async def run_self_check(
                 if ms == "tier2_fail":
                     tier2_fail += 1
                 mismatch_reasons[event.get("diff_summary", "unknown")[:80]] += 1
+                mismatched_ids.append(event.get("probe_id", event.get("bundle_id", "?")))
 
     compared = matched + mismatched
     if compared < total:
@@ -87,6 +91,8 @@ async def run_self_check(
         print(f"  Mismatched: {mismatched}")
         for reason, cnt in mismatch_reasons.most_common(8):
             print(f"    {cnt}x {reason}")
+        for pid in mismatched_ids:
+            print(f"    - {pid}")
     if rate < min_compat:
         print(f"FAIL: below threshold {min_compat}%")
         return 1
