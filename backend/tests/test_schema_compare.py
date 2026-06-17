@@ -52,6 +52,29 @@ def test_connection_single_edge_matches_multi_edge_golden_element_schema():
     assert result.compatible is True
 
 
+def test_empty_golden_edges_matches_populated_actual():
+    """Golden recorded empty Relay connection; backend has rows — still compatible."""
+    golden = {
+        "data": {
+            "taxClasses": {
+                "edges": [],
+                "pageInfo": {"hasNextPage": False, "endCursor": None},
+            }
+        }
+    }
+    actual = {
+        "data": {
+            "taxClasses": {
+                "edges": [{"node": {"id": "VGF4Q2xhc3M6MQ==", "name": "Standard"}}],
+                "pageInfo": {"hasNextPage": False, "endCursor": "VGF4Q2xhc3M6MQ=="},
+            }
+        }
+    }
+    result = compare_schemas(golden, actual)
+    assert result.compatible is True
+    assert result.match_status == "match"
+
+
 def test_structural_mismatch_still_fails():
     golden = {"data": {"product": {"isAvailable": True}}}
     actual = {"data": {"product": {"isAvailable": "yes"}}}

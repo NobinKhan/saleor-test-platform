@@ -19,7 +19,7 @@
         "errors": [
           {
             "field": "query",
-            "message": "Syntax Error GraphQL (1:1) Unexpected Name \"apple\"\n\n1: apple-juice\n   ^\n"
+            "message": "Syntax Error GraphQL (1:1) Unexpected Name \"harness\"\n\n1: harness-reference-product\n   ^\n"
           }
         ]
       }

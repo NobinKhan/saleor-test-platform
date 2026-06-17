@@ -13,23 +13,9 @@
     "data": {
       "channels": [
         {
-          "id": "Q2hhbm5lbDoy",
-          "isActive": true,
-          "name": "Channel-PLN",
-          "slug": "channel-pln",
-          "currencyCode": "PLN",
-          "defaultCountry": {
-            "code": "PL",
-            "country": "Poland"
-          },
-          "stockSettings": {
-            "allocationStrategy": "PRIORITIZE_SORTING_ORDER"
-          }
-        },
-        {
           "id": "Q2hhbm5lbDox",
           "isActive": true,
-          "name": "Channel-USD",
+          "name": "Default Channel",
           "slug": "default-channel",
           "currencyCode": "USD",
           "defaultCountry": {

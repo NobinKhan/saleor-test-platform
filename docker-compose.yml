@@ -148,6 +148,7 @@ services:
       CLIENT_BUNDLES_ROOT: /app/reference-baked/client-bundles
       SCENARIOS_ROOT: /app/reference-baked/scenarios
       REFERENCE_SALEOR_URL: http://saleor-api:8000/graphql/
+      GOLDEN_LITERAL_LINT_BLOCKING: "true"
     depends_on:
       harness-db:
         condition: service_healthy

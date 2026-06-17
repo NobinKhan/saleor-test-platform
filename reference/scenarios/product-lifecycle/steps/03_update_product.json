@@ -26,7 +26,7 @@
         "product": {
           "id": "UHJvZHVjdDoy",
           "name": "Harness Scenario Product Updated",
-          "slug": "harness-scenario-f9d72e1b"
+          "slug": "harness-scenario-1270ee34"
         },
         "errors": []
       }
@@ -39,5 +39,5 @@
     "data_path": "Update product name",
     "expected_null": true
   },
-  "recorded_at": "2026-06-17T06:18:55.815200+00:00"
+  "recorded_at": "2026-06-17T09:33:14.216318+00:00"
 }

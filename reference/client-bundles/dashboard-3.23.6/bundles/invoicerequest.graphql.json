@@ -16,9 +16,9 @@
       "invoiceRequest": {
         "errors": [
           {
-            "code": "NO_INVOICE_PLUGIN",
+            "code": "INVALID_STATUS",
             "field": "orderId",
-            "message": "No app or plugin is configured to handle invoice requests."
+            "message": "Cannot request an invoice for draft, unconfirmed or expired order."
           }
         ],
         "invoice": null,

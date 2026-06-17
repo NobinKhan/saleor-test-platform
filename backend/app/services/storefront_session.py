@@ -12,7 +12,11 @@ from typing import Any
 
 import httpx
 
-from app.services.reference_seed import _append_mutation_errors, _gql
+from app.services.reference_seed import (
+    REFERENCE_CHANNEL_SLUG,
+    _append_mutation_errors,
+    _gql,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +47,7 @@ def _checkout_channel_slug(fixtures: dict[str, Any]) -> str:
     return (
         fixtures.get("storefront_channel")
         or fixtures.get("default_channel")
-        or "default-channel"
+        or REFERENCE_CHANNEL_SLUG
     )
 
 

@@ -29,6 +29,10 @@
   let startMessage = "";
   let error = "";
   let resolvedSaleorUrl: string | null = null;
+  let preflightSeedInfo: {
+    seeded_keys: string[];
+    storefront_session_ready: boolean;
+  } | null = null;
 
   function shortId(id: string): string {
     return id.slice(0, 8);
@@ -125,6 +129,10 @@
 
       const blockingIssues: string[] = validation.blocking_issues ?? [];
       const warningIssues: string[] = validation.warning_issues ?? [];
+      preflightSeedInfo = {
+        seeded_keys: (validation.seeded_keys as string[] | undefined) ?? [],
+        storefront_session_ready: Boolean(validation.storefront_session_ready),
+      };
       if (blockingIssues.length > 0) {
         const confirmMsg = blockingIssues.length === 1
           ? `Pre-flight issue:\n  ${blockingIssues[0]}\n\nStart anyway?`
@@ -253,6 +261,20 @@
         </div>
       </div>
 
+      {#if preflightSeedInfo}
+        <div class="preflight-chips" role="status">
+          {#if preflightSeedInfo.storefront_session_ready}
+            <span class="chip chip-ok">Storefront session ready</span>
+          {/if}
+          {#each preflightSeedInfo.seeded_keys.slice(0, 8) as key}
+            <span class="chip">{key}</span>
+          {/each}
+          {#if preflightSeedInfo.seeded_keys.length > 8}
+            <span class="chip">+{preflightSeedInfo.seeded_keys.length - 8} more</span>
+          {/if}
+        </div>
+      {/if}
+
       <div class="form-actions">
         <a href="/dashboard" class="btn-secondary">Cancel</a>
         <button class="btn-primary" type="submit" disabled={loading || prefillLoading}>
@@ -331,4 +353,14 @@
   .password-wrap input { flex: 1; }
   .toggle-pw { flex-shrink: 0; align-self: stretch; }
   .form-actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
+  .preflight-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: -0.25rem; }
+  .chip {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--surface-elevated, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+  }
+  .chip-ok { border-color: var(--success, #22c55e); color: var(--success, #22c55e); }
 </style>

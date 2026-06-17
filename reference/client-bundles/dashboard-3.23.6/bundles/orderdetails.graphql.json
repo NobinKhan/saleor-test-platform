@@ -1027,13 +1027,9 @@
           }
         ],
         "defaultWeightUnit": "KG",
-        "fulfillmentAllowUnpaid": false,
+        "fulfillmentAllowUnpaid": true,
         "fulfillmentAutoApprove": true,
         "availablePaymentGateways": [
-          {
-            "name": "Dummy",
-            "id": "mirumee.payments.dummy"
-          },
           {
             "name": "Dummy",
             "id": "mirumee.payments.dummy"

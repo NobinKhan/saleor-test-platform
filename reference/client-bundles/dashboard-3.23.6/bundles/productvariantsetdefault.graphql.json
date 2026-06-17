@@ -17,15 +17,15 @@
       "productVariantSetDefault": {
         "errors": [],
         "product": {
-          "id": "UHJvZHVjdDoxNTI=",
+          "id": "UHJvZHVjdDox",
           "defaultVariant": {
-            "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
-            "name": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
+            "id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
+            "name": "harness-ref-sku"
           },
           "variants": [
             {
-              "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0",
-              "name": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
+              "id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
+              "name": "harness-ref-sku"
             }
           ]
         }

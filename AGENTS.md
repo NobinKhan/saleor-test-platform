@@ -57,6 +57,7 @@ Score: **100% (856/856)** against official Saleor 3.23.7 on `just baseline` (`fu
 - `just record-scenarios` / `just record-golden` seed harness topology before recording and export from `/app/reference-baked/`
 - `just export-reference` copies both runtime volume (`/app/reference/`) and baked paths (`/app/reference-baked/*`)
 - Goldens are baked into the image (`COPY reference/` → `/app/reference-baked/`). After recording: `just export-reference`, then `just build-harness`
+- `checkout-lifecycle/06_checkout_complete` records pre-payment contract; email preamble + dummy payment plugin seed support optional success golden later
 
 ### Data independence
 
@@ -79,4 +80,4 @@ just baseline
 
 ### Golden literal lint
 
-`just verify-corpus` / `just baseline` run a **non-blocking** demo-literal lint on baked corpus paths (`REFERENCE_CORPUS_ROOT`, `CLIENT_BUNDLES_ROOT`, `SCENARIOS_ROOT`). After re-recording L3/scenario goldens on harness topology, set `GOLDEN_LITERAL_LINT_BLOCKING=true` to fail on remaining demo literals.
+`just verify-corpus` / `just baseline` run **blocking** demo-literal lint on baked corpus paths when `GOLDEN_LITERAL_LINT_BLOCKING=true` (default in `docker-compose.yml` and `.env.example`).

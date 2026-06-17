@@ -19,12 +19,12 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6ODYzNTQ0NGQtNmNkYS00ZTYzLWEzMzAtMmJhZTRhZWQ3NGRl",
-        "number": "2",
+        "id": "T3JkZXI6OWM3OTVlYjctYWVkOC00MGFkLThlZTItNDA4YzM1MWJjMjFh",
+        "number": "8",
         "status": "DRAFT",
         "lines": [
           {
-            "id": "T3JkZXJMaW5lOmVjZDM4NWRkLTE3ZjctNGIwNi1hYjg1LWQzNDJkZTgxOGI2YQ==",
+            "id": "T3JkZXJMaW5lOjNkYWJiMGFiLTZjYjItNDEyNS04OWQzLTc3MWNkNTk0NDY3NA==",
             "quantity": 1
           }
         ]
@@ -33,5 +33,5 @@
   },
   "golden_contract": "success",
   "golden_status": "pass",
-  "recorded_at": "2026-06-17T06:18:57.271745+00:00"
+  "recorded_at": "2026-06-17T09:33:15.235859+00:00"
 }

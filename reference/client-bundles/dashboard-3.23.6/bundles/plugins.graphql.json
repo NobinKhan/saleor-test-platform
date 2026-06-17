@@ -41,16 +41,8 @@
                 {
                   "active": false,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": false,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }
@@ -67,16 +59,8 @@
                 {
                   "active": false,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": false,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }
@@ -93,16 +77,8 @@
                 {
                   "active": false,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": false,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }
@@ -119,16 +95,8 @@
                 {
                   "active": true,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": true,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }
@@ -145,16 +113,8 @@
                 {
                   "active": false,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": false,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }
@@ -183,16 +143,8 @@
                 {
                   "active": false,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": false,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }
@@ -209,16 +161,8 @@
                 {
                   "active": false,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": false,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }
@@ -235,16 +179,8 @@
                 {
                   "active": false,
                   "channel": {
-                    "id": "Q2hhbm5lbDoy",
-                    "name": "Channel-PLN",
-                    "slug": "channel-pln"
-                  }
-                },
-                {
-                  "active": false,
-                  "channel": {
                     "id": "Q2hhbm5lbDox",
-                    "name": "Channel-USD",
+                    "name": "Default Channel",
                     "slug": "default-channel"
                   }
                 }

@@ -92,6 +92,68 @@ async def _ensure_catalog_categories(
     return seeded
 
 
+async def _ensure_dummy_payment_gateway(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+) -> set[str]:
+    """Activate Saleor dummy payment plugin on the harness channel for checkout scenarios."""
+    seeded: set[str] = set()
+    channel_id = fixtures.get("default_channel_id")
+    if not channel_id:
+        return seeded
+    data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "query { plugins(first: 20, filter: {search: \"dummy\"}) { "
+            "edges { node { id name channelConfigurations { channel { id } active } } } } }"
+        ),
+        allow_errors=True,
+        error_log=error_log,
+        operation="plugins(dummy)",
+    )
+    plugin_id = None
+    for edge in (data.get("plugins") or {}).get("edges") or []:
+        node = edge.get("node") or {}
+        if "dummy" in (node.get("name") or "").lower():
+            plugin_id = node.get("id")
+            for cfg in node.get("channelConfigurations") or []:
+                ch = (cfg.get("channel") or {}).get("id")
+                if ch == channel_id and cfg.get("active"):
+                    fixtures["payment_gateway_id"] = plugin_id
+                    return seeded
+            break
+    if not plugin_id:
+        return seeded
+    update = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($channelId: ID, $id: ID!, $input: PluginUpdateInput!) { "
+            "pluginUpdate(channelId: $channelId, id: $id, input: $input) { "
+            "plugin { id } errors { field message code } } }"
+        ),
+        variables={
+            "channelId": channel_id,
+            "id": plugin_id,
+            "input": {"active": True},
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="pluginUpdate(dummy)",
+    )
+    if (update.get("pluginUpdate") or {}).get("plugin"):
+        fixtures["payment_gateway_id"] = plugin_id
+        seeded.add("payment_gateway:dummy")
+    return seeded
+
+
 async def ensure_certification_topology(
     saleor_url: str,
     token: str,
@@ -123,6 +185,15 @@ async def ensure_certification_topology(
         fixtures = await _capture_fixtures(client, url=saleor_url, headers=headers)
         fixtures = await _seed_storefront_fixtures(
             client, url=saleor_url, headers=headers, fixtures=fixtures
+        )
+        seeded.update(
+            await _ensure_dummy_payment_gateway(
+                client,
+                url=saleor_url,
+                headers=headers,
+                fixtures=fixtures,
+                error_log=error_log,
+            )
         )
 
     live_keys = {k for k, v in fixtures.items() if v and k != "placeholder_id"}
@@ -562,40 +633,6 @@ async def _ensure_reference_product(
                         error_log=error_log,
                         operation="productVariantStocksCreate",
                     )
-                # Also assign to storefront channel (channel-pln)
-                pln_data = await _gql(
-                    client,
-                    url=url,
-                    headers=headers,
-                    query="query { channels { id slug isActive } }",
-                    allow_errors=True,
-                    error_log=error_log,
-                    operation="channels",
-                )
-                for ch in (pln_data.get("channels") or []):
-                    if ch.get("slug") == "channel-pln" and ch.get("isActive") and ch.get("id") != channel_id:
-                        pln_id = ch["id"]
-                        await _gql(
-                            client, url=url, headers=headers,
-                            query=(
-                                "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
-                                "productChannelListingUpdate(id: $id, input: $input) { product { id } "
-                                "errors { field message code } } }"
-                            ),
-                            variables={"id": existing["id"], "input": {"updateChannels": [{"channelId": pln_id, "isPublished": True, "isAvailableForPurchase": True, "addVariants": [variant_id]}]}},
-                            allow_errors=True, error_log=error_log, operation="productChannelListingUpdate(pln)",
-                        )
-                        await _gql(
-                            client, url=url, headers=headers,
-                            query=(
-                                "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
-                                "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
-                                "errors { field message code } } }"
-                            ),
-                            variables={"id": variant_id, "input": [{"channelId": pln_id, "price": "10.00"}]},
-                            allow_errors=True, error_log=error_log, operation="productVariantChannelListingUpdate(pln)",
-                        )
-                        break
             return True
 
     data = await _gql(
@@ -705,66 +742,6 @@ async def _ensure_reference_product(
         error_log=error_log,
         operation="productVariantChannelListingUpdate",
     )
-
-    # Also assign product to storefront channel (channel-pln) if it exists
-    pln_data = await _gql(
-        client,
-        url=url,
-        headers=headers,
-        query="query { channels { id slug isActive } }",
-        allow_errors=True,
-        error_log=error_log,
-        operation="channels",
-    )
-    all_channels = (pln_data.get("channels") or [])
-    pln_channel = None
-    for ch in all_channels:
-        if ch.get("slug") == "channel-pln" and ch.get("isActive"):
-            pln_channel = ch
-            break
-    if pln_channel and pln_channel.get("id") != channel_id:
-        pln_id = pln_channel["id"]
-        await _gql(
-            client,
-            url=url,
-            headers=headers,
-            query=(
-                "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
-                "productChannelListingUpdate(id: $id, input: $input) { product { id } "
-                "errors { field message code } } }"
-            ),
-            variables={
-                "id": product["id"],
-                "input": {
-                    "updateChannels": [{
-                        "channelId": pln_id,
-                        "isPublished": True,
-                        "isAvailableForPurchase": True,
-                        "addVariants": [variant_id],
-                    }],
-                },
-            },
-            allow_errors=True,
-            error_log=error_log,
-            operation="productChannelListingUpdate(pln)",
-        )
-        await _gql(
-            client,
-            url=url,
-            headers=headers,
-            query=(
-                "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
-                "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
-                "errors { field message code } } }"
-            ),
-            variables={
-                "id": variant_id,
-                "input": [{"channelId": pln_id, "price": "10.00"}],
-            },
-            allow_errors=True,
-            error_log=error_log,
-            operation="productVariantChannelListingUpdate(pln)",
-        )
 
     # Create stock for variant in the first warehouse
     warehouse_data = await _gql(

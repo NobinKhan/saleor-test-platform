@@ -194,6 +194,33 @@ async def test_validate_preflight_rewrites_localhost_url():
 
 
 @pytest.mark.asyncio
+async def test_validate_preflight_exposes_seeded_keys():
+    with patch(
+        "app.services.fixture_resolver._query_saleor",
+        new_callable=AsyncMock,
+        return_value={"shop": {"version": "3.23.7"}},
+    ):
+        with patch(
+            "app.services.fixture_resolver.resolve_fixtures",
+            new_callable=AsyncMock,
+            return_value=FixtureResolution(
+                fixtures={"default_checkout_id": "CHK1"},
+                live_keys=frozenset({"default_checkout_id"}),
+                seeded_keys=frozenset(
+                    {"storefront_checkout_session", "default_channel_id"}
+                ),
+            ),
+        ):
+            result = await validate_preflight(
+                "http://saleor-api:8000/graphql/",
+                "token",
+                corpus_version="3.23.7",
+            )
+    assert result["seeded_keys"] == ["default_channel_id", "storefront_checkout_session"]
+    assert result["storefront_session_ready"] is True
+
+
+@pytest.mark.asyncio
 async def test_resolve_dynamic_probe_support():
     with patch.object(httpx, "AsyncClient") as mock_cls:
         _setup_client_mock(mock_cls, post_return=_mock_response({

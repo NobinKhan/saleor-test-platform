@@ -14,113 +14,12 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6NWI0MDgzNWQtZmI2Mi00MzIwLWE1ZjMtZGZkZmY4ZWU1NWYw",
-        "transactions": [
-          {
-            "id": "VHJhbnNhY3Rpb25JdGVtOjc1NmYzNDljLTBlOWEtNGVhOC05MmIzLTc2N2YxMjkyMzI3Mg==",
-            "name": "",
-            "actions": [],
-            "events": [
-              {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2NA==",
-                "pspReference": "0f8f3a4c-9924-4546-aa30-1279768d19eb",
-                "amount": {
-                  "amount": 185.79,
-                  "currency": "PLN"
-                },
-                "externalUrl": "",
-                "type": "REFUND_SUCCESS",
-                "message": "Refund success",
-                "createdAt": "2026-06-15T09:54:58.813800+00:00",
-                "reasonReference": null,
-                "createdBy": null
-              },
-              {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2Mw==",
-                "pspReference": "0f8f3a4c-9924-4546-aa30-1279768d19eb",
-                "amount": {
-                  "amount": 185.79,
-                  "currency": "PLN"
-                },
-                "externalUrl": "",
-                "type": "REFUND_REQUEST",
-                "message": "",
-                "createdAt": "2026-06-15T09:54:58.813788+00:00",
-                "reasonReference": null,
-                "createdBy": null
-              },
-              {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2Mg==",
-                "pspReference": "07ef3f01-72fe-4dad-b212-5e30bfcd0a0f",
-                "amount": {
-                  "amount": 185.79,
-                  "currency": "PLN"
-                },
-                "externalUrl": "",
-                "type": "CHARGE_SUCCESS",
-                "message": "Charge success",
-                "createdAt": "2026-06-15T09:54:58.813774+00:00",
-                "reasonReference": null,
-                "createdBy": null
-              },
-              {
-                "id": "VHJhbnNhY3Rpb25FdmVudDo2MQ==",
-                "pspReference": "07ef3f01-72fe-4dad-b212-5e30bfcd0a0f",
-                "amount": {
-                  "amount": 185.79,
-                  "currency": "PLN"
-                },
-                "externalUrl": "",
-                "type": "CHARGE_REQUEST",
-                "message": "",
-                "createdAt": "2026-06-15T09:54:58.813746+00:00",
-                "reasonReference": null,
-                "createdBy": null
-              }
-            ],
-            "pspReference": "07ef3f01-72fe-4dad-b212-5e30bfcd0a0f",
-            "externalUrl": "",
-            "createdAt": "2026-06-15T09:54:58.812179+00:00",
-            "createdBy": null,
-            "paymentMethodDetails": null,
-            "authorizedAmount": {
-              "amount": 0.0,
-              "currency": "PLN"
-            },
-            "chargedAmount": {
-              "amount": 0.0,
-              "currency": "PLN"
-            },
-            "refundedAmount": {
-              "amount": 185.79,
-              "currency": "PLN"
-            },
-            "canceledAmount": {
-              "amount": 0.0,
-              "currency": "PLN"
-            },
-            "authorizePendingAmount": {
-              "amount": 0.0,
-              "currency": "PLN"
-            },
-            "chargePendingAmount": {
-              "amount": 0.0,
-              "currency": "PLN"
-            },
-            "refundPendingAmount": {
-              "amount": 0.0,
-              "currency": "PLN"
-            },
-            "cancelPendingAmount": {
-              "amount": 0.0,
-              "currency": "PLN"
-            }
-          }
-        ],
+        "id": "T3JkZXI6YzY0YjMzYmUtOGVjNC00NWVmLTk4MDUtYzVhNGUxYTdkNjFj",
+        "transactions": [],
         "total": {
           "gross": {
-            "amount": 185.79,
-            "currency": "PLN"
+            "amount": 60.0,
+            "currency": "USD"
           }
         }
       }
@@ -130,6 +29,6 @@
   "golden_status": "pass",
   "golden_contract": "success",
   "http_status": 200,
-  "response_shape_hash": "sha256:8a32600721f2348f",
+  "response_shape_hash": "sha256:50eab1287f440e14",
   "document_hash": "sha256:aaf2b7f12d0d2aa0"
 }

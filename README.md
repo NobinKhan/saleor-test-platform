@@ -41,6 +41,22 @@ just fresh      # wipes volumes, migrates Saleor, creates admin@example.com / ad
 just baseline   # re-verify golden baseline
 ```
 
+## Golden workflow (maintainers)
+
+Re-record L3 and scenario goldens on **mutation-first** harness topology (no `populatedb`):
+
+```bash
+just fresh
+just record-golden all          # L3 dashboard + storefront
+just record-scenarios           # product, checkout, order lifecycles
+just build-harness              # bake ./reference/ into harness image
+just fresh && just baseline     # must pass 100% (856/856)
+```
+
+`just record-golden` and `just record-scenarios` export JSON to `./reference/` automatically. Commit corpus changes, then `just import-reference` on other machines.
+
+Golden literal lint is **blocking** by default (`GOLDEN_LITERAL_LINT_BLOCKING=true` in compose / `.env.example`).
+
 ## Commands
 
 | Command | Description |

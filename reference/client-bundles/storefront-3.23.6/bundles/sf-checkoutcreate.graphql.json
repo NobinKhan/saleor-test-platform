@@ -23,14 +23,14 @@
     "data": {
       "checkoutCreate": {
         "checkout": {
-          "id": "Q2hlY2tvdXQ6ZmM3ZmI1MGYtZDc4Mi00OTA2LWJlYzctMmU2NjBkMTQ2YTMz",
-          "token": "fc7fb50f-d782-4906-bec7-2e660d146a33",
+          "id": "Q2hlY2tvdXQ6NzAzOTlmOTUtNWQ2MC00NGY4LWI5ODgtMzA3YmE2ODg0ZjJi",
+          "token": "70399f95-5d60-44f8-b988-307ba6884f2b",
           "lines": [
             {
-              "id": "Q2hlY2tvdXRMaW5lOjlhMjBiMjVlLTdmMTktNDA0Yy04MDZkLWEyNWJiNzRlMjY1ZQ==",
+              "id": "Q2hlY2tvdXRMaW5lOmM0OWMwOTE1LWJlNTQtNGNhYS04ZjEzLTVjZDQxYWYwMmM5MA==",
               "quantity": 1,
               "variant": {
-                "id": "UHJvZHVjdFZhcmlhbnQ6Mzg0"
+                "id": "UHJvZHVjdFZhcmlhbnQ6MQ=="
               }
             }
           ]

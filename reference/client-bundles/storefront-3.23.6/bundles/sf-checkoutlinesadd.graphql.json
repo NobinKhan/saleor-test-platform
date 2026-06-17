@@ -21,10 +21,10 @@
     "data": {
       "checkoutLinesAdd": {
         "checkout": {
-          "id": "Q2hlY2tvdXQ6ZTIyZGM4YTYtYjg3Yy00MDdkLTk4YjAtOGQ2ZmY3YjZhMGI4",
+          "id": "Q2hlY2tvdXQ6NTJkYjA3NDMtOWUxNC00ODExLTk5OTUtZjA2YTE5NTlmMDc3",
           "lines": [
             {
-              "id": "Q2hlY2tvdXRMaW5lOjAwMjNjOGIxLWFkOTItNDFkYi1hNmQ5LTczODUzNWViMzA0Zg==",
+              "id": "Q2hlY2tvdXRMaW5lOjI1NjU2ZTUxLWM4MDQtNGU1Yi05ZTA5LTAwMWIxYjI5MWFmOA==",
               "quantity": 2
             }
           ]

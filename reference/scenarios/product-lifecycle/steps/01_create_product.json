@@ -34,7 +34,7 @@
         "product": {
           "id": "UHJvZHVjdDoy",
           "name": "Harness Scenario Product",
-          "slug": "harness-scenario-f9d72e1b"
+          "slug": "harness-scenario-1270ee34"
         },
         "errors": []
       }
@@ -47,5 +47,5 @@
     "data_path": "Create harness scenario product",
     "expected_null": true
   },
-  "recorded_at": "2026-06-17T06:18:55.667525+00:00"
+  "recorded_at": "2026-06-17T09:33:14.159317+00:00"
 }

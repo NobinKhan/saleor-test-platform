@@ -19,6 +19,12 @@ def test_productvariantreorder_shares_secondary_variant_setup():
     assert get_bundle_setup("productvariantreorder") == get_bundle_setup("productvariantsetdefault")
 
 
+def test_variant_bulk_mutations_share_secondary_variant_setup():
+    bulk = get_bundle_setup("productvariantbulkdelete")
+    assert bulk == get_bundle_setup("productvariantbulkupdate")
+    assert bulk[0]["fixture_key"] == "secondary_variant_id"
+
+
 @pytest.mark.asyncio
 async def test_apply_bundle_setup_merges_fixture_overlay():
     run_setup = AsyncMock(return_value="VmFyaWFudDoy")

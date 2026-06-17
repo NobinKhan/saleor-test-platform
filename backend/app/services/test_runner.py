@@ -58,6 +58,7 @@ from app.services.scenario_corpus import (
     run_assertions,
     substitute_scenario_variables,
     enrich_checkout_delivery_fixture,
+    enrich_checkout_email_before_complete,
 )
 from app.services.variant_corpus import VARIANT_KIND, build_variant_endpoints
 from app.services.dynamic_corpus import DYNAMIC_PROBE_KIND, build_dynamic_probe_endpoints, compare_dynamic_response
@@ -559,7 +560,7 @@ class TestRunner:
         }
 
     def _storefront_fixture_overlay(self, resolved: dict[str, Any]) -> dict[str, Any]:
-        """Map storefront L3 bundles to channel-pln while dashboard keeps USD."""
+        """Overlay storefront channel slug/id when fixtures define a separate storefront channel."""
         fixtures = dict(resolved)
         if resolved.get("storefront_channel"):
             fixtures["default_channel"] = resolved["storefront_channel"]
@@ -720,6 +721,13 @@ class TestRunner:
                 step_id=endpoint.get("step_id", ""),
                 context=self._scenario_context,
                 fixtures=fixtures,
+                token=self.saleor_token,
+                timeout=self.timeout,
+            )
+            await enrich_checkout_email_before_complete(
+                self.saleor_url,
+                step_id=endpoint.get("step_id", ""),
+                context=self._scenario_context,
                 token=self.saleor_token,
                 timeout=self.timeout,
             )

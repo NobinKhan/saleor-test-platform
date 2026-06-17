@@ -301,5 +301,12 @@ async def validate_preflight(
         for err in resolution.seed_errors[:5]:
             issues.append(PreflightIssue(message=f"Seed error: {err}", severity="warning"))
 
+    seeded = sorted(resolution.seeded_keys)
+    result["seeded_keys"] = seeded
+    result["storefront_session_ready"] = (
+        "storefront_checkout_session" in resolution.seeded_keys
+        or bool(resolution.fixtures.get("default_checkout_id"))
+    )
+
     result.update(_classify_preflight_issues(issues))
     return result

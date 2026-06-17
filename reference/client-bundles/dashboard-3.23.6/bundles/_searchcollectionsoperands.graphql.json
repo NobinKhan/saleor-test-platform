@@ -17,16 +17,9 @@
         "edges": [
           {
             "node": {
-              "id": "Q29sbGVjdGlvbjo0",
-              "name": "Featured Products",
-              "slug": "featured-products"
-            }
-          },
-          {
-            "node": {
-              "id": "Q29sbGVjdGlvbjo1",
-              "name": "Summer Picks",
-              "slug": "summer-picks"
+              "id": "Q29sbGVjdGlvbjox",
+              "name": "Harness Reference Collection",
+              "slug": "harness-reference-collection"
             }
           }
         ]

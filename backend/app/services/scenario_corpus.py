@@ -202,6 +202,41 @@ async def enrich_checkout_delivery_fixture(
         fixtures["delivery_method_id"] = methods[0]["id"]
 
 
+HARNESS_CHECKOUT_EMAIL = "harness-checkout@example.com"
+
+
+async def enrich_checkout_email_before_complete(
+    saleor_url: str,
+    *,
+    step_id: str,
+    context: dict[str, Any],
+    token: str | None = None,
+    timeout: int = 30,
+) -> None:
+    """Set checkout email before checkoutComplete (scenario step 06)."""
+    if step_id != "06_checkout_complete":
+        return
+    checkout_id = context.get("checkout_id")
+    if not checkout_id:
+        return
+    headers: dict[str, str] = {"Content-Type": "application/json"}
+    if token:
+        headers["Authorization"] = f"Bearer {token.removeprefix('Bearer ')}"
+    async with httpx.AsyncClient(timeout=timeout) as client:
+        await client.post(
+            saleor_url,
+            json={
+                "query": (
+                    "mutation($id: ID!, $email: String!) { "
+                    "checkoutEmailUpdate(id: $id, email: $email) { "
+                    "checkout { id email } errors { field message code } } }"
+                ),
+                "variables": {"id": checkout_id, "email": HARNESS_CHECKOUT_EMAIL},
+            },
+            headers=headers,
+        )
+
+
 def substitute_scenario_variables(
     template: dict[str, Any] | str,
     context: dict[str, Any],

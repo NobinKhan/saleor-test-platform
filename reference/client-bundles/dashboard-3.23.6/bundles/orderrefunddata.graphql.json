@@ -14,11 +14,11 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6ZDY5ZTZhZDMtMjAzMS00Yzg3LTljYzItNWM0MzBlYTdhM2Jm",
-        "number": "20",
+        "id": "T3JkZXI6YzY0YjMzYmUtOGVjNC00NWVmLTk4MDUtYzVhNGUxYTdkNjFj",
+        "number": "3",
         "total": {
           "gross": {
-            "amount": 507.75,
+            "amount": 60.0,
             "currency": "USD"
           }
         },
@@ -28,49 +28,23 @@
         },
         "shippingPrice": {
           "gross": {
-            "amount": 67.75,
+            "amount": 0.0,
             "currency": "USD"
           }
         },
         "lines": [
           {
-            "id": "T3JkZXJMaW5lOmFiODkzMGRjLWQ4NjYtNDEwZS04NGFhLTkyMzM4OWJhYTQzNw==",
-            "productName": "Blue Plimsolls",
-            "quantity": 2,
+            "id": "T3JkZXJMaW5lOjFlZjE4ZDczLTU2MzItNGNjNC1hZmY5LTNlNWFmYWIwMjQxMA==",
+            "productName": "Harness Reference Product",
+            "quantity": 6,
             "unitPrice": {
               "gross": {
-                "amount": 75.0,
+                "amount": 10.0,
                 "currency": "USD"
               }
             },
             "thumbnail": null,
-            "quantityToFulfill": 2
-          },
-          {
-            "id": "T3JkZXJMaW5lOmMxNGVjMTNiLThjZjQtNDg4OC05ZDdmLTExYjRmYjA5ZDNiOA==",
-            "productName": "Monospace Tee",
-            "quantity": 1,
-            "unitPrice": {
-              "gross": {
-                "amount": 20.0,
-                "currency": "USD"
-              }
-            },
-            "thumbnail": null,
-            "quantityToFulfill": 1
-          },
-          {
-            "id": "T3JkZXJMaW5lOjdmNmRiMzQzLWU2NTUtNDVhYS05ZmNiLTZlNTg2NGUzODE4Mw==",
-            "productName": "Dash Force",
-            "quantity": 3,
-            "unitPrice": {
-              "gross": {
-                "amount": 90.0,
-                "currency": "USD"
-              }
-            },
-            "thumbnail": null,
-            "quantityToFulfill": 3
+            "quantityToFulfill": 6
           }
         ],
         "fulfillments": []

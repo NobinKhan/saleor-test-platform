@@ -13,13 +13,8 @@
     "data": {
       "channels": [
         {
-          "id": "Q2hhbm5lbDoy",
-          "name": "Channel-PLN",
-          "slug": "channel-pln"
-        },
-        {
           "id": "Q2hhbm5lbDox",
-          "name": "Channel-USD",
+          "name": "Default Channel",
           "slug": "default-channel"
         }
       ]

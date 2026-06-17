@@ -27,25 +27,9 @@
           },
           {
             "node": {
-              "id": "Q2F0ZWdvcnk6MjU=",
-              "name": "Accessories",
+              "id": "Q2F0ZWdvcnk6Mg==",
+              "name": "Harness Accessories",
               "slug": "accessories",
-              "backgroundImage": null
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjc=",
-              "name": "Apparel",
-              "slug": "apparel",
-              "backgroundImage": null
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6NDI=",
-              "name": "Groceries",
-              "slug": "groceries",
               "backgroundImage": null
             }
           }

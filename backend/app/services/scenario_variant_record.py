@@ -18,6 +18,7 @@ import httpx
 from app.services.client_bundle_fixtures import substitute_fixtures
 from app.services.scenario_corpus import (
     enrich_checkout_delivery_fixture,
+    enrich_checkout_email_before_complete,
     scenario_dir,
     substitute_scenario_variables,
 )
@@ -164,6 +165,13 @@ async def record_scenario(
             step_id=step.step_id,
             context=context,
             fixtures=step_fixtures,
+            token=saleor_token,
+            timeout=timeout,
+        )
+        await enrich_checkout_email_before_complete(
+            saleor_url,
+            step_id=step.step_id,
+            context=context,
             token=saleor_token,
             timeout=timeout,
         )

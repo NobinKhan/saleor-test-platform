@@ -37,6 +37,9 @@ _SECONDARY_VARIANT_STEP: dict[str, Any] = {
 BUNDLE_SETUP: dict[str, list[dict[str, Any]]] = {
     "productvariantsetdefault": [_SECONDARY_VARIANT_STEP],
     "productvariantreorder": [_SECONDARY_VARIANT_STEP],
+    # Variant mutations that need a second SKU on the harness reference product.
+    "productvariantbulkdelete": [_SECONDARY_VARIANT_STEP],
+    "productvariantbulkupdate": [_SECONDARY_VARIANT_STEP],
 }
 
 

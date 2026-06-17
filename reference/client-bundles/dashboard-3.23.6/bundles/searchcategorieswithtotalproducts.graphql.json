@@ -22,95 +22,23 @@
               "id": "Q2F0ZWdvcnk6MQ==",
               "name": "Default Category",
               "products": {
+                "totalCount": 1
+              }
+            }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mg==",
+              "name": "Harness Accessories",
+              "products": {
                 "totalCount": 0
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MjU=",
-              "name": "Accessories",
-              "products": {
-                "totalCount": 10
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MjY=",
-              "name": "Audiobooks",
-              "products": {
-                "totalCount": 4
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjc=",
-              "name": "Apparel",
-              "products": {
-                "totalCount": 18
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjg=",
-              "name": "Sneakers",
-              "products": {
-                "totalCount": 4
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjk=",
-              "name": "Sweatshirts",
-              "products": {
-                "totalCount": 3
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzM=",
-              "name": "Headware",
-              "products": {
-                "totalCount": 4
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzU=",
-              "name": "Beanies",
-              "products": {
-                "totalCount": 1
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzY=",
-              "name": "Scarfs",
-              "products": {
-                "totalCount": 1
-              }
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mzc=",
-              "name": "Sunglasses",
-              "products": {
-                "totalCount": 2
               }
             }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyIzNyJd",
-          "hasNextPage": true,
+          "endCursor": "WyIyIl0=",
+          "hasNextPage": false,
           "hasPreviousPage": false,
           "startCursor": "WyIxIl0="
         }

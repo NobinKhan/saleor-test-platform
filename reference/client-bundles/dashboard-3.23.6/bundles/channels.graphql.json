@@ -13,68 +13,9 @@
     "data": {
       "channels": [
         {
-          "id": "Q2hhbm5lbDoy",
-          "isActive": true,
-          "name": "Channel-PLN",
-          "slug": "channel-pln",
-          "currencyCode": "PLN",
-          "defaultCountry": {
-            "code": "PL",
-            "country": "Poland"
-          },
-          "stockSettings": {
-            "allocationStrategy": "PRIORITIZE_SORTING_ORDER"
-          },
-          "hasOrders": true,
-          "warehouses": [
-            {
-              "id": "V2FyZWhvdXNlOjZiNWUwYTQ3LWNiZmItNGRlNS1hMTZhLTE4YjA0YmM2MWVhNQ==",
-              "name": "Default"
-            },
-            {
-              "id": "V2FyZWhvdXNlOjQwNGI0ZjJhLTdhMjYtNGM2Ny05YmM4LWEzOTg1NTdmNmM5ZA==",
-              "name": "Europe"
-            },
-            {
-              "id": "V2FyZWhvdXNlOmE1NzJhZTRhLTY5NWQtNGQ4Mi05NTIyLTU2MzJiZDRiY2Q0ZA==",
-              "name": "Oceania"
-            },
-            {
-              "id": "V2FyZWhvdXNlOmU2MmM3MzJjLTBhOTItNGE2MC05MzI0LWRhYWI1NWM2ZjMyMA==",
-              "name": "Asia"
-            },
-            {
-              "id": "V2FyZWhvdXNlOjFhN2MyOGUyLTc3MDItNGRmNS1iM2Y4LWQ4ZTExODJmMTk4NQ==",
-              "name": "Americas"
-            },
-            {
-              "id": "V2FyZWhvdXNlOjViNmE5NmU3LTMwYmYtNDRlNC1iMjgyLTc0NTcwYjZiMTNmYQ==",
-              "name": "Africa"
-            },
-            {
-              "id": "V2FyZWhvdXNlOmE2OTA0NDFiLWVjMDUtNGMwMS04MTZmLWFjYjAwNTczMjZkMQ==",
-              "name": "Default for click and collect"
-            }
-          ],
-          "orderSettings": {
-            "markAsPaidStrategy": "TRANSACTION_FLOW",
-            "deleteExpiredOrdersAfter": 60,
-            "allowUnpaidOrders": false
-          },
-          "paymentSettings": {
-            "defaultTransactionFlowStrategy": "CHARGE"
-          },
-          "checkoutSettings": {
-            "automaticallyCompleteFullyPaidCheckouts": false,
-            "automaticCompletionDelay": null,
-            "automaticCompletionCutOffDate": null,
-            "allowLegacyGiftCardUse": true
-          }
-        },
-        {
           "id": "Q2hhbm5lbDox",
           "isActive": true,
-          "name": "Channel-USD",
+          "name": "Default Channel",
           "slug": "default-channel",
           "currencyCode": "USD",
           "defaultCountry": {
@@ -87,41 +28,17 @@
           "hasOrders": true,
           "warehouses": [
             {
-              "id": "V2FyZWhvdXNlOjA5MDA3NDQ4LTVhOTUtNDU1Mi1iYjAwLWE0NGVkODMxNTI0ZQ==",
+              "id": "V2FyZWhvdXNlOmJjZWEzMjUzLWYyMDItNDBlYy1hNWY4LTliMDE2ZjIzMzU4Yg==",
               "name": "Default Warehouse"
-            },
-            {
-              "id": "V2FyZWhvdXNlOjZiNWUwYTQ3LWNiZmItNGRlNS1hMTZhLTE4YjA0YmM2MWVhNQ==",
-              "name": "Default"
-            },
-            {
-              "id": "V2FyZWhvdXNlOjQwNGI0ZjJhLTdhMjYtNGM2Ny05YmM4LWEzOTg1NTdmNmM5ZA==",
-              "name": "Europe"
-            },
-            {
-              "id": "V2FyZWhvdXNlOmE1NzJhZTRhLTY5NWQtNGQ4Mi05NTIyLTU2MzJiZDRiY2Q0ZA==",
-              "name": "Oceania"
-            },
-            {
-              "id": "V2FyZWhvdXNlOmU2MmM3MzJjLTBhOTItNGE2MC05MzI0LWRhYWI1NWM2ZjMyMA==",
-              "name": "Asia"
-            },
-            {
-              "id": "V2FyZWhvdXNlOjFhN2MyOGUyLTc3MDItNGRmNS1iM2Y4LWQ4ZTExODJmMTk4NQ==",
-              "name": "Americas"
-            },
-            {
-              "id": "V2FyZWhvdXNlOjViNmE5NmU3LTMwYmYtNDRlNC1iMjgyLTc0NTcwYjZiMTNmYQ==",
-              "name": "Africa"
             }
           ],
           "orderSettings": {
-            "markAsPaidStrategy": "TRANSACTION_FLOW",
+            "markAsPaidStrategy": "PAYMENT_FLOW",
             "deleteExpiredOrdersAfter": 60,
             "allowUnpaidOrders": false
           },
           "paymentSettings": {
-            "defaultTransactionFlowStrategy": "AUTHORIZATION"
+            "defaultTransactionFlowStrategy": "CHARGE"
           },
           "checkoutSettings": {
             "automaticallyCompleteFullyPaidCheckouts": false,

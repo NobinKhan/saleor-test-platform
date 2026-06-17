@@ -18,65 +18,9 @@
         "edges": [
           {
             "node": {
-              "id": "UHJvZHVjdFR5cGU6MTc=",
-              "name": "Audiobook",
-              "slug": "audiobook"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjE=",
-              "name": "Beanies & Scarfs",
-              "slug": "beanie"
-            }
-          },
-          {
-            "node": {
               "id": "UHJvZHVjdFR5cGU6MQ==",
               "name": "Default Type",
               "slug": "default-type"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjQ=",
-              "name": "Simple Gift Card",
-              "slug": "gift-card"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjM=",
-              "name": "Juice",
-              "slug": "juice"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjA=",
-              "name": "Top",
-              "slug": "shirt"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MTg=",
-              "name": "Shoe",
-              "slug": "shoe"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MjI=",
-              "name": "Simple",
-              "slug": "simple"
-            }
-          },
-          {
-            "node": {
-              "id": "UHJvZHVjdFR5cGU6MTk=",
-              "name": "Sweatshirt",
-              "slug": "sweatshirt"
             }
           }
         ]

@@ -38,7 +38,7 @@ async def test_ensure_storefront_session_updates_profile_and_checkout():
         ]
     )
     fixtures: dict[str, Any] = {
-        "storefront_channel": "channel-pln",
+        "storefront_channel": "harness-channel",
         "variant_id_for_cart": "VAR1",
         "storefront_customer_id": "U1",
     }
@@ -57,7 +57,7 @@ async def test_ensure_storefront_session_updates_profile_and_checkout():
     assert updated["default_checkout_token"] == "tok-1"
     assert updated["delivery_method_id"] == "SHIP1"
     create_call = gql.await_args_list[1]
-    assert create_call.kwargs["variables"]["input"]["channel"] == "channel-pln"
+    assert create_call.kwargs["variables"]["input"]["channel"] == "harness-channel"
 
 
 @pytest.mark.asyncio
@@ -102,7 +102,7 @@ async def test_ensure_storefront_session_skips_profile_without_token():
             {"checkout": {"availableShippingMethods": []}},
         ]
     )
-    fixtures = {"default_channel": "default-channel", "default_variant_id": "VAR1"}
+    fixtures = {"default_channel": "harness-channel", "default_variant_id": "VAR1"}
     with patch("app.services.storefront_session._gql", gql):
         updated, seeded, _ = await ensure_storefront_session(
             "http://example.com/graphql/",

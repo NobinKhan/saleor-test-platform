@@ -67,6 +67,8 @@ VOLATILE_FRAGMENTS = (
     ".token",
     ".password",
     ".isActive",
+    ".endCursor",
+    ".startCursor",
     "__typename",
 )
 
@@ -126,6 +128,9 @@ def _forgive_connection_cardinality(
     golden_edge0_prefix = f"{prefix}.edges[0]"
     golden_has_edge0 = any(p.startswith(golden_edge0_prefix) for p in golden_schema)
     if not golden_has_edge0:
+        # Golden recorded empty connection; actual has rows — cardinality only.
+        if edge_index == 0 and any(p.startswith(f"{prefix}.edges[0]") for p in actual_schema):
+            return True
         return False
     if edge_index >= 1:
         # Golden recorded more edges than actual — non-certifying when [0] schema exists.
@@ -248,6 +253,10 @@ def compare_schemas(
             # This is acceptable (backends may add fields)
             continue
         if a is None:
+            if path.endswith(".edges") and any(
+                p.startswith(f"{path}[0]") for p in actual_schema
+            ):
+                continue
             if _forgive_connection_cardinality(
                 path,
                 golden_schema=golden_schema,

@@ -1,6 +1,6 @@
 # Saleor compatibility — test improvement report
 
-> **Historical / Basmalahub-specific.** This document describes seed-dependent failures for an external backend replaying golden probes before the mutation-first refactor. For current failure taxonomy (`seed_prerequisite`, schema comparison, effective score), see [COMPATIBILITY.md](COMPATIBILITY.md) and run `just baseline` on official Saleor.
+> **Historical — superseded by harness-only workflow.** See [COMPATIBILITY.md](COMPATIBILITY.md), [REFACTOR-PLAN.md](../REFACTOR-PLAN.md), and `just baseline` on official Saleor. Body below is a Basmalahub-era appendix only.
 
 **Audience:** External compat runner / QA team replaying Saleor 3.23.7 golden probes against Basmalahub Commerce.
 

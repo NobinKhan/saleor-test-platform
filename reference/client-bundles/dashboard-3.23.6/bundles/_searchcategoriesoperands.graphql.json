@@ -25,65 +25,9 @@
           },
           {
             "node": {
-              "id": "Q2F0ZWdvcnk6MjU=",
-              "name": "Accessories",
+              "id": "Q2F0ZWdvcnk6Mg==",
+              "name": "Harness Accessories",
               "slug": "accessories"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MjY=",
-              "name": "Audiobooks",
-              "slug": "audiobooks"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjc=",
-              "name": "Apparel",
-              "slug": "apparel"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjg=",
-              "name": "Sneakers",
-              "slug": "sneakers"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mjk=",
-              "name": "Sweatshirts",
-              "slug": "sweatshirts"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzM=",
-              "name": "Headware",
-              "slug": "headware"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzU=",
-              "name": "Beanies",
-              "slug": "beanies"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6MzY=",
-              "name": "Scarfs",
-              "slug": "scarfs"
-            }
-          },
-          {
-            "node": {
-              "id": "Q2F0ZWdvcnk6Mzc=",
-              "name": "Sunglasses",
-              "slug": "sunglasses"
             }
           }
         ]

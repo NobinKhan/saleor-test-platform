@@ -26,10 +26,10 @@
     "data": {
       "checkoutLinesAdd": {
         "checkout": {
-          "id": "Q2hlY2tvdXQ6OWU2NjAzZGYtOTBmYS00YmIyLWJiMWQtMzUzOTk1YWYzNmIy",
+          "id": "Q2hlY2tvdXQ6NWZlNjc1YjMtYjJjNy00MjA5LWJiZjAtOTRjOTNkM2UxMmNl",
           "lines": [
             {
-              "id": "Q2hlY2tvdXRMaW5lOjI2N2I0YjU4LTc2NzEtNDBiZC05M2FkLTljMDgwM2EyOGYyNg==",
+              "id": "Q2hlY2tvdXRMaW5lOmUzZTU5YzhmLWFhY2MtNDE3ZC05YTU5LTgxNjU0MGY5NWQ1NQ==",
               "quantity": 2
             }
           ]
@@ -40,5 +40,5 @@
   },
   "golden_contract": "success",
   "golden_status": "pass",
-  "recorded_at": "2026-06-17T06:18:56.289536+00:00"
+  "recorded_at": "2026-06-17T09:56:43.536505+00:00"
 }

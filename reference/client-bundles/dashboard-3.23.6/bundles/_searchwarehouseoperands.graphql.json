@@ -17,58 +17,9 @@
         "edges": [
           {
             "node": {
-              "id": "V2FyZWhvdXNlOmE1NzJhZTRhLTY5NWQtNGQ4Mi05NTIyLTU2MzJiZDRiY2Q0ZA==",
-              "name": "Oceania",
-              "slug": "oceania"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjQwNGI0ZjJhLTdhMjYtNGM2Ny05YmM4LWEzOTg1NTdmNmM5ZA==",
-              "name": "Europe",
-              "slug": "europe"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjA5MDA3NDQ4LTVhOTUtNDU1Mi1iYjAwLWE0NGVkODMxNTI0ZQ==",
+              "id": "V2FyZWhvdXNlOmJjZWEzMjUzLWYyMDItNDBlYy1hNWY4LTliMDE2ZjIzMzU4Yg==",
               "name": "Default Warehouse",
               "slug": "default-warehouse"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmE2OTA0NDFiLWVjMDUtNGMwMS04MTZmLWFjYjAwNTczMjZkMQ==",
-              "name": "Default for click and collect",
-              "slug": "default-for-click-and-collect"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjZiNWUwYTQ3LWNiZmItNGRlNS1hMTZhLTE4YjA0YmM2MWVhNQ==",
-              "name": "Default",
-              "slug": "default"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOmU2MmM3MzJjLTBhOTItNGE2MC05MzI0LWRhYWI1NWM2ZjMyMA==",
-              "name": "Asia",
-              "slug": "asia"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjFhN2MyOGUyLTc3MDItNGRmNS1iM2Y4LWQ4ZTExODJmMTk4NQ==",
-              "name": "Americas",
-              "slug": "americas"
-            }
-          },
-          {
-            "node": {
-              "id": "V2FyZWhvdXNlOjViNmE5NmU3LTMwYmYtNDRlNC1iMjgyLTc0NTcwYjZiMTNmYQ==",
-              "name": "Africa",
-              "slug": "africa"
             }
           }
         ]

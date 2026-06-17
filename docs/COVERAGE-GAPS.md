@@ -74,7 +74,7 @@ Example: `checkoutCreate` L1 sends empty input and golden-records a schema valid
 
 Record goldens: `just record-scenarios` or `just patch-corpus --scenarios checkout-lifecycle,order-lifecycle` on official Saleor after `just fresh`.
 
-**Status:** Scenario goldens recorded with `harness` profile (aligned with `just baseline`). Remaining optional: payment gateway fixture for `checkoutComplete` **success** golden.
+**Status:** Scenario goldens recorded on harness topology. Step `06_checkout_complete` records the business contract when billing/payment preconditions are not met (`BILLING_ADDRESS_NOT_SET` after email preamble); dummy payment plugin activation runs in `ensure_certification_topology`. Full `checkoutComplete` **success** golden remains optional.
 
 ## Gap 4 — Deprecated L3 bundles (removed)
 
