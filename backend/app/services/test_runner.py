@@ -22,6 +22,7 @@ from app.services.reference_corpus import (
     resolve_corpus_version,
 )
 from app.services.introspection import compare_schema, introspect_saleor, schema_gate_diff
+from app.services.reference_seed import REFERENCE_CHANNEL_SLUG
 from app.services.saleor_auth import (
     CUSTOMER_DEFAULT_EMAIL,
     CUSTOMER_DEFAULT_PASSWORD,
@@ -200,6 +201,9 @@ class TestRunner:
         if auth_context == "anonymous":
             return None
         if auth_context == "customer":
+            channel = REFERENCE_CHANNEL_SLUG
+            if self._resolved_fixtures:
+                channel = self._resolved_fixtures.get("default_channel") or channel
             self._customer_token = await ensure_customer_token(
                 saleor_url=self.saleor_url,
                 token=self._customer_token,
@@ -208,6 +212,7 @@ class TestRunner:
                 timeout=self.timeout,
                 client=http_client,
                 force_refresh=force_refresh,
+                channel=channel,
                 staff_token=self.saleor_token,
             )
             return self._customer_token
@@ -1073,7 +1078,7 @@ class TestRunner:
         use_client = client or httpx.AsyncClient(timeout=self.timeout)
         own_client = client is None
         try:
-            await self._ensure_valid_token(use_client, force_refresh=False)
+            await self._ensure_auth_for_context(use_client, auth_context=auth_context)
             headers = self._auth_headers(auth_context)
             resp = await use_client.post(self.saleor_url, json=payload, headers=headers)
             resp_json = resp.json()

@@ -263,6 +263,12 @@ def compare_schemas(
                 actual_schema=actual_schema,
             ):
                 continue
+            if (
+                path.endswith(".errors")
+                and g.type_label == "array"
+                and not any(p.startswith(f"{path}[") for p in golden_schema)
+            ):
+                continue
             # Field exists in golden but not in actual — missing field
             diffs.append(SchemaDiff(
                 path=path,
@@ -282,6 +288,11 @@ def compare_schemas(
 
         # Type mismatch — check if it's an ID type (all IDs are compatible)
         if _is_id_type(g_type) and _is_id_type(a_type):
+            continue
+
+        # Relay IDs in goldens may be short (classified as string) while live
+        # responses use longer base64 (global_id) — both are valid ID shapes.
+        if path.endswith(".id") and {g_type, a_type} <= {"string", "uuid", "global_id"}:
             continue
 
         # Type mismatch — check if it's a volatile path

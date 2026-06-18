@@ -54,13 +54,16 @@ async def _token_for_auth_context(
     saleor_url: str,
     auth_context: str,
     staff_token: str | None,
+    fixtures: dict[str, Any] | None = None,
     timeout: int = 30,
 ) -> str | None:
     if auth_context == "anonymous":
         return None
     if auth_context == "customer":
+        from app.services.reference_seed import REFERENCE_CHANNEL_SLUG
         from app.services.saleor_auth import ensure_customer_token
 
+        channel = (fixtures or {}).get("default_channel") or REFERENCE_CHANNEL_SLUG
         return await ensure_customer_token(
             saleor_url=saleor_url,
             token=None,
@@ -69,6 +72,7 @@ async def _token_for_auth_context(
             timeout=timeout,
             force_refresh=True,
             staff_token=staff_token,
+            channel=channel,
         )
     return staff_token
 
@@ -97,6 +101,7 @@ async def record_scenario_step(
         saleor_url=saleor_url,
         auth_context=auth_context,
         staff_token=saleor_token,
+        fixtures=fixtures,
         timeout=timeout,
     )
     try:

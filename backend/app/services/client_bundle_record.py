@@ -196,6 +196,8 @@ async def record_client_bundles(
                 continue
             auth_context = bundle.auth_context or "staff"
             if auth_context == "customer" and not cust_token:
+                from app.services.reference_seed import REFERENCE_CHANNEL_SLUG
+
                 cust_token = await ensure_customer_token(
                     saleor_url=saleor_url,
                     token=None,
@@ -203,6 +205,7 @@ async def record_client_bundles(
                     password=None,
                     timeout=timeout,
                     client=client,
+                    channel=fixtures.get("default_channel") or REFERENCE_CHANNEL_SLUG,
                 )
             headers = dict(staff_headers)
             if auth_context == "customer" and cust_token:

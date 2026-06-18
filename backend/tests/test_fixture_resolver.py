@@ -152,6 +152,64 @@ async def test_resolve_fixtures_runtime_seed():
 
 
 @pytest.mark.asyncio
+async def test_resolve_fixtures_clears_static_entity_keys_before_seed():
+    static = {
+        "default_variant_id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
+        "default_product_id": "UHJvZHVjdDox",
+        "default_checkout_id": "Q2hlY2tvdXQ6c3RhbGU=",
+    }
+    with patch(
+        "app.services.fixture_resolver.capture_live_fixtures",
+        new_callable=AsyncMock,
+        return_value={},
+    ):
+        with patch(
+            "app.services.fixture_resolver.ensure_certification_topology",
+            new_callable=AsyncMock,
+            return_value=SeedResult(
+                fixtures={
+                    "default_channel_id": "Q2hhbm5lbDox",
+                    "default_product_id": "UHJvZHVjdDoy",
+                    "default_variant_id": "UHJvZHVjdFZhcmlhbnQ6Mg==",
+                    "default_product_type_id": "UHJvZHVjdFR5cGU6MQ==",
+                },
+                live_keys=frozenset(
+                    {
+                        "default_channel_id",
+                        "default_product_id",
+                        "default_variant_id",
+                        "default_product_type_id",
+                    }
+                ),
+                seeded_keys=frozenset({"default_variant_id"}),
+            ),
+        ):
+            with patch(
+                "app.services.fixture_resolver._resolve_storefront_customer",
+                new_callable=AsyncMock,
+                return_value=(None, None),
+            ):
+                with patch(
+                    "app.services.storefront_session.ensure_storefront_session",
+                    new_callable=AsyncMock,
+                    return_value=({}, set(), []),
+                ):
+                    with patch(
+                        "app.services.fixture_resolver.load_fixtures",
+                        return_value=dict(static),
+                    ):
+                        with patch("app.services.fixture_resolver.settings") as mock_settings:
+                            mock_settings.runtime_seed = True
+                            result = await resolve_fixtures(
+                                "http://example.com/graphql/", "token"
+                            )
+
+    assert result.fixtures["default_variant_id"] == "UHJvZHVjdFZhcmlhbnQ6Mg=="
+    assert result.fixtures["default_product_id"] == "UHJvZHVjdDoy"
+    assert "default_checkout_id" not in result.fixtures
+
+
+@pytest.mark.asyncio
 async def test_validate_preflight_rewrites_localhost_url():
     with patch(
         "app.services.fixture_resolver.resolve_harness_saleor_url",

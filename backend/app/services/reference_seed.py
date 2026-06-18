@@ -154,6 +154,49 @@ async def _ensure_dummy_payment_gateway(
     return seeded
 
 
+async def _ensure_shop_settings(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    error_log: list[str],
+) -> set[str]:
+    """Enable legacy shipping-zone stock availability (sitesettings golden)."""
+    seeded: set[str] = set()
+    shop = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="query { shop { useLegacyShippingZoneStockAvailability } }",
+        allow_errors=True,
+        error_log=error_log,
+        operation="shop",
+    )
+    if (shop.get("shop") or {}).get("useLegacyShippingZoneStockAvailability") is True:
+        return seeded
+    data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($input: ShopSettingsInput!) { "
+            "shopSettingsUpdate(input: $input) { shop { useLegacyShippingZoneStockAvailability } "
+            "errors { field message code } } }"
+        ),
+        variables={"input": {"useLegacyShippingZoneStockAvailability": True}},
+        allow_errors=True,
+        error_log=error_log,
+        operation="shopSettingsUpdate",
+    )
+    payload = data.get("shopSettingsUpdate")
+    shop_out = (payload or {}).get("shop")
+    if shop_out and shop_out.get("useLegacyShippingZoneStockAvailability") is True:
+        seeded.add("site_settings:legacy_shipping")
+    else:
+        _append_mutation_errors(error_log, "shopSettingsUpdate", payload)
+    return seeded
+
+
 async def ensure_certification_topology(
     saleor_url: str,
     token: str,
@@ -182,7 +225,14 @@ async def ensure_certification_topology(
                 error_log=error_log,
             )
         )
-        fixtures = await _capture_fixtures(client, url=saleor_url, headers=headers)
+        seeded_snapshot = {
+            key: fixtures[key] for key in seeded if fixtures.get(key)
+        }
+        captured = await _capture_fixtures(client, url=saleor_url, headers=headers)
+        for key, value in captured.items():
+            if value and key != "placeholder_id":
+                fixtures.setdefault(key, value)
+        fixtures.update(seeded_snapshot)
         fixtures = await _seed_storefront_fixtures(
             client, url=saleor_url, headers=headers, fixtures=fixtures
         )
@@ -192,6 +242,14 @@ async def ensure_certification_topology(
                 url=saleor_url,
                 headers=headers,
                 fixtures=fixtures,
+                error_log=error_log,
+            )
+        )
+        seeded.update(
+            await _ensure_shop_settings(
+                client,
+                url=saleor_url,
+                headers=headers,
                 error_log=error_log,
             )
         )

@@ -43,3 +43,23 @@ async def test_apply_bundle_setup_merges_fixture_overlay():
     assert overlay["secondary_variant_id"] == "VmFyaWFudDoy"
     assert overlay["default_variant_id"] == "VmFyaWFudDoy"
     run_setup.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_sf_accountupdate_setup_uses_customer_auth_for_profile_step():
+    auth_contexts: list[str] = []
+
+    async def run_setup(setup, auth):
+        auth_contexts.append(auth)
+        if auth == "anonymous":
+            return "VXNlcjox"
+        if auth == "customer":
+            return "VXNlcjox"
+        return None
+
+    await apply_bundle_setup(
+        bundle_id="sf-accountupdate",
+        fixtures={"default_channel": "harness-channel"},
+        run_setup_mutation=run_setup,
+    )
+    assert auth_contexts == ["anonymous", "customer"]

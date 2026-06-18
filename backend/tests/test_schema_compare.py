@@ -81,3 +81,33 @@ def test_structural_mismatch_still_fails():
     result = compare_schemas(golden, actual)
     assert result.compatible is False
     assert result.match_status == "schema_mismatch"
+
+
+def test_empty_mutation_errors_omitted_in_actual_is_compatible():
+    golden = {
+        "data": {
+            "productCreate": {
+                "product": {"id": "UHJvZHVjdDox", "name": "Harness Scenario Product"},
+                "errors": [],
+            }
+        }
+    }
+    actual = {
+        "data": {
+            "productCreate": {
+                "product": {"id": "UHJvZHVjdDoy", "name": "Harness Scenario Product"},
+            }
+        }
+    }
+    result = compare_schemas(golden, actual)
+    assert result.compatible is True
+    assert result.match_status == "match"
+
+
+def test_short_golden_id_string_vs_live_global_id_is_compatible():
+    """Scenario goldens may record short Relay IDs classified as string."""
+    golden = {"data": {"product": {"id": "UHJvZHVjdDoy", "slug": "x"}}}
+    actual = {"data": {"product": {"id": "UHJvZHVjdDoxMjM0NTY=", "slug": "y"}}}
+    result = compare_schemas(golden, actual)
+    assert result.compatible is True
+    assert result.match_status == "match"

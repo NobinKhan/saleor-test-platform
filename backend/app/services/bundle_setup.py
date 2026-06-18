@@ -55,7 +55,7 @@ def _customer_step(fixtures: dict[str, Any]) -> dict[str, Any]:
             "input": {
                 "email": "harness-storefront-customer@example.com",
                 "password": "HarnessCustomer123!",
-                "channel": f.get("default_channel", "default-channel"),
+                "channel": f.get("default_channel", "harness-channel"),
                 "redirectUrl": "http://localhost:3000/account/confirm",
             }
         },
@@ -76,7 +76,7 @@ def _checkout_create_step(fixtures: dict[str, Any]) -> dict[str, Any]:
         }""",
         "variables": lambda f: {
             "input": {
-                "channel": f.get("default_channel", "default-channel"),
+                "channel": f.get("default_channel", "harness-channel"),
                 "lines": [
                     {
                         "quantity": 1,

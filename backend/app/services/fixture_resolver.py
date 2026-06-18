@@ -17,6 +17,7 @@ from app.core.config import settings
 from app.core.url_utils import resolve_harness_saleor_url, resolve_saleor_url_for_runner
 from app.services.client_bundles import load_fixtures, resolve_dashboard_bundle_version
 from app.services.reference_seed import (
+    REFERENCE_CHANNEL_SLUG,
     capture_live_fixtures,
     ensure_certification_topology,
 )
@@ -93,6 +94,8 @@ async def _query_saleor(
 async def _resolve_storefront_customer(
     saleor_url: str,
     staff_token: str,
+    *,
+    channel: str | None = None,
     timeout: int = 30,
 ) -> tuple[str | None, str | None]:
     """Return (customer_id, customer_jwt) for the harness storefront account."""
@@ -105,6 +108,7 @@ async def _resolve_storefront_customer(
         password=None,
         timeout=timeout,
         staff_token=staff_token,
+        channel=channel or REFERENCE_CHANNEL_SLUG,
     )
     if not customer_token:
         return None, None
@@ -162,7 +166,7 @@ async def resolve_fixtures(
         seed_errors.extend(seed_result.errors)
 
     storefront_customer_id, customer_token = await _resolve_storefront_customer(
-        saleor_url, token, timeout=timeout
+        saleor_url, token, timeout=timeout, channel=resolved.get("default_channel")
     )
     if storefront_customer_id:
         resolved["storefront_customer_id"] = storefront_customer_id

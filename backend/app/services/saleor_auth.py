@@ -9,6 +9,7 @@ from typing import Optional
 import httpx
 
 from app.core.url_utils import resolve_saleor_url_for_runner
+from app.services.reference_seed import REFERENCE_CHANNEL_SLUG
 
 TOKEN_CREATE_MUTATION = """
 mutation TokenCreate($email: String!, $password: String!) {
@@ -32,6 +33,7 @@ mutation AccountRegister($input: AccountRegisterInput!) {
 
 CUSTOMER_DEFAULT_EMAIL = "harness-storefront-customer@example.com"
 CUSTOMER_DEFAULT_PASSWORD = "HarnessCustomer123!"
+HARNESS_DEFAULT_CHANNEL = "harness-channel"
 
 
 def _format_saleor_auth_error(message: str) -> str:
@@ -171,7 +173,7 @@ async def register_customer_account(
     password: str,
     *,
     timeout: int = 15,
-    channel: str = "default-channel",
+    channel: str = HARNESS_DEFAULT_CHANNEL,
 ) -> tuple[bool, str | None]:
     """Register a customer account (idempotent — ignores duplicate email errors)."""
     graphql_url = resolve_saleor_url_for_runner(saleor_url)
@@ -293,7 +295,7 @@ async def ensure_customer_token(
     timeout: int = 30,
     client: httpx.AsyncClient | None = None,
     force_refresh: bool = False,
-    channel: str = "default-channel",
+    channel: str = HARNESS_DEFAULT_CHANNEL,
     staff_token: str | None = None,
 ) -> str | None:
     """Ensure a valid customer JWT, registering the account if needed."""
