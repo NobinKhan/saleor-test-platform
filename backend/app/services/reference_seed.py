@@ -534,6 +534,36 @@ async def _ensure_reference_product(
         fixtures["default_product_id"] = existing["id"]
         fixtures["default_slug"] = existing.get("slug") or REFERENCE_PRODUCT_SLUG
         variants = existing.get("variants") or []
+        if not variants:
+            # Product exists but has no variants — create one
+            variant_data = await _gql(
+                client,
+                url=url,
+                headers=headers,
+                query=(
+                    "mutation($input: ProductVariantCreateInput!) { "
+                    "productVariantCreate(input: $input) { productVariant { id } "
+                    "errors { field message code } } }"
+                ),
+                variables={
+                    "input": {
+                        "product": existing["id"],
+                        "sku": "harness-ref-sku",
+                        "name": "Harness Reference Variant",
+                        "attributes": [],
+                    }
+                },
+                allow_errors=True,
+                error_log=error_log,
+                operation="productVariantCreate",
+            )
+            variant_payload = variant_data.get("productVariantCreate")
+            variant = (variant_payload or {}).get("productVariant")
+            if variant:
+                variants = [variant]
+            else:
+                _append_mutation_errors(error_log, "productVariantCreate", variant_payload)
+                return False
         if variants:
             variant_id = variants[0]["id"]
             fixtures["default_variant_id"] = variant_id

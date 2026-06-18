@@ -46,6 +46,9 @@ L3_VOLATILE_PATH_FRAGMENTS = (
     ".name",
     ".slug",
     "__typename",
+    # Country display names are localized/translated strings that differ between
+    # Saleor instances based on locale settings. Only country codes are stable.
+    ".country",
 )
 
 

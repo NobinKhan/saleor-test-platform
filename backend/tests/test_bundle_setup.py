@@ -9,14 +9,18 @@ import pytest
 from app.services.bundle_setup import apply_bundle_setup, get_bundle_setup
 
 
-def test_productvariantsetdefault_has_secondary_variant_setup():
+def test_productvariantsetdefault_has_secondary_variant_and_copy():
     steps = get_bundle_setup("productvariantsetdefault")
+    assert len(steps) == 2
+    assert steps[0]["fixture_key"] == "secondary_variant_id"
+    assert steps[1]["fixture_key"] == "default_variant_id"
+    assert steps[1].get("_from_key") == "secondary_variant_id"
+
+
+def test_productvariantreorder_has_secondary_variant_setup():
+    steps = get_bundle_setup("productvariantreorder")
     assert len(steps) == 1
     assert steps[0]["fixture_key"] == "secondary_variant_id"
-
-
-def test_productvariantreorder_shares_secondary_variant_setup():
-    assert get_bundle_setup("productvariantreorder") == get_bundle_setup("productvariantsetdefault")
 
 
 def test_variant_bulk_mutations_share_secondary_variant_setup():
@@ -37,4 +41,5 @@ async def test_apply_bundle_setup_merges_fixture_overlay():
         run_setup_mutation=run_setup,
     )
     assert overlay["secondary_variant_id"] == "VmFyaWFudDoy"
+    assert overlay["default_variant_id"] == "VmFyaWFudDoy"
     run_setup.assert_awaited_once()

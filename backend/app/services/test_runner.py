@@ -560,12 +560,28 @@ class TestRunner:
         }
 
     def _storefront_fixture_overlay(self, resolved: dict[str, Any]) -> dict[str, Any]:
-        """Overlay storefront channel slug/id when fixtures define a separate storefront channel."""
+        """Overlay storefront-specific keys from the runtime-resolved fixture map.
+
+        Transfers channel, checkout, variant, and customer IDs from the runtime
+        fixture resolution into the storefront bundle fixture namespace, so
+        all storefront probes share the same preamble-created entities.
+        """
         fixtures = dict(resolved)
         if resolved.get("storefront_channel"):
             fixtures["default_channel"] = resolved["storefront_channel"]
         if resolved.get("storefront_channel_id"):
             fixtures["default_channel_id"] = resolved["storefront_channel_id"]
+        # Transfer preamble-created checkout and customer IDs so all storefront
+        # bundles share the same session entities instead of each using static
+        # fixture IDs that may not exist in the target DB.
+        for key in (
+            "default_checkout_id",
+            "default_checkout_token",
+            "variant_id_for_cart",
+            "storefront_customer_id",
+        ):
+            if resolved.get(key):
+                fixtures[key] = resolved[key]
         return fixtures
 
     def _attach_resolved_fixtures(self, endpoints: list[dict]) -> list[dict]:
@@ -716,21 +732,39 @@ class TestRunner:
             payload["query"] = endpoint["golden_input"]
             raw_vars = endpoint.get("step_variables") or {}
             fixtures = dict(endpoint.get("step_fixtures") or {})
-            await enrich_checkout_delivery_fixture(
-                self.saleor_url,
-                step_id=endpoint.get("step_id", ""),
-                context=self._scenario_context,
-                fixtures=fixtures,
-                token=self.saleor_token,
-                timeout=self.timeout,
-            )
-            await enrich_checkout_email_before_complete(
-                self.saleor_url,
-                step_id=endpoint.get("step_id", ""),
-                context=self._scenario_context,
-                token=self.saleor_token,
-                timeout=self.timeout,
-            )
+            try:
+                await enrich_checkout_delivery_fixture(
+                    self.saleor_url,
+                    step_id=endpoint.get("step_id", ""),
+                    context=self._scenario_context,
+                    fixtures=fixtures,
+                    token=self.saleor_token,
+                    timeout=self.timeout,
+                )
+                await enrich_checkout_email_before_complete(
+                    self.saleor_url,
+                    step_id=endpoint.get("step_id", ""),
+                    context=self._scenario_context,
+                    token=self.saleor_token,
+                    timeout=self.timeout,
+                )
+            except Exception as enrichment_error:
+                return {
+                    "status": "fail",
+                    "outcome": "enrichment_error",
+                    "expected": "Scenario enrichment should succeed",
+                    "diff_summary": str(enrichment_error),
+                    "endpoint": name,
+                    "kind": kind,
+                    "category": category,
+                    "is_public": is_public,
+                    "failure_category": "enrichment_error",
+                    "response_valid": False,
+                    "compatible": False,
+                    "input_sent": json.dumps(payload),
+                    "actual_response": json.dumps({"error": str(enrichment_error)}),
+                    "match_status": "enrichment_error",
+                }
             payload["variables"] = substitute_scenario_variables(
                 raw_vars, self._scenario_context, fixtures
             )

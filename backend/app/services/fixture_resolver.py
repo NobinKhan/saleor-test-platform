@@ -141,6 +141,17 @@ async def resolve_fixtures(
 
     if settings.runtime_seed:
         logger.info("Runtime seed: mutation-first harness certification topology")
+        # Clear entity-specific keys so the seed functions are forced to create
+        # entities via mutations. The static fixtures contain hardcoded IDs from
+        # the golden reference that may not exist on the target Saleor instance.
+        _ENTITY_KEYS = {
+            "default_product_id", "default_variant_id", "variant_id_for_cart",
+            "default_checkout_id", "default_checkout_token",
+            "default_customer_id", "default_order_id",
+            "default_product_type_id", "default_warehouse_id",
+        }
+        for k in _ENTITY_KEYS:
+            resolved.pop(k, None)
         seed_result = await ensure_certification_topology(
             saleor_url,
             token,

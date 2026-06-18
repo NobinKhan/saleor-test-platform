@@ -164,6 +164,10 @@ def _extract_json_path(obj: Any, path: str) -> Any:
     return current
 
 
+class ScenarioEnrichmentError(Exception):
+    """Raised when a scenario enrichment step cannot complete due to missing context."""
+
+
 async def enrich_checkout_delivery_fixture(
     saleor_url: str,
     *,
@@ -178,7 +182,10 @@ async def enrich_checkout_delivery_fixture(
         return
     checkout_id = context.get("checkout_id")
     if not checkout_id:
-        return
+        raise ScenarioEnrichmentError(
+            f"enrich_checkout_delivery_fixture: checkout_id missing from scenario context "
+            f"for step {step_id}. Available context keys: {list(context.keys())}"
+        )
     headers: dict[str, str] = {"Content-Type": "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token.removeprefix('Bearer ')}"
@@ -218,7 +225,10 @@ async def enrich_checkout_email_before_complete(
         return
     checkout_id = context.get("checkout_id")
     if not checkout_id:
-        return
+        raise ScenarioEnrichmentError(
+            f"enrich_checkout_email_before_complete: checkout_id missing from scenario context "
+            f"for step {step_id}. Available context keys: {list(context.keys())}"
+        )
     headers: dict[str, str] = {"Content-Type": "application/json"}
     if token:
         headers["Authorization"] = f"Bearer {token.removeprefix('Bearer ')}"
