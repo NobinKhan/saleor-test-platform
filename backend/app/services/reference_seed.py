@@ -558,6 +558,146 @@ async def _ensure_product_type(
     return False
 
 
+def _channel_listing_needs_publish(
+    channel_listings: list[dict[str, Any]],
+    channel_id: str,
+) -> bool:
+    """True when the product has no listing or is unpublished on the target channel."""
+    for listing in channel_listings:
+        ch = listing.get("channel") or {}
+        if ch.get("id") == channel_id:
+            return not listing.get("isPublished", False)
+    return True
+
+
+async def _ensure_fixture_variant_purchasable(
+    client: httpx.AsyncClient,
+    *,
+    url: str,
+    headers: dict[str, str],
+    fixtures: dict[str, Any],
+    error_log: list[str],
+    product_id: str | None = None,
+    variant_id: str | None = None,
+    channel_id: str | None = None,
+) -> bool:
+    """Ensure harness fixture variant is published, priced, and stocked on the channel."""
+    pid = product_id or fixtures.get("default_product_id")
+    vid = variant_id or fixtures.get("default_variant_id")
+    cid = channel_id or fixtures.get("default_channel_id")
+    if not pid or not vid or not cid:
+        return False
+
+    listing_data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "query($id: ID!) { "
+            "product(id: $id) { id channelListings { channel { id } isPublished } } }"
+        ),
+        variables={"id": pid},
+        allow_errors=True,
+        error_log=error_log,
+        operation="productChannelListings",
+    )
+    product = listing_data.get("product") or {}
+    channel_listings = product.get("channelListings") or []
+    if not _channel_listing_needs_publish(channel_listings, cid):
+        return True
+
+    category_id = fixtures.get("default_category_id")
+    if category_id:
+        await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($id: ID!, $input: ProductUpdateInput!) { "
+                "productUpdate(id: $id, input: $input) { product { id } "
+                "errors { field message code } } }"
+            ),
+            variables={"id": pid, "input": {"category": category_id}},
+            allow_errors=True,
+            error_log=error_log,
+            operation="productUpdate(category)",
+        )
+
+    await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
+            "productChannelListingUpdate(id: $id, input: $input) { product { id } "
+            "errors { field message code } } }"
+        ),
+        variables={
+            "id": pid,
+            "input": {
+                "updateChannels": [{
+                    "channelId": cid,
+                    "isPublished": True,
+                    "isAvailableForPurchase": True,
+                    "addVariants": [vid],
+                }],
+            },
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="productChannelListingUpdate",
+    )
+
+    await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query=(
+            "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
+            "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
+            "errors { field message code } } }"
+        ),
+        variables={
+            "id": vid,
+            "input": [{"channelId": cid, "price": "10.00"}],
+        },
+        allow_errors=True,
+        error_log=error_log,
+        operation="productVariantChannelListingUpdate",
+    )
+
+    warehouse_data = await _gql(
+        client,
+        url=url,
+        headers=headers,
+        query="query { warehouses(first: 1) { edges { node { id } } } }",
+        allow_errors=True,
+        error_log=error_log,
+        operation="warehouses",
+    )
+    warehouses = (warehouse_data.get("warehouses") or {}).get("edges") or []
+    if warehouses:
+        wh_id = warehouses[0]["node"]["id"]
+        await _gql(
+            client,
+            url=url,
+            headers=headers,
+            query=(
+                "mutation($variantId: ID!, $stocks: [StockInput!]!) { "
+                "productVariantStocksCreate(variantId: $variantId, stocks: $stocks) "
+                "{ productVariant { id } errors { field message code } } }"
+            ),
+            variables={
+                "variantId": vid,
+                "stocks": [{"warehouse": wh_id, "quantity": 100}],
+            },
+            allow_errors=True,
+            error_log=error_log,
+            operation="productVariantStocksCreate",
+        )
+    return True
+
+
 async def _ensure_reference_product(
     client: httpx.AsyncClient,
     *,
@@ -566,12 +706,20 @@ async def _ensure_reference_product(
     fixtures: dict[str, Any],
     error_log: list[str],
 ) -> bool:
-    if fixtures.get("default_product_id") and fixtures.get("default_variant_id"):
-        return False
     channel_id = fixtures.get("default_channel_id")
     channel_slug = fixtures.get("default_channel")
     product_type_id = fixtures.get("default_product_type_id")
     if not channel_id or not product_type_id:
+        return False
+
+    if fixtures.get("default_product_id") and fixtures.get("default_variant_id"):
+        await _ensure_fixture_variant_purchasable(
+            client,
+            url=url,
+            headers=headers,
+            fixtures=fixtures,
+            error_log=error_log,
+        )
         return False
 
     by_slug = await _gql(
@@ -580,7 +728,8 @@ async def _ensure_reference_product(
         headers=headers,
         query=(
             "query($slug: String!) { "
-            "product(slug: $slug) { id slug variants { id } channelListings { channel { id } } } }"
+            "product(slug: $slug) { id slug variants { id } "
+            "channelListings { channel { id } isPublished } } }"
         ),
         variables={"slug": REFERENCE_PRODUCT_SLUG},
         allow_errors=True,
@@ -626,101 +775,16 @@ async def _ensure_reference_product(
             variant_id = variants[0]["id"]
             fixtures["default_variant_id"] = variant_id
             fixtures["variant_id_for_cart"] = variant_id
-            # Ensure product is assigned to channel with variant available for purchase
-            channel_listings = existing.get("channelListings") or []
-            if not any(cl.get("channel", {}).get("id") == channel_id for cl in channel_listings):
-                # Assign category first (required for publishing)
-                category_id = fixtures.get("default_category_id")
-                if category_id:
-                    await _gql(
-                        client,
-                        url=url,
-                        headers=headers,
-                        query=(
-                            "mutation($id: ID!, $input: ProductUpdateInput!) { "
-                            "productUpdate(id: $id, input: $input) { product { id } "
-                            "errors { field message code } } }"
-                        ),
-                        variables={
-                            "id": existing["id"],
-                            "input": {"category": category_id},
-                        },
-                        allow_errors=True,
-                        error_log=error_log,
-                        operation="productUpdate(category)",
-                    )
-                await _gql(
-                    client,
-                    url=url,
-                    headers=headers,
-                    query=(
-                        "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
-                        "productChannelListingUpdate(id: $id, input: $input) { product { id } "
-                        "errors { field message code } } }"
-                    ),
-                    variables={
-                        "id": existing["id"],
-                        "input": {
-                            "updateChannels": [{
-                                "channelId": channel_id,
-                                "isPublished": True,
-                                "isAvailableForPurchase": True,
-                                "addVariants": [variant_id],
-                            }],
-                        },
-                    },
-                    allow_errors=True,
-                    error_log=error_log,
-                    operation="productChannelListingUpdate",
-                )
-                # Set variant price
-                await _gql(
-                    client,
-                    url=url,
-                    headers=headers,
-                    query=(
-                        "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
-                        "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
-                        "errors { field message code } } }"
-                    ),
-                    variables={
-                        "id": variant_id,
-                        "input": [{"channelId": channel_id, "price": "10.00"}],
-                    },
-                    allow_errors=True,
-                    error_log=error_log,
-                    operation="productVariantChannelListingUpdate",
-                )
-                # Create stock
-                warehouse_data = await _gql(
-                    client,
-                    url=url,
-                    headers=headers,
-                    query="query { warehouses(first: 1) { edges { node { id } } } }",
-                    allow_errors=True,
-                    error_log=error_log,
-                    operation="warehouses",
-                )
-                warehouses = (warehouse_data.get("warehouses") or {}).get("edges") or []
-                if warehouses:
-                    wh_id = warehouses[0]["node"]["id"]
-                    await _gql(
-                        client,
-                        url=url,
-                        headers=headers,
-                        query=(
-                            "mutation($variantId: ID!, $stocks: [StockInput!]!) { "
-                            "productVariantStocksCreate(variantId: $variantId, stocks: $stocks) "
-                            "{ productVariant { id } errors { field message code } } }"
-                        ),
-                        variables={
-                            "variantId": variant_id,
-                            "stocks": [{"warehouse": wh_id, "quantity": 100}],
-                        },
-                        allow_errors=True,
-                        error_log=error_log,
-                        operation="productVariantStocksCreate",
-                    )
+            await _ensure_fixture_variant_purchasable(
+                client,
+                url=url,
+                headers=headers,
+                fixtures=fixtures,
+                error_log=error_log,
+                product_id=existing["id"],
+                variant_id=variant_id,
+                channel_id=channel_id,
+            )
             return True
 
     data = await _gql(
@@ -770,6 +834,7 @@ async def _ensure_reference_product(
                 "input": {
                     "product": product["id"],
                     "sku": "harness-ref-sku",
+                    "name": "Harness Reference Variant",
                     "attributes": [],
                 }
             },
@@ -786,81 +851,16 @@ async def _ensure_reference_product(
             return False
 
     # Assign product to channel with variant (Saleor 3.23.7 uses productChannelListingUpdate)
-    # Include addVariants and isAvailableForPurchase so variant is available for purchase
-    await _gql(
+    await _ensure_fixture_variant_purchasable(
         client,
         url=url,
         headers=headers,
-        query=(
-            "mutation($id: ID!, $input: ProductChannelListingUpdateInput!) { "
-            "productChannelListingUpdate(id: $id, input: $input) { product { id } "
-            "errors { field message code } } }"
-        ),
-        variables={
-            "id": product["id"],
-            "input": {
-                "updateChannels": [{
-                    "channelId": channel_id,
-                    "isPublished": True,
-                    "isAvailableForPurchase": True,
-                    "addVariants": [variant_id],
-                }],
-            },
-        },
-        allow_errors=True,
+        fixtures=fixtures,
         error_log=error_log,
-        operation="productChannelListingUpdate",
+        product_id=product["id"],
+        variant_id=variant_id,
+        channel_id=channel_id,
     )
-
-    # Set price on variant channel listing (required for checkout)
-    await _gql(
-        client,
-        url=url,
-        headers=headers,
-        query=(
-            "mutation($id: ID!, $input: [ProductVariantChannelListingAddInput!]!) { "
-            "productVariantChannelListingUpdate(id: $id, input: $input) { variant { id } "
-            "errors { field message code } } }"
-        ),
-        variables={
-            "id": variant_id,
-            "input": [{"channelId": channel_id, "price": "10.00"}],
-        },
-        allow_errors=True,
-        error_log=error_log,
-        operation="productVariantChannelListingUpdate",
-    )
-
-    # Create stock for variant in the first warehouse
-    warehouse_data = await _gql(
-        client,
-        url=url,
-        headers=headers,
-        query="query { warehouses(first: 1) { edges { node { id } } } }",
-        allow_errors=True,
-        error_log=error_log,
-        operation="warehouses",
-    )
-    warehouses = (warehouse_data.get("warehouses") or {}).get("edges") or []
-    if warehouses:
-        wh_id = warehouses[0]["node"]["id"]
-        await _gql(
-            client,
-            url=url,
-            headers=headers,
-            query=(
-                "mutation($variantId: ID!, $stocks: [StockInput!]!) { "
-                "productVariantStocksCreate(variantId: $variantId, stocks: $stocks) "
-                "{ productVariant { id } errors { field message code } } }"
-            ),
-            variables={
-                "variantId": variant_id,
-                "stocks": [{"warehouse": wh_id, "quantity": 100}],
-            },
-            allow_errors=True,
-            error_log=error_log,
-            operation="productVariantStocksCreate",
-        )
 
     fixtures["default_variant_id"] = variant_id
     fixtures["variant_id_for_cart"] = variant_id
@@ -1276,6 +1276,15 @@ async def ensure_runtime_fixture_entities(
             client, url=saleor_url, headers=headers, fixtures=fixtures, error_log=error_log
         ):
             seeded.add("default_order_id")
+
+        if await _ensure_fixture_variant_purchasable(
+            client,
+            url=saleor_url,
+            headers=headers,
+            fixtures=fixtures,
+            error_log=error_log,
+        ):
+            seeded.add("fixture_variant_purchasable")
 
         fixtures = await _seed_storefront_fixtures(
             client, url=saleor_url, headers=headers, fixtures=fixtures

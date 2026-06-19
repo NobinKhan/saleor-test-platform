@@ -45,6 +45,8 @@ Run pytest inside the harness container (`just test`), not on the host without a
 
 Full compatibility, corpus, and SGRC rules live in [`.cursor/rules/`](.cursor/rules/).
 
+Replay/auth/schema-gate contracts (customer JWT, URL rewrite, deprecated Sale API exclusion): [`.cursor/rules/harness-replay-contract.mdc`](.cursor/rules/harness-replay-contract.mdc).
+
 ## Current state (2026-06-17)
 
 Score: **100% (856/856)** against official Saleor 3.23.7 on `just baseline` (`full+scenarios`, Tier 2 gate on).

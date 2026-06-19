@@ -6,6 +6,8 @@ from app.services.deprecated_scanner import (
     filter_deprecated_bundles,
     scan_l1_probe_for_deprecated,
     get_deprecated_types,
+    is_deprecated_mutation,
+    filter_deprecated_schema_ops,
 )
 
 from app.services.client_bundles import ClientBundle
@@ -98,3 +100,21 @@ def test_scan_l1_probe_dirty():
     is_dep, types_found = scan_l1_probe_for_deprecated("type SaleTranslatableContent { id }")
     assert is_dep
     assert "SaleTranslatableContent" in types_found
+
+
+def test_is_deprecated_mutation_sale_bulk_delete():
+    assert is_deprecated_mutation("saleBulkDelete")
+    assert not is_deprecated_mutation("productCreate")
+
+
+def test_filter_deprecated_schema_ops():
+    ops = ["productCreate", "saleBulkDelete", "orderCreate"]
+    assert filter_deprecated_schema_ops(ops) == ["productCreate", "orderCreate"]
+
+
+def test_scan_l1_probe_deprecated_mutation_field():
+    is_dep, found = scan_l1_probe_for_deprecated(
+        'mutation { saleBulkDelete(ids: ["U2FsZTox"]) { count errors { field message } } }'
+    )
+    assert is_dep
+    assert "saleBulkDelete" in found

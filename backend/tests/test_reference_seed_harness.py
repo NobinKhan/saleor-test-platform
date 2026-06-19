@@ -9,9 +9,25 @@ import pytest
 
 from app.services.reference_seed import (
     REFERENCE_PRODUCT_SLUG,
+    _channel_listing_needs_publish,
+    _ensure_fixture_variant_purchasable,
     _ensure_reference_product,
     _ensure_shop_settings,
 )
+
+
+def test_channel_listing_needs_publish_missing_listing():
+    assert _channel_listing_needs_publish([], "Q2hhbm5lbDox") is True
+
+
+def test_channel_listing_needs_publish_unpublished():
+    listings = [{"channel": {"id": "Q2hhbm5lbDox"}, "isPublished": False}]
+    assert _channel_listing_needs_publish(listings, "Q2hhbm5lbDox") is True
+
+
+def test_channel_listing_needs_publish_already_published():
+    listings = [{"channel": {"id": "Q2hhbm5lbDox"}, "isPublished": True}]
+    assert _channel_listing_needs_publish(listings, "Q2hhbm5lbDox") is False
 
 
 @pytest.mark.asyncio
@@ -68,7 +84,7 @@ async def test_ensure_reference_product_creates_variant_when_product_has_none():
                     "id": "UHJvZHVjdDox",
                     "slug": REFERENCE_PRODUCT_SLUG,
                     "variants": [],
-                    "channelListings": [{"channel": {"id": "Q2hhbm5lbDox"}}],
+                    "channelListings": [{"channel": {"id": "Q2hhbm5lbDox"}, "isPublished": False}],
                 }
             },
             {
@@ -77,6 +93,16 @@ async def test_ensure_reference_product_creates_variant_when_product_has_none():
                     "errors": [],
                 }
             },
+            {
+                "product": {
+                    "id": "UHJvZHVjdDox",
+                    "channelListings": [{"channel": {"id": "Q2hhbm5lbDox"}, "isPublished": False}],
+                }
+            },
+            {"productChannelListingUpdate": {"product": {"id": "UHJvZHVjdDox"}, "errors": []}},
+            {"productVariantChannelListingUpdate": {"variant": {"id": "UHJvZHVjdFZhcmlhbnQ6MQ=="}, "errors": []}},
+            {"warehouses": {"edges": [{"node": {"id": "V2FyZWhvdXNlOjE="}}]}},
+            {"productVariantStocksCreate": {"productVariant": {"id": "UHJvZHVjdFZhcmlhbnQ6MQ=="}, "errors": []}},
         ]
     )
     with patch("app.services.reference_seed._gql", gql):
@@ -90,6 +116,71 @@ async def test_ensure_reference_product_creates_variant_when_product_has_none():
     assert created is True
     assert fixtures["default_variant_id"] == "UHJvZHVjdFZhcmlhbnQ6MQ=="
     assert fixtures["variant_id_for_cart"] == "UHJvZHVjdFZhcmlhbnQ6MQ=="
+    publish_calls = [
+        c for c in gql.await_args_list if "productChannelListingUpdate" in str(c)
+    ]
+    assert publish_calls
+
+
+@pytest.mark.asyncio
+async def test_ensure_reference_product_repairs_captured_fixtures():
+    fixtures = {
+        "default_product_id": "UHJvZHVjdDox",
+        "default_variant_id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
+        "default_channel_id": "Q2hhbm5lbDox",
+        "default_product_type_id": "UHJvZHVjdFR5cGU6MQ==",
+    }
+    gql = AsyncMock(
+        side_effect=[
+            {
+                "product": {
+                    "id": "UHJvZHVjdDox",
+                    "channelListings": [{"channel": {"id": "Q2hhbm5lbDox"}, "isPublished": False}],
+                }
+            },
+            {"productChannelListingUpdate": {"product": {"id": "UHJvZHVjdDox"}, "errors": []}},
+            {"productVariantChannelListingUpdate": {"variant": {"id": "UHJvZHVjdFZhcmlhbnQ6MQ=="}, "errors": []}},
+            {"warehouses": {"edges": [{"node": {"id": "V2FyZWhvdXNlOjE="}}]}},
+            {"productVariantStocksCreate": {"productVariant": {"id": "UHJvZHVjdFZhcmlhbnQ6MQ=="}, "errors": []}},
+        ]
+    )
+    with patch("app.services.reference_seed._gql", gql):
+        created = await _ensure_reference_product(
+            httpx.AsyncClient(),
+            url="http://example.com/graphql/",
+            headers={},
+            fixtures=fixtures,
+            error_log=[],
+        )
+    assert created is False
+    assert gql.await_count >= 2
+
+
+@pytest.mark.asyncio
+async def test_ensure_fixture_variant_purchasable_skips_when_published():
+    fixtures = {
+        "default_product_id": "UHJvZHVjdDox",
+        "default_variant_id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
+        "default_channel_id": "Q2hhbm5lbDox",
+    }
+    gql = AsyncMock(
+        return_value={
+            "product": {
+                "id": "UHJvZHVjdDox",
+                "channelListings": [{"channel": {"id": "Q2hhbm5lbDox"}, "isPublished": True}],
+            }
+        }
+    )
+    with patch("app.services.reference_seed._gql", gql):
+        ok = await _ensure_fixture_variant_purchasable(
+            httpx.AsyncClient(),
+            url="http://example.com/graphql/",
+            headers={},
+            fixtures=fixtures,
+            error_log=[],
+        )
+    assert ok is True
+    gql.assert_awaited_once()
 
 
 @pytest.mark.asyncio

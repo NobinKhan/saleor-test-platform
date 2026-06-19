@@ -316,6 +316,11 @@ async def main() -> int:
     elif args.apply_diff and not ops_to_record:
         print("No L1 probes to record from diff")
 
+    if args.apply_diff:
+        from app.services.reference_corpus import update_manifest_after_patch
+
+        update_manifest_after_patch(version)
+
     diff = await compute_corpus_diff(
         saleor_url=args.url,
         saleor_token=token,

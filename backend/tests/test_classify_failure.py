@@ -160,3 +160,62 @@ def test_searchcategories_seed_tagged_stays_seed_prerequisite():
         endpoint={"seed_tags": ["requires_catalog_seed"]},
     )
     assert cat == "seed_prerequisite"
+
+
+def test_sf_accountupdate_account_not_found_is_auth_prerequisite():
+    cat = _classify_failure_category(
+        comparison=_comparison(
+            match_status="mismatch",
+            actual_contract="not_found",
+            diff_summary="Account not found",
+        ),
+        kind="CLIENT_BUNDLE",
+        endpoint_name="sf-accountupdate",
+        meta={},
+        assertion_failures=[],
+        endpoint={
+            "auth_context": "customer",
+            "golden_contract": "success_with_data",
+        },
+    )
+    assert cat == "auth_prerequisite"
+
+
+def test_product_not_published_assertion_is_seed_prerequisite():
+    cat = _classify_failure_category(
+        comparison=_comparison(
+            match_status="assertion_fail",
+            compatible=False,
+            diff_summary="Path $.data.orderLinesCreate.order.id does not exist",
+        ),
+        kind="SCENARIO_STEP",
+        endpoint_name="order-lifecycle/02_order_line_create",
+        meta={},
+        assertion_failures=["Path $.data.orderLinesCreate.order.id does not exist"],
+        actual_response={
+            "data": {
+                "orderLinesCreate": {
+                    "order": None,
+                    "errors": [{"field": "variantId", "message": "Variant is not published", "code": "PRODUCT_NOT_PUBLISHED"}],
+                }
+            }
+        },
+    )
+    assert cat == "seed_prerequisite"
+
+
+def test_generic_assertion_fail_stays_assertion_fail():
+    cat = _classify_failure_category(
+        comparison=_comparison(
+            match_status="assertion_fail",
+            compatible=False,
+            diff_summary="Path $.data.foo missing",
+        ),
+        kind="SCENARIO_STEP",
+        endpoint_name="some-scenario/01_step",
+        meta={},
+        assertion_failures=["Path $.data.foo missing"],
+        actual_response={"data": {"foo": None}},
+    )
+    assert cat == "assertion_fail"
+

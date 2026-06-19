@@ -195,7 +195,11 @@ def write_corpus(
     if existing_manifest.get("reference_queries"):
         manifest["reference_queries"] = existing_manifest["reference_queries"]
     if existing_manifest.get("reference_mutations"):
-        manifest["reference_mutations"] = existing_manifest["reference_mutations"]
+        from app.services.deprecated_scanner import filter_deprecated_schema_ops
+
+        manifest["reference_mutations"] = filter_deprecated_schema_ops(
+            list(existing_manifest["reference_mutations"])
+        )
     manifest["corpus_hash"] = corpus_hash(version)
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return directory
@@ -234,6 +238,12 @@ def update_manifest_after_patch(version: str) -> None:
     manifest["operations_index"] = operations_index
     manifest["probe_count"] = len(probes)
     manifest["corpus_hash"] = corpus_hash(version)
+    if manifest.get("reference_mutations"):
+        from app.services.deprecated_scanner import filter_deprecated_schema_ops
+
+        manifest["reference_mutations"] = filter_deprecated_schema_ops(
+            list(manifest["reference_mutations"])
+        )
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
 

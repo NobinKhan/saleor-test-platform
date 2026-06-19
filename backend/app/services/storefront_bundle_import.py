@@ -78,14 +78,18 @@ STOREFRONT_P0_OPERATION_NAMES = frozenset({
 CUSTOMER_AUTH_OPS = frozenset({
     "me",
     "accountUpdate",
-    "accountRegister",
-    "passwordChange",
-    "requestPasswordReset",
-    "confirmAccount",
     "accountAddressCreate",
     "accountAddressUpdate",
     "accountAddressDelete",
+    "passwordChange",
     "checkoutCustomerAttach",
+})
+
+ANONYMOUS_ACCOUNT_OPS = frozenset({
+    "accountRegister",
+    "confirmAccount",
+    "requestPasswordReset",
+    "resetPassword",
 })
 
 _GQL_BLOCK = re.compile(r"gql`\s*(.*?)\s*`", re.DOTALL)
@@ -100,9 +104,9 @@ def storefront_vendor_path(version: str) -> Path:
 
 def _infer_auth_context(operation_names: list[str], document: str) -> str:
     roots = {name for name, _ in root_fields_in_document(document)}
-    if roots & CUSTOMER_AUTH_OPS or any(
-        n.lower().startswith("account") for n in operation_names
-    ):
+    if roots & ANONYMOUS_ACCOUNT_OPS:
+        return "anonymous"
+    if roots & CUSTOMER_AUTH_OPS:
         return "customer"
     return "anonymous"
 

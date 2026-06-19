@@ -32,9 +32,62 @@ DEPRECATED_TYPES: frozenset[str] = frozenset({
     "sale",
 })
 
+DEPRECATED_MUTATIONS: frozenset[str] = frozenset({
+    "saleBulkDelete",
+    "saleCreate",
+    "saleUpdate",
+    "saleDelete",
+    "saleAddChannels",
+    "saleRemoveChannels",
+    "saleChannelListingUpdate",
+})
+
 DEPRECATED_TYPE_PATTERN = re.compile(
     r"\b(" + "|".join(re.escape(t) for t in sorted(DEPRECATED_TYPES)) + r")\b"
 )
+
+DEPRECATED_MUTATION_PATTERN = re.compile(
+    r"\b(" + "|".join(re.escape(m) for m in sorted(DEPRECATED_MUTATIONS)) + r")\b"
+)
+
+
+def is_deprecated_mutation(name: str) -> bool:
+    """True when an introspected mutation field is legacy/removed from certification."""
+    return name in DEPRECATED_MUTATIONS
+
+
+def filter_deprecated_schema_ops(ops: list[str]) -> list[str]:
+    """Drop deprecated mutation names from schema gate reference lists."""
+    return [op for op in ops if not is_deprecated_mutation(op)]
+
+
+def find_deprecated_mutations_in_list(ops: list[str]) -> list[str]:
+    """Return deprecated mutation field names present in a list."""
+    return sorted(m for m in ops if is_deprecated_mutation(m))
+
+
+def check_corpus_deprecated(
+    *,
+    manifest_mutations: list[str] | None,
+    probes: list[Any],
+) -> list[str]:
+    """Return error messages if legacy Sale API appears in corpus or manifest."""
+    errors: list[str] = []
+    if manifest_mutations:
+        found = find_deprecated_mutations_in_list(manifest_mutations)
+        if found:
+            errors.append(
+                "manifest reference_mutations contains legacy Sale API: "
+                + ", ".join(found)
+            )
+    for probe in probes:
+        is_dep, types_found = scan_l1_probe_for_deprecated(probe.input_sent)
+        if is_dep:
+            errors.append(
+                f"probe {probe.endpoint_name}__{probe.endpoint_kind} references "
+                f"deprecated: {', '.join(types_found)}"
+            )
+    return errors
 
 
 def scan_document_for_deprecated_types(document: str) -> list[str]:
@@ -88,8 +141,10 @@ def scan_l1_probe_for_deprecated(query_input: str) -> tuple[bool, list[str]]:
 
     Returns (is_deprecated, list_of_deprecated_types_found).
     """
-    found = DEPRECATED_TYPE_PATTERN.findall(query_input)
-    return bool(found), sorted(set(found))
+    type_found = DEPRECATED_TYPE_PATTERN.findall(query_input)
+    mutation_found = DEPRECATED_MUTATION_PATTERN.findall(query_input)
+    found = sorted(set(type_found + mutation_found))
+    return bool(found), found
 
 
 def get_deprecated_types() -> list[str]:

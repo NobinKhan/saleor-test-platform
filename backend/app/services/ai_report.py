@@ -57,10 +57,11 @@ def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
     )
     mismatched = sum(
         1 for r in results
-        if r.match_status in ("mismatch", "shape_drift", "tier2_fail")
+        if r.match_status in ("mismatch", "shape_drift", "tier2_fail", "assertion_fail")
         or (gate_on and r.match_status == "parity_gap")
     )
     missing = sum(1 for r in results if r.match_status == "missing_golden")
+    assertion_fail_count = sum(1 for r in results if r.match_status == "assertion_fail")
     parity_gaps = sum(
         1 for r in results if r.match_status in ("parity_gap", "tier2_fail") or r.client_parity_note
     )
@@ -104,6 +105,7 @@ def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
         "data_drift": data_drift_count,
         "effective_compatible": compatible_count,
         "effective_incompatible": real_bug_count,
+        "assertion_fail_count": assertion_fail_count,
         "failure_category_counts": category_counts,
     }
 
@@ -170,6 +172,7 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
         f"- Probe outcome rate (informational): **{probe_outcome_rate}%** returned success-class responses ({probe_success}/{total})",
         f"- Incompatible: {run.failed}, Warnings: {run.warnings}, Compatible: {run.passed}",
         f"- Golden: {stats['golden_matched']} matched, {stats['golden_mismatched']} mismatched, {stats['golden_missing']} missing",
+        f"- Scenario assertion failures: {stats.get('assertion_fail_count', 0)}",
         f"- Client parity gaps (Tier 2, informational): {stats.get('client_parity_gaps', 0)}",
     ])
     dep_count = stats.get("deprecated_excluded", 0)

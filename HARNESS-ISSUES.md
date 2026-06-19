@@ -1,193 +1,83 @@
-# Harness-Side Issues
+# Saleor 3.23.7 compatibility harness — issues for test team
 
-Baseline run against custom Saleor (3.23.7) at `http://192.168.31.237:8000/graphql/`
-on 2026-06-18.
+Action items for **saleor-test-platform** maintainers when certifying **Basmalahub Commerce**. Fixes belong in the harness repo — not in basmalahub-commerce.
 
-**Result: 856 total — 829 pass, 13 fail, 14 skip, 0 warn**
+## Scope
 
-> **Note:** Failures caused by custom backend `productVariantCreate` database errors
-> ([SALEOR-ISSUES.md](SALEOR-ISSUES.md) S1) are out of harness scope. Re-run against
-> a fixed backend after Saleor-side repairs.
+| Item | Value |
+|------|-------|
+| Target API | Saleor 3.23.7 GraphQL at merchant URL (e.g. `http://<host>:8000/graphql/`) |
+| Staff login | `merchant@demo.basmalahub.local` / `changeme` (`tokenCreate` — dashboard staff only) |
+| Latest report | [`report.md`](report.md) (gitignored locally; export from harness UI) |
 
----
+## API-side fixes (already in basmalahub-commerce)
 
-## Issue H1: Static fixture IDs override live-captured entities
+These are **not** harness bugs. Do not re-file as API defects:
 
-**Status:** Verified fixed (commit `695c7a8`, regression test in `test_fixture_resolver.py`)
-**Severity:** High — blocked 18 of 27 failures
-
-### Problem
-
-`resolve_fixtures()` loads static fixtures from baked reference files on disk
-(`reference/baked/client-bundles/.../fixtures.json`). These contain hardcoded
-entity IDs from the original Saleor demo data:
-
-```
-default_variant_id:    UHJvZHVjdFZhcmlhbnQ6MQ==  (ProductVariant:1)
-default_product_id:    UHJvZHVjdDox              (Product:1)
-default_checkout_id:   Q2hlY2tvdXQ6NTJkYjA3ND... (hardcoded checkout)
-variant_id_for_cart:   UHJvZHVjdFZhcmlhbnQ6MQ==  (ProductVariant:1)
-```
-
-`_apply_captured()` only **adds** keys not already in `resolved` — it never
-overrides existing keys. So the static IDs persist even when the live Saleor
-has completely different entities (or none at all).
-
-The seed functions (`_ensure_reference_product`, etc.) check
-`fixtures.get("default_variant_id")` and skip creation if the key exists,
-even though the referenced entity doesn't exist on the target.
-
-### Fix
-
-Clear entity-specific keys from `resolved` before seeding when `RUNTIME_SEED=true`:
-
-```python
-_ENTITY_KEYS = {
-    "default_product_id", "default_variant_id", "variant_id_for_cart",
-    "default_checkout_id", "default_checkout_token",
-    "default_customer_id", "default_order_id",
-    "default_product_type_id", "default_warehouse_id",
-}
-for k in _ENTITY_KEYS:
-    resolved.pop(k, None)
-```
-
-**File:** [`backend/app/services/fixture_resolver.py`](backend/app/services/fixture_resolver.py)
+- `productChannelListingUpdate` implements Saleor `updateChannels` bulk input (`channelId`, `isPublished`, `addVariants` / `removeVariants`)
+- `product(slug: …)` loads variants using resolved `public_id` (slug query no longer returns empty `variants`)
+- `orderLinesCreate` resolves the **order's channel** (not staff default), accepts relay `Order` global IDs, validates PCL publish + VCL on that channel
+- Guest customer context for L1 validation probes; Saleor token-possession checkout scope; `sitesettings` / countries parity (see [`docs/SALEOR_GAPS.md`](docs/SALEOR_GAPS.md))
 
 ---
 
-## Issue H2: `_ensure_reference_product` doesn't handle product-without-variants
+## Resolved (harness)
 
-**Status:** Verified fixed (commit `695c7a8`, test in `test_reference_seed_harness.py`)
-**Severity:** High
+### ISSUE-1: `sf-accountupdate` requires customer access JWT — **FIXED**
 
-### Problem
+- Customer probes use `TestRunner._customer_token` only (`_auth_headers()` for `auth_context=customer`).
+- `ensure_customer_auth()` in [`saleor_auth.py`](backend/app/services/saleor_auth.py) provisions JWT via `accountRegister.sessionToken` or per-run fallback email.
+- Staff `tokenCreate` is never sent on customer-success storefront bundles.
 
-`_ensure_reference_product()` queries the product by slug. If the product
-exists but has **zero variants**, the function skips variant creation (the
-`if variants:` block) and falls through to try creating a **duplicate** product
-with the same slug. This fails silently, and `default_variant_id` is never set.
+### ISSUE-2: `saleBulkDelete` legacy Sale API in schema gate — **FIXED**
 
-### Fix
+- `saleBulkDelete` is in [`deprecated_scanner.py`](backend/app/services/deprecated_scanner.py) `DEPRECATED_MUTATIONS`.
+- [`schema_gate_diff()`](backend/app/services/introspection.py) filters deprecated ops before computing `missing_mutations`.
+- No `saleBulkDelete` L1 probe remains in the 3.23.7 corpus manifest.
+- **If you still see this:** rebuild `harness-backend` — reference Python is baked at image build time.
 
-When the product exists but has no variants, create one via
-`productVariantCreate` before continuing.
+### ISSUE-4: Customer JWT prerequisites (5 skipped probes) — **FIXED**
 
-**File:** [`backend/app/services/reference_seed.py`](backend/app/services/reference_seed.py)
-
----
-
-## Issue H3: Scenario enrichment error handler references undefined `start`
-
-**Status:** Verified fixed (commit `695c7a8`)
-**Severity:** Medium
-
-### Problem
-
-The `ScenarioEnrichmentError` handler in `_test_endpoint()` referenced
-`time.time() - start`, but `start` is defined **after** the enrichment block.
-This caused `UnboundLocalError` when enrichment failed.
-
-### Fix
-
-Removed `response_time_ms` from the enrichment error return dict.
-
-**File:** [`backend/app/services/test_runner.py`](backend/app/services/test_runner.py)
+- `resolve_fixtures()` provisions customer JWT during runtime seed; per-run fallback `harness-customer-{runId}@example.com` when staff delete fails.
+- `customer_delete_incompatible` warning logged when Basmalahub rejects relay IDs from `customers` query (API defect, not harness skip).
+- Expect **0** `auth_prerequisite` skips on customer bundles after rebuild.
 
 ---
 
-## Issue H4: sf-accountupdate probe fails with "Account not found"
+## Open / recently fixed (verify on next run)
 
-**Status:** Fixed
-**Severity:** Medium
+### ISSUE-3: Runtime seed skips publish repair (`order-lifecycle/02`) — **FIXED in harness**
 
-### Problem
+**Symptom:** `orderLinesCreate` returns `PRODUCT_NOT_PUBLISHED`; `order-lifecycle/02_order_line_create` assertion fails.
 
-`sf-accountupdate` sends `accountUpdate` with `auth_context: customer`.
-`apply_bundle_setup()` runs an `accountUpdate` preamble step with `auth: customer`,
-but `_run_setup_mutation()` only refreshed the **staff** token — customer setup
-mutations were sent without a Bearer token.
+**Harness fix ( [`reference_seed.py`](backend/app/services/reference_seed.py) ):**
 
-Secondary issue: `ensure_customer_token()` defaulted to `default-channel` while
-harness topology uses `harness-channel`.
+- `_ensure_fixture_variant_purchasable()` — idempotent publish + VCL + stock repair
+- No blind early-return when capture already has product/variant IDs
+- Publish when channel listing missing **or** `isPublished` is false
+- `productVariantCreate` includes `name: "Harness Reference Variant"` on all paths
 
-### Fix
+**Verify:** Rebuild `harness-backend`, run certification; `order-lifecycle/02_order_line_create` should be `pass | match | success`.
 
-1. `_run_setup_mutation()` now calls `_ensure_auth_for_context(auth_context)` before posting.
-2. Customer registration uses `harness-channel` (default in `saleor_auth.py` and bundle_setup).
-3. Test: `test_sf_accountupdate_setup_uses_customer_auth_for_profile_step` in `test_bundle_setup.py`.
+### ISSUE-5: Compatibility score hides scenario assertion failures — **FIXED in harness**
 
-**Files:** [`test_runner.py`](backend/app/services/test_runner.py), [`saleor_auth.py`](backend/app/services/saleor_auth.py)
+- `assertion_fail` rows now count in the compatibility denominator ([`ai_report.py`](backend/app/services/ai_report.py), [`reports.py`](backend/app/routes/reports.py)).
+- Executive summary includes **Scenario assertion failures: N**.
+- `PRODUCT_NOT_PUBLISHED` (and similar seed codes) on scenario assertions classify as `seed_prerequisite`, not `assertion_fail`.
 
----
-
-## Issue H5: sitesettings schema structural mismatch
-
-**Status:** Fixed
-**Severity:** Low
-
-### Problem
-
-`sitesettings` golden expects `useLegacyShippingZoneStockAvailability: true`.
-Fresh/custom Saleor instances often return `false` because harness seed no longer
-set this flag after `demo_seed` was trimmed.
-
-### Fix
-
-Added `_ensure_shop_settings()` to `ensure_certification_topology()` — idempotently
-enables legacy shipping-zone stock availability via `shopSettingsUpdate`.
-
-**File:** [`backend/app/services/reference_seed.py`](backend/app/services/reference_seed.py)
+**Verify:** A failing `order-lifecycle/02` before seed fix should no longer show 100% compatibility when assertion failures remain.
 
 ---
 
-## Issue H6: product-lifecycle scenario schema mismatches
+## Basmalahub API defect (not harness)
 
-**Status:** Fixed
-**Severity:** Low
+**`customerDelete` relay ID rejection:** When `customers` returns `id: VXNlcjoy` but `customerDelete` responds `Invalid ID: … Expected: User.`, that is a **target API defect** vs Saleor 3.23.x. Harness logs `customer_delete_incompatible` and uses per-run customer email fallback — not SQL delete.
 
-### Problem
-
-Scenario goldens include `"errors": []` on success mutations. `extract_schema()`
-only descends into non-empty arrays, so backends that omit empty `errors` keys
-produced structural schema mismatches.
-
-### Fix
-
-Forgive missing `.errors` paths when golden records an empty errors array
-(no `errors[0]` child paths in golden schema). Also treat `.id` fields as
-compatible when golden uses short Relay IDs (`string`) and live responses
-use longer base64 (`global_id`).
-
-**File:** [`backend/app/services/schema_compare.py`](backend/app/services/schema_compare.py)
+**Basmalahub fix:** Accept User relay IDs from the `customers` query on `customerDelete` / `customerUpdate`.
 
 ---
 
-## Issue H7: orderLinesCreate uses hardcoded Order ID
+## Failure classification note
 
-**Status:** Resolved via H1
-**Severity:** Low (blocked by H1)
-
-### Problem
-
-`orderLinesCreate` used a previously-seeded order ID but failed because
-`default_variant_id` was missing (blocked by H1 static fixture override).
-
-### Fix
-
-Resolves once H1 clears static entity keys and runtime seed creates a variant.
-
----
-
-## Summary of original 27 failures
-
-| # | Endpoint | Status | Category | Root cause |
-|---|----------|--------|----------|------------|
-| 1 | sitesettings | fixed (H5) | schema_mismatch | H5 |
-| 2-6 | sf-checkout* | skip if no variant | data_prerequisite | H1 + Saleor S1 |
-| 7 | sf-accountupdate | fixed (H4) | real_bug | H4 |
-| 8-16 | sf-*, productvariant*, order* | skip if no variant | data_prerequisite | H1 + Saleor S1 |
-| 17 | scenario/01_checkout_create | cascade | assertion_fail | H1 + Saleor S1 |
-| 18-21 | checkout scenario steps | cascade | enrichment_error | H1 + Saleor S1 |
-| 22 | orderLinesCreate | fixed via H1 | assertion_fail | H1 |
-| 23-27 | product-lifecycle scenario | fixed (H6) | schema_mismatch | H6 |
+- Guest/staff Bearer on customer-only **success** mutations → `auth_prerequisite` or `data_prerequisite`, not `real_bug`.
+- `PRODUCT_NOT_PUBLISHED` on scenario steps after seed → `seed_prerequisite` when fixtures were not published on the order channel.

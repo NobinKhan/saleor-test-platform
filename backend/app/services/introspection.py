@@ -236,7 +236,13 @@ def schema_gate_diff(
     source: str = "golden",
 ) -> dict[str, Any]:
     """Build schema_diff for the compatibility gate (reference ops must exist on target)."""
-    drift = compare_two_introspections(target, reference)
+    from app.services.deprecated_scanner import filter_deprecated_schema_ops
+
+    filtered_reference = {
+        "queries": list(reference.get("queries") or []),
+        "mutations": filter_deprecated_schema_ops(list(reference.get("mutations") or [])),
+    }
+    drift = compare_two_introspections(target, filtered_reference)
     return {
         "missing_queries": drift["reference_only_queries"],
         "missing_mutations": drift["reference_only_mutations"],

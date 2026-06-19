@@ -152,8 +152,6 @@ def build_query(endpoint_name: str, kind: str) -> str:
         return 'mutation { collectionCreate(input: { name: "Test Collection", slug: "test-col-xyz" }) { collection { id name } errors { field message } } }'
     if endpoint_name == "channelCreate":
         return 'mutation { channelCreate(input: { name: "Test Channel", slug: "test-channel-xyz", currencyCode: "USD", isActive: true }) { channel { id name } errors { field message } } }'
-    if endpoint_name == "saleCreate":
-        return 'mutation { saleCreate(input: { name: "Test Sale", type: PERCENTAGE, value: 10 }) { sale { id name } errors { field message } } }'
     if endpoint_name == "voucherCreate":
         return 'mutation { voucherCreate(input: { code: "TESTXYZ", name: "Test Voucher", discountValueType: PERCENTAGE, discountValue: 10 }) { voucher { id code } errors { field message } } }'
     return f'mutation {{ {endpoint_name}(input: {{}}) {{ errors {{ field message code }} }} }}'

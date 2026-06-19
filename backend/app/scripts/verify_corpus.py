@@ -55,6 +55,14 @@ async def check_corpus(min_probes: int, version: str) -> tuple[bool, str]:
     chash = corpus_hash(version)
     if manifest and manifest.get("corpus_hash") and manifest["corpus_hash"] != chash:
         return False, "Corpus hash mismatch — re-run record-reference"
+    from app.services.deprecated_scanner import check_corpus_deprecated
+
+    dep_errors = check_corpus_deprecated(
+        manifest_mutations=(manifest or {}).get("reference_mutations"),
+        probes=probes,
+    )
+    if dep_errors:
+        return False, dep_errors[0]
     return True, f"Reference corpus OK: {count} probes, hash {chash[:20]}…"
 
 

@@ -81,7 +81,7 @@ async def test_resolve_fixtures_uses_capture():
         with patch(
             "app.services.fixture_resolver._resolve_storefront_customer",
             new_callable=AsyncMock,
-            return_value=(None, None),
+            return_value=(None, None, (), None),
         ):
             with patch(
                 "app.services.storefront_session.ensure_storefront_session",
@@ -132,7 +132,7 @@ async def test_resolve_fixtures_runtime_seed():
             with patch(
                 "app.services.fixture_resolver._resolve_storefront_customer",
                 new_callable=AsyncMock,
-                return_value=(None, None),
+                return_value=(None, None, (), None),
             ):
                 with patch(
                     "app.services.storefront_session.ensure_storefront_session",
@@ -187,7 +187,7 @@ async def test_resolve_fixtures_clears_static_entity_keys_before_seed():
             with patch(
                 "app.services.fixture_resolver._resolve_storefront_customer",
                 new_callable=AsyncMock,
-                return_value=(None, None),
+                return_value=(None, None, (), None),
             ):
                 with patch(
                     "app.services.storefront_session.ensure_storefront_session",
@@ -357,6 +357,79 @@ async def test_validate_preflight_fixture_missing():
 
 
 @pytest.mark.asyncio
+async def test_validate_preflight_surfaces_customer_delete_warning():
+    warning = (
+        "customer_delete_incompatible: staff customerDelete rejects relay ID "
+        "from customers query (target API defect vs Saleor)"
+    )
+    with patch(
+        "app.services.fixture_resolver._query_saleor",
+        new_callable=AsyncMock,
+        return_value={"shop": {"version": "3.23.7"}},
+    ):
+        with patch(
+            "app.services.fixture_resolver.resolve_fixtures",
+            new_callable=AsyncMock,
+            return_value=FixtureResolution(
+                fixtures={},
+                live_keys=frozenset(
+                    {
+                        "default_product_id",
+                        "default_variant_id",
+                        "default_channel_id",
+                        "default_product_type_id",
+                    }
+                ),
+                customer_auth_warnings=(warning,),
+                effective_customer_email="harness-customer-e2052d4c@example.com",
+            ),
+        ):
+            result = await validate_preflight(
+                "http://saleor-api:8000/graphql/",
+                "token",
+                corpus_version="3.23.7",
+            )
+    assert warning in result["warning_issues"]
+    assert result["effective_customer_email"] == "harness-customer-e2052d4c@example.com"
+
+
+@pytest.mark.asyncio
+async def test_resolve_fixtures_propagates_customer_jwt():
+    with patch(
+        "app.services.fixture_resolver.capture_live_fixtures",
+        new_callable=AsyncMock,
+        return_value={"default_channel_id": "Q2hhbm5lbDox", "default_channel": "default"},
+    ):
+        with patch(
+            "app.services.fixture_resolver.ensure_certification_topology",
+            new_callable=AsyncMock,
+            return_value=type("R", (), {
+                "fixtures": {},
+                "seeded_keys": frozenset(),
+                "errors": [],
+            })(),
+        ):
+            with patch(
+                "app.services.fixture_resolver._resolve_storefront_customer",
+                new_callable=AsyncMock,
+                return_value=("VXNlcjox", "customer-jwt", (), "shopper@example.com"),
+            ):
+                with patch(
+                    "app.services.storefront_session.ensure_storefront_session",
+                    new_callable=AsyncMock,
+                    return_value=({}, set(), []),
+                ):
+                    with patch("app.services.fixture_resolver.load_fixtures", return_value={}):
+                        with patch("app.services.fixture_resolver.settings") as mock_settings:
+                            mock_settings.runtime_seed = True
+                            result = await resolve_fixtures(
+                                "http://example.com/graphql/", "staff-token"
+                            )
+
+    assert result.customer_jwt == "customer-jwt"
+
+
+@pytest.mark.asyncio
 async def test_resolve_fixtures_always_runs_storefront_session():
     with patch(
         "app.services.fixture_resolver.capture_live_fixtures",
@@ -373,7 +446,7 @@ async def test_resolve_fixtures_always_runs_storefront_session():
     ), patch(
         "app.services.fixture_resolver._resolve_storefront_customer",
         new_callable=AsyncMock,
-        return_value=("VXNlcjox", "customer-jwt"),
+        return_value=("VXNlcjox", "customer-jwt", (), "shopper@example.com"),
     ), patch(
         "app.services.storefront_session.ensure_storefront_session",
         new_callable=AsyncMock,

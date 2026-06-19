@@ -248,8 +248,12 @@ async def capture_reference_probes(
     manifest_path = directory / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest["auth_mode"] = "staff" if saleor_token else "anonymous"
+    from app.services.deprecated_scanner import filter_deprecated_schema_ops
+
     manifest["reference_queries"] = intro.get("queries", [])
-    manifest["reference_mutations"] = intro.get("mutations", [])
+    manifest["reference_mutations"] = filter_deprecated_schema_ops(
+        intro.get("mutations", [])
+    )
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     chash = corpus_hash(version)
 
@@ -464,8 +468,12 @@ async def capture_subset_probes(
     manifest_path = directory / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     if intro:
+        from app.services.deprecated_scanner import filter_deprecated_schema_ops
+
         manifest["reference_queries"] = intro.get("queries", [])
-        manifest["reference_mutations"] = intro.get("mutations", [])
+        manifest["reference_mutations"] = filter_deprecated_schema_ops(
+            intro.get("mutations", [])
+        )
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     update_manifest_after_patch(version)
     chash = corpus_hash(version)

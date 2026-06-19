@@ -28,6 +28,18 @@ def test_storefront_bundles_have_auth_context():
     assert "anonymous" in contexts
 
 
+def test_storefront_bundles_anonymous_account_ops():
+    bundles = scan_sdk_storefront_bundles()
+    by_id = {b.bundle_id: b for b in bundles}
+    for bundle_id in (
+        "sf-registeraccount",
+        "sf-accountconfirm",
+        "sf-resetpasswordrequest",
+    ):
+        if bundle_id in by_id:
+            assert by_id[bundle_id].auth_context == "anonymous", bundle_id
+
+
 def test_sdk_storefront_bundles_include_checkout():
     bundles = scan_sdk_storefront_bundles()
     assert len(bundles) >= 15

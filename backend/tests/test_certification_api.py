@@ -206,3 +206,20 @@ def test_certified_parity_gaps():
 
 def test_certified_none_score():
     assert compute_certified(schema_gate_pass=True, compatibility_score=None) is False
+
+
+def test_summary_stats_counts_assertion_fail_in_denominator():
+    from types import SimpleNamespace
+
+    from app.services.ai_report import _summary_stats
+
+    results = [
+        SimpleNamespace(match_status="match", failure_category="compatible", outcome="success", client_parity_note=None),
+        SimpleNamespace(match_status="assertion_fail", failure_category="assertion_fail", outcome="business_error", client_parity_note=None),
+    ]
+    stats = _summary_stats(results)
+    assert stats["assertion_fail_count"] == 1
+    assert stats["golden_matched"] == 1
+    assert stats["golden_mismatched"] == 1
+    assert stats["compatibility_score"] == 50.0
+

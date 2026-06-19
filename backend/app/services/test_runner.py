@@ -119,16 +119,27 @@ def build_golden_endpoints(corpus_version: str) -> list[dict]:
 
 def load_reference_schema(corpus_version: str) -> dict[str, list[str]]:
     """Reference schema from manifest or golden probe names."""
+    from app.services.deprecated_scanner import filter_deprecated_schema_ops, is_deprecated_mutation
+
     manifest = load_manifest(corpus_version)
     if manifest:
         rq = manifest.get("reference_queries")
         rm = manifest.get("reference_mutations")
         if rq is not None and rm is not None:
-            return {"queries": list(rq), "mutations": list(rm)}
+            return {
+                "queries": list(rq),
+                "mutations": filter_deprecated_schema_ops(list(rm)),
+            }
     probes = load_all_probes_from_disk(corpus_version)
     return {
         "queries": sorted({p.endpoint_name for p in probes if p.endpoint_kind == "QUERY"}),
-        "mutations": sorted({p.endpoint_name for p in probes if p.endpoint_kind == "MUTATION"}),
+        "mutations": sorted(
+            {
+                p.endpoint_name
+                for p in probes
+                if p.endpoint_kind == "MUTATION" and not is_deprecated_mutation(p.endpoint_name)
+            }
+        ),
     }
 
 
@@ -165,6 +176,7 @@ class TestRunner:
         self._scenario_context: dict[str, Any] = {}
         self._last_scenario_id: str | None = None
         self._customer_token: str | None = None
+        self._customer_auth_warnings: tuple[str, ...] = ()
         self.public_only = public_only
         self.concurrency = concurrency
         self.timeout = timeout
@@ -182,11 +194,13 @@ class TestRunner:
 
     def _auth_headers(self, auth_context: str = "staff") -> dict[str, str]:
         headers = {"Content-Type": "application/json", "Accept": "application/json"}
-        token = self.saleor_token
+        token: str | None
         if auth_context == "customer":
             token = self._customer_token
         elif auth_context == "anonymous":
             token = None
+        else:
+            token = self.saleor_token
         if token:
             headers["Authorization"] = f"Bearer {token}"
         return headers
@@ -202,7 +216,9 @@ class TestRunner:
             return None
         if auth_context == "customer":
             channel = REFERENCE_CHANNEL_SLUG
+            fixtures: dict | None = None
             if self._resolved_fixtures:
+                fixtures = self._resolved_fixtures
                 channel = self._resolved_fixtures.get("default_channel") or channel
             self._customer_token = await ensure_customer_token(
                 saleor_url=self.saleor_url,
@@ -214,6 +230,8 @@ class TestRunner:
                 force_refresh=force_refresh,
                 channel=channel,
                 staff_token=self.saleor_token,
+                fixtures=fixtures,
+                run_id=str(self.run_id),
             )
             return self._customer_token
         refreshed = await ensure_valid_token(
@@ -347,11 +365,6 @@ class TestRunner:
                     "type": "schema_diff",
                     "diff": {"introspection_error": "Staff authentication failed"},
                 }
-            yield {"type": "progress", "message": "Provisioning customer account…"}
-            await self._ensure_auth_for_context(
-                http_client, auth_context="customer", force_refresh=True
-            )
-
             yield {"type": "progress", "message": "Resolving runtime fixtures…"}
             try:
                 from app.services.fixture_resolver import (
@@ -362,8 +375,21 @@ class TestRunner:
                     self.saleor_url,
                     self.saleor_token,
                     timeout=self.timeout,
+                    run_id=str(self.run_id),
                 )
                 self._resolved_fixtures = resolution.fixtures
+                if resolution.customer_jwt:
+                    self._customer_token = resolution.customer_jwt
+                if resolution.effective_customer_email:
+                    self.saleor_customer_email = resolution.effective_customer_email
+                if resolution.customer_auth_warnings:
+                    self._customer_auth_warnings = resolution.customer_auth_warnings
+                    yield {
+                        "type": "schema_diff",
+                        "diff": {
+                            "customer_auth_warnings": list(resolution.customer_auth_warnings),
+                        },
+                    }
                 if resolution.seeded_keys:
                     yield {
                         "type": "progress",
@@ -387,6 +413,12 @@ class TestRunner:
                     "type": "schema_diff",
                     "diff": {"fixture_resolver_error": str(exc)},
                 }
+
+            if not self._customer_token:
+                yield {"type": "progress", "message": "Provisioning customer account…"}
+                await self._ensure_auth_for_context(
+                    http_client, auth_context="customer", force_refresh=False
+                )
 
             async def test_one(idx: int, endpoint: dict) -> dict:
                 if self._stopped:
@@ -814,6 +846,26 @@ class TestRunner:
             client = http_client or httpx.AsyncClient(timeout=self.timeout)
             own_client = http_client is None
             try:
+                if auth_context == "customer":
+                    await self._ensure_auth_for_context(
+                        client, auth_context="customer"
+                    )
+                    if not self._customer_token:
+                        return {
+                            "status": "skip",
+                            "outcome": "skipped",
+                            "expected": "Customer JWT required for this probe",
+                            "response_valid": None,
+                            "endpoint": name,
+                            "kind": kind,
+                            "category": category,
+                            "is_public": is_public,
+                            "failure_category": "auth_prerequisite",
+                            "error_message": "Could not obtain customer access JWT",
+                            "match_status": "auth_prerequisite",
+                            "compatible": False,
+                        }
+
                 resp_json = {}
                 resp_status = 500
                 for attempt in range(3):
@@ -995,6 +1047,7 @@ class TestRunner:
                     meta=meta,
                     assertion_failures=assertion_failures,
                     endpoint=endpoint,
+                    actual_response=resp_json,
                 )
                 return {
                     "status": status,
@@ -1213,16 +1266,28 @@ def _client_bundle_setup_prerequisite(
     endpoint_name: str,
     comparison: Any,
     match_status: str,
+    endpoint: dict[str, Any] | None = None,
 ) -> bool:
     """Detect runner setup/session gaps (not API parity bugs)."""
     diff = (comparison.diff_summary or "").lower()
     raw_diff = comparison.diff_summary or ""
+    endpoint = endpoint or {}
 
     if endpoint_name.startswith("sf-checkout") and "checkout access denied" in diff:
         return True
 
     if endpoint_name in ("sf-me", "sf-accountupdate", "sf-accountaddresscreate"):
         if "account not found" in diff:
+            return True
+
+    auth_context = endpoint.get("auth_context", "staff")
+    golden_contract = endpoint.get("golden_contract") or ""
+    if (
+        auth_context == "customer"
+        and golden_contract in ("success", "success_with_data")
+        and match_status in ("mismatch", "shape_drift")
+    ):
+        if "account not found" in diff or "permission" in diff or "auth" in diff:
             return True
 
     if match_status == "shape_drift":
@@ -1240,6 +1305,54 @@ def _client_bundle_setup_prerequisite(
     return False
 
 
+_SEED_ERROR_CODES = frozenset({
+    "PRODUCT_NOT_PUBLISHED",
+    "PRODUCT_UNAVAILABLE",
+    "VARIANT_NOT_AVAILABLE",
+    "NOT_PUBLISHED",
+})
+
+
+def _collect_mutation_error_codes(payload: Any) -> list[str]:
+    codes: list[str] = []
+    if not isinstance(payload, dict):
+        return codes
+    errs = payload.get("errors")
+    if isinstance(errs, list):
+        for err in errs:
+            if isinstance(err, dict) and err.get("code"):
+                codes.append(str(err["code"]))
+    return codes
+
+
+def _response_indicates_seed_prerequisite(actual_response: dict[str, Any] | None) -> bool:
+    if not isinstance(actual_response, dict):
+        return False
+    for err in actual_response.get("errors") or []:
+        if isinstance(err, dict):
+            ext = err.get("extensions") or {}
+            code = ext.get("code") if isinstance(ext, dict) else None
+            if code and str(code) in _SEED_ERROR_CODES:
+                return True
+            if "not published" in str(err.get("message", "")).lower():
+                return True
+    data = actual_response.get("data")
+    if isinstance(data, dict):
+        for value in data.values():
+            if isinstance(value, dict):
+                for code in _collect_mutation_error_codes(value):
+                    if code in _SEED_ERROR_CODES:
+                        return True
+                msg_blob = " ".join(
+                    str(e.get("message", ""))
+                    for e in (value.get("errors") or [])
+                    if isinstance(e, dict)
+                ).lower()
+                if "not published" in msg_blob or "product_not_published" in msg_blob:
+                    return True
+    return False
+
+
 def _classify_failure_category(
     *,
     comparison: Any,
@@ -1248,6 +1361,7 @@ def _classify_failure_category(
     meta: dict[str, Any],
     assertion_failures: list[str],
     endpoint: dict[str, Any] | None = None,
+    actual_response: dict[str, Any] | None = None,
 ) -> str:
     """Classify the failure category for structured reporting.
 
@@ -1273,6 +1387,8 @@ def _classify_failure_category(
         return "static_response_suspected"
 
     if assertion_failures:
+        if _response_indicates_seed_prerequisite(actual_response):
+            return "seed_prerequisite"
         return "assertion_fail"
 
     if match_status == "tier2_fail":
@@ -1306,7 +1422,17 @@ def _classify_failure_category(
             seed_tags = resolve_seed_tags(endpoint_name, endpoint)
             if seed_tags and match_status in ("shape_drift", "mismatch"):
                 return "seed_prerequisite"
-            if _client_bundle_setup_prerequisite(endpoint_name, comparison, match_status):
+            if _client_bundle_setup_prerequisite(
+                endpoint_name, comparison, match_status, endpoint
+            ):
+                auth_context = endpoint.get("auth_context", "staff")
+                golden_contract = endpoint.get("golden_contract") or ""
+                if (
+                    auth_context == "customer"
+                    and golden_contract in ("success", "success_with_data")
+                    and "account not found" in (comparison.diff_summary or "").lower()
+                ):
+                    return "auth_prerequisite"
                 return "data_prerequisite"
 
         # Distinguish schema mismatch (structural) from data drift (data differs)

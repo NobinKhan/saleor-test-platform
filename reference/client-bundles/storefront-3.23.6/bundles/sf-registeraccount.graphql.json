@@ -12,7 +12,7 @@
     "redirectUrl": "",
     "channel": "{{fixtures.default_channel}}"
   },
-  "auth_context": "customer",
+  "auth_context": "anonymous",
   "priority": "P1",
   "golden_response": {
     "data": {

@@ -12,6 +12,8 @@ from __future__ import annotations
 
 from typing import Any, Awaitable, Callable
 
+from app.services.saleor_auth import CUSTOMER_DEFAULT_EMAIL, CUSTOMER_DEFAULT_PASSWORD
+
 RunSetupFn = Callable[[dict[str, Any], str], Awaitable[str | None]]
 
 # Shared step: create a second variant on the harness reference product.
@@ -53,8 +55,8 @@ def _customer_step(fixtures: dict[str, Any]) -> dict[str, Any]:
         }""",
         "variables": lambda f: {
             "input": {
-                "email": "harness-storefront-customer@example.com",
-                "password": "HarnessCustomer123!",
+                "email": CUSTOMER_DEFAULT_EMAIL,
+                "password": CUSTOMER_DEFAULT_PASSWORD,
                 "channel": f.get("default_channel", "harness-channel"),
                 "redirectUrl": "http://localhost:3000/account/confirm",
             }

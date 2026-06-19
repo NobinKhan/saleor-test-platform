@@ -211,10 +211,11 @@ async def get_report(
     )
     golden_mismatched = sum(
         1 for r in results
-        if r.match_status in ("mismatch", "shape_drift", "tier2_fail")
+        if r.match_status in ("mismatch", "shape_drift", "tier2_fail", "assertion_fail")
         or (gate_on and r.match_status == "parity_gap")
     )
     golden_missing = sum(1 for r in results if r.match_status == "missing_golden")
+    assertion_fail_count = sum(1 for r in results if r.match_status == "assertion_fail")
     client_parity_gaps = sum(
         1 for r in results if r.match_status in ("parity_gap", "tier2_fail") or r.client_parity_note
     )

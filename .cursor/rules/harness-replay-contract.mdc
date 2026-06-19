@@ -1,0 +1,62 @@
+---
+description: Harness replay contract — auth context, URL rewrite, deprecated ops, schema gate parity
+alwaysApply: true
+---
+
+# Harness Replay Contract
+
+Rules for Saleor HTTP replay, authentication, and schema gate consistency. Violations cause false `real_bug` labels or certification gate failures on compatible backends.
+
+## Auth context contract
+
+Every L3 bundle and scenario step declares `auth_context`: `staff` | `customer` | `anonymous`.
+
+- **Never** send staff `tokenCreate` JWT when `auth_context` is `customer` or `anonymous`.
+- `_auth_headers()` must not default to staff token for customer context — customer probes use **only** `TestRunner._customer_token`.
+- Customer-success storefront bundles (`sf-accountupdate`, `sf-accountaddresscreate`, `sf-me`, etc.) require a persisted customer JWT from `ensure_customer_token()` / `FixtureResolution.customer_jwt`.
+- Public account mutations (`accountRegister`, `confirmAccount`, `requestPasswordReset`, `resetPassword`) are **`auth_context: anonymous`** — they must not require customer JWT.
+- When customer account exists and login fails, harness calls `delete_harness_customer_by_email()` then re-registers; requires working staff `customerDelete` on the target API.
+- When delete fails (e.g. API rejects relay ID from `customers` query), log `customer_delete_incompatible` as a **target API defect** in preflight/run warnings — not a harness gap.
+- Per-run fallback: when fixed email + login + delete all fail, register `harness-customer-{runId}@example.com` via `accountRegister.sessionToken`; customer success bundles compare id/email by schema shape (not literals).
+- If customer JWT cannot be obtained, skip/fail with `failure_category: auth_prerequisite` — do not fire the probe with staff credentials.
+- Wrong-auth failures on customer-success goldens (`account not found`, permission/auth errors) classify as **`auth_prerequisite`** or `data_prerequisite`, never `real_bug`.
+
+## Saleor URL contract
+
+All user-facing Saleor HTTP entry points must call `resolve_saleor_url_for_runner()` (or `resolve_harness_saleor_url()` when returning requested vs resolved URLs):
+
+- `saleor_auth.authenticate_saleor`
+- `fixture_resolver.validate_preflight` / `resolve_fixtures`
+- `reference_seed` capture/seed
+- `TestRunner`
+
+The UI may show `http://localhost:8000/graphql/`; inside Docker the harness connects via `SALEOR_GRAPHQL_URL` (e.g. `host.docker.internal`). Pre-flight validate returns `requested_saleor_url` and `resolved_saleor_url`.
+
+## Deprecated operations — single registry
+
+Legacy Sale API mutation field names and deprecated GraphQL type names live **only** in `backend/app/services/deprecated_scanner.py`:
+
+- `DEPRECATED_MUTATIONS` — introspected mutation field names (`saleBulkDelete`, …)
+- `DEPRECATED_TYPES` — GraphQL type names in documents (`Sale`, …)
+
+**Hard rule:** deprecated ops must **not** appear in the certification corpus — manifest `reference_mutations`, L1 probe JSON, or `query_builder` templates. `just verify-corpus` fails if any remain. Runtime filters are guardrails for vendor re-imports, not a substitute for purging stored data.
+
+Consumers (never duplicate ad-hoc lists):
+
+1. L1 replay exclusion (`build_golden_endpoints`, `scan_l1_probe_for_deprecated`)
+2. L3 bundle filter (`filter_deprecated_bundles`)
+3. L1 schema gate denominator (`load_reference_schema`, `schema_gate_diff`)
+4. Corpus integrity gate (`check_corpus_deprecated` in `verify_corpus.py`)
+5. Manifest write/patch (`filter_deprecated_schema_ops` on capture and `update_manifest_after_patch`)
+
+Removing a deprecated probe: delete probe JSON, remove from manifest `reference_mutations`, run `just patch-corpus --remove opName` per platform rules.
+
+## Customer provisioning constants
+
+Storefront customer email/password must use `CUSTOMER_DEFAULT_EMAIL` / `CUSTOMER_DEFAULT_PASSWORD` from `saleor_auth.py` — not inline strings in `bundle_setup.py` or SDK documents.
+
+`ensure_customer_token()` obtains customer JWT via create-or-login: `accountRegister.sessionToken` on the resolved live channel, then `login_existing_customer()` (unified `tokenCreate` when `me` validates, or `setPassword` with `HARNESS_CUSTOMER_RESET_TOKEN`) when the email already exists; staff `shopSettingsUpdate` disables confirmation when possible — never staff `tokenCreate` alone.
+
+## Schema gate parity
+
+An operation excluded from L1 replay must also be excluded from `missing_mutations` / schema gate math.

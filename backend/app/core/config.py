@@ -59,6 +59,11 @@ class Settings(BaseSettings):
         default="",
         validation_alias="CLIENT_BUNDLES_STOREFRONT_VERSION",
     )
+    harness_customer_reset_token: str = Field(
+        default="",
+        validation_alias="HARNESS_CUSTOMER_RESET_TOKEN",
+        description="Optional plaintext password-reset token for existing customer login on dev backends",
+    )
 
     @property
     def is_production(self) -> bool:

@@ -46,6 +46,9 @@ class FixtureResolution:
     live_keys: frozenset[str] = field(default_factory=frozenset)
     seeded_keys: frozenset[str] = field(default_factory=frozenset)
     seed_errors: tuple[str, ...] = ()
+    customer_jwt: str | None = None
+    customer_auth_warnings: tuple[str, ...] = ()
+    effective_customer_email: str | None = None
 
 
 def _apply_captured(
@@ -96,31 +99,40 @@ async def _resolve_storefront_customer(
     staff_token: str,
     *,
     channel: str | None = None,
+    fixtures: dict | None = None,
     timeout: int = 30,
-) -> tuple[str | None, str | None]:
-    """Return (customer_id, customer_jwt) for the harness storefront account."""
-    from app.services.saleor_auth import ensure_customer_token
+    run_id: str | None = None,
+) -> tuple[str | None, str | None, tuple[str, ...], str | None]:
+    """Return (customer_id, customer_jwt, auth_warnings, effective_email)."""
+    from app.services.saleor_auth import ensure_customer_auth, prepare_storefront_customer_auth
 
-    customer_token = await ensure_customer_token(
+    fixture_map = dict(fixtures or {})
+    if channel:
+        fixture_map.setdefault("default_channel", channel)
+    await prepare_storefront_customer_auth(saleor_url, staff_token, timeout=timeout)
+    auth = await ensure_customer_auth(
         saleor_url=saleor_url,
         token=None,
         email=None,
         password=None,
         timeout=timeout,
         staff_token=staff_token,
-        channel=channel or REFERENCE_CHANNEL_SLUG,
+        fixtures=fixture_map,
+        run_id=run_id,
     )
-    if not customer_token:
-        return None, None
+    for warning in auth.warnings:
+        logger.warning("Storefront customer auth: %s", warning)
+    if not auth.token:
+        return None, None, auth.warnings, auth.effective_email
     me_data = await _query_saleor(
         saleor_url,
         "query { me { id } }",
-        customer_token,
+        auth.token,
         timeout,
     )
     me = (me_data or {}).get("me") if isinstance(me_data, dict) else None
     customer_id = me.get("id") if isinstance(me, dict) else None
-    return customer_id, customer_token
+    return customer_id, auth.token, auth.warnings, auth.effective_email
 
 
 async def resolve_fixtures(
@@ -128,6 +140,8 @@ async def resolve_fixtures(
     token: str | None,
     timeout: int = 30,
     source: str = "dashboard",
+    *,
+    run_id: str | None = None,
 ) -> FixtureResolution:
     """Resolve fixture IDs from target Saleor; optionally create missing entities."""
     saleor_url = resolve_saleor_url_for_runner(saleor_url)
@@ -165,8 +179,15 @@ async def resolve_fixtures(
         seeded_keys.update(seed_result.seeded_keys)
         seed_errors.extend(seed_result.errors)
 
-    storefront_customer_id, customer_token = await _resolve_storefront_customer(
-        saleor_url, token, timeout=timeout, channel=resolved.get("default_channel")
+    storefront_customer_id, customer_token, customer_warnings, effective_email = (
+        await _resolve_storefront_customer(
+            saleor_url,
+            token,
+            timeout=timeout,
+            channel=resolved.get("default_channel"),
+            fixtures=resolved,
+            run_id=run_id,
+        )
     )
     if storefront_customer_id:
         resolved["storefront_customer_id"] = storefront_customer_id
@@ -189,6 +210,9 @@ async def resolve_fixtures(
         live_keys=frozenset(live_keys),
         seeded_keys=frozenset(seeded_keys),
         seed_errors=tuple(seed_errors),
+        customer_jwt=customer_token,
+        customer_auth_warnings=customer_warnings,
+        effective_customer_email=effective_email,
     )
 
 
@@ -315,6 +339,12 @@ async def validate_preflight(
     if resolution.seed_errors:
         for err in resolution.seed_errors[:5]:
             issues.append(PreflightIssue(message=f"Seed error: {err}", severity="warning"))
+
+    for warning in resolution.customer_auth_warnings:
+        issues.append(PreflightIssue(message=warning, severity="warning"))
+
+    if resolution.effective_customer_email:
+        result["effective_customer_email"] = resolution.effective_customer_email
 
     seeded = sorted(resolution.seeded_keys)
     result["seeded_keys"] = seeded
