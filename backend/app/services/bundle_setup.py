@@ -182,6 +182,27 @@ BUNDLE_SETUP: dict[str, list[dict[str, Any]]] = {
     # Golden: graphql_error — already attached
     # Fix: create a customer, create a checkout, attach the customer to it,
     # then the probe tries to attach the same customer again → PermissionDenied.
+    "categorydetails-aftercreate": [
+        {
+            "mutation": "mutation($input: CategoryInput!) { categoryCreate(input: $input) { category { id slug } errors { field message code } } }",
+            "variables": lambda f: {"input": {"name": "Harness Smoke Category", "slug": ""}},
+            "extract": "$.data.categoryCreate.category.id",
+            "fixture_key": "_smoke_category_id",
+            "auth": "staff",
+        },
+    ],
+    "externalrefresh-success": [
+        {
+            "mutation": "mutation($email: String!, $password: String!) { tokenCreate(email: $email, password: $password) { token refreshToken errors { field message code } } }",
+            "variables": lambda f: {
+                "email": f.get("staff_email") or "admin@example.com",
+                "password": f.get("staff_password") or "admin123456",
+            },
+            "extract": "$.data.tokenCreate.refreshToken",
+            "fixture_key": "refresh_token",
+            "auth": "staff",
+        },
+    ],
     "sf-checkoutcustomerattach": [
         _customer_step({}),
         _checkout_create_step({}),

@@ -63,3 +63,43 @@ async def test_sf_accountupdate_setup_uses_customer_auth_for_profile_step():
         run_setup_mutation=run_setup,
     )
     assert auth_contexts == ["anonymous", "customer"]
+
+
+def test_categorydetails_aftercreate_setup_creates_category():
+    steps = get_bundle_setup("categorydetails-aftercreate")
+    assert len(steps) == 1
+    assert steps[0]["fixture_key"] == "_smoke_category_id"
+    assert steps[0]["auth"] == "staff"
+    assert "categoryCreate" in steps[0]["mutation"]
+
+
+def test_externalrefresh_success_setup_runs_token_create():
+    steps = get_bundle_setup("externalrefresh-success")
+    assert len(steps) == 1
+    assert steps[0]["fixture_key"] == "refresh_token"
+    assert steps[0]["auth"] == "staff"
+    assert "tokenCreate" in steps[0]["mutation"]
+
+
+@pytest.mark.asyncio
+async def test_categorydetails_aftercreate_extracts_category_id():
+    run_setup = AsyncMock(return_value="Q2F0ZWdvcnk6NDI=")
+    overlay = await apply_bundle_setup(
+        bundle_id="categorydetails-aftercreate",
+        fixtures={},
+        run_setup_mutation=run_setup,
+    )
+    assert overlay["_smoke_category_id"] == "Q2F0ZWdvcnk6NDI="
+    run_setup.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_externalrefresh_success_extracts_refresh_token():
+    run_setup = AsyncMock(return_value="refresh-token-value")
+    overlay = await apply_bundle_setup(
+        bundle_id="externalrefresh-success",
+        fixtures={"staff_email": "admin@example.com", "staff_password": "admin"},
+        run_setup_mutation=run_setup,
+    )
+    assert overlay["refresh_token"] == "refresh-token-value"
+    run_setup.assert_awaited_once()

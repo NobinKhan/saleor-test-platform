@@ -24,6 +24,7 @@ from app.schemas import (
     CategoryBreakdown,
     ResponseTimeBucket,
     LatencySummary,
+    OperationLatency,
     SlowEndpoint,
     TestResultResponse,
 )
@@ -95,20 +96,65 @@ except ImportError:
 
 def _latency_stats(times: list[int]) -> LatencySummary:
     if not times:
-        return LatencySummary(avg=0, min=0, max=0, p50=0, p95=0, sample_count=0)
+        return LatencySummary(avg=0, min=0, max=0, p50=0, p95=0, p99=0, sample_count=0)
     sorted_t = sorted(times)
     n = len(sorted_t)
     p50 = sorted_t[n // 2]
     p95_idx = min(n - 1, int(n * 0.95))
     p95 = sorted_t[p95_idx]
+    p99_idx = min(n - 1, int(n * 0.99))
+    p99 = sorted_t[p99_idx]
     return LatencySummary(
         avg=round(sum(times) / n, 1),
         min=sorted_t[0],
         max=sorted_t[-1],
         p50=float(p50),
         p95=float(p95),
+        p99=float(p99),
         sample_count=n,
     )
+
+
+def _percentile(sorted_t: list[int], pct: float) -> int:
+    if not sorted_t:
+        return 0
+    n = len(sorted_t)
+    idx = min(n - 1, int(n * pct))
+    return sorted_t[idx]
+
+
+def _latency_by_operation(results: list) -> list:
+    """Group latency by operation_name; return sorted by p95 desc."""
+    groups: dict[str, list[int]] = {}
+    kinds: dict[str, str] = {}
+    for r in results:
+        op = getattr(r, "operation_name", None) or "unknown"
+        rt = getattr(r, "response_time_ms", None)
+        if rt is None:
+            continue
+        groups.setdefault(op, []).append(rt)
+        if op not in kinds:
+            kinds[op] = getattr(r, "endpoint_kind", "") or ""
+    out = []
+    for op, vals in groups.items():
+        sorted_t = sorted(vals)
+        n = len(sorted_t)
+        p95 = _percentile(sorted_t, 0.95)
+        out.append(
+            OperationLatency(
+                operation_name=op,
+                endpoint_kind=kinds[op],
+                sample_count=n,
+                avg=round(sum(vals) / n, 1),
+                p50=float(_percentile(sorted_t, 0.50)),
+                p95=float(p95),
+                p99=float(_percentile(sorted_t, 0.99)),
+                max=sorted_t[-1],
+                latency_outlier=p95 > 100,
+            )
+        )
+    out.sort(key=lambda x: x.p95, reverse=True)
+    return out
 
 
 def _build_compare_summary(
@@ -283,9 +329,12 @@ async def get_report(
             status=r.status,
             response_time_ms=r.response_time_ms or 0,
             outcome=r.outcome,
+            operation_name=getattr(r, "operation_name", None),
         )
         for r in slowest
     ]
+
+    latency_by_operation = _latency_by_operation(results)
 
     q_count, m_count = catalog_counts()
     extra = run_detail_fields(run)
@@ -365,6 +414,7 @@ async def get_report(
         response_time_distribution=response_time_dist,
         latency_summary=latency_summary,
         slowest_endpoints=slowest_endpoints,
+        latency_by_operation=latency_by_operation,
         results=results,
         pass_rate=pass_rate,
         schema_diff=run.schema_diff,
@@ -387,7 +437,7 @@ async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
     writer.writerow([
         "Endpoint", "Kind", "Category", "Is Public", "Status", "Outcome",
         "Match Status", "Failure Category", "Response Valid", "Expected", "Diff Summary",
-        "Response Time (ms)", "Error Message",
+        "Response Time (ms)", "Operation Name", "Error Message",
         "Input Sent", "Expected Response", "Actual Response", "Created At",
     ])
 
@@ -405,6 +455,7 @@ async def export_csv(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
             r.expected or "",
             r.diff_summary or "",
             r.response_time_ms,
+            getattr(r, "operation_name", None) or "",
             r.error_message or "",
             r.input_sent or "",
             r.expected_response or "",
@@ -454,6 +505,7 @@ async def export_json(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), use
                 "outcome": r.outcome,
                 "match_status": r.match_status,
                 "failure_category": r.failure_category,
+                "operation_name": getattr(r, "operation_name", None),
                 "diff_summary": r.diff_summary,
                 "response_time_ms": r.response_time_ms,
                 "error_message": r.error_message,
@@ -584,6 +636,38 @@ async def export_pdf(run_id: uuid.UUID, db: AsyncSession = Depends(get_db), user
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
         ]))
         story.append(fail_table)
+
+    # Latency by operation table
+    lat_by_op = _latency_by_operation(results)
+    if lat_by_op:
+        story.append(Spacer(1, 0.5*cm))
+        story.append(Paragraph("Latency by Operation (Top 15 by p95)", styles["Heading2"]))
+        lat_data = [["Operation", "Kind", "n", "avg", "p50", "p95", "p99", "max"]]
+        for op in lat_by_op[:15]:
+            lat_data.append([
+                op.operation_name[:32],
+                op.endpoint_kind,
+                str(op.sample_count),
+                f"{op.avg:.0f}",
+                f"{op.p50:.0f}",
+                f"{op.p95:.0f}",
+                f"{op.p99:.0f}",
+                str(op.max),
+            ])
+        lat_table = Table(lat_data, colWidths=[4.2*cm, 1.5*cm, 0.8*cm, 1.0*cm, 1.0*cm, 1.0*cm, 1.0*cm, 1.0*cm])
+        lat_table.setStyle(TableStyle([
+            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1e3a5f")),
+            ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.HexColor("#1c1c1c"), colors.HexColor("#272727")]),
+            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+            ("FONTSIZE", (0, 0), (-1, -1), 7),
+            ("ALIGN", (2, 0), (-1, -1), "RIGHT"),
+            ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#334155")),
+            ("TOPPADDING", (0, 0), (-1, -1), 2),
+            ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
+            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ]))
+        story.append(lat_table)
 
     doc.build(story)
     output.seek(0)

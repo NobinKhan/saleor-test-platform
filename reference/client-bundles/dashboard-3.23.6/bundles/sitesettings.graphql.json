@@ -1030,7 +1030,7 @@
         "reserveStockDurationAnonymousUser": null,
         "reserveStockDurationAuthenticatedUser": null,
         "limitQuantityPerCheckout": 50,
-        "enableAccountConfirmationByEmail": true,
+        "enableAccountConfirmationByEmail": false,
         "useLegacyUpdateWebhookEmission": true,
         "useLegacyShippingZoneStockAvailability": true,
         "preserveAllAddressFields": false,

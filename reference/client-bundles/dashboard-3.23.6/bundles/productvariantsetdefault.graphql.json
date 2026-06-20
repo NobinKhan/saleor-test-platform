@@ -20,12 +20,16 @@
           "id": "UHJvZHVjdDox",
           "defaultVariant": {
             "id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
-            "name": "harness-ref-sku"
+            "name": "Harness Reference Variant"
           },
           "variants": [
             {
               "id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
-              "name": "harness-ref-sku"
+              "name": "Harness Reference Variant"
+            },
+            {
+              "id": "UHJvZHVjdFZhcmlhbnQ6Mg==",
+              "name": "harness-smoke-sku"
             }
           ]
         }

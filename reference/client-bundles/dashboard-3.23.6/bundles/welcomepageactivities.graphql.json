@@ -1,0 +1,27 @@
+{
+  "bundle_id": "welcomepageactivities",
+  "source": "saleor-dashboard",
+  "source_path": "welcomePage/queries.ts",
+  "operation_names": [
+    "WelcomePageActivities"
+  ],
+  "document": "query WelcomePageActivities($hasPermissionToManageOrders: Boolean!) {\n  activities: homepageEvents(last: 10) @include(if: $hasPermissionToManageOrders) {\n    edges {\n      node {\n        ...Activities\n      }\n    }\n  }\n}\n\nfragment Activities on OrderEvent {\n  date\n  email\n  message\n  orderNumber\n  type\n  user {\n    email\n  }\n}",
+  "variables": {
+    "hasPermissionToManageOrders": true
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "activities": {
+        "edges": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:d0b9782b5cdc765b",
+  "document_hash": "sha256:996f809945eeac76"
+}

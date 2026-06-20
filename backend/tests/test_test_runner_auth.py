@@ -10,6 +10,49 @@ import pytest
 from app.services.test_runner import TestRunner
 
 
+def test_result_from_meta_propagates_operation_name():
+    from app.services.test_runner import _result_from_meta
+
+    meta = {
+        "status": "pass",
+        "outcome": "success_with_data",
+        "expected": "200",
+        "response_valid": True,
+    }
+    result = _result_from_meta(
+        meta,
+        name="productcreate-success",
+        kind="CLIENT_BUNDLE",
+        category="dashboard",
+        is_public=False,
+        elapsed_ms=42,
+        query="mutation ProductCreate { productCreate(input: {}) { id } }",
+        operation_name="ProductCreate",
+    )
+    assert result["operation_name"] == "ProductCreate"
+
+
+def test_result_from_meta_derives_operation_name_from_query():
+    from app.services.test_runner import _result_from_meta
+
+    meta = {
+        "status": "pass",
+        "outcome": "success_with_data",
+        "expected": "200",
+        "response_valid": True,
+    }
+    result = _result_from_meta(
+        meta,
+        name="some-endpoint",
+        kind="QUERY",
+        category="shop",
+        is_public=True,
+        elapsed_ms=10,
+        query="query ShopVersion { shop { version } }",
+    )
+    assert result["operation_name"] == "ShopVersion"
+
+
 def test_auth_headers_customer_never_uses_staff_token():
     runner = TestRunner(
         run_id=uuid.uuid4(),

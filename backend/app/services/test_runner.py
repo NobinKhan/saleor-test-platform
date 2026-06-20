@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 import time
 import uuid
 from datetime import datetime, timezone
@@ -69,6 +70,19 @@ from app.services.response_contract import CONTRACT_AUTH_ERROR, CONTRACT_SUCCESS
 from app.services.auth_visibility import infer_is_public
 
 TEST_MODE_COMPATIBILITY = "compatibility"
+
+_OPERATION_NAME_RE = re.compile(
+    r"^\s*(?:query|mutation|subscription)\s+(\w+)",
+    re.I | re.M,
+)
+
+
+def _extract_operation_name(document: str | None) -> str | None:
+    """Extract the GraphQL operationName from a document string."""
+    if not document:
+        return None
+    m = _OPERATION_NAME_RE.search(document)
+    return m.group(1) if m else None
 
 
 async def detect_saleor_version(url: str, token: str | None, timeout: int) -> str | None:
@@ -479,6 +493,7 @@ class TestRunner:
                     "saleor_field_type": result.get("saleor_field_type"),
                     "actual_field_type": result.get("actual_field_type"),
                     "failure_category": result.get("failure_category"),
+                    "operation_name": result.get("operation_name"),
                     "status_counts": counts,
                 }
 
@@ -736,6 +751,11 @@ class TestRunner:
             payload["query"] = bundle_document
             variables = endpoint.get("bundle_variables") or {}
             fixtures = dict(endpoint.get("bundle_fixtures") or {})
+            fixtures["_run_id"] = str(self.run_id)
+            if self.saleor_email:
+                fixtures["staff_email"] = self.saleor_email
+            if self.saleor_password:
+                fixtures["staff_password"] = self.saleor_password
             bundle_id = endpoint.get("bundle_id") or name
             from app.services.bundle_setup import apply_bundle_setup
 
@@ -1066,6 +1086,7 @@ class TestRunner:
                     "category": category,
                     "is_public": is_public,
                     "response_time_ms": elapsed_ms,
+                    "operation_name": endpoint.get("operation_name") or _extract_operation_name(query),
                     "error_message": meta.get("error_message"),
                     "input_sent": json.dumps(payload) if (
                         endpoint.get("bundle_document") or kind == SCENARIO_KIND
@@ -1083,7 +1104,7 @@ class TestRunner:
                 kind="timeout",
                 message=f"Timeout after {self.timeout}s",
             )
-            return _result_from_meta(meta, name, kind, category, is_public, elapsed_ms, query)
+            return _result_from_meta(meta, name, kind, category, is_public, elapsed_ms, query, operation_name=endpoint.get("operation_name"))
         except httpx.HTTPStatusError as e:
             elapsed_ms = int((time.time() - start) * 1000)
             meta = classify_transport_error(
@@ -1093,11 +1114,12 @@ class TestRunner:
             return _result_from_meta(
                 meta, name, kind, category, is_public, elapsed_ms, query,
                 actual_response=e.response.text[:500],
+                operation_name=endpoint.get("operation_name"),
             )
         except Exception as e:
             elapsed_ms = int((time.time() - start) * 1000)
             meta = classify_transport_error(kind="error", message=str(e))
-            return _result_from_meta(meta, name, kind, category, is_public, elapsed_ms, query)
+            return _result_from_meta(meta, name, kind, category, is_public, elapsed_ms, query, operation_name=endpoint.get("operation_name"))
 
     async def _run_setup_mutation(
         self,
@@ -1245,6 +1267,7 @@ def _result_from_meta(
     elapsed_ms: int,
     query: str,
     actual_response: str | None = None,
+    operation_name: str | None = None,
 ) -> dict:
     return {
         "status": meta["status"],
@@ -1256,6 +1279,7 @@ def _result_from_meta(
         "category": category,
         "is_public": is_public,
         "response_time_ms": elapsed_ms,
+        "operation_name": operation_name or _extract_operation_name(query),
         "error_message": meta.get("error_message"),
         "input_sent": query,
         "actual_response": actual_response,

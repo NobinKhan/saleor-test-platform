@@ -57,3 +57,36 @@ def test_build_ai_report_json():
     payload = build_ai_report_json(run, results)
     assert "purpose" in payload
     assert payload["executive_summary"]["compatible"] == 1
+
+
+def test_latency_by_operation_groups_and_sorts():
+    from app.services.ai_report import _latency_by_operation
+
+    run = _minimal_run()
+    r1 = _minimal_result(run.id)
+    r1.operation_name = "ProductCreate"
+    r1.response_time_ms = 50
+    r2 = _minimal_result(run.id)
+    r2.operation_name = "ProductCreate"
+    r2.response_time_ms = 200
+    r3 = _minimal_result(run.id)
+    r3.operation_name = "CategoryCreate"
+    r3.response_time_ms = 10
+    ops = _latency_by_operation([r1, r2, r3])
+    assert len(ops) == 2
+    assert ops[0]["operation_name"] == "ProductCreate"
+    assert ops[0]["sample_count"] == 2
+    assert ops[0]["max"] == 200
+    assert ops[1]["operation_name"] == "CategoryCreate"
+
+
+def test_latency_by_operation_p99_in_json_report():
+    run = _minimal_run()
+    r1 = _minimal_result(run.id)
+    r1.operation_name = "CheckoutCreate"
+    r1.response_time_ms = 30
+    payload = build_ai_report_json(run, [r1])
+    lat = payload["latency_by_operation"]
+    assert len(lat) == 1
+    assert lat[0]["operation_name"] == "CheckoutCreate"
+    assert "p99" in lat[0]

@@ -1,0 +1,43 @@
+{
+  "bundle_id": "categorydetails-aftercreate",
+  "source": "saleor-dashboard",
+  "source_path": "categories/queries.ts",
+  "operation_names": [
+    "CategoryDetails"
+  ],
+  "document": "query CategoryDetails($id: ID!) {\n  category(id: $id) {\n    ...CategoryDetails\n  }\n}\n\nfragment CategoryDetails on Category {\n  id\n  ...Metadata\n  backgroundImage {\n    alt\n    url\n  }\n  name\n  slug\n  description\n  seoDescription\n  seoTitle\n  parent {\n    id\n  }\n  ancestors(first: 100) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}",
+  "variables": {
+    "id": "{{fixtures._smoke_category_id}}"
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "category": {
+        "id": "Q2F0ZWdvcnk6MQ==",
+        "metadata": [],
+        "privateMetadata": [],
+        "backgroundImage": null,
+        "name": "Harness Smoke Category",
+        "slug": "harness-smoke-category",
+        "description": null,
+        "seoDescription": null,
+        "seoTitle": null,
+        "parent": null,
+        "ancestors": {
+          "edges": []
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:placeholder",
+  "semantic_profile": {
+    "contract": "success",
+    "data_path": "category"
+  },
+  "document_hash": "sha256:placeholder"
+}

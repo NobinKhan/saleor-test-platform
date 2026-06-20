@@ -14,7 +14,7 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6YzY0YjMzYmUtOGVjNC00NWVmLTk4MDUtYzVhNGUxYTdkNjFj",
+        "id": "T3JkZXI6ZWUwODc3MWItZWE2ZC00YzMwLWI3YzItOGNmMjQ0Njc2YjUw",
         "number": "3",
         "total": {
           "gross": {
@@ -34,7 +34,7 @@
         },
         "lines": [
           {
-            "id": "T3JkZXJMaW5lOjFlZjE4ZDczLTU2MzItNGNjNC1hZmY5LTNlNWFmYWIwMjQxMA==",
+            "id": "T3JkZXJMaW5lOjlkN2ViNzZiLTEwYmQtNDY5OS1iNGZjLWI2MWUwNjRmNDFhNg==",
             "productName": "Harness Reference Product",
             "quantity": 6,
             "unitPrice": {

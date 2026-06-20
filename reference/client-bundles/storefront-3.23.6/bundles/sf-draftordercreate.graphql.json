@@ -18,8 +18,8 @@
     "data": {
       "draftOrderCreate": {
         "order": {
-          "id": "T3JkZXI6ZjI4NDM5ZTAtNDIwNS00ZTVhLTkzYjUtOTVhMDU1MmNlMjg0",
-          "number": "6",
+          "id": "T3JkZXI6NTk3ZTJhZTAtN2JkZS00ZTU4LTk2YzctYmYwMTMyNTY5NTA0",
+          "number": "4",
           "status": "DRAFT"
         },
         "errors": []

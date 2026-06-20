@@ -22,7 +22,7 @@
               "id": "Q2F0ZWdvcnk6MQ==",
               "name": "Default Category",
               "products": {
-                "totalCount": 1
+                "totalCount": 2
               }
             }
           },
@@ -34,10 +34,19 @@
                 "totalCount": 0
               }
             }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mw==",
+              "name": "Harness Smoke Category",
+              "products": {
+                "totalCount": 0
+              }
+            }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyIyIl0=",
+          "endCursor": "WyIzIl0=",
           "hasNextPage": false,
           "hasPreviousPage": false,
           "startCursor": "WyIxIl0="

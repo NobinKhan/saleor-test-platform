@@ -1,0 +1,30 @@
+{
+  "bundle_id": "ordersettings",
+  "source": "saleor-dashboard",
+  "source_path": "orders/queries.ts",
+  "operation_names": [
+    "OrderSettings"
+  ],
+  "document": "query OrderSettings {\n  orderSettings {\n    ...OrderSettings\n  }\n  shop {\n    ...ShopOrderSettings\n  }\n}\n\nfragment OrderSettings on OrderSettings {\n  automaticallyConfirmAllNewOrders\n  automaticallyFulfillNonShippableGiftCard\n}\n\nfragment ShopOrderSettings on Shop {\n  fulfillmentAutoApprove\n  fulfillmentAllowUnpaid\n}",
+  "variables": {},
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "orderSettings": {
+        "automaticallyConfirmAllNewOrders": true,
+        "automaticallyFulfillNonShippableGiftCard": true
+      },
+      "shop": {
+        "fulfillmentAutoApprove": true,
+        "fulfillmentAllowUnpaid": true
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:e5fd55d84acb65cc",
+  "document_hash": "sha256:cddc1667a06affd8"
+}

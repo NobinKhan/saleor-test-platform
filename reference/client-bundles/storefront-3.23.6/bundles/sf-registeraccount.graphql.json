@@ -19,11 +19,11 @@
       "accountRegister": {
         "errors": [
           {
-            "field": "redirectUrl",
-            "message": "This field is required."
+            "field": "password",
+            "message": "This password is too short. It must contain at least 8 characters."
           }
         ],
-        "requiresConfirmation": true
+        "requiresConfirmation": false
       }
     }
   },

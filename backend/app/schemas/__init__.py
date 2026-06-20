@@ -139,6 +139,7 @@ class TestResultResponse(BaseModel):
     diff_summary: str | None = None
     client_parity_note: str | None = None
     failure_category: str | None = None
+    operation_name: str | None = None
     input_sent: str | None
     actual_response: str | None
     error_message: str | None
@@ -217,7 +218,7 @@ class ReportSummary(BaseModel):
     certification_endpoint_count: int = 0
     l3_dashboard_certified: int = 0
     l3_dashboard_recorded: int = 0
-    excluded_l3_bundles: list[dict[str, str]] = []
+    excluded_l3_bundles: list[dict[str, Any]] = []
     not_counted_note: str | None = None
     effective_score: float | None = None
     effective_compatible: int = 0
@@ -234,6 +235,7 @@ class LatencySummary(BaseModel):
     max: int
     p50: float
     p95: float
+    p99: float
     sample_count: int
 
 
@@ -244,6 +246,19 @@ class SlowEndpoint(BaseModel):
     status: str
     response_time_ms: int
     outcome: str | None = None
+    operation_name: str | None = None
+
+
+class OperationLatency(BaseModel):
+    operation_name: str
+    endpoint_kind: str
+    sample_count: int
+    avg: float
+    p50: float
+    p95: float
+    p99: float
+    max: int
+    latency_outlier: bool = False
 
 
 class CategoryBreakdown(BaseModel):
@@ -281,6 +296,7 @@ class ReportData(BaseModel):
     response_time_distribution: list[ResponseTimeBucket]
     latency_summary: LatencySummary
     slowest_endpoints: list[SlowEndpoint]
+    latency_by_operation: list[OperationLatency] = []
     results: list[TestResultResponse]
     pass_rate: float
     schema_diff: dict[str, Any] | None = None

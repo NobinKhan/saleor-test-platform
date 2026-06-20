@@ -172,6 +172,31 @@ async def record_client_bundles(
     else:
         fixtures = load_fixtures(source, ver) or load_fixtures("dashboard", ver)
 
+    # Resolve staff_user_id via me { id } for bundles that need it
+    # (saveonboardingstate-success, updatemetadata-success)
+    if not fixtures.get("staff_user_id"):
+        try:
+            async with httpx.AsyncClient(timeout=timeout) as me_client:
+                me_resp = await me_client.post(
+                    saleor_url,
+                    json={"query": "query { me { id } }"},
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {saleor_token.removeprefix('Bearer ')}",
+                    },
+                )
+                me_data = me_resp.json().get("data", {})
+                staff_id = (me_data.get("me") or {}).get("id")
+                if staff_id:
+                    fixtures["staff_user_id"] = staff_id
+        except Exception:
+            pass
+
+    # Inject a recording-scoped run_id so bundles with unique-SKU fixtures
+    # (e.g. productvariantbulkcreate-success) don't collide on re-runs.
+    import uuid as _uuid
+    fixtures["_run_id"] = str(_uuid.uuid4())[:8]
+
     bundles = load_all_bundles_from_disk(source, ver, priority=priority)
     if bundle_ids:
         wanted = set(bundle_ids)
@@ -183,6 +208,46 @@ async def record_client_bundles(
         "Content-Type": "application/json",
         "Authorization": f"Bearer {saleor_token.removeprefix('Bearer ')}",
     }
+
+    # Run BUNDLE_SETUP chains for bundles that need prerequisite entities
+    from app.services.bundle_setup import get_bundle_setup
+
+    async with httpx.AsyncClient(timeout=timeout) as setup_client:
+        for bundle in bundles:
+            setup_steps = get_bundle_setup(bundle.bundle_id)
+            for step in setup_steps:
+                fixture_key = step.get("fixture_key")
+                if fixture_key and fixtures.get(fixture_key):
+                    continue  # Already resolved
+                mutation = step.get("mutation")
+                if not mutation:
+                    # Copy-from-key step (no mutation to run)
+                    from_key = step.get("_from_key")
+                    if from_key and from_key in fixtures and fixture_key:
+                        fixtures[fixture_key] = fixtures[from_key]
+                    continue
+                variables_fn = step.get("variables")
+                step_vars = variables_fn(fixtures) if callable(variables_fn) else variables_fn
+                step_auth = step.get("auth", "staff")
+                step_headers = {"Content-Type": "application/json"}
+                if step_auth == "staff":
+                    step_headers["Authorization"] = f"Bearer {saleor_token.removeprefix('Bearer ')}"
+                try:
+                    step_resp = await setup_client.post(
+                        saleor_url,
+                        json={"query": mutation, "variables": step_vars},
+                        headers=step_headers,
+                    )
+                    step_json = step_resp.json()
+                    extract_path = step.get("extract")
+                    if extract_path:
+                        from app.services.scenario_corpus import _extract_json_path
+                        entity_id = _extract_json_path(step_json, extract_path)
+                        if entity_id:
+                            fixtures[fixture_key] = str(entity_id)
+                except Exception:
+                    pass
+
     recorded = 0
     errors: list[str] = []
 

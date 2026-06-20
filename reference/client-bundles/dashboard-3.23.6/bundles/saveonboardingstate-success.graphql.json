@@ -1,0 +1,43 @@
+{
+  "bundle_id": "saveonboardingstate-success",
+  "source": "saleor-dashboard",
+  "source_path": "welcomePage/mutations.ts",
+  "operation_names": [
+    "SaveOnBoardingState"
+  ],
+  "document": "mutation SaveOnBoardingState($id: ID!, $input: [MetadataInput!]!) {\n  updateMetadata(id: $id, input: $input) {\n    errors {\n      ...MetadataError\n    }\n    item {\n      ...Metadata\n      ... on Node {\n        id\n      }\n    }\n  }\n}\n\nfragment MetadataError on MetadataError {\n  code\n  field\n  message\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}",
+  "variables": {
+    "id": "{{fixtures.staff_user_id}}",
+    "input": [
+      {
+        "key": "onboarding.state",
+        "value": "true"
+      }
+    ]
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "updateMetadata": {
+        "errors": [],
+        "item": {
+          "metadata": [
+            {
+              "key": "onboarding.state",
+              "value": "true"
+            }
+          ],
+          "privateMetadata": [],
+          "id": "VXNlcjox"
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:fd710ad6cf849398",
+  "document_hash": "sha256:7823ab235cbacdcd"
+}

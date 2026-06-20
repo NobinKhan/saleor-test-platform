@@ -1,0 +1,30 @@
+{
+  "bundle_id": "externalrefresh-success",
+  "source": "saleor-dashboard",
+  "source_path": "legacy-sdk/apollo/mutations.ts",
+  "operation_names": [
+    "externalRefresh"
+  ],
+  "document": "mutation externalRefresh($pluginId: String = \"mirumee.authentication.openidconnect\", $input: JSONString!) {\n  externalRefresh(pluginId: $pluginId, input: $input) {\n    token\n    refreshToken\n    errors {\n      ...AccountErrorFragment\n    }\n  }\n}\n\nfragment AccountErrorFragment on AccountError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "pluginId": null,
+    "input": "{\"refreshToken\":\"{{fixtures.refresh_token}}\"}"
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "externalRefresh": {
+        "token": null,
+        "refreshToken": null,
+        "errors": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:fb5717714f60cbfe",
+  "document_hash": "sha256:f9e6ce78983c9341"
+}

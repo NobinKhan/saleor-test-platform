@@ -31,9 +31,5 @@
   "golden_contract": "success",
   "http_status": 200,
   "response_shape_hash": "sha256:90f00b8cf308b228",
-  "semantic_profile": {
-    "contract": "success",
-    "data_path": "accountUpdate"
-  },
   "document_hash": "sha256:0daf874ed32d25f5"
 }

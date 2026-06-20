@@ -374,6 +374,7 @@ def build_client_bundle_endpoints(
     fixtures = load_fixtures(source, ver)
     endpoints: list[dict] = []
     for bundle in bundles:
+        op_names = bundle.operation_names or []
         endpoints.append({
             "name": bundle.bundle_id,
             "bundle_id": bundle.bundle_id,
@@ -381,6 +382,7 @@ def build_client_bundle_endpoints(
             "category": bundle.client_category(),
             "is_public": bundle.auth_context == "anonymous",
             "auth_context": bundle.auth_context,
+            "operation_name": op_names[0] if op_names else None,
             "golden_input": bundle.document,
             "bundle_document": bundle.document,
             "bundle_variables": bundle.variables,

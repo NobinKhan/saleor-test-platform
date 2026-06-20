@@ -1,0 +1,34 @@
+{
+  "bundle_id": "ordersettingsupdate",
+  "source": "saleor-dashboard",
+  "source_path": "orders/mutations.ts",
+  "operation_names": [
+    "OrderSettingsUpdate"
+  ],
+  "document": "mutation OrderSettingsUpdate($orderSettingsInput: OrderSettingsUpdateInput!, $shopSettingsInput: ShopSettingsInput!) {\n  orderSettingsUpdate(input: $orderSettingsInput) {\n    errors {\n      ...OrderSettingsError\n    }\n    orderSettings {\n      ...OrderSettings\n    }\n  }\n  shopSettingsUpdate(input: $shopSettingsInput) {\n    errors {\n      ...ShopError\n    }\n    shop {\n      ...ShopOrderSettings\n    }\n  }\n}\n\nfragment OrderSettingsError on OrderSettingsError {\n  code\n  field\n  message\n}\n\nfragment OrderSettings on OrderSettings {\n  automaticallyConfirmAllNewOrders\n  automaticallyFulfillNonShippableGiftCard\n}\n\nfragment ShopError on ShopError {\n  code\n  field\n  message\n}\n\nfragment ShopOrderSettings on Shop {\n  fulfillmentAutoApprove\n  fulfillmentAllowUnpaid\n}",
+  "variables": {
+    "orderSettingsInput": null,
+    "shopSettingsInput": null
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "errors": [
+      {
+        "message": "Variable \"$orderSettingsInput\" of required type \"OrderSettingsUpdateInput!\" was not provided."
+      }
+    ]
+  },
+  "golden_outcome": "schema_error",
+  "golden_status": "warn",
+  "golden_contract": "graphql_error",
+  "http_status": 400,
+  "response_shape_hash": "sha256:e36cc9569fe9d2f0",
+  "semantic_profile": {
+    "contract": "graphql_error",
+    "data_path": "ordersettingsupdate",
+    "expected_null": true,
+    "message_pattern": "<required>"
+  },
+  "document_hash": "sha256:340eafd1d5c132cc"
+}

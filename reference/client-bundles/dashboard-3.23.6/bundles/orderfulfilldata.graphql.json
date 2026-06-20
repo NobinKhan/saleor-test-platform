@@ -14,12 +14,12 @@
   "golden_response": {
     "data": {
       "order": {
-        "id": "T3JkZXI6YzY0YjMzYmUtOGVjNC00NWVmLTk4MDUtYzVhNGUxYTdkNjFj",
+        "id": "T3JkZXI6ZWUwODc3MWItZWE2ZC00YzMwLWI3YzItOGNmMjQ0Njc2YjUw",
         "isPaid": true,
         "deliveryMethod": null,
         "lines": [
           {
-            "id": "T3JkZXJMaW5lOjFlZjE4ZDczLTU2MzItNGNjNC1hZmY5LTNlNWFmYWIwMjQxMA==",
+            "id": "T3JkZXJMaW5lOjlkN2ViNzZiLTEwYmQtNDY5OS1iNGZjLWI2MWUwNjRmNDFhNg==",
             "allocations": [],
             "quantity": 6,
             "quantityToFulfill": 6,
@@ -30,13 +30,13 @@
                   "quantity": 100,
                   "quantityAllocated": 0,
                   "warehouse": {
-                    "id": "V2FyZWhvdXNlOmJjZWEzMjUzLWYyMDItNDBlYy1hNWY4LTliMDE2ZjIzMzU4Yg==",
+                    "id": "V2FyZWhvdXNlOjc5N2E3Yjc3LWNmYmMtNGM3OC1hMDk4LTkyNTU3ZGQxMmYxYw==",
                     "name": "Default Warehouse"
                   }
                 }
               ],
               "id": "UHJvZHVjdFZhcmlhbnQ6MQ==",
-              "name": "harness-ref-sku",
+              "name": "Harness Reference Variant",
               "sku": "harness-ref-sku",
               "preorder": null,
               "attributes": [],

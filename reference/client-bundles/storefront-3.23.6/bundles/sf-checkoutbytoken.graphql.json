@@ -14,11 +14,11 @@
   "golden_response": {
     "data": {
       "checkout": {
-        "id": "Q2hlY2tvdXQ6NTJkYjA3NDMtOWUxNC00ODExLTk5OTUtZjA2YTE5NTlmMDc3",
-        "token": "52db0743-9e14-4811-9995-f06a1959f077",
+        "id": "Q2hlY2tvdXQ6NWY3N2RjMmYtYjY3OC00ODNlLWE1Y2MtYjIzMDE3MWFiZjFi",
+        "token": "5f77dc2f-b678-483e-a5cc-b230171abf1b",
         "lines": [
           {
-            "id": "Q2hlY2tvdXRMaW5lOjI1NjU2ZTUxLWM4MDQtNGU1Yi05ZTA5LTAwMWIxYjI5MWFmOA==",
+            "id": "Q2hlY2tvdXRMaW5lOmNiMWE3MjFjLWUyYjgtNGFiZi04ODQ4LTUxYmJmN2U2MjQwYw==",
             "quantity": 1
           }
         ]

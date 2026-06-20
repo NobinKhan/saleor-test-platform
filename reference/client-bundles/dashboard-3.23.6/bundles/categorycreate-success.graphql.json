@@ -1,0 +1,46 @@
+{
+  "bundle_id": "categorycreate-success",
+  "source": "saleor-dashboard",
+  "source_path": "categories/mutations.ts",
+  "operation_names": [
+    "CategoryCreate"
+  ],
+  "document": "mutation CategoryCreate($parent: ID, $input: CategoryInput!) {\n  categoryCreate(parent: $parent, input: $input) {\n    category {\n      ...CategoryDetails\n    }\n    errors {\n      ...ProductError\n    }\n  }\n}\n\nfragment CategoryDetails on Category {\n  id\n  ...Metadata\n  backgroundImage {\n    alt\n    url\n  }\n  name\n  slug\n  description\n  seoDescription\n  seoTitle\n  parent {\n    id\n  }\n  ancestors(first: 100) {\n    edges {\n      node {\n        id\n        name\n      }\n    }\n  }\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "parent": null,
+    "input": {
+      "name": "Harness Smoke Category",
+      "slug": ""
+    }
+  },
+  "auth_context": "staff",
+  "priority": "P0",
+  "golden_response": {
+    "data": {
+      "categoryCreate": {
+        "category": {
+          "id": "Q2F0ZWdvcnk6Mw==",
+          "metadata": [],
+          "privateMetadata": [],
+          "backgroundImage": null,
+          "name": "Harness Smoke Category",
+          "slug": "harness-smoke-category",
+          "description": null,
+          "seoDescription": null,
+          "seoTitle": null,
+          "parent": null,
+          "ancestors": {
+            "edges": []
+          }
+        },
+        "errors": []
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:362a6dcd7014735c",
+  "document_hash": "sha256:03ebe701442731e5"
+}

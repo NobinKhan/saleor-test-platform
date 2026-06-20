@@ -22,14 +22,6 @@
               "firstName": "Harness",
               "lastName": "Reference"
             }
-          },
-          {
-            "node": {
-              "id": "VXNlcjoz",
-              "email": "harness-storefront-customer@example.com",
-              "firstName": "Harness",
-              "lastName": "Updated"
-            }
           }
         ]
       }

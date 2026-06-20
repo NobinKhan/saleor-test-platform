@@ -1,0 +1,35 @@
+{
+  "bundle_id": "productcreate-success",
+  "source": "saleor-dashboard",
+  "source_path": "products/mutations.ts",
+  "operation_names": [
+    "ProductCreate"
+  ],
+  "document": "mutation ProductCreate($input: ProductCreateInput!) {\n  productCreate(input: $input) {\n    errors {\n      ...ProductErrorWithAttributes\n    }\n    product {\n      id\n    }\n  }\n}\n\nfragment ProductErrorWithAttributes on ProductError {\n  ...ProductError\n  attributes\n}\n\nfragment ProductError on ProductError {\n  code\n  field\n  message\n}",
+  "variables": {
+    "input": {
+      "name": "Harness Smoke Product",
+      "productType": "{{fixtures.default_product_type_id}}",
+      "category": "{{fixtures.default_category_id}}",
+      "attributes": []
+    }
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "productCreate": {
+        "errors": [],
+        "product": {
+          "id": "UHJvZHVjdDoy"
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:4381754a4873190f",
+  "document_hash": "sha256:60257a810fb8abcc"
+}

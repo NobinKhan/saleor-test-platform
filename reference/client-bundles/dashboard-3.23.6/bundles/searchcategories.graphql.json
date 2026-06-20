@@ -38,10 +38,21 @@
                 "edges": []
               }
             }
+          },
+          {
+            "node": {
+              "id": "Q2F0ZWdvcnk6Mw==",
+              "name": "Harness Smoke Category",
+              "parent": null,
+              "level": 0,
+              "ancestors": {
+                "edges": []
+              }
+            }
           }
         ],
         "pageInfo": {
-          "endCursor": "WyIyIl0=",
+          "endCursor": "WyIzIl0=",
           "hasNextPage": false,
           "hasPreviousPage": false,
           "startCursor": "WyIxIl0="

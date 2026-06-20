@@ -1,0 +1,65 @@
+{
+  "bundle_id": "updatemetadata-success",
+  "source": "saleor-dashboard",
+  "source_path": "utils/metadata/mutations.ts",
+  "operation_names": [
+    "UpdateMetadata"
+  ],
+  "document": "mutation UpdateMetadata($id: ID!, $input: [MetadataInput!]!, $keysToDelete: [String!]!) {\n  updateMetadata(id: $id, input: $input) {\n    errors {\n      ...MetadataError\n    }\n    item {\n      ...Metadata\n      ... on Node {\n        id\n      }\n    }\n  }\n  deleteMetadata(id: $id, keys: $keysToDelete) {\n    errors {\n      ...MetadataError\n    }\n    item {\n      ...Metadata\n      ... on Node {\n        id\n      }\n    }\n  }\n}\n\nfragment MetadataError on MetadataError {\n  code\n  field\n  message\n}\n\nfragment Metadata on ObjectWithMetadata {\n  metadata {\n    ...MetadataItem\n  }\n  privateMetadata {\n    ...MetadataItem\n  }\n}\n\nfragment MetadataItem on MetadataItem {\n  key\n  value\n}",
+  "variables": {
+    "id": "{{fixtures.staff_user_id}}",
+    "input": [
+      {
+        "key": "harness.onboarding",
+        "value": "true"
+      }
+    ],
+    "keysToDelete": []
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "updateMetadata": {
+        "errors": [],
+        "item": {
+          "metadata": [
+            {
+              "key": "harness.onboarding",
+              "value": "true"
+            },
+            {
+              "key": "onboarding.state",
+              "value": "true"
+            }
+          ],
+          "privateMetadata": [],
+          "id": "VXNlcjox"
+        }
+      },
+      "deleteMetadata": {
+        "errors": [],
+        "item": {
+          "metadata": [
+            {
+              "key": "harness.onboarding",
+              "value": "true"
+            },
+            {
+              "key": "onboarding.state",
+              "value": "true"
+            }
+          ],
+          "privateMetadata": [],
+          "id": "VXNlcjox"
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:5608e9b401ee6be0",
+  "document_hash": "sha256:5ad397f7a2f51984"
+}

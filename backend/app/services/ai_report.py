@@ -110,6 +110,37 @@ def _summary_stats(results: list[TestResult]) -> dict[str, Any]:
     }
 
 
+def _latency_by_operation(results: list[TestResult]) -> list[dict[str, Any]]:
+    """Group response times by operation_name; return sorted by p95 desc."""
+    groups: dict[str, list[int]] = {}
+    kinds: dict[str, str] = {}
+    for r in results:
+        op = getattr(r, "operation_name", None) or "unknown"
+        rt = r.response_time_ms
+        if rt is None:
+            continue
+        groups.setdefault(op, []).append(rt)
+        if op not in kinds:
+            kinds[op] = r.endpoint_kind or ""
+    out = []
+    for op, vals in groups.items():
+        st = sorted(vals)
+        n = len(st)
+        out.append({
+            "operation_name": op,
+            "endpoint_kind": kinds[op],
+            "sample_count": n,
+            "avg": round(sum(vals) / n, 1),
+            "p50": float(st[min(n - 1, int(n * 0.50))]),
+            "p95": float(st[min(n - 1, int(n * 0.95))]),
+            "p99": float(st[min(n - 1, int(n * 0.99))]),
+            "max": st[-1],
+            "latency_outlier": st[min(n - 1, int(n * 0.95))] > 100,
+        })
+    out.sort(key=lambda x: x["p95"], reverse=True)
+    return out
+
+
 def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
     ctx = _golden_context(run)
     stats = _summary_stats(results)
@@ -278,6 +309,20 @@ def build_ai_report_markdown(run: TestRun, results: list[TestResult]) -> str:
                 f"| {r.endpoint_name} | {r.endpoint_kind} | {r.outcome or '—'} | {r.match_status or '—'} |"
             )
 
+    latency_ops = _latency_by_operation(results)
+    if latency_ops:
+        lines.extend([
+            "",
+            "## Latency by operation (Top 20 by p95)",
+            "| Operation | Kind | n | avg | p50 | p95 | p99 | max |",
+            "|-----------|------|---|-----|-----|-----|-----|-----|",
+        ])
+        for op in latency_ops[:20]:
+            lines.append(
+                f"| {op['operation_name']} | {op['endpoint_kind']} | {op['sample_count']} | "
+                f"{op['avg']:.0f} | {op['p50']:.0f} | {op['p95']:.0f} | {op['p99']:.0f} | {op['max']} |"
+            )
+
     lines.extend([
         "",
         "## All results index (compact)",
@@ -317,6 +362,7 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
             "diff_summary": r.diff_summary,
             "client_parity_note": r.client_parity_note,
             "response_time_ms": r.response_time_ms,
+            "operation_name": getattr(r, "operation_name", None),
             "error_message": r.error_message,
         }
         if full:
@@ -352,6 +398,7 @@ def build_ai_report_json(run: TestRun, results: list[TestResult]) -> dict[str, A
             **stats,
         },
         "schema_diff": run.schema_diff,
+        "latency_by_operation": _latency_by_operation(results),
         "failures": [row(r, full=True) for r in priority[:50]],
         "client_parity_gaps": [row(r, full=False) for r in parity_gaps[:50]],
         "warnings": [row(r, full=False) for r in warnings[:30]],

@@ -157,6 +157,13 @@ async def resolve_fixtures(
     captured = await capture_live_fixtures(saleor_url, token, timeout=timeout)
     _apply_captured(resolved, live_keys, captured)
 
+    staff_me = await _query_saleor(saleor_url, "query { me { id } }", token, timeout)
+    if isinstance(staff_me, dict):
+        staff_id = (staff_me.get("me") or {}).get("id")
+        if staff_id:
+            resolved["staff_user_id"] = staff_id
+            live_keys.add("staff_user_id")
+
     if settings.runtime_seed:
         logger.info("Runtime seed: mutation-first harness certification topology")
         # Clear entity-specific keys so the seed functions are forced to create

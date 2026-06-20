@@ -1,0 +1,31 @@
+{
+  "bundle_id": "welcomepageanalytics",
+  "source": "saleor-dashboard",
+  "source_path": "welcomePage/queries.ts",
+  "operation_names": [
+    "WelcomePageAnalytics"
+  ],
+  "document": "query WelcomePageAnalytics($channel: String!, $hasPermissionToManageOrders: Boolean!) {\n  salesToday: ordersTotal(period: TODAY, channel: $channel) @include(if: $hasPermissionToManageOrders) {\n    gross {\n      amount\n      currency\n    }\n  }\n}",
+  "variables": {
+    "channel": "{{fixtures.default_channel}}",
+    "hasPermissionToManageOrders": true
+  },
+  "auth_context": "staff",
+  "priority": "P1",
+  "golden_response": {
+    "data": {
+      "salesToday": {
+        "gross": {
+          "amount": 0.0,
+          "currency": "USD"
+        }
+      }
+    }
+  },
+  "golden_outcome": "success_with_data",
+  "golden_status": "pass",
+  "golden_contract": "success",
+  "http_status": 200,
+  "response_shape_hash": "sha256:fd2a01ccde0f7f0f",
+  "document_hash": "sha256:ef28a439092998f2"
+}
